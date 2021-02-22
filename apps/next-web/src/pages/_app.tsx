@@ -1,8 +1,8 @@
 import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { ReactComponent as NxLogo } from '../../public/nx-logo-white.svg';
 import '../tailwind.css';
+import { Layout } from '../components/presentational/templates/Layouts';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -10,12 +10,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to next-web!</title>
       </Head>
-      <div className="app">
-        <header className="flex"></header>
-        <main>
-          <Component {...pageProps} />
-        </main>
-      </div>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }
