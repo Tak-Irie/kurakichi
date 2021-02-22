@@ -25,9 +25,7 @@
       "targets": {
         "build": {
           "executor": "@nrwl/next:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "root": "apps/next-web",
             "outputPath": "dist/apps/next-web"
@@ -57,9 +55,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/next-web"
-          ],
+          "outputs": ["coverage/apps/next-web"],
           "options": {
             "jestConfig": "apps/next-web/jest.config.js",
             "passWithNoTests": true
@@ -68,9 +64,15 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/next-web/**/*.{ts,tsx,js,jsx}"
-            ]
+            "lintFilePatterns": ["apps/next-web/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "build-tailwind-css": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [],
+          "options": {
+            "command": "npx tailwindcss-cli@latest build ./src/styles.css -o src/app/tailwind.css",
+            "cwd": "apps/next-web"
           }
         }
       }
@@ -96,9 +98,7 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/next-web-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/next-web-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -111,16 +111,12 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/express-serevr",
             "main": "apps/express-serevr/src/main.ts",
             "tsConfig": "apps/express-serevr/tsconfig.app.json",
-            "assets": [
-              "apps/express-serevr/src/assets"
-            ]
+            "assets": ["apps/express-serevr/src/assets"]
           },
           "configurations": {
             "production": {
@@ -145,16 +141,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/express-serevr/**/*.ts"
-            ]
+            "lintFilePatterns": ["apps/express-serevr/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/express-serevr"
-          ],
+          "outputs": ["coverage/apps/express-serevr"],
           "options": {
             "jestConfig": "apps/express-serevr/jest.config.js",
             "passWithNoTests": true
