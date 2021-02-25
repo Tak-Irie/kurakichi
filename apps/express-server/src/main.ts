@@ -3,7 +3,6 @@ import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import { join } from 'path';
-import dotenv from 'dotenv';
 
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection, useContainer } from 'typeorm';
