@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  # express-server:
+  #   build: ./server/
+  #   ports:
+  #     - 4000:4000
+  #   volumes:
+  #     - ./server/src:/usr/src/app/src #only dev
+  #     - ./server/.env:/usr/src/app/.env #only dev
+  #   depends_on:
+  #     - redis_store
+  #     - postgres_store
+  redis_store:
+    image: redis:6
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/data:/data
+      - ./redis/redis.conf:/redis.conf
+    command: ['redis-server', '/redis.conf']
+  postgres_store:
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./psql:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8 --locale=C
