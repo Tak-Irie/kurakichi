@@ -1,0 +1,9 @@
+overwrite: true
+schema: 'http://localhost:4000/graphql'
+documents: 'apps/next-web/src/graphql/**/*.graphql'
+generates:
+  apps/next-web/src/generated/graphql.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'

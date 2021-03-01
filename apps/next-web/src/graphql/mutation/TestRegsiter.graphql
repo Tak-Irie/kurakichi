@@ -1,0 +1,8 @@
+mutation testRegister($registerName: String!) {
+  register(name: $registerName) {
+    test {
+      id
+      name
+    }
+  }
+}
