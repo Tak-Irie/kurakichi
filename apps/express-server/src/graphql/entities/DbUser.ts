@@ -25,7 +25,7 @@ export class User {
 
   @Field()
   @Column({ nullable: true })
-  role?: string;
+  role: string;
 
   @Column()
   password: string;

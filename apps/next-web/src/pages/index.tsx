@@ -1,10 +1,12 @@
 import React from 'react';
+import { Feature2 } from '../components/presentational/organisms//Feature2';
+import { Feature } from '../components/presentational/organisms/Feature';
 
 export function Index() {
   return (
     <div>
-      <p>its index</p>
-      <p className="text-purple-600">does tailwind work ?</p>
+      <Feature />
+      <Feature2 />
     </div>
   );
 }

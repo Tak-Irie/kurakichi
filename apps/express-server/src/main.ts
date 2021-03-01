@@ -36,9 +36,12 @@ const main = async () => {
   app.set('trust proxy', 1);
   app.use(
     cors({
-      origin: [process.env.NX_CORS_ORIGIN, 'https://studio.apollographql.com'],
+      origin: [
+        process.env.NX_CORS_ORIGIN as string,
+        'https://studio.apollographql.com',
+      ],
       credentials: true,
-    })
+    }),
   );
   app.use(
     session({
@@ -55,9 +58,9 @@ const main = async () => {
         domain: IS_PRODUCTION ? 'www.kurakichi.org' : undefined,
       },
       saveUninitialized: false,
-      secret: process.env.NX_SESSION_SECRET,
+      secret: process.env.NX_SESSION_SECRET as string,
       resave: false,
-    })
+    }),
   );
 
   const apolloServer = new ApolloServer({
@@ -79,7 +82,8 @@ const main = async () => {
   });
 
   app.get('/', (req, res) => {
-    res.send('hello');
+    console.log('got access');
+    res.json({ hi: 'congrats!' });
   });
 
   app.listen(process.env.NX_PORT, () => {

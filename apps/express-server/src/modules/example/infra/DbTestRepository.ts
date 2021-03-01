@@ -10,8 +10,8 @@ export class TypeOrmTestRepository
   public async registerTest(test: DbTest): Promise<DbTest> {
     const result = await this.manager
       .create(DbTest, {
-        id: ulid(),
         ...test,
+        id: ulid(),
       })
       .save();
 

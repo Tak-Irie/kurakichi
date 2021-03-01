@@ -5,6 +5,7 @@
     "sourceMap": true,
     "strict": true,
     "declaration": false,
+    "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

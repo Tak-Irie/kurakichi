@@ -4,11 +4,11 @@ import { Footer } from '../organisms/Footer';
 
 const Layout: FC = ({ children }) => {
   return (
-    <main className="bg-green-50">
+    <>
       <Header />
-      {children}
+      <main className="bg-green-50">{children}</main>
       <Footer />
-    </main>
+    </>
   );
 };
 
