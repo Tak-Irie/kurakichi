@@ -9,8 +9,8 @@ import {
 
 export type Role = 'ADMIN' | 'DEVELOPER';
 @ObjectType()
-@Entity()
-export class User {
+@Entity('user')
+export class DbUser {
   @Field()
   @PrimaryColumn()
   id: string;
