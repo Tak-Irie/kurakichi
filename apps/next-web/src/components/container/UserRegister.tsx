@@ -1,19 +1,16 @@
 import { FC } from 'react';
 import { useTestRegisterMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
-
 import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 
-interface IFormInput {
+interface UserRegisterInput {
   name: string;
 }
 
-const RegisterTest: FC = () => {
-  const router = useRouter();
-
+const UserRegister: FC = () => {
   const [TestRegister, { data }] = useTestRegisterMutation();
 
   const { register, handleSubmit } = useForm();
@@ -37,12 +34,19 @@ const RegisterTest: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input name="name" type="text" labeled={false} register={register} />
-        <MiddleButton type="submit">Post test!</MiddleButton>
+        <Input name="name" type="text" labeled={true} register={register} />
+        <Input name="email" type="email" labeled={true} register={register} />
+        <Input
+          name="password"
+          type="password"
+          labeled={true}
+          register={register}
+        />
+        <MiddleButton type="submit">UserRegister</MiddleButton>
       </Form>
       {data && <p>{data.register.test.name}</p>}
     </>
   );
 };
 
-export { RegisterTest };
+export { UserRegister };

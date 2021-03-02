@@ -1,4 +1,4 @@
-import { User } from '../../../../graphql/entities/User';
+import { StoredUser } from '../../../../graphql/entities/StoredUser';
 import { Either, left, right } from '../../../../shared/Either';
 import { Result } from '../../../../shared/Result';
 import { UnexpectedError } from '../../../../shared/UnexpectedError';
@@ -7,7 +7,7 @@ import { IUserRepository } from '../../domain/IUserRepository';
 import * as GetUsersErrors from './GetUsersErrors';
 
 type GetUsersDTO = {
-  users: User[];
+  users: StoredUser[];
 };
 
 type GetUsersResponse = Either<

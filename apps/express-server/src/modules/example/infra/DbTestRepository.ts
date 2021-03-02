@@ -1,15 +1,15 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { ulid } from 'ulid';
 import { ITestRepository } from '../domain/ITestRepository';
-import { DbTest } from '../../../graphql/entities/DbTest';
+import { StoredTest } from '../../../graphql/entities/StoredTest';
 
-@EntityRepository(DbTest)
+@EntityRepository(StoredTest)
 export class TypeOrmTestRepository
-  extends Repository<DbTest>
+  extends Repository<StoredTest>
   implements ITestRepository {
-  public async registerTest(test: DbTest): Promise<DbTest> {
+  public async registerTest(test: StoredTest): Promise<StoredTest> {
     const result = await this.manager
-      .create(DbTest, {
+      .create(StoredTest, {
         ...test,
         id: ulid(),
       })
@@ -18,8 +18,8 @@ export class TypeOrmTestRepository
     return result || undefined;
   }
 
-  public async getTests(): Promise<DbTest[] | undefined> {
-    const tests = await this.manager.find(DbTest);
+  public async getTests(): Promise<StoredTest[] | undefined> {
+    const tests = await this.manager.find(StoredTest);
 
     return tests || undefined;
   }

@@ -7,7 +7,7 @@ import {
   Query,
   InputType,
 } from 'type-graphql';
-import { DbTest } from '../entities/DbTest';
+import { StoredTest } from '../entities/StoredTest';
 import { ulid } from 'ulid';
 
 @ObjectType()
@@ -23,11 +23,11 @@ export class TestResponse {
   @Field(() => FieldError, { nullable: true })
   errors?: FieldError;
 
-  @Field(() => [DbTest], { nullable: true })
-  tests?: DbTest[];
+  @Field(() => [StoredTest], { nullable: true })
+  tests?: StoredTest[];
 
-  @Field(() => DbTest, { nullable: true })
-  test?: DbTest;
+  @Field(() => StoredTest, { nullable: true })
+  test?: StoredTest;
 }
 
 @InputType()
@@ -36,18 +36,18 @@ export class TestInput {
   name: string;
 }
 
-@Resolver(DbTest)
+@Resolver(StoredTest)
 export class TestResolver {
   @Query(() => TestResponse)
   async getTests() {
-    const result = await DbTest.find();
+    const result = await StoredTest.find();
     return { tests: result };
   }
 
   @Mutation(() => TestResponse)
   async register(@Arg('name') name: string): Promise<TestResponse> {
     console.log('got access:');
-    const result = await DbTest.create({
+    const result = await StoredTest.create({
       id: ulid(),
       name: name,
     }).save();

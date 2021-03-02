@@ -10,6 +10,7 @@ type GetUserByIdDTO = {
   username: string;
   email: string;
   password: string;
+  role: string;
   updatedAt: Date;
   createdAt: Date;
 };

@@ -10,7 +10,7 @@ const Form: FC<FormProps> = (props) => {
   return (
     <div>
       <form
-        className="flex flex-col items-center w-full mb-4 md:flex-row md:px-16"
+        className="flex flex-col items-center w-full mb-4  md:px-16"
         onSubmit={props.onSubmit}
       >
         {props.children}

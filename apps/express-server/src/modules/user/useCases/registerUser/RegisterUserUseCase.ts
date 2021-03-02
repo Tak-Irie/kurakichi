@@ -14,6 +14,7 @@ type RegisterUserDTO = {
   email: string;
   password: string;
 };
+
 type UserTypes = UserEmail | UserName | UserPassword;
 
 class EmailAlreadyExistsError extends Result<IUseCaseError> {
@@ -22,9 +23,8 @@ class EmailAlreadyExistsError extends Result<IUseCaseError> {
   }
 }
 
-
 type RegisterUserResponse = Either<
-  EmailAlreadyExistsError | UnexpectedError | Result<UserTypes>| Result<User>,
+  EmailAlreadyExistsError | UnexpectedError | Result<UserTypes> | Result<User>,
   Result<void>
 >;
 
@@ -40,12 +40,13 @@ export class RegisterUserUseCase
     const usernameOrError = UserName.create({
       username: request.username,
     });
-    const emailOrError: Result<UserEmail> = UserEmail.create({email: request.email});
+    const emailOrError: Result<UserEmail> = UserEmail.create({
+      email: request.email,
+    });
 
     const passwordOrError = UserPassword.create({
       password: request.password,
     });
-
 
     const verifiedResult = Result.verifyResults<UserTypes>([
       emailOrError,

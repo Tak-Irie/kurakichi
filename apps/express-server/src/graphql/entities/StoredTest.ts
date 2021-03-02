@@ -5,30 +5,19 @@ import {
   UpdateDateColumn,
   Column,
   PrimaryColumn,
+  BaseEntity,
 } from 'typeorm';
 
-export type Role = 'ADMIN' | 'DEVELOPER';
 @ObjectType()
-@Entity('user')
-export class DbUser {
+@Entity('test')
+export class StoredTest extends BaseEntity {
   @Field()
   @PrimaryColumn()
   id: string;
 
   @Field()
   @Column()
-  username: string;
-
-  @Field()
-  @Column({ unique: true })
-  email: string;
-
-  @Field()
-  @Column({ nullable: true })
-  role: string;
-
-  @Column()
-  password: string;
+  name: string;
 
   @Field()
   @CreateDateColumn()

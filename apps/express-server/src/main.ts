@@ -8,17 +8,20 @@ import { ApolloServer } from 'apollo-server-express';
 import { createConnection, useContainer } from 'typeorm';
 import { buildSchema } from 'type-graphql';
 import { Container } from 'typedi';
+// import { Container } from 'inversify';
 import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 
 import { COOKIE_NAME, IS_PRODUCTION } from './util/constants';
-import { DbTest } from './graphql/entities/DbTest';
+import { StoredTest } from './graphql/entities/StoredTest';
 import { TestResolver } from './graphql/resolvers/TestResolver';
+import { StoredUser } from './graphql/entities/StoredUser';
+import { UserResolver } from './graphql/resolvers/UserResolver';
 
 const main = async () => {
   const app = express();
 
-  // useContainer(Container);
+  useContainer(Container);
 
   await createConnection({
     type: 'postgres',
@@ -27,7 +30,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [join(__dirname, './migrations/*')],
-    entities: [DbTest],
+    entities: [StoredTest, StoredUser],
   });
 
   const RedisStore = connectRedis(session);
@@ -65,9 +68,9 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [TestResolver],
+      resolvers: [TestResolver, UserResolver],
       validate: false,
-      // container: Container,
+      container: Container,
     }),
     context: ({ req, res }) => ({
       req,
