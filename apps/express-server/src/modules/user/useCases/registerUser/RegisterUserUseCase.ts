@@ -37,6 +37,7 @@ export class RegisterUserUseCase
   public async execute(
     request: RegisterUserDTO,
   ): Promise<RegisterUserResponse> {
+    console.log(':', request);
     const usernameOrError = UserName.create({
       username: request.username,
     });
@@ -54,6 +55,8 @@ export class RegisterUserUseCase
       usernameOrError,
     ]);
 
+    console.log(':', verifiedResult);
+
     if (verifiedResult.isFailure) {
       return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
     }
@@ -61,6 +64,8 @@ export class RegisterUserUseCase
     const email: UserEmail = emailOrError.getValue();
     const password: UserPassword = passwordOrError.getValue();
     const username: UserName = usernameOrError.getValue();
+
+    console.log(':', email);
 
     try {
       const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(
@@ -75,6 +80,7 @@ export class RegisterUserUseCase
         password,
         username,
       });
+      console.log(':', userOrError);
 
       if (userOrError.isFailure)
         return left(Result.fail<User>(userOrError.getErrorValue()));

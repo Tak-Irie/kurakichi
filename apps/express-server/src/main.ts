@@ -21,7 +21,7 @@ import { UserResolver } from './graphql/resolvers/UserResolver';
 const main = async () => {
   const app = express();
 
-  useContainer(Container);
+  // useContainer(Container);
 
   await createConnection({
     type: 'postgres',
@@ -70,7 +70,7 @@ const main = async () => {
     schema: await buildSchema({
       resolvers: [TestResolver, UserResolver],
       validate: false,
-      container: Container,
+      // container: Container,
     }),
     context: ({ req, res }) => ({
       req,

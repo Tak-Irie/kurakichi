@@ -7,13 +7,11 @@ import { RegisterUserUseCase } from '../../modules/user/useCases/registerUser/Re
 import { GetUsersUseCase } from '../../modules/user/useCases/getUsers/GetUsersUseCase';
 import { StoredUser } from '../entities/StoredUser';
 import { UserInput, UserResponse, Users } from '../types';
+import { Service } from 'typedi';
 
 @Resolver(StoredUser)
 export class UserResolver {
-  constructor(
-    @InjectRepository()
-    private readonly OrmUserRepository: TypeOrmUserRepository,
-  ) {}
+  constructor(private readonly OrmUserRepository: TypeOrmUserRepository) {}
 
   @Query(() => UserResponse, { nullable: true })
   async userGetById(@Arg('id') id: string): Promise<UserResponse | null> {

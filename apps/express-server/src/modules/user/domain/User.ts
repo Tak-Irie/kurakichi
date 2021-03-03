@@ -11,6 +11,7 @@ interface UserProps {
   username: UserName;
   email: UserEmail;
   password: UserPassword;
+  role?: string;
   // // isEmailVerified: boolean;
   // profilePicture?: string;
   // firstName?: string;

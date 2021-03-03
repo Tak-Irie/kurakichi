@@ -11,7 +11,9 @@ export class TypeOrmUserRepository
   implements IUserRepository {
   async confirmExistence(userEmail: UserEmail): Promise<boolean> {
     const { email } = userEmail.props;
+    console.log(':', email);
     const result = await this.manager.findOne(StoredUser, { email });
+    console.log(':', result);
 
     return !!result;
   }
