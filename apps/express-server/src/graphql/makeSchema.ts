@@ -13,6 +13,7 @@ const GraphqlSchema = makeSchema({
   },
   contextType: {
     module:
+      // TODO only dev
       '/Users/tak/development/kurakichi/apps/express-server/src/util/context.ts',
     // module: path.join(__dirname, 'context.ts'),
     export: 'Context',

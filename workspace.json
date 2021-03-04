@@ -158,10 +158,6 @@
             "jestConfig": "apps/express-server/jest.config.js",
             "passWithNoTests": true
           }
-        },
-        "gen-nexus": {
-          "executor": "@nrwl/node:execute",
-          "options": { "command": "gen:nexus" }
         }
       }
     },
