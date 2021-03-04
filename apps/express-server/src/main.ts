@@ -1,37 +1,21 @@
-import 'reflect-metadata';
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
-import { join } from 'path';
 
 import { ApolloServer } from 'apollo-server-express';
-import { createConnection, useContainer } from 'typeorm';
-import { buildSchema } from 'type-graphql';
-import { Container } from 'typedi';
-// import { Container } from 'inversify';
+
 import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
+import { isProduction } from './util/isProduction';
+import { COOKIE_NAME } from './util/constants';
+import { PrismaClient } from '@prisma/client';
 
-import { COOKIE_NAME, IS_PRODUCTION } from './util/constants';
-import { StoredTest } from './graphql/entities/StoredTest';
-import { TestResolver } from './graphql/resolvers/TestResolver';
-import { StoredUser } from './graphql/entities/StoredUser';
-import { UserResolver } from './graphql/resolvers/UserResolver';
+import { GraphqlSchema as schema } from './graphql/makeSchema';
 
 const main = async () => {
   const app = express();
 
-  // useContainer(Container);
-
-  await createConnection({
-    type: 'postgres',
-    username: 'test',
-    password: 'test',
-    logging: true,
-    synchronize: true,
-    migrations: [join(__dirname, './migrations/*')],
-    entities: [StoredTest, StoredUser],
-  });
+  const prisma = new PrismaClient();
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.NX_REDIS_URL);
@@ -57,8 +41,8 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
         sameSite: 'lax', // csrf
-        secure: IS_PRODUCTION, // cookie only works in https
-        domain: IS_PRODUCTION ? 'www.kurakichi.org' : undefined,
+        secure: isProduction, // cookie only works in https
+        domain: isProduction ? 'www.kurakichi.org' : undefined,
       },
       saveUninitialized: false,
       secret: process.env.NX_SESSION_SECRET as string,
@@ -67,14 +51,11 @@ const main = async () => {
   );
 
   const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [TestResolver, UserResolver],
-      validate: false,
-      // container: Container,
-    }),
+    schema,
     context: ({ req, res }) => ({
       req,
       res,
+      prisma,
       redis,
     }),
   });
