@@ -15,8 +15,8 @@ export const UserResponse = objectType({
   name: 'UserResponse',
   definition(t) {
     t.nonNull.string('id');
-    t.nonNull.string('email');
-    t.nonNull.string('username');
+    t.string('email');
+    t.string('username');
   },
 });
 

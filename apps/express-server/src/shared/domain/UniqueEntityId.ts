@@ -5,6 +5,7 @@ import { ulid } from 'ulid';
  *
  */
 export class UniqueEntityId {
+  // TODO 自動で生成すると何かと不都合が発生したので、レファクト予定
   constructor(private id?: string) {
     if (id === undefined) this.id = ulid();
     else {

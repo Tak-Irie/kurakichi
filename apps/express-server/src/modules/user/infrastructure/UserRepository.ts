@@ -1,4 +1,4 @@
-import { PrismaClient, User as StoredUser } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { IUserRepository } from '../domain/IUserRepository';
 import { User } from '../domain/User';
 import { UserEmail } from '../domain/UserEmail';
@@ -16,13 +16,13 @@ export class UserRepository implements IUserRepository {
     return !!result;
   }
 
-  async getUserByUserId(userId: string): Promise<StoredUser | null> {
+  async getUserByUserId(userId: string): Promise<User | undefined> {
     const result = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-    if (!result) return null;
+    if (!result) return undefined;
 
-    return result;
+    return UserMapper.toDomain(result);
   }
 
   async registerUser(user: User): Promise<boolean> {
@@ -39,10 +39,19 @@ export class UserRepository implements IUserRepository {
 
   async getUsers(): Promise<User[] | undefined> {
     const users = await this.prisma.user.findMany();
-    console.log('users:', users);
 
     const data = users.map((user) => UserMapper.toDomain(user));
 
     return data || null;
+  }
+
+  async getUserByEmail(userEmail: UserEmail): Promise<User | undefined> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: userEmail.value },
+    });
+    if (user === null) return undefined;
+
+    const data = UserMapper.toDomain(user);
+    return data;
   }
 }

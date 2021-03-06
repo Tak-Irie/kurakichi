@@ -1,0 +1,14 @@
+import { Result } from '../../../../shared/Result';
+import { IUseCaseError } from '../../../../shared/useCase/IUseCaseError';
+
+export class IncorrectPassword extends Result<IUseCaseError> {
+  constructor() {
+    super(false, 'アカウントが存在しないか、パスワードが正しくありません');
+  }
+}
+
+export class InvalidEmail extends Result<IUseCaseError> {
+  constructor() {
+    super(false, 'アカウントが存在しないか、パスワードが正しくありません');
+  }
+}

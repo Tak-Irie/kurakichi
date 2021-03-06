@@ -3,21 +3,12 @@ import { Result } from '../../../../shared/Result';
 import { UnexpectedError } from '../../../../shared/UnexpectedError';
 import { IUseCase } from '../../../../shared/useCase/IUseCase';
 import { IUserRepository } from '../../domain/IUserRepository';
+import { UserReadModel } from '../../domain/UserReadModel';
 import * as GetUserByIdErrors from './GetUserByIdErrors';
-
-type GetUserByIdDTO = {
-  id: string;
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-  updatedAt: Date;
-  createdAt: Date;
-};
 
 type GetUserByIdResponse = Either<
   GetUserByIdErrors.UserNotFoundError | UnexpectedError,
-  Result<GetUserByIdDTO>
+  Result<UserReadModel>
 >;
 
 export class GetUserByIdUseCase
@@ -38,7 +29,10 @@ export class GetUserByIdUseCase
         }
 
         return right(
-          Result.success<GetUserByIdDTO>(FoundResult as GetUserByIdDTO),
+          Result.success<UserReadModel>({
+            id: FoundResult.id.getId(),
+            email: FoundResult.email,
+          }),
         );
       default:
         return left(new UnexpectedError());

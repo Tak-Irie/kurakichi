@@ -1,8 +1,10 @@
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserId } from '../../util/getUserId';
-import { RegisterUserUseCase } from '../../modules/user/useCases/registerUser/RegisterUserUseCase';
-import { UserRepository } from '../../modules/user/infrastructure/UserRepository';
-import { useGetUsersUseCase } from '../../modules/user/useCases';
+import {
+  useGetUsersUseCase,
+  useLoginUserUseCase,
+  useRegisterUserUseCase,
+} from '../../modules/user/useCases';
 import { userToPresentation } from '../DTO/UserDTO';
 
 const userQuery = extendType({
@@ -46,10 +48,23 @@ const userMutation = extendType({
         username: nonNull(stringArg()),
       },
       resolve: async (_, args) => {
-        const re = new RegisterUserUseCase(new UserRepository());
-        const user = await re.execute({ ...args });
+        const user = await useRegisterUserUseCase.execute({ ...args });
         if (user.isLeft()) return { message: user.value.getErrorValue() };
         return { message: 'success!' };
+      },
+    });
+    t.field('login', {
+      type: 'getUser',
+      args: {
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        console.log('args:', args);
+        const user = await useLoginUserUseCase.execute({ ...args });
+        if (user.isLeft()) return { message: user.value.getErrorValue() };
+        context.req.session.userId = user.value.getValue().id;
+        return { message: 'success!', user: { ...user.value.getValue() } };
       },
     });
   },

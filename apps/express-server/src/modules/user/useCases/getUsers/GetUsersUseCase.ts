@@ -1,5 +1,3 @@
-import { User as StoredUser } from '@prisma/client';
-
 import { Either, left, right } from '../../../../shared/Either';
 import { Result } from '../../../../shared/Result';
 import { UnexpectedError } from '../../../../shared/UnexpectedError';

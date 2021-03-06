@@ -7,7 +7,7 @@ import { UserEmail } from '../../domain/UserEmail';
 import { UserName } from '../../domain/UserName';
 import { UserPassword } from '../../domain/UserPassword';
 import { IUserRepository } from '../../domain/IUserRepository';
-import { IUseCaseError } from '../../../../shared/useCase/IUseCaseError';
+import { EmailAlreadyExistsError } from './RegisterUserError';
 
 type RegisterUserDTO = {
   username: string;
@@ -16,12 +16,6 @@ type RegisterUserDTO = {
 };
 
 type UserTypes = UserEmail | UserName | UserPassword;
-
-class EmailAlreadyExistsError extends Result<IUseCaseError> {
-  constructor(email: string, error?: Error) {
-    super(false, `こちらのEmail"${email}"は既に登録されています`, error);
-  }
-}
 
 type RegisterUserResponse = Either<
   EmailAlreadyExistsError | UnexpectedError | Result<UserTypes> | Result<User>,
@@ -37,7 +31,6 @@ export class RegisterUserUseCase
   public async execute(
     request: RegisterUserDTO,
   ): Promise<RegisterUserResponse> {
-    console.log('request :', request);
     const usernameOrError = UserName.create({
       username: request.username,
     });
@@ -55,8 +48,6 @@ export class RegisterUserUseCase
       usernameOrError,
     ]);
 
-    console.log('verifiedResult:', verifiedResult);
-
     if (verifiedResult.isFailure) {
       return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
     }
@@ -64,8 +55,6 @@ export class RegisterUserUseCase
     const email: UserEmail = emailOrError.getValue();
     const password: UserPassword = passwordOrError.getValue();
     const username: UserName = usernameOrError.getValue();
-
-    console.log('email:', email);
 
     try {
       const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(
@@ -80,7 +69,6 @@ export class RegisterUserUseCase
         password,
         username,
       });
-      console.log('userOrError:', userOrError);
 
       if (userOrError.isFailure)
         return left(Result.fail<User>(userOrError.getErrorValue()));
