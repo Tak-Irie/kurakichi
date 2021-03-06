@@ -20,7 +20,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@./ddd-modules": [
+      "@/ddd-modules": [
         "libs/ddd-modules/src/index.ts"
       ]
     },

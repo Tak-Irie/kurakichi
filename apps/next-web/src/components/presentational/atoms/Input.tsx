@@ -30,7 +30,7 @@ const Input: FC<InputProps> = ({
     <>
       {labeled ? (
         <label
-          className="inline-block uppercase text-gray-700 text-xs font-bold mb-2"
+          className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto"
           htmlFor={name}
         >
           {name}

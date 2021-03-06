@@ -41,13 +41,6 @@ const RegisterTest: FC = () => {
         <MiddleButton type="submit">Post test!</MiddleButton>
       </Form>
       {data && <p>{data.register.test.name}</p>}
-
-      {/* <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input name="name" ref={register} />
-          <input type="submit" />
-        </form>
-      </div> */}
     </>
   );
 };
