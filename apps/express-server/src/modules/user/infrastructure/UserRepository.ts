@@ -12,9 +12,7 @@ export class UserRepository implements IUserRepository {
 
   async confirmExistence(userEmail: UserEmail): Promise<boolean> {
     const { email } = userEmail.props;
-    console.log(':', email);
     const result = await this.prisma.user.findUnique({ where: { email } });
-
     return !!result;
   }
 
@@ -28,19 +26,23 @@ export class UserRepository implements IUserRepository {
   }
 
   async registerUser(user: User): Promise<boolean> {
-    const confirmExistence = await this.confirmExistence(user.email);
+    const registeredEmail = await this.confirmExistence(user.props.email);
 
-    if (!confirmExistence) return false;
+    if (registeredEmail === true) return false;
 
     const data = await UserMapper.toStore(user);
+
     await this.prisma.user.create({ data });
 
     return true;
   }
 
-  async getUsers(): Promise<StoredUser[] | undefined[]> {
+  async getUsers(): Promise<User[] | undefined> {
     const users = await this.prisma.user.findMany();
+    console.log('users:', users);
 
-    return users || undefined;
+    const data = users.map((user) => UserMapper.toDomain(user));
+
+    return data || null;
   }
 }

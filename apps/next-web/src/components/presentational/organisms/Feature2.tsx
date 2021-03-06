@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { DownArrowInCircleSVG, DownwardCurveSVG } from '../atoms/SVG';
 import { BigText, SmallText, Text } from '../atoms/Text';
 
-import { RegisterTest } from '../../container/RegisterTest';
 import { UserRegister } from '../../container/UserRegister';
 
 const Feature2: FC = () => {

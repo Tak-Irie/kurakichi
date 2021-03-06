@@ -4,12 +4,12 @@
 
 type Mutation {
   register(name: String!): Test
-  userRegister(email: String!, password: String!, username: String!): UserResponse
+  userRegister(email: String!, password: String!, username: String!): getUser
 }
 
 type Query {
-  allUsers: [User!]!
   getTests: [Test]
+  getUsers: getUser!
   me: User
 }
 
@@ -30,6 +30,13 @@ type User {
 }
 
 type UserResponse {
-  message: String
-  user: User
+  email: String!
+  id: String!
+  username: String!
+}
+
+type getUser {
+  message: String!
+  user: UserResponse
+  users: [UserResponse]
 }

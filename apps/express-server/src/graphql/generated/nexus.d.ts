@@ -49,8 +49,14 @@ export interface NexusGenObjects {
     username: string; // String!
   }
   UserResponse: { // root type
-    message?: string | null; // String
-    user?: NexusGenRootTypes['User'] | null; // User
+    email: string; // String!
+    id: string; // String!
+    username: string; // String!
+  }
+  getUser: { // root type
+    message: string; // String!
+    user?: NexusGenRootTypes['UserResponse'] | null; // UserResponse
+    users?: Array<NexusGenRootTypes['UserResponse'] | null> | null; // [UserResponse]
   }
 }
 
@@ -67,11 +73,11 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     register: NexusGenRootTypes['Test'] | null; // Test
-    userRegister: NexusGenRootTypes['UserResponse'] | null; // UserResponse
+    userRegister: NexusGenRootTypes['getUser'] | null; // getUser
   }
   Query: { // field return type
-    allUsers: NexusGenRootTypes['User'][]; // [User!]!
     getTests: Array<NexusGenRootTypes['Test'] | null> | null; // [Test]
+    getUsers: NexusGenRootTypes['getUser']; // getUser!
     me: NexusGenRootTypes['User'] | null; // User
   }
   Test: { // field return type
@@ -88,19 +94,25 @@ export interface NexusGenFieldTypes {
     username: string; // String!
   }
   UserResponse: { // field return type
-    message: string | null; // String
-    user: NexusGenRootTypes['User'] | null; // User
+    email: string; // String!
+    id: string; // String!
+    username: string; // String!
+  }
+  getUser: { // field return type
+    message: string; // String!
+    user: NexusGenRootTypes['UserResponse'] | null; // UserResponse
+    users: Array<NexusGenRootTypes['UserResponse'] | null> | null; // [UserResponse]
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     register: 'Test'
-    userRegister: 'UserResponse'
+    userRegister: 'getUser'
   }
   Query: { // field return type name
-    allUsers: 'User'
     getTests: 'Test'
+    getUsers: 'getUser'
     me: 'User'
   }
   Test: { // field return type name
@@ -117,8 +129,14 @@ export interface NexusGenFieldTypeNames {
     username: 'String'
   }
   UserResponse: { // field return type name
+    email: 'String'
+    id: 'String'
+    username: 'String'
+  }
+  getUser: { // field return type name
     message: 'String'
-    user: 'User'
+    user: 'UserResponse'
+    users: 'UserResponse'
   }
 }
 

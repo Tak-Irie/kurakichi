@@ -11,6 +11,8 @@ import { COOKIE_NAME } from './util/constants';
 import { PrismaClient } from '@prisma/client';
 
 import { GraphqlSchema as schema } from './graphql/makeSchema';
+import { UserResponse } from './graphql/schema';
+import { UserRepository } from './modules/user/infrastructure/UserRepository';
 
 const main = async () => {
   const app = express();
@@ -70,8 +72,16 @@ const main = async () => {
     res.json({ hi: 'congrats!' });
   });
 
+  app.get('/ex', async (req, res) => {
+    const repo = new UserRepository();
+    await repo.getUsers();
+
+    res.json({ done: 'congrats!' });
+  });
+
   app.listen(process.env.NX_PORT, () => {
     console.log('server started on localhost:4000');
+    console.log('cors:', process.env.NX_CORS_ORIGIN);
   });
 };
 

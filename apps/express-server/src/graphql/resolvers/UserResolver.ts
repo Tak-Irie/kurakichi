@@ -2,14 +2,21 @@ import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserId } from '../../util/getUserId';
 import { RegisterUserUseCase } from '../../modules/user/useCases/registerUser/RegisterUserUseCase';
 import { UserRepository } from '../../modules/user/infrastructure/UserRepository';
+import { useGetUsersUseCase } from '../../modules/user/useCases';
+import { userToPresentation } from '../DTO/UserDTO';
 
 const userQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.nonNull.list.nonNull.field('allUsers', {
-      type: 'User',
-      resolve: (_, __, context) => {
-        return context.prisma.user.findMany();
+    t.nonNull.field('getUsers', {
+      type: 'getUser',
+      resolve: async () => {
+        const users = await useGetUsersUseCase.execute();
+        if (users.isLeft()) return { message: users.value.getErrorValue() };
+        const data = users.value.getValue();
+        const data2 = data.map((user) => userToPresentation(user));
+
+        return { message: 'success!', users: data2 };
       },
     });
 
@@ -32,7 +39,7 @@ const userMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.field('userRegister', {
-      type: 'UserResponse',
+      type: 'getUser',
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),

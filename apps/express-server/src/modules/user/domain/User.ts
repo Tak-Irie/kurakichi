@@ -23,12 +23,12 @@ export class User extends AggregateRoot<UserProps> {
     super(props, id);
   }
 
-  get username(): UserName {
-    return this.props.username;
+  get username(): string {
+    return this.props.username.value;
   }
 
-  get email(): UserEmail {
-    return this.props.email;
+  get email(): string {
+    return this.props.email.value;
   }
 
   get password(): UserPassword {

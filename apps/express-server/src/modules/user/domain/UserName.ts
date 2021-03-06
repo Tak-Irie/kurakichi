@@ -15,6 +15,10 @@ export class UserName extends ValueObject<UserNameProps> {
     super(props);
   }
 
+  get value(): string {
+    return this.props.username;
+  }
+
   public static create(props: UserNameProps): Result<UserName> {
     const usernameResult = Guard.falsyCheck({
       argument: props.username,
@@ -38,7 +42,6 @@ export class UserName extends ValueObject<UserNameProps> {
     if (!lessEnough) {
       return Result.fail<UserName>('ユーザー名は最大15文字です');
     }
-
 
     return Result.success<UserName>(new UserName(props));
   }

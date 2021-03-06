@@ -38,8 +38,8 @@ export class UserMapper {
 
     return {
       id: user.id.getId(),
-      username: user.username.props.username,
-      email: user.email.props.email,
+      username: user.username,
+      email: user.email,
       password: hashedPassword,
     };
   }

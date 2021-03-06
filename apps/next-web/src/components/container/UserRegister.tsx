@@ -1,17 +1,18 @@
 import { FC } from 'react';
-import { useTestRegisterMutation } from '../../generated/graphql';
-import { useRouter } from 'next/router';
 import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
+import { useUserRegisterMutation } from '../../graphql/generated/graphql';
 
 interface UserRegisterInput {
-  name: string;
+  email: string;
+  password: string;
+  username: string;
 }
 
 const UserRegister: FC = () => {
-  const [TestRegister, { data }] = useTestRegisterMutation();
+  const [userRegister, { data, loading, error }] = useUserRegisterMutation();
 
   const { register, handleSubmit } = useForm();
 
@@ -19,13 +20,11 @@ const UserRegister: FC = () => {
   //   console.log('what:', a);
   // };
 
-  const onSubmit = async (value: any) => {
+  const onSubmit = async (value: UserRegisterInput) => {
     try {
-      const response = await TestRegister({
-        variables: { registerName: value.name },
+      const response = await userRegister({
+        variables: { ...value },
       });
-
-      console.log(':', response);
     } catch (err) {
       console.log('err:', err);
     }
@@ -34,7 +33,7 @@ const UserRegister: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input name="name" type="text" labeled={true} register={register} />
+        <Input name="username" type="text" labeled={true} register={register} />
         <Input name="email" type="email" labeled={true} register={register} />
         <Input
           name="password"
@@ -44,7 +43,9 @@ const UserRegister: FC = () => {
         />
         <MiddleButton type="submit">UserRegister</MiddleButton>
       </Form>
-      {data && <p>{data.register.test.name}</p>}
+      {loading && <p>loading!</p>}
+      {error && <p>{error.message}</p>}
+      {data && <p>{data.userRegister.message}</p>}
     </>
   );
 };

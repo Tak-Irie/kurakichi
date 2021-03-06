@@ -25,7 +25,7 @@ const Header: FC = () => {
         </Link>
         <ul className="flex items-center space-x-8 lg:flex">
           <HeaderList href="/product" title="our product" label="Product" />
-          <HeaderList href="/" title="none0" label="None0" />
+          <HeaderList href="/users" title="users" label="users" />
           <HeaderList href="/" title="none1" label="None1" />
           <HeaderList href="/" title="none2" label="None2" />
           <HeaderList href="/" title="none3" label="None3" />
