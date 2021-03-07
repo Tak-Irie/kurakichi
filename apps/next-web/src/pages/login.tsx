@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
+import { UserLogin } from '../components/container/UserLogin';
 
 const Login: NextPage = () => {
-  return <p>login</p>;
+  return <UserLogin />;
 };
 
 export default Login;

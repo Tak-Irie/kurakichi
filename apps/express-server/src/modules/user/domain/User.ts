@@ -7,7 +7,7 @@ import { UserName } from './UserName';
 import { UserPassword } from './UserPassword';
 
 interface UserProps {
-  id?: UniqueEntityId;
+  id: UniqueEntityId;
   username: UserName;
   email: UserEmail;
   password: UserPassword;
@@ -23,15 +23,20 @@ export class User extends AggregateRoot<UserProps> {
     super(props, id);
   }
 
-  get username(): string {
+  getId(): string {
+    if (!this.props.id) return "id doesn't exist";
+    return this.props.id.getId();
+  }
+
+  getUsername(): string {
     return this.props.username.value;
   }
 
-  get email(): string {
+  getEmail(): string {
     return this.props.email.value;
   }
 
-  get password(): UserPassword {
+  getPassword(): UserPassword {
     return this.props.password;
   }
 

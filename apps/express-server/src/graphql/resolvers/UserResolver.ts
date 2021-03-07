@@ -1,6 +1,7 @@
 import { extendType, nonNull, stringArg } from 'nexus';
-import { getUserId } from '../../util/getUserId';
+import { getUserIdByCookie } from '../../util/getUserId';
 import {
+  useGetUserById,
   useGetUsersUseCase,
   useLoginUserUseCase,
   useRegisterUserUseCase,
@@ -23,15 +24,15 @@ const userQuery = extendType({
     });
 
     t.nullable.field('me', {
-      type: 'User',
-      resolve: (_, __, context) => {
-        const userId = getUserId(context);
-        if (userId) console.log('userId:', userId);
-        return context.prisma.user.findUnique({
-          where: {
-            id: '1',
-          },
-        });
+      type: 'getUser',
+      resolve: async (_, __, context) => {
+        console.log('session:', context.req.session.userId);
+        const userId = getUserIdByCookie(context);
+        if (userId === undefined) return { message: 'not logged in' };
+        const result = await useGetUserById.execute(userId);
+        if (result.isLeft()) return { message: result.value.getErrorValue() };
+        const user = result.value.getValue();
+        return { message: 'logged in', user: { id: user.id } };
       },
     });
   },
@@ -60,9 +61,9 @@ const userMutation = extendType({
         password: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        console.log('args:', args);
         const user = await useLoginUserUseCase.execute({ ...args });
         if (user.isLeft()) return { message: user.value.getErrorValue() };
+        console.log('user:', user.value.getValue());
         context.req.session.userId = user.value.getValue().id;
         return { message: 'success!', user: { ...user.value.getValue() } };
       },

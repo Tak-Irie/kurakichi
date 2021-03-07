@@ -36,15 +36,15 @@ export class LoginUserUseCase
 
       const verified = await UserPassword.verifyPassword(
         req.password,
-        result.password.value,
+        result.getPassword().value,
       );
 
       if (!verified) return left(new Error.IncorrectPassword());
 
       return right(
         Result.success<UserReadModel>({
-          id: result.id.getId(),
-          email: result.email,
+          id: result.getId(),
+          email: result.getEmail(),
         }),
       );
     } catch (err) {

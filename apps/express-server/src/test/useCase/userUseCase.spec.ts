@@ -120,3 +120,12 @@
 //     done()
 //   })
 // })
+
+describe('ダミー', () => {
+  test('ダミー', (done) => {
+    const one = 1;
+
+    expect(one).toBeTruthy();
+    done();
+  });
+});

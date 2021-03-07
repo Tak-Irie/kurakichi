@@ -11,7 +11,7 @@ type Mutation {
 type Query {
   getTests: [Test]
   getUsers: getUser!
-  me: User
+  me: getUser
 }
 
 type Test {

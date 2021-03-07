@@ -8,6 +8,7 @@ import { UserName } from '../../domain/UserName';
 import { UserPassword } from '../../domain/UserPassword';
 import { IUserRepository } from '../../domain/IUserRepository';
 import { EmailAlreadyExistsError } from './RegisterUserError';
+import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
 
 type RegisterUserDTO = {
   username: string;
@@ -65,6 +66,7 @@ export class RegisterUserUseCase
         return left(new EmailAlreadyExistsError(email.props.email));
       }
       const userOrError = User.create({
+        id: UniqueEntityId.create(),
         email,
         password,
         username,

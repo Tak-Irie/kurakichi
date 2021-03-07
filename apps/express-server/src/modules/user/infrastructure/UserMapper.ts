@@ -21,6 +21,7 @@ export class UserMapper {
       email: userEmailResult.getValue(),
     });
 
+    console.log('user:', userResult);
     return userResult;
   }
 
@@ -28,18 +29,18 @@ export class UserMapper {
     user: User,
   ): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
     let hashedPassword = '';
-    if (!!user.password === true) {
-      if (user.password.isAlreadyHashed()) {
-        hashedPassword = user.password.props.password;
+    if (!!user.getPassword() === true) {
+      if (user.getPassword().isAlreadyHashed()) {
+        hashedPassword = user.getPassword().value;
       } else {
-        hashedPassword = await user.password.getHashedValue();
+        hashedPassword = await user.getPassword().getHashedValue();
       }
     }
 
     return {
       id: user.id.getId(),
-      username: user.username,
-      email: user.email,
+      username: user.getUsername(),
+      email: user.getEmail(),
       password: hashedPassword,
     };
   }

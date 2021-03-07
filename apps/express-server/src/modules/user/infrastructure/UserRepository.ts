@@ -51,6 +51,7 @@ export class UserRepository implements IUserRepository {
     });
     if (user === null) return undefined;
 
+    console.log('user:', user);
     const data = UserMapper.toDomain(user);
     return data;
   }

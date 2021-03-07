@@ -31,7 +31,7 @@ export class GetUserByIdUseCase
         return right(
           Result.success<UserReadModel>({
             id: FoundResult.id.getId(),
-            email: FoundResult.email,
+            email: FoundResult.getEmail(),
           }),
         );
       default:

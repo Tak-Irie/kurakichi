@@ -3,20 +3,32 @@ import { User } from '../../modules/user/domain/User';
 import { UserEmail } from '../../modules/user/domain/UserEmail';
 import { UserName } from '../../modules/user/domain/UserName';
 import { UserPassword } from '../../modules/user/domain/UserPassword';
+import { jest } from '@jest/globals';
 
 export const validEmail = 'success@email.com';
 export const invalidEmail = 'fail';
 export const validPassword = 'password';
 export const invalidPassword = 'p';
+export const hashedValidPassword =
+  '$argon2i$v=19$m=4096,t=3,p=1$6zoQ/V/6nOPil25jstUgHg$+CpC+cvfnq9N5cwsHbvSEQH4yDmo7zTcgDbZT6CYJdk';
 
-const username = UserName.create({ username: 'okName' }).getValue();
+const username = UserName.create({ username: 'validUser' }).getValue();
 const email = UserEmail.create({ email: validEmail }).getValue();
 const password = UserPassword.create({ password: validPassword }).getValue();
+const hashedPassword = UserPassword.create({
+  password: hashedValidPassword,
+}).getValue();
 
-export const dummyValidUser = User.create({
+export const mockValidUser = User.create({
   username,
   email,
   password,
+}).getValue();
+
+export const mockValidUserWithArgon2 = User.create({
+  username,
+  email,
+  password: hashedPassword,
 }).getValue();
 
 export const MockUserRepository = jest
@@ -29,7 +41,7 @@ export const MockUserRepository = jest
       return false;
     },
     getUserByUserId: async (userId: string): Promise<User | undefined> => {
-      if (userId === '1') return dummyValidUser;
+      if (userId === '1') return mockValidUser;
       await Promise.resolve('nothing');
 
       return undefined;
@@ -43,11 +55,12 @@ export const MockUserRepository = jest
     getUsers: async (): Promise<User[] | undefined> => {
       await Promise.resolve('nothing');
 
-      return [dummyValidUser, dummyValidUser];
+      return [mockValidUser, mockValidUser];
     },
 
     getUserByEmail: async (userEmail: UserEmail): Promise<User | undefined> => {
-      if (userEmail.value === 'success@email.com') return dummyValidUser;
+      if (userEmail.value === 'success@email.com')
+        return mockValidUserWithArgon2;
       return undefined;
     },
   }));

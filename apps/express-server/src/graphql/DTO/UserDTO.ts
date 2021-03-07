@@ -5,9 +5,9 @@ export const userToPresentation = (
   user: User,
 ): NexusGenObjects['UserResponse'] => {
   const data = {
-    id: user.id.getId(),
-    email: user.email,
-    username: user.username,
+    id: user.getId(),
+    email: user.getEmail(),
+    username: user.getUsername(),
   };
   return data;
 };

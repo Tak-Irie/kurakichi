@@ -79,7 +79,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getTests: Array<NexusGenRootTypes['Test'] | null> | null; // [Test]
     getUsers: NexusGenRootTypes['getUser']; // getUser!
-    me: NexusGenRootTypes['User'] | null; // User
+    me: NexusGenRootTypes['getUser'] | null; // getUser
   }
   Test: { // field return type
     id: string; // String!
@@ -115,7 +115,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getTests: 'Test'
     getUsers: 'getUser'
-    me: 'User'
+    me: 'getUser'
   }
   Test: { // field return type name
     id: 'String'
