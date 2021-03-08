@@ -9,33 +9,44 @@ import { UserPassword } from '../../domain/UserPassword';
 import { IUserRepository } from '../../domain/IUserRepository';
 import { EmailAlreadyExistsError } from './RegisterUserError';
 import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
+import { StoreConnectionError } from '../../../../shared/StoreConnectionError';
 
-type RegisterUserDTO = {
+type RegisterUserInput = {
   username: string;
   email: string;
   password: string;
 };
 
+type RegisterUserDTO = {
+  id: string;
+  username: string;
+};
+
 type UserTypes = UserEmail | UserName | UserPassword;
 
 type RegisterUserResponse = Either<
-  EmailAlreadyExistsError | UnexpectedError | Result<UserTypes> | Result<User>,
-  Result<void>
+  | EmailAlreadyExistsError
+  | UnexpectedError
+  | StoreConnectionError
+  | Result<UserTypes>
+  | Result<User>,
+  Result<RegisterUserDTO>
 >;
 
 export class RegisterUserUseCase
-  implements IUseCase<RegisterUserDTO, Promise<RegisterUserResponse>> {
+  implements IUseCase<RegisterUserInput, Promise<RegisterUserResponse>> {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
   public async execute(
-    request: RegisterUserDTO,
+    request: RegisterUserInput,
   ): Promise<RegisterUserResponse> {
     const usernameOrError = UserName.create({
       username: request.username,
     });
-    const emailOrError: Result<UserEmail> = UserEmail.create({
+
+    const emailOrError = UserEmail.create({
       email: request.email,
     });
 
@@ -53,9 +64,9 @@ export class RegisterUserUseCase
       return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
     }
 
-    const email: UserEmail = emailOrError.getValue();
-    const password: UserPassword = passwordOrError.getValue();
-    const username: UserName = usernameOrError.getValue();
+    const email = emailOrError.getValue();
+    const password = passwordOrError.getValue();
+    const username = usernameOrError.getValue();
 
     try {
       const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(
@@ -75,9 +86,20 @@ export class RegisterUserUseCase
       if (userOrError.isFailure)
         return left(Result.fail<User>(userOrError.getErrorValue()));
 
-      await this.userRepository.registerUser(userOrError.getValue());
+      const result = await this.userRepository.registerUser(
+        userOrError.getValue(),
+      );
 
-      return right(Result.success<void>());
+      if (result === undefined) {
+        return left(new StoreConnectionError());
+      }
+
+      return right(
+        Result.success<RegisterUserDTO>({
+          id: result.getId(),
+          username: result.getUsername(),
+        }),
+      );
     } catch (err) {
       return left(new UnexpectedError(err));
     }

@@ -12,7 +12,7 @@ const repo = new MockUserRepository();
 describe('ユーザーログインテスト', () => {
   const useLoginUserUseCase = new LoginUserUseCase(repo);
 
-  //TODO Jestがargon2を読み込まない。ApolloMockテストのときまた考える
+  //TODO: Jestがargon2を読み込まない。ApolloMockテストのときまた考える
   // test('ログイン成功', async (done) => {
   //   const result = await useLoginUserUseCase.execute({
   //     email: validEmail,

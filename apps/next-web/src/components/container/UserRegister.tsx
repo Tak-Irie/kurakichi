@@ -3,7 +3,12 @@ import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
-import { useUserRegisterMutation } from '../../graphql/generated/graphql';
+import {
+  UserMeDocument,
+  UserMeQuery,
+  useUserMeLazyQuery,
+  useUserRegisterMutation,
+} from '../../graphql/generated/graphql';
 
 interface UserRegisterInput {
   email: string;
@@ -13,18 +18,17 @@ interface UserRegisterInput {
 
 const UserRegister: FC = () => {
   const [userRegister, { data, loading, error }] = useUserRegisterMutation();
+  const [meQuery] = useUserMeLazyQuery();
 
   const { register, handleSubmit } = useForm();
 
-  // const onSubmit = (a: any) => {
-  //   console.log('what:', a);
-  // };
-
   const onSubmit = async (value: UserRegisterInput) => {
     try {
-      const response = await userRegister({
+      await userRegister({
         variables: { ...value },
+        fetchPolicy: 'no-cache',
       });
+      meQuery();
     } catch (err) {
       console.log('err:', err);
     }
@@ -44,8 +48,8 @@ const UserRegister: FC = () => {
         <MiddleButton type="submit">UserRegister</MiddleButton>
       </Form>
       {loading && <p>loading!</p>}
-      {error && <p>{error.message}</p>}
-      {data && <p>{data.userRegister.message}</p>}
+      {error && <p>{error.message} error</p>}
+      {data && <p>{data.userRegister.message} data</p>}
     </>
   );
 };

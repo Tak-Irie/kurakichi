@@ -17,7 +17,7 @@ const TestQuery = extendType({
 const TestMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('register', {
+    t.field('testRegister', {
       type: 'Test',
       args: {
         name: nonNull(stringArg()),

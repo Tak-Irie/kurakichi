@@ -17,6 +17,7 @@ const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_URL,
   credentials: 'include',
   cache: new InMemoryCache(),
+  // }),
   // headers: {
   //   cookie:
   //     (typeof window === 'undefined' ? ctx?.req?.headers.cookie : undefined) ||

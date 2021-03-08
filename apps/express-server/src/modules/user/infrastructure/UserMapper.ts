@@ -6,7 +6,7 @@ import { UserName } from '../domain/UserName';
 import { UserPassword } from '../domain/UserPassword';
 
 export class UserMapper {
-  public static toDomain(storedUser: StoredUser): User {
+  public static ToDomain(storedUser: StoredUser): User {
     const userNameResult = UserName.create({ username: storedUser.username });
     const userPasswordResult = UserPassword.create({
       password: storedUser.password,
@@ -21,7 +21,6 @@ export class UserMapper {
       email: userEmailResult.getValue(),
     });
 
-    console.log('user:', userResult);
     return userResult;
   }
 
@@ -36,9 +35,8 @@ export class UserMapper {
         hashedPassword = await user.getPassword().getHashedValue();
       }
     }
-
     return {
-      id: user.id.getId(),
+      id: user.getId(),
       username: user.getUsername(),
       email: user.getEmail(),
       password: hashedPassword,

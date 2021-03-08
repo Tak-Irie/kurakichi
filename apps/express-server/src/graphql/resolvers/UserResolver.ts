@@ -4,9 +4,11 @@ import {
   useGetUserById,
   useGetUsersUseCase,
   useLoginUserUseCase,
+  useLogoutUserUseCase,
   useRegisterUserUseCase,
 } from '../../modules/user/useCases';
-import { userToPresentation } from '../DTO/UserDTO';
+import { userToPresentation } from '../toPresentationDTO/userToPresentation';
+import { COOKIE_NAME } from '../../util/constants';
 
 const userQuery = extendType({
   type: 'Query',
@@ -26,12 +28,15 @@ const userQuery = extendType({
     t.nullable.field('me', {
       type: 'getUser',
       resolve: async (_, __, context) => {
-        console.log('session:', context.req.session.userId);
+        console.log('called');
         const userId = getUserIdByCookie(context);
+        // console.log('id:', userId);
         if (userId === undefined) return { message: 'not logged in' };
         const result = await useGetUserById.execute(userId);
+        // console.log('res:', result);
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
+        // console.log('user:', user);
         return { message: 'logged in', user: { id: user.id } };
       },
     });
@@ -48,10 +53,12 @@ const userMutation = extendType({
         password: nonNull(stringArg()),
         username: nonNull(stringArg()),
       },
-      resolve: async (_, args) => {
-        const user = await useRegisterUserUseCase.execute({ ...args });
-        if (user.isLeft()) return { message: user.value.getErrorValue() };
-        return { message: 'success!' };
+      resolve: async (_, args, context) => {
+        const result = await useRegisterUserUseCase.execute({ ...args });
+        if (result.isLeft()) return { message: result.value.getErrorValue() };
+        const user = result.value.getValue();
+        context.req.session.userId = user.id;
+        return { message: 'success!', user: { id: user.id } };
       },
     });
     t.field('login', {
@@ -63,9 +70,27 @@ const userMutation = extendType({
       resolve: async (_, args, context) => {
         const user = await useLoginUserUseCase.execute({ ...args });
         if (user.isLeft()) return { message: user.value.getErrorValue() };
-        console.log('user:', user.value.getValue());
-        context.req.session.userId = user.value.getValue().id;
+        const data = user.value.getValue();
+        context.req.session.userId = data.id;
         return { message: 'success!', user: { ...user.value.getValue() } };
+      },
+    });
+    // TODO::check below
+    t.field('logout', {
+      type: 'GeneralResponse',
+      resolve: async (_, __, context) => {
+        const req = context.req;
+        const userId = req.session.userId;
+        if (userId === undefined) return { result: false, message: '不正検出' };
+        const result = await useLogoutUserUseCase.execute({ userId });
+        if (result.isLeft())
+          return { result: false, message: result.value.getErrorValue() };
+        // TODO::transplant this process to auth service
+        req.session.destroy((err) => {
+          console.log('err:', err);
+        });
+        context.res.clearCookie(COOKIE_NAME);
+        return { result: true, message: 'ログアウトしました' };
       },
     });
   },

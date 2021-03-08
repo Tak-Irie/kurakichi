@@ -19,8 +19,8 @@ interface UserProps {
 }
 
 export class User extends AggregateRoot<UserProps> {
-  constructor(readonly props: UserProps, id?: UniqueEntityId) {
-    super(props, id);
+  constructor(readonly props: UserProps) {
+    super(props);
   }
 
   getId(): string {

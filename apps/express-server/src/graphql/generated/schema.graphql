@@ -2,9 +2,15 @@
 ### Do not make changes to this file directly
 
 
+type GeneralResponse {
+  message: String
+  result: Boolean
+}
+
 type Mutation {
   login(email: String!, password: String!): getUser
-  register(name: String!): Test
+  logout: GeneralResponse
+  testRegister(name: String!): Test
   userRegister(email: String!, password: String!, username: String!): getUser
 }
 

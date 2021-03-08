@@ -18,24 +18,20 @@ export class GetUserByIdUseCase
   }
 
   public async execute(userId: string): Promise<GetUserByIdResponse> {
-    const FoundResult = await this.userRepository.getUserByUserId(userId);
+    try {
+      const result = await this.userRepository.getUserByUserId(userId);
 
-    switch (typeof FoundResult) {
-      case 'undefined':
+      if (result === undefined)
         return left(new GetUserByIdErrors.UserNotFoundError(userId));
-      case 'object':
-        if (FoundResult === null) {
-          return left(new UnexpectedError());
-        }
 
-        return right(
-          Result.success<UserReadModel>({
-            id: FoundResult.id.getId(),
-            email: FoundResult.getEmail(),
-          }),
-        );
-      default:
-        return left(new UnexpectedError());
+      return right(
+        Result.success<UserReadModel>({
+          id: result.getId(),
+          email: result.getEmail(),
+        }),
+      );
+    } catch (err) {
+      return left(new UnexpectedError());
     }
   }
 }

@@ -4,6 +4,7 @@ import { UserEmail } from '../../modules/user/domain/UserEmail';
 import { UserName } from '../../modules/user/domain/UserName';
 import { UserPassword } from '../../modules/user/domain/UserPassword';
 import { jest } from '@jest/globals';
+import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 
 export const validEmail = 'success@email.com';
 export const invalidEmail = 'fail';
@@ -20,12 +21,14 @@ const hashedPassword = UserPassword.create({
 }).getValue();
 
 export const mockValidUser = User.create({
+  id: UniqueEntityId.create(),
   username,
   email,
   password,
 }).getValue();
 
 export const mockValidUserWithArgon2 = User.create({
+  id: UniqueEntityId.create(),
   username,
   email,
   password: hashedPassword,
@@ -46,11 +49,11 @@ export const MockUserRepository = jest
 
       return undefined;
     },
-    registerUser: async (user: User): Promise<boolean> => {
-      if (typeof user === 'object') return true;
+    registerUser: async (user: User): Promise<User | undefined> => {
+      if (typeof user === 'object') return undefined;
       await Promise.resolve('nothing');
 
-      return false;
+      return mockValidUser;
     },
     getUsers: async (): Promise<User[] | undefined> => {
       await Promise.resolve('nothing');

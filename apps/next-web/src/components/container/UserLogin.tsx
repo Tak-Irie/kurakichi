@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, SyntheticEvent } from 'react';
 import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
@@ -7,6 +7,8 @@ import {
   UserMeDocument,
   UserMeQuery,
   useUserLoginMutation,
+  useUserMeLazyQuery,
+  useUserMeQuery,
 } from '../../graphql/generated/graphql';
 
 interface UserLoginInput {
@@ -16,23 +18,26 @@ interface UserLoginInput {
 
 const UserLogin: FC = () => {
   const [userLogin, { data, loading, error }] = useUserLoginMutation();
+  const [meQuery] = useUserMeLazyQuery();
 
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = async (value: UserLoginInput) => {
+  const handleMutation = async (value: UserLoginInput) => {
     try {
-      const response = await userLogin({
+      await userLogin({
         variables: { ...value },
-        update: (cache, { data }) => {
-          cache.writeQuery<UserMeQuery>({
-            query: UserMeDocument,
-            data: {
-              __typename: 'Query',
-              me: { user: { id: data.login.user.id } },
-            },
-          });
-        },
+        // update: (cache, { data }) => {
+        //   cache.writeQuery<UserMeQuery>({
+        //     query: UserMeDocument,
+        //     data: {
+        //       __typename: 'Query',
+        //       me: { user: { id: data.login.user.id } },
+        //     },
+        //   });
+        // },
+        fetchPolicy: 'no-cache',
       });
+      meQuery();
     } catch (err) {
       console.log('err:', err);
     }
@@ -40,7 +45,7 @@ const UserLogin: FC = () => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(handleMutation)}>
         <Input name="email" type="email" labeled={true} register={register} />
         <Input
           name="password"
@@ -51,8 +56,8 @@ const UserLogin: FC = () => {
         <MiddleButton type="submit">Login</MiddleButton>
       </Form>
       {loading && <p>loading!</p>}
-      {error && <p>{error.message}</p>}
-      {data && <p>{data.login.user.id}</p>}
+      {error && <p>{error.message} error</p>}
+      {data && <p>{data.login.message} data</p>}
     </>
   );
 };

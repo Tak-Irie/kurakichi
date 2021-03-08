@@ -22,25 +22,25 @@ export class UserRepository implements IUserRepository {
     });
     if (!result) return undefined;
 
-    return UserMapper.toDomain(result);
+    return UserMapper.ToDomain(result);
   }
 
-  async registerUser(user: User): Promise<boolean> {
+  async registerUser(user: User): Promise<User | undefined> {
     const registeredEmail = await this.confirmExistence(user.props.email);
 
-    if (registeredEmail === true) return false;
+    if (registeredEmail === true) return undefined;
 
     const data = await UserMapper.toStore(user);
 
     await this.prisma.user.create({ data });
 
-    return true;
+    return user;
   }
 
   async getUsers(): Promise<User[] | undefined> {
     const users = await this.prisma.user.findMany();
 
-    const data = users.map((user) => UserMapper.toDomain(user));
+    const data = users.map((user) => UserMapper.ToDomain(user));
 
     return data || null;
   }
@@ -51,8 +51,7 @@ export class UserRepository implements IUserRepository {
     });
     if (user === null) return undefined;
 
-    console.log('user:', user);
-    const data = UserMapper.toDomain(user);
+    const data = UserMapper.ToDomain(user);
     return data;
   }
 }
