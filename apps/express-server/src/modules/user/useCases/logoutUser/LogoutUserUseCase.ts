@@ -31,7 +31,7 @@ export class LogoutUserUseCase
       if (user === undefined) {
         return left(new UserNotFoundOrDeletedError());
       }
-      // TODO OIDCとRedisを組み込んだAuthサービスをつくる
+      // TODO: OIDCとRedisを組み込んだAuthサービスをつくる
       return right(Result.success<void>());
     } catch (err) {
       return left(new UnexpectedError());

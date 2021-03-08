@@ -1,14 +1,9 @@
-import { useApolloClient } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useUserLogoutMutation } from '../../graphql/generated/graphql';
 import { MiddleButton } from '../presentational/atoms/Button';
 
-type LogoutButtonProps = {
-  some?: string;
-};
-
-const LogoutButton: FC<LogoutButtonProps> = () => {
+const LogoutButton: FC = () => {
   const [logout, { client }] = useUserLogoutMutation();
   const router = useRouter();
 
@@ -18,6 +13,7 @@ const LogoutButton: FC<LogoutButtonProps> = () => {
       onClick={async (e) => {
         e.preventDefault();
         await logout();
+        // TODO: need to reset all cache ?
         await client.resetStore();
         router.push('/');
       }}
