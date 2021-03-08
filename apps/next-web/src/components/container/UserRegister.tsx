@@ -4,8 +4,6 @@ import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import {
-  UserMeDocument,
-  UserMeQuery,
   useUserMeLazyQuery,
   useUserRegisterMutation,
 } from '../../graphql/generated/graphql';

@@ -1,3 +1,4 @@
+import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
 import { User } from './User';
 import { UserEmail } from './UserEmail';
 
@@ -7,4 +8,5 @@ export interface IUserRepository {
   registerUser(user: User): Promise<User | undefined>;
   getUsers(): Promise<User[] | undefined>;
   getUserByEmail(userEmail: UserEmail): Promise<User | undefined>;
+  deleteUser(userId: UniqueEntityId): Promise<boolean>;
 }

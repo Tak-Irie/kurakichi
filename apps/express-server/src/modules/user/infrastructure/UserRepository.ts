@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
 import { IUserRepository } from '../domain/IUserRepository';
 import { User } from '../domain/User';
 import { UserEmail } from '../domain/UserEmail';
@@ -53,5 +54,13 @@ export class UserRepository implements IUserRepository {
 
     const data = UserMapper.ToDomain(user);
     return data;
+  }
+
+  async deleteUser(userId: UniqueEntityId): Promise<boolean> {
+    const result = await this.prisma.user.delete({
+      where: { id: userId.getId() },
+    });
+    if (result === undefined) return false;
+    return true;
   }
 }
