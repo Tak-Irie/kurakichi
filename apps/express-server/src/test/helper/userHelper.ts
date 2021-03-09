@@ -66,4 +66,9 @@ export const MockUserRepository = jest
         return mockValidUserWithArgon2;
       return undefined;
     },
+
+    deleteUser: async (userId: UniqueEntityId): Promise<boolean> => {
+      if (userId.getId() === '1234567890') return true;
+      return false;
+    },
   }));

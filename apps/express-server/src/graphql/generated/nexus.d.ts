@@ -80,6 +80,7 @@ export interface NexusGenFieldTypes {
     result: boolean | null; // Boolean
   }
   Mutation: { // field return type
+    deleteUser: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     login: NexusGenRootTypes['getUser'] | null; // getUser
     logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     testRegister: NexusGenRootTypes['Test'] | null; // Test
@@ -121,6 +122,7 @@ export interface NexusGenFieldTypeNames {
     result: 'Boolean'
   }
   Mutation: { // field return type name
+    deleteUser: 'GeneralResponse'
     login: 'getUser'
     logout: 'GeneralResponse'
     testRegister: 'Test'

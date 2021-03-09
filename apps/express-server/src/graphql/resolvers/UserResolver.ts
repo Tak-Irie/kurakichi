@@ -1,6 +1,7 @@
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserId';
 import {
+  useDeleteUserUseCase,
   useGetUserById,
   useGetUsersUseCase,
   useLoginUserUseCase,
@@ -81,6 +82,7 @@ const userMutation = extendType({
       resolve: async (_, __, context) => {
         const req = context.req;
         const userId = req.session.userId;
+        // TODO:set up logger sentry or winston
         if (userId === undefined) return { result: false, message: '不正検出' };
         const result = await useLogoutUserUseCase.execute({ userId });
         if (result.isLeft())
@@ -91,6 +93,23 @@ const userMutation = extendType({
         });
         context.res.clearCookie(COOKIE_NAME);
         return { result: true, message: 'ログアウトしました' };
+      },
+    });
+    t.field('deleteUser', {
+      type: 'GeneralResponse',
+      resolve: async (_, __, context) => {
+        const req = context.req;
+        const userId = req.session.userId;
+        // TODO:set up logger sentry or winston
+        if (userId === undefined) return { result: false, message: '不正検出' };
+        const result = await useDeleteUserUseCase.execute({ userId });
+        if (result.isLeft())
+          return { result: false, message: result.value.getErrorValue() };
+        req.session.destroy((err) => {
+          console.log('err:', err);
+        });
+        context.res.clearCookie(COOKIE_NAME);
+        return { result: true, message: 'アカウントの削除に成功しました' };
       },
     });
   },

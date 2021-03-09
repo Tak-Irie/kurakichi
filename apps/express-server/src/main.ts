@@ -12,6 +12,7 @@ import { PrismaClient } from '@prisma/client';
 
 import { GraphqlSchema as schema } from './graphql/makeSchema';
 import { UserRepository } from './modules/user/infrastructure/UserRepository';
+import { sentryTest } from './util/sentry';
 
 declare module 'express-session' {
   interface SessionData {
@@ -74,14 +75,13 @@ const main = async () => {
 
   app.get('/', (req, res) => {
     console.log('got access');
+    sentryTest();
+
     res.json({ hi: 'congrats!' });
   });
 
   app.get('/ex', async (req, res) => {
-    const repo = new UserRepository();
-    await repo.getUsers();
-
-    res.json({ done: 'congrats!' });
+    res.json({ done: "it's experimental page" });
   });
 
   app.listen(process.env.NX_PORT, () => {

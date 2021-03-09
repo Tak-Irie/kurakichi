@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { LogoutButton } from '../components/container/LogoutButton';
+import { UserDeleteButton } from '../components/container/UserDeleteButton';
 import { useUserMeQuery } from '../graphql/generated/graphql';
 import { IsAuth } from '../util/isAuth';
 
@@ -17,6 +18,7 @@ const Private: NextPage = () => {
         <p>aaa</p>
         <p>bbb</p>
         <LogoutButton />
+        <UserDeleteButton />
       </>
     );
 };
