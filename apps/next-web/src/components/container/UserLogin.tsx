@@ -1,14 +1,11 @@
-import { FC, SyntheticEvent } from 'react';
+import { FC } from 'react';
 import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import {
-  UserMeDocument,
-  UserMeQuery,
   useUserLoginMutation,
   useUserMeLazyQuery,
-  useUserMeQuery,
 } from '../../graphql/generated/graphql';
 
 interface UserLoginInput {
@@ -26,15 +23,6 @@ const UserLogin: FC = () => {
     try {
       await userLogin({
         variables: { ...value },
-        // update: (cache, { data }) => {
-        //   cache.writeQuery<UserMeQuery>({
-        //     query: UserMeDocument,
-        //     data: {
-        //       __typename: 'Query',
-        //       me: { user: { id: data.login.user.id } },
-        //     },
-        //   });
-        // },
         fetchPolicy: 'no-cache',
       });
       meQuery();

@@ -10,7 +10,9 @@ interface UserProps {
   id: UniqueEntityId;
   username: UserName;
   email: UserEmail;
-  password: UserPassword;
+  password?: UserPassword;
+  ssoSub?: string;
+  picture?: string;
   // role: "USER" | "ADMIN";
   // // isEmailVerified: boolean;
   // profilePicture?: string;
@@ -36,7 +38,8 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.email.value;
   }
 
-  getPassword(): UserPassword {
+  getPassword(): UserPassword | undefined {
+    if (this.props.password === undefined) return undefined;
     return this.props.password;
   }
 

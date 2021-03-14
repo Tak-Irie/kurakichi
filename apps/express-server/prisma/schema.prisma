@@ -10,8 +10,10 @@ generator client {
 model User {
   id        String   @id
   email     String   @unique
-  password  String
   username  String
+  password  String?
+  ssoSub    String?
+  picture   String?
   // role      Role?    @default(USER)
   createdAt DateTime @default(now())
 }

@@ -1,4 +1,4 @@
-import argon2 from 'argon2';
+import * as argon2 from 'argon2';
 
 import { Guard } from '../../../shared/Guard';
 import { Result } from '../../../shared/Result';
@@ -14,7 +14,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     super(props);
   }
 
-  get value(): string {
+  getValue(): string {
     return this.props.password;
   }
 

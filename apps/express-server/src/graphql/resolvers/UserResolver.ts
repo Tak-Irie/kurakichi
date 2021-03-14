@@ -29,7 +29,7 @@ const userQuery = extendType({
     t.nullable.field('me', {
       type: 'getUser',
       resolve: async (_, __, context) => {
-        console.log('called');
+        console.log('me query called');
         const userId = getUserIdByCookie(context);
         // console.log('id:', userId);
         if (userId === undefined) return { message: 'not logged in' };
@@ -38,7 +38,10 @@ const userQuery = extendType({
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
         // console.log('user:', user);
-        return { message: 'logged in', user: { id: user.id } };
+        return {
+          message: 'logged in',
+          user: { id: user.id, username: user.username },
+        };
       },
     });
   },

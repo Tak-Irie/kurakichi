@@ -9,7 +9,10 @@ import { UserReadModel } from '../../domain/UserReadModel';
 import * as Error from './LoginUserError';
 
 type LoginUserResponse = Either<
-  Error.IncorrectPassword | Error.InvalidEmail | UnexpectedError,
+  | Error.IncorrectPassword
+  | Error.InvalidEmail
+  | Error.SsoUser
+  | UnexpectedError,
   Result<UserReadModel>
 >;
 
@@ -34,9 +37,13 @@ export class LoginUserUseCase
 
       if (result === undefined) return left(new Error.InvalidEmail());
 
+      const storedPass = result.getPassword();
+
+      if (storedPass === undefined) return left(new Error.SsoUser());
+
       const verified = await UserPassword.verifyPassword(
         req.password,
-        result.getPassword().value,
+        storedPass.getValue(),
       );
 
       if (!verified) return left(new Error.IncorrectPassword());

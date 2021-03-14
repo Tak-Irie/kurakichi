@@ -28,6 +28,7 @@ export class GetUserByIdUseCase
         Result.success<UserReadModel>({
           id: result.getId(),
           email: result.getEmail(),
+          username: result.getUsername(),
         }),
       );
     } catch (err) {

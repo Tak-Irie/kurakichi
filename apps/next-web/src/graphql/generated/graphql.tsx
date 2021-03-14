@@ -28,7 +28,7 @@ export type User = {
   __typename?: 'User';
   id: Scalars['String'];
   email: Scalars['String'];
-  password: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   username: Scalars['String'];
 };
 
@@ -168,7 +168,7 @@ export type UserMeQuery = (
     { __typename?: 'getUser' }
     & { user?: Maybe<(
       { __typename?: 'UserResponse' }
-      & Pick<UserResponse, 'id'>
+      & Pick<UserResponse, 'id' | 'username'>
     )> }
   )> }
 );
@@ -352,6 +352,7 @@ export const UserMeDocument = gql`
   me {
     user {
       id
+      username
     }
   }
 }

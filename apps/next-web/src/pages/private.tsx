@@ -6,7 +6,9 @@ import { IsAuth } from '../util/isAuth';
 
 const Private: NextPage = () => {
   IsAuth();
-  const { data, loading, error } = useUserMeQuery();
+  const { data, loading, error } = useUserMeQuery({
+    fetchPolicy: 'network-only',
+  });
 
   if (loading) return <p>loading</p>;
 
@@ -17,6 +19,7 @@ const Private: NextPage = () => {
       <>
         <p>aaa</p>
         <p>bbb</p>
+        {data.me.user?.username && <p>こんにちは {data.me.user.username} !</p>}
         <LogoutButton />
         <UserDeleteButton />
       </>

@@ -11,7 +11,6 @@ import {
 } from '@apollo/client';
 
 import { Layout } from '../components/presentational/templates/Layouts';
-import { NextPageContext } from 'next';
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_URL,

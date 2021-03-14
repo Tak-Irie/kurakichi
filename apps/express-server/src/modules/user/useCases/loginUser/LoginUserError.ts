@@ -12,3 +12,12 @@ export class InvalidEmail extends Result<IUseCaseError> {
     super(false, 'アカウントが存在しないか、パスワードが正しくありません');
   }
 }
+
+export class SsoUser extends Result<IUseCaseError> {
+  constructor() {
+    super(
+      false,
+      'ソーシャルログインを利用しています。そちらからログインして下さい',
+    );
+  }
+}
