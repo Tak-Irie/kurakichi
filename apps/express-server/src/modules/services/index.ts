@@ -1,3 +1,4 @@
 import { OidcAuthService } from './OidcAuthService';
+import { RedisAuthService } from './RedisAuthService';
 
-export { OidcAuthService };
+export { OidcAuthService, RedisAuthService };
