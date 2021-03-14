@@ -26,8 +26,8 @@ const Header: FC = () => {
         <ul className="flex items-center space-x-8 lg:flex">
           <HeaderList href="/product" title="our product" label="Product" />
           <HeaderList href="/users" title="users" label="users" />
-          <HeaderList href="/" title="none1" label="None1" />
-          <HeaderList href="/" title="none2" label="None2" />
+          <HeaderList href="/login" title="login" label="login" />
+          <HeaderList href="/private" title="private" label="private" />
           <HeaderList href="/" title="none3" label="None3" />
           <li>
             <SingUpButton />

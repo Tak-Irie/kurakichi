@@ -7,10 +7,12 @@ import { UserName } from './UserName';
 import { UserPassword } from './UserPassword';
 
 interface UserProps {
-  id?: UniqueEntityId;
+  id: UniqueEntityId;
   username: UserName;
   email: UserEmail;
-  password: UserPassword;
+  password?: UserPassword;
+  ssoSub?: string;
+  picture?: string;
   // role: "USER" | "ADMIN";
   // // isEmailVerified: boolean;
   // profilePicture?: string;
@@ -19,19 +21,25 @@ interface UserProps {
 }
 
 export class User extends AggregateRoot<UserProps> {
-  constructor(readonly props: UserProps, id?: UniqueEntityId) {
-    super(props, id);
+  constructor(readonly props: UserProps) {
+    super(props);
   }
 
-  get username(): string {
+  getId(): string {
+    if (!this.props.id) return "id doesn't exist";
+    return this.props.id.getId();
+  }
+
+  getUsername(): string {
     return this.props.username.value;
   }
 
-  get email(): string {
+  getEmail(): string {
     return this.props.email.value;
   }
 
-  get password(): UserPassword {
+  getPassword(): UserPassword | undefined {
+    if (this.props.password === undefined) return undefined;
     return this.props.password;
   }
 

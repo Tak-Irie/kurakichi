@@ -1,9 +1,15 @@
 import { NextPage } from 'next';
+import { SyntheticEvent } from 'react';
 import { MiddleButton } from '../components/presentational/atoms/Button';
 import { useUserGetQuery } from '../graphql/generated/graphql';
 
 const Users: NextPage = () => {
   const { data, loading, error, refetch } = useUserGetQuery();
+
+  const handleClick = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    await refetch();
+  };
 
   return (
     <>
@@ -19,7 +25,7 @@ const Users: NextPage = () => {
             </ul>
           </div>
         ))}
-      <MiddleButton type="button" onClick={() => refetch()}>
+      <MiddleButton type="button" onClick={handleClick}>
         再読み込み
       </MiddleButton>
     </>

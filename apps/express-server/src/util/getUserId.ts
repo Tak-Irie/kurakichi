@@ -1,7 +1,7 @@
 import { Context } from './context';
 
-//TODO
-export function getUserId(context: Context) {
-  const cookie = context.req.cookie;
-  return cookie;
+//TODO:
+export function getUserIdByCookie(context: Context) {
+  const id = context.req.session.userId;
+  return id;
 }

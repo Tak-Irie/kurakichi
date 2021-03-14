@@ -1,4 +1,4 @@
-import argon2 from 'argon2';
+import * as argon2 from 'argon2';
 
 import { Guard } from '../../../shared/Guard';
 import { Result } from '../../../shared/Result';
@@ -14,6 +14,10 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     super(props);
   }
 
+  getValue(): string {
+    return this.props.password;
+  }
+
   public static create(props: UserPasswordProps): Result<UserPassword> {
     const propsResult = Guard.falsyCheck({
       argument: props.password,
@@ -24,11 +28,10 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
       return Result.fail<UserPassword>(propsResult.message);
     }
     if (!props.isHashed && !this.isAppropriateLength(props.password)) {
-        return Result.fail<UserPassword>(
-          'パスワードは8文字以上に設定してください',
-        );
-      }
-
+      return Result.fail<UserPassword>(
+        'パスワードは8文字以上に設定してください',
+      );
+    }
 
     return Result.success<UserPassword>(
       new UserPassword({
@@ -45,7 +48,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
   public async getHashedValue(): Promise<string> {
     if (this.isAlreadyHashed()) return this.props.password;
 
-    return this.hashPassword(this.props.password);
+    return await this.hashPassword(this.props.password);
   }
 
   private async hashPassword(password: string): Promise<string> {
@@ -54,18 +57,18 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     return hashedPassword;
   }
 
-  public async comparePassword(plainTextPassword: string): Promise<boolean> {
-    let isHashed: string;
-    if (this.isAlreadyHashed()) {
-      isHashed = this.props.password;
+  // public async comparePassword(plainTextPassword: string): Promise<boolean> {
+  //   let isHashed: string;
+  //   if (this.isAlreadyHashed()) {
+  //     isHashed = this.props.password;
 
-      return this.verifyPassword(plainTextPassword, isHashed);
-    }
+  //     return this.verifyPassword(plainTextPassword, isHashed);
+  //   }
 
-    return this.props.password === plainTextPassword;
-  }
+  //   return this.props.password === plainTextPassword;
+  // }
 
-  private async verifyPassword(
+  public static async verifyPassword(
     plainText: string,
     hashed: string,
   ): Promise<boolean> {
@@ -83,5 +86,4 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
 
     return this.props.isHashed;
   }
-
 }

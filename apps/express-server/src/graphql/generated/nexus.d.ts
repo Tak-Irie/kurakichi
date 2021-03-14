@@ -33,6 +33,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  GeneralResponse: { // root type
+    message?: string | null; // String
+    result?: boolean | null; // Boolean
+  }
   Mutation: {};
   Query: {};
   Test: { // root type
@@ -45,13 +49,13 @@ export interface NexusGenObjects {
   User: { // root type
     email: string; // String!
     id: string; // String!
-    password: string; // String!
+    password?: string | null; // String
     username: string; // String!
   }
   UserResponse: { // root type
-    email: string; // String!
+    email?: string | null; // String
     id: string; // String!
-    username: string; // String!
+    username?: string | null; // String
   }
   getUser: { // root type
     message: string; // String!
@@ -71,14 +75,21 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  GeneralResponse: { // field return type
+    message: string | null; // String
+    result: boolean | null; // Boolean
+  }
   Mutation: { // field return type
-    register: NexusGenRootTypes['Test'] | null; // Test
+    deleteUser: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    login: NexusGenRootTypes['getUser'] | null; // getUser
+    logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    testRegister: NexusGenRootTypes['Test'] | null; // Test
     userRegister: NexusGenRootTypes['getUser'] | null; // getUser
   }
   Query: { // field return type
     getTests: Array<NexusGenRootTypes['Test'] | null> | null; // [Test]
     getUsers: NexusGenRootTypes['getUser']; // getUser!
-    me: NexusGenRootTypes['User'] | null; // User
+    me: NexusGenRootTypes['getUser'] | null; // getUser
   }
   Test: { // field return type
     id: string; // String!
@@ -90,13 +101,13 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     email: string; // String!
     id: string; // String!
-    password: string; // String!
+    password: string | null; // String
     username: string; // String!
   }
   UserResponse: { // field return type
-    email: string; // String!
+    email: string | null; // String
     id: string; // String!
-    username: string; // String!
+    username: string | null; // String
   }
   getUser: { // field return type
     message: string; // String!
@@ -106,14 +117,21 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  GeneralResponse: { // field return type name
+    message: 'String'
+    result: 'Boolean'
+  }
   Mutation: { // field return type name
-    register: 'Test'
+    deleteUser: 'GeneralResponse'
+    login: 'getUser'
+    logout: 'GeneralResponse'
+    testRegister: 'Test'
     userRegister: 'getUser'
   }
   Query: { // field return type name
     getTests: 'Test'
     getUsers: 'getUser'
-    me: 'User'
+    me: 'getUser'
   }
   Test: { // field return type name
     id: 'String'
@@ -142,7 +160,11 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    register: { // args
+    login: { // args
+      email: string; // String!
+      password: string; // String!
+    }
+    testRegister: { // args
       name: string; // String!
     }
     userRegister: { // args

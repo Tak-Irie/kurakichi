@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, SyntheticEvent } from 'react';
 
 type ButtonProps = {
-  onClick?: () => void;
+  onClick?: (e: SyntheticEvent) => void | Promise<void>;
   type: 'button' | 'submit';
 };
 

@@ -7,41 +7,46 @@ import { UserEmail } from '../../domain/UserEmail';
 import { UserName } from '../../domain/UserName';
 import { UserPassword } from '../../domain/UserPassword';
 import { IUserRepository } from '../../domain/IUserRepository';
-import { IUseCaseError } from '../../../../shared/useCase/IUseCaseError';
+import { EmailAlreadyExistsError } from './RegisterUserError';
+import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
+import { StoreConnectionError } from '../../../../shared/StoreConnectionError';
 
-type RegisterUserDTO = {
+type RegisterUserInput = {
   username: string;
   email: string;
   password: string;
 };
 
+type RegisterUserDTO = {
+  id: string;
+  username: string;
+};
+
 type UserTypes = UserEmail | UserName | UserPassword;
 
-class EmailAlreadyExistsError extends Result<IUseCaseError> {
-  constructor(email: string, error?: Error) {
-    super(false, `こちらのEmail"${email}"は既に登録されています`, error);
-  }
-}
-
 type RegisterUserResponse = Either<
-  EmailAlreadyExistsError | UnexpectedError | Result<UserTypes> | Result<User>,
-  Result<void>
+  | EmailAlreadyExistsError
+  | UnexpectedError
+  | StoreConnectionError
+  | Result<UserTypes>
+  | Result<User>,
+  Result<RegisterUserDTO>
 >;
 
 export class RegisterUserUseCase
-  implements IUseCase<RegisterUserDTO, Promise<RegisterUserResponse>> {
+  implements IUseCase<RegisterUserInput, Promise<RegisterUserResponse>> {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
   public async execute(
-    request: RegisterUserDTO,
+    request: RegisterUserInput,
   ): Promise<RegisterUserResponse> {
-    console.log('request :', request);
     const usernameOrError = UserName.create({
       username: request.username,
     });
-    const emailOrError: Result<UserEmail> = UserEmail.create({
+
+    const emailOrError = UserEmail.create({
       email: request.email,
     });
 
@@ -55,17 +60,13 @@ export class RegisterUserUseCase
       usernameOrError,
     ]);
 
-    console.log('verifiedResult:', verifiedResult);
-
     if (verifiedResult.isFailure) {
       return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
     }
 
-    const email: UserEmail = emailOrError.getValue();
-    const password: UserPassword = passwordOrError.getValue();
-    const username: UserName = usernameOrError.getValue();
-
-    console.log('email:', email);
+    const email = emailOrError.getValue();
+    const password = passwordOrError.getValue();
+    const username = usernameOrError.getValue();
 
     try {
       const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(
@@ -76,18 +77,29 @@ export class RegisterUserUseCase
         return left(new EmailAlreadyExistsError(email.props.email));
       }
       const userOrError = User.create({
+        id: UniqueEntityId.create(),
         email,
         password,
         username,
       });
-      console.log('userOrError:', userOrError);
 
       if (userOrError.isFailure)
         return left(Result.fail<User>(userOrError.getErrorValue()));
 
-      await this.userRepository.registerUser(userOrError.getValue());
+      const result = await this.userRepository.registerUser(
+        userOrError.getValue(),
+      );
 
-      return right(Result.success<void>());
+      if (result === undefined) {
+        return left(new StoreConnectionError());
+      }
+
+      return right(
+        Result.success<RegisterUserDTO>({
+          id: result.getId(),
+          username: result.getUsername(),
+        }),
+      );
     } catch (err) {
       return left(new UnexpectedError(err));
     }

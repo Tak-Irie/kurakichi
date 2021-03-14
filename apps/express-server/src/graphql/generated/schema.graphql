@@ -2,15 +2,23 @@
 ### Do not make changes to this file directly
 
 
+type GeneralResponse {
+  message: String
+  result: Boolean
+}
+
 type Mutation {
-  register(name: String!): Test
+  deleteUser: GeneralResponse
+  login(email: String!, password: String!): getUser
+  logout: GeneralResponse
+  testRegister(name: String!): Test
   userRegister(email: String!, password: String!, username: String!): getUser
 }
 
 type Query {
   getTests: [Test]
   getUsers: getUser!
-  me: User
+  me: getUser
 }
 
 type Test {
@@ -25,14 +33,14 @@ type Tests {
 type User {
   email: String!
   id: String!
-  password: String!
+  password: String
   username: String!
 }
 
 type UserResponse {
-  email: String!
+  email: String
   id: String!
-  username: String!
+  username: String
 }
 
 type getUser {

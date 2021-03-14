@@ -4,15 +4,16 @@ import cors from 'cors';
 
 import { ApolloServer } from 'apollo-server-express';
 
-import Redis from 'ioredis';
 import connectRedis from 'connect-redis';
 import { isProduction } from './util/isProduction';
 import { COOKIE_NAME } from './util/constants';
 import { PrismaClient } from '@prisma/client';
 
 import { GraphqlSchema as schema } from './graphql/makeSchema';
-import { UserResponse } from './graphql/schema';
-import { UserRepository } from './modules/user/infrastructure/UserRepository';
+import { sentryTest } from './util/sentry';
+import { googleRouter } from './route/googleRouter';
+import { yahooRouter } from './route/yahooRouter';
+import { redis } from './util/redisClient';
 
 const main = async () => {
   const app = express();
@@ -20,15 +21,11 @@ const main = async () => {
   const prisma = new PrismaClient();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.NX_REDIS_URL);
 
   app.set('trust proxy', 1);
   app.use(
     cors({
-      origin: [
-        process.env.NX_CORS_ORIGIN as string,
-        'https://studio.apollographql.com',
-      ],
+      origin: [process.env.NX_CORS_ORIGIN as string, 'https://studio.apollographql.com'],
       credentials: true,
     }),
   );
@@ -67,21 +64,32 @@ const main = async () => {
     cors: false,
   });
 
+  app.use('/google', googleRouter);
+  app.use('/yahoo', yahooRouter);
+
   app.get('/', (req, res) => {
     console.log('got access');
+    sentryTest();
+
     res.json({ hi: 'congrats!' });
   });
 
   app.get('/ex', async (req, res) => {
-    const repo = new UserRepository();
-    await repo.getUsers();
+    // req.session.temp1 = 'hoge';
+    // req.session.temp2 = req.session.id;
 
-    res.json({ done: 'congrats!' });
+    console.log('sessionId:', req.session.id);
+    res.json({ done: "it's experimental page" });
+  });
+
+  app.get('/ex1', async (req, res) => {
+    res.json({ done: 'check redis' });
   });
 
   app.listen(process.env.NX_PORT, () => {
+    console.log('next connection:', process.env.NX_CORS_ORIGIN);
+    console.log('redis connection:', process.env.NX_REDIS_URL);
     console.log('server started on localhost:4000');
-    console.log('cors:', process.env.NX_CORS_ORIGIN);
   });
 };
 

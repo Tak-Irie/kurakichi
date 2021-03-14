@@ -6,10 +6,10 @@ import { UserName } from '../domain/UserName';
 import { UserPassword } from '../domain/UserPassword';
 
 export class UserMapper {
-  public static toDomain(storedUser: StoredUser): User {
+  public static ToDomain(storedUser: StoredUser): User {
     const userNameResult = UserName.create({ username: storedUser.username });
     const userPasswordResult = UserPassword.create({
-      password: storedUser.password,
+      password: storedUser.password!,
       isHashed: true,
     });
     const userEmailResult = UserEmail.create({ email: storedUser.email });
@@ -27,20 +27,21 @@ export class UserMapper {
   public static async toStore(
     user: User,
   ): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
-    let hashedPassword = '';
-    if (!!user.password === true) {
-      if (user.password.isAlreadyHashed()) {
-        hashedPassword = user.password.props.password;
-      } else {
-        hashedPassword = await user.password.getHashedValue();
+    const result = () => {
+      const data = user.getPassword();
+      if (data === undefined) {
+        return null;
       }
-    }
+      return data.getValue();
+    };
 
     return {
-      id: user.id.getId(),
-      username: user.username,
-      email: user.email,
-      password: hashedPassword,
+      id: user.getId(),
+      username: user.getUsername(),
+      email: user.getEmail(),
+      password: result(),
+      ssoSub: user.props.ssoSub || null,
+      picture: user.props.picture || null,
     };
   }
 }

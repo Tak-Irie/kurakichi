@@ -1,9 +1,15 @@
 import { extendType, nonNull, stringArg } from 'nexus';
-import { getUserId } from '../../util/getUserId';
-import { RegisterUserUseCase } from '../../modules/user/useCases/registerUser/RegisterUserUseCase';
-import { UserRepository } from '../../modules/user/infrastructure/UserRepository';
-import { useGetUsersUseCase } from '../../modules/user/useCases';
-import { userToPresentation } from '../DTO/UserDTO';
+import { getUserIdByCookie } from '../../util/getUserId';
+import {
+  useDeleteUserUseCase,
+  useGetUserById,
+  useGetUsersUseCase,
+  useLoginUserUseCase,
+  useLogoutUserUseCase,
+  useRegisterUserUseCase,
+} from '../../modules/user/useCases';
+import { userToPresentation } from '../toPresentationDTO/userToPresentation';
+import { COOKIE_NAME } from '../../util/constants';
 
 const userQuery = extendType({
   type: 'Query',
@@ -21,15 +27,21 @@ const userQuery = extendType({
     });
 
     t.nullable.field('me', {
-      type: 'User',
-      resolve: (_, __, context) => {
-        const userId = getUserId(context);
-        if (userId) console.log('userId:', userId);
-        return context.prisma.user.findUnique({
-          where: {
-            id: '1',
-          },
-        });
+      type: 'getUser',
+      resolve: async (_, __, context) => {
+        console.log('me query called');
+        const userId = getUserIdByCookie(context);
+        // console.log('id:', userId);
+        if (userId === undefined) return { message: 'not logged in' };
+        const result = await useGetUserById.execute(userId);
+        // console.log('res:', result);
+        if (result.isLeft()) return { message: result.value.getErrorValue() };
+        const user = result.value.getValue();
+        // console.log('user:', user);
+        return {
+          message: 'logged in',
+          user: { id: user.id, username: user.username },
+        };
       },
     });
   },
@@ -45,11 +57,62 @@ const userMutation = extendType({
         password: nonNull(stringArg()),
         username: nonNull(stringArg()),
       },
-      resolve: async (_, args) => {
-        const re = new RegisterUserUseCase(new UserRepository());
-        const user = await re.execute({ ...args });
+      resolve: async (_, args, context) => {
+        const result = await useRegisterUserUseCase.execute({ ...args });
+        if (result.isLeft()) return { message: result.value.getErrorValue() };
+        const user = result.value.getValue();
+        context.req.session.userId = user.id;
+        return { message: 'success!', user: { id: user.id } };
+      },
+    });
+    t.field('login', {
+      type: 'getUser',
+      args: {
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        const user = await useLoginUserUseCase.execute({ ...args });
         if (user.isLeft()) return { message: user.value.getErrorValue() };
-        return { message: 'success!' };
+        const data = user.value.getValue();
+        context.req.session.userId = data.id;
+        return { message: 'success!', user: { ...user.value.getValue() } };
+      },
+    });
+    // TODO::check below
+    t.field('logout', {
+      type: 'GeneralResponse',
+      resolve: async (_, __, context) => {
+        const req = context.req;
+        const userId = req.session.userId;
+        // TODO:set up logger sentry or winston
+        if (userId === undefined) return { result: false, message: '不正検出' };
+        const result = await useLogoutUserUseCase.execute({ userId });
+        if (result.isLeft())
+          return { result: false, message: result.value.getErrorValue() };
+        // TODO::transplant this process to auth service
+        req.session.destroy((err) => {
+          console.log('err:', err);
+        });
+        context.res.clearCookie(COOKIE_NAME);
+        return { result: true, message: 'ログアウトしました' };
+      },
+    });
+    t.field('deleteUser', {
+      type: 'GeneralResponse',
+      resolve: async (_, __, context) => {
+        const req = context.req;
+        const userId = req.session.userId;
+        // TODO:set up logger sentry or winston
+        if (userId === undefined) return { result: false, message: '不正検出' };
+        const result = await useDeleteUserUseCase.execute({ userId });
+        if (result.isLeft())
+          return { result: false, message: result.value.getErrorValue() };
+        req.session.destroy((err) => {
+          console.log('err:', err);
+        });
+        context.res.clearCookie(COOKIE_NAME);
+        return { result: true, message: 'アカウントの削除に成功しました' };
       },
     });
   },
