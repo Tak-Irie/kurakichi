@@ -7,6 +7,7 @@ import { GetUserByIdUseCase } from './getUserById/GetUserByIdUseCase';
 import { LogoutUserUseCase } from './logoutUser/logoutUserUseCase';
 import { DeleteUserUseCase } from './deleteUser/DeleteUserUseCase';
 import { SsoUserUseCase } from './ssoUser/ssoUserUseCase';
+import { ForgotPasswordUseCase } from './forgotPassword/ForgotPasswordUseCase';
 
 const userRepo = new UserRepository();
 
@@ -17,3 +18,4 @@ export const useLoginUserUseCase = new LoginUserUseCase(userRepo);
 export const useLogoutUserUseCase = new LogoutUserUseCase(userRepo);
 export const useDeleteUserUseCase = new DeleteUserUseCase(userRepo);
 export const useSsoUserUseCase = new SsoUserUseCase(userRepo);
+export const useForgotPasswordUseCase = new ForgotPasswordUseCase(userRepo);

@@ -2,6 +2,7 @@ import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserId';
 import {
   useDeleteUserUseCase,
+  useForgotPasswordUseCase,
   useGetUserById,
   useGetUsersUseCase,
   useLoginUserUseCase,
@@ -88,8 +89,7 @@ const userMutation = extendType({
         // TODO:set up logger sentry or winston
         if (userId === undefined) return { result: false, message: '不正検出' };
         const result = await useLogoutUserUseCase.execute({ userId });
-        if (result.isLeft())
-          return { result: false, message: result.value.getErrorValue() };
+        if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
         // TODO::transplant this process to auth service
         req.session.destroy((err) => {
           console.log('err:', err);
@@ -106,13 +106,21 @@ const userMutation = extendType({
         // TODO:set up logger sentry or winston
         if (userId === undefined) return { result: false, message: '不正検出' };
         const result = await useDeleteUserUseCase.execute({ userId });
-        if (result.isLeft())
-          return { result: false, message: result.value.getErrorValue() };
+        if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
         req.session.destroy((err) => {
           console.log('err:', err);
         });
         context.res.clearCookie(COOKIE_NAME);
         return { result: true, message: 'アカウントの削除に成功しました' };
+      },
+    });
+    t.field('forgetPassword', {
+      type: 'GeneralResponse',
+      args: { email: nonNull(stringArg()) },
+      resolve: async (_, args) => {
+        const result = await useForgotPasswordUseCase.execute(args.email);
+        if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
+        return { result: true };
       },
     });
   },

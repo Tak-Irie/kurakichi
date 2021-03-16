@@ -81,6 +81,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     deleteUser: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    forgetPassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     login: NexusGenRootTypes['getUser'] | null; // getUser
     logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     testRegister: NexusGenRootTypes['Test'] | null; // Test
@@ -123,6 +124,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     deleteUser: 'GeneralResponse'
+    forgetPassword: 'GeneralResponse'
     login: 'getUser'
     logout: 'GeneralResponse'
     testRegister: 'Test'
@@ -160,6 +162,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    forgetPassword: { // args
+      email: string; // String!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!

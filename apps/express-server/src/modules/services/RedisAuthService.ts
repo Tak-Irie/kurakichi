@@ -55,6 +55,17 @@ class RedisAuthService {
     const [token, iv] = [...cryptedToken];
     return { token, iv };
   }
+
+  public static async storePasswordToken(userId: string, changePassToken: string) {
+    const result = await redis.set(
+      `forgetPassword:${userId}`,
+      changePassToken,
+      'ex',
+      60 * 60, //1hour
+    );
+    if (result === null) return false;
+    return true;
+  }
 }
 
 export { RedisAuthService };
