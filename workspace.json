@@ -90,11 +90,9 @@
       "root": "apps/express-server",
       "sourceRoot": "apps/express-server/src",
       "projectType": "application",
-      "architect": {},
-
       "targets": {
         "dev": {
-          "builder": "@nrwl/workspace:run-commands",
+          "executor": "@nrwl/workspace:run-commands",
           "options": {
             "command": "npx nodemon --exec ts-node src/main.ts",
             "cwd": "apps/express-server/"
