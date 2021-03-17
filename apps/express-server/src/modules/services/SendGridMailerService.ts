@@ -1,5 +1,4 @@
 import * as mailer from '@sendgrid/mail';
-import nodemailer from 'nodemailer';
 
 class SendGridMailerService {
   public static async sendMail(to: string, token: string) {

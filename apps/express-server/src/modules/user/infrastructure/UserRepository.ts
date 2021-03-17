@@ -3,6 +3,7 @@ import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
 import { IUserRepository } from '../domain/IUserRepository';
 import { User } from '../domain/User';
 import { UserEmail } from '../domain/UserEmail';
+import { UserPassword } from '../domain/UserPassword';
 import { UserMapper } from './UserMapper';
 
 export class UserRepository implements IUserRepository {
@@ -17,9 +18,9 @@ export class UserRepository implements IUserRepository {
     return !!result;
   }
 
-  async getUserByUserId(userId: string): Promise<User | undefined> {
+  async getUserByUserId(userId: UniqueEntityId): Promise<User | undefined> {
     const result = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: userId.getId() },
     });
     if (!result) return undefined;
 
@@ -48,7 +49,7 @@ export class UserRepository implements IUserRepository {
 
   async getUserByEmail(userEmail: UserEmail): Promise<User | undefined> {
     const user = await this.prisma.user.findUnique({
-      where: { email: userEmail.value },
+      where: { email: userEmail.getValue() },
     });
     if (user === null) return undefined;
 
@@ -61,6 +62,17 @@ export class UserRepository implements IUserRepository {
       where: { id: userId.getId() },
     });
     if (result === undefined) return false;
+    return true;
+  }
+
+  async changeUserPassword(userId: UniqueEntityId, password: UserPassword): Promise<boolean> {
+    const result = await this.prisma.user.update({
+      where: { id: userId.getId() },
+      data: {
+        password: password.getValue(),
+      },
+    });
+    if (result == undefined) return false;
     return true;
   }
 }

@@ -10,7 +10,7 @@ export class UserEmail extends ValueObject<UserEmailProps> {
     super(props);
   }
 
-  get value(): string {
+  getValue(): string {
     return this.props.email;
   }
 
@@ -26,13 +26,9 @@ export class UserEmail extends ValueObject<UserEmailProps> {
 
   public static create(email: UserEmailProps): Result<UserEmail> {
     if (!this.isValidEmail(email.email)) {
-      return Result.fail<UserEmail>(
-        'メールアドレスに使用できない文字が含まれています',
-      );
+      return Result.fail<UserEmail>('メールアドレスに使用できない文字が含まれています');
     }
 
-    return Result.success<UserEmail>(
-      new UserEmail({ email: this.formatEmail(email.email) }),
-    );
+    return Result.success<UserEmail>(new UserEmail({ email: this.formatEmail(email.email) }));
   }
 }

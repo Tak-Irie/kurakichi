@@ -8,6 +8,7 @@ import { LogoutUserUseCase } from './logoutUser/logoutUserUseCase';
 import { DeleteUserUseCase } from './deleteUser/DeleteUserUseCase';
 import { SsoUserUseCase } from './ssoUser/ssoUserUseCase';
 import { ForgotPasswordUseCase } from './forgotPassword/ForgotPasswordUseCase';
+import { ChangePasswordUseCase } from './changePassword/ChangePasswordUseCase';
 
 const userRepo = new UserRepository();
 
@@ -19,3 +20,4 @@ export const useLogoutUserUseCase = new LogoutUserUseCase(userRepo);
 export const useDeleteUserUseCase = new DeleteUserUseCase(userRepo);
 export const useSsoUserUseCase = new SsoUserUseCase(userRepo);
 export const useForgotPasswordUseCase = new ForgotPasswordUseCase(userRepo);
+export const useChangePasswordUseCase = new ChangePasswordUseCase(userRepo);

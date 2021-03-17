@@ -9,10 +9,7 @@ import { UserReadModel } from '../../domain/UserReadModel';
 import * as Error from './LoginUserError';
 
 type LoginUserResponse = Either<
-  | Error.IncorrectPassword
-  | Error.InvalidEmail
-  | Error.SsoUser
-  | UnexpectedError,
+  Error.IncorrectPassword | Error.InvalidEmail | Error.SsoUser | UnexpectedError,
   Result<UserReadModel>
 >;
 
@@ -21,8 +18,7 @@ type LoginUserDTO = {
   password: string;
 };
 
-export class LoginUserUseCase
-  implements IUseCase<LoginUserDTO, Promise<LoginUserResponse>> {
+export class LoginUserUseCase implements IUseCase<LoginUserDTO, Promise<LoginUserResponse>> {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
@@ -33,25 +29,22 @@ export class LoginUserUseCase
 
       if (email.isFailure) return left(new Error.InvalidEmail());
 
-      const result = await this.userRepository.getUserByEmail(email.getValue());
+      const foundUser = await this.userRepository.getUserByEmail(email.getValue());
 
-      if (result === undefined) return left(new Error.InvalidEmail());
+      if (foundUser === undefined) return left(new Error.InvalidEmail());
 
-      const storedPass = result.getPassword();
+      const storedPass = foundUser.getPassword();
 
       if (storedPass === undefined) return left(new Error.SsoUser());
 
-      const verified = await UserPassword.verifyPassword(
-        req.password,
-        storedPass.getValue(),
-      );
+      const passwordVerified = await UserPassword.verifyPassword(req.password, storedPass);
 
-      if (!verified) return left(new Error.IncorrectPassword());
+      if (!passwordVerified) return left(new Error.IncorrectPassword());
 
       return right(
         Result.success<UserReadModel>({
-          id: result.getId(),
-          email: result.getEmail(),
+          id: foundUser.getId(),
+          email: foundUser.getEmail(),
         }),
       );
     } catch (err) {

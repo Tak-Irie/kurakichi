@@ -8,6 +8,7 @@ type GeneralResponse {
 }
 
 type Mutation {
+  changePassword(currentPass: String!, newPass: String!): GeneralResponse
   deleteUser: GeneralResponse
   forgetPassword(email: String!): GeneralResponse
   login(email: String!, password: String!): getUser

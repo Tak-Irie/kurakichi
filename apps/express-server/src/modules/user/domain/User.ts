@@ -31,16 +31,16 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   getUsername(): string {
-    return this.props.username.value;
+    return this.props.username.getValue();
   }
 
   getEmail(): string {
-    return this.props.email.value;
+    return this.props.email.getValue();
   }
 
-  getPassword(): UserPassword | undefined {
+  getPassword(): string | undefined {
     if (this.props.password === undefined) return undefined;
-    return this.props.password;
+    return this.props.password.getValue();
   }
 
   public static create(props: UserProps): Result<User> {

@@ -1,31 +1,55 @@
-// import { Either, left, right } from '../../../../shared/Either';
-// import { Result } from '../../../../shared/Result';
-// import { UnexpectedError } from '../../../../shared/UnexpectedError';
-// import { IUseCase } from '../../../../shared/useCase/IUseCase';
-// import { IUserRepository } from '../../domain/IUserRepository';
-// import { User } from '../../domain/User';
+import { StoreConnectionError } from '../../../../shared/StoreConnectionError';
+import { Either, left, right } from '../../../../shared/Either';
+import { Result } from '../../../../shared/Result';
+import { UnexpectedError } from '../../../../shared/UnexpectedError';
+import { IUseCase } from '../../../../shared/useCase/IUseCase';
+import { IUserRepository } from '../../domain/IUserRepository';
+import { UserPassword } from '../../domain/UserPassword';
+import { InvalidPasswordError, InvalidNewPasswordError } from './ChangePasswordError';
+import { UniqueEntityId } from '../../../../shared/domain/UniqueEntityId';
 
-// type GetUsersResponse = Either<GetUsersErrors.UsersNotFoundError | UnexpectedError, Result<User[]>>;
+type ChangePasswordResponse = Either<
+  InvalidPasswordError | InvalidNewPasswordError | UnexpectedError,
+  Result<boolean>
+>;
 
-// export class GetUsersUseCase implements IUseCase<string, Promise<GetUsersResponse>> {
-//   constructor(private userRepository: IUserRepository) {
-//     this.userRepository = userRepository;
-//   }
+type ChangePasswordArg = {
+  currentPass: string;
+  newPass: string;
+  userId: string;
+};
+export class ChangePasswordUseCase
+  implements IUseCase<ChangePasswordArg, Promise<ChangePasswordResponse>> {
+  constructor(private userRepository: IUserRepository) {
+    this.userRepository = userRepository;
+  }
 
-//   public async execute(): Promise<GetUsersResponse> {
-//     const FoundResult = await this.userRepository.getUsers();
+  public async execute(req: ChangePasswordArg): Promise<ChangePasswordResponse> {
+    try {
+      const newPass = UserPassword.create({ password: req.newPass });
+      if (newPass.isFailure) return left(new InvalidNewPasswordError());
 
-//     switch (typeof FoundResult) {
-//       case 'undefined':
-//         return left(new GetUsersErrors.UsersNotFoundError());
-//       case 'object':
-//         if (FoundResult === null) {
-//           return left(new UnexpectedError());
-//         }
+      const id = new UniqueEntityId(req.userId);
+      const foundUser = await this.userRepository.getUserByUserId(id);
 
-//         return right(Result.success<User[]>(FoundResult));
-//       default:
-//         return left(new UnexpectedError());
-//     }
-//   }
-// }
+      if (foundUser === undefined) return left(new StoreConnectionError());
+
+      const passExisted = foundUser.getPassword();
+
+      // TODO: add pattern foundUser use sso
+      // FIXME:
+      if (passExisted === undefined) return left(new UnexpectedError());
+
+      const passVerified = await UserPassword.verifyPassword(req.currentPass, passExisted);
+
+      if (passVerified === false) return left(new InvalidPasswordError());
+
+      const passChanged = await this.userRepository.changeUserPassword(id, newPass.getValue());
+      if (passChanged == false) return left(new StoreConnectionError());
+
+      return right(Result.success<boolean>(true));
+    } catch (err) {
+      return left(new UnexpectedError());
+    }
+  }
+}

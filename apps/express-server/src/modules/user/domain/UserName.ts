@@ -15,7 +15,7 @@ export class UserName extends ValueObject<UserNameProps> {
     super(props);
   }
 
-  get value(): string {
+  getValue(): string {
     return this.props.username;
   }
 

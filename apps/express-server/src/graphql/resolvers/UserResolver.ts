@@ -1,6 +1,7 @@
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserId';
 import {
+  useChangePasswordUseCase,
   useDeleteUserUseCase,
   useForgotPasswordUseCase,
   useGetUserById,
@@ -119,6 +120,24 @@ const userMutation = extendType({
       args: { email: nonNull(stringArg()) },
       resolve: async (_, args) => {
         const result = await useForgotPasswordUseCase.execute(args.email);
+        if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
+        return { result: true };
+      },
+    });
+    t.field('changePassword', {
+      type: 'GeneralResponse',
+      args: {
+        currentPass: nonNull(stringArg()),
+        newPass: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        const id = context.req.session.id;
+        if (id === undefined) return { result: false, message: 'ログインして下さい' };
+        const result = await useChangePasswordUseCase.execute({
+          currentPass: args.currentPass,
+          newPass: args.newPass,
+          userId: id,
+        });
         if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
         return { result: true };
       },

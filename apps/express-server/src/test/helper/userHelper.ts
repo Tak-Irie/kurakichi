@@ -34,41 +34,42 @@ export const mockValidUserWithArgon2 = User.create({
   password: hashedPassword,
 }).getValue();
 
-export const MockUserRepository = jest
-  .fn<IUserRepository, []>()
-  .mockImplementation(() => ({
-    confirmExistence: async (userEmail: UserEmail): Promise<boolean> => {
-      if (userEmail.props.email === 'dupulicate@test.com') return true;
-      await Promise.resolve('nothing');
+export const MockUserRepository = jest.fn<IUserRepository, []>().mockImplementation(() => ({
+  confirmExistence: async (userEmail: UserEmail): Promise<boolean> => {
+    if (userEmail.props.email === 'dupulicate@test.com') return true;
+    await Promise.resolve('nothing');
 
-      return false;
-    },
-    getUserByUserId: async (userId: string): Promise<User | undefined> => {
-      if (userId === '1') return mockValidUser;
-      await Promise.resolve('nothing');
+    return false;
+  },
+  getUserByUserId: async (userId: UniqueEntityId): Promise<User | undefined> => {
+    if (userId.getId() === '1') return mockValidUser;
+    await Promise.resolve('nothing');
 
-      return undefined;
-    },
-    registerUser: async (user: User): Promise<User | undefined> => {
-      if (typeof user === 'object') return undefined;
-      await Promise.resolve('nothing');
+    return undefined;
+  },
+  registerUser: async (user: User): Promise<User | undefined> => {
+    if (typeof user === 'object') return undefined;
+    await Promise.resolve('nothing');
 
-      return mockValidUser;
-    },
-    getUsers: async (): Promise<User[] | undefined> => {
-      await Promise.resolve('nothing');
+    return mockValidUser;
+  },
+  getUsers: async (): Promise<User[] | undefined> => {
+    await Promise.resolve('nothing');
 
-      return [mockValidUser, mockValidUser];
-    },
+    return [mockValidUser, mockValidUser];
+  },
 
-    getUserByEmail: async (userEmail: UserEmail): Promise<User | undefined> => {
-      if (userEmail.value === 'success@email.com')
-        return mockValidUserWithArgon2;
-      return undefined;
-    },
+  getUserByEmail: async (userEmail: UserEmail): Promise<User | undefined> => {
+    if (userEmail.getValue() === 'success@email.com') return mockValidUserWithArgon2;
+    return undefined;
+  },
 
-    deleteUser: async (userId: UniqueEntityId): Promise<boolean> => {
-      if (userId.getId() === '1234567890') return true;
-      return false;
-    },
-  }));
+  deleteUser: async (userId: UniqueEntityId): Promise<boolean> => {
+    if (userId.getId() === '1234567890') return true;
+    return false;
+  },
+  changeUserPassword: async (userId: UniqueEntityId, password: UserPassword): Promise<boolean> => {
+    // wip
+    return true;
+  },
+}));

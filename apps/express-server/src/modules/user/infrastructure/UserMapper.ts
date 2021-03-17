@@ -24,15 +24,13 @@ export class UserMapper {
     return userResult;
   }
 
-  public static async toStore(
-    user: User,
-  ): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
+  public static async toStore(user: User): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
     const result = () => {
       const data = user.getPassword();
       if (data === undefined) {
         return null;
       }
-      return data.getValue();
+      return data;
     };
 
     return {
