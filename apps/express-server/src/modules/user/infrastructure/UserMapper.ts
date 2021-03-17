@@ -6,18 +6,24 @@ import { UserName } from '../domain/UserName';
 import { UserPassword } from '../domain/UserPassword';
 
 export class UserMapper {
-  public static ToDomain(storedUser: StoredUser): User {
+  public static async ToDomain(storedUser: StoredUser): Promise<User> {
+    let password: UserPassword | undefined;
     const userNameResult = UserName.create({ username: storedUser.username });
-    const userPasswordResult = UserPassword.create({
-      password: storedUser.password!,
-      isHashed: true,
-    });
+
+    if (storedUser.password) {
+      const result = await UserPassword.create({
+        password: storedUser.password,
+        isHashed: true,
+      });
+      password = result.getValue();
+    }
+
     const userEmailResult = UserEmail.create({ email: storedUser.email });
 
     const userResult = new User({
       id: new UniqueEntityId(storedUser.id),
       username: userNameResult.getValue(),
-      password: userPasswordResult.getValue(),
+      password,
       email: userEmailResult.getValue(),
     });
 

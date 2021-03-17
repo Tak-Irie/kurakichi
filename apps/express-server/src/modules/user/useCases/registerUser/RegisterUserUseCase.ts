@@ -39,9 +39,7 @@ export class RegisterUserUseCase
     this.userRepository = userRepository;
   }
 
-  public async execute(
-    request: RegisterUserInput,
-  ): Promise<RegisterUserResponse> {
+  public async execute(request: RegisterUserInput): Promise<RegisterUserResponse> {
     const usernameOrError = UserName.create({
       username: request.username,
     });
@@ -50,7 +48,7 @@ export class RegisterUserUseCase
       email: request.email,
     });
 
-    const passwordOrError = UserPassword.create({
+    const passwordOrError = await UserPassword.create({
       password: request.password,
     });
 
@@ -69,9 +67,7 @@ export class RegisterUserUseCase
     const username = usernameOrError.getValue();
 
     try {
-      const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(
-        email,
-      );
+      const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(email);
 
       if (userEmailAlreadyRegistered) {
         return left(new EmailAlreadyExistsError(email.props.email));
@@ -83,12 +79,9 @@ export class RegisterUserUseCase
         username,
       });
 
-      if (userOrError.isFailure)
-        return left(Result.fail<User>(userOrError.getErrorValue()));
+      if (userOrError.isFailure) return left(Result.fail<User>(userOrError.getErrorValue()));
 
-      const result = await this.userRepository.registerUser(
-        userOrError.getValue(),
-      );
+      const result = await this.userRepository.registerUser(userOrError.getValue());
 
       if (result === undefined) {
         return left(new StoreConnectionError());

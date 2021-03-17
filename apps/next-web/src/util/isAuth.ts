@@ -10,4 +10,6 @@ export const IsAuth = () => {
       router.replace('/login?next=' + router.pathname);
     }
   }, [loading, data, router]);
+
+  return loading;
 };

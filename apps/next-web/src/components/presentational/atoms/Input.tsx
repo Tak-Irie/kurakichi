@@ -3,12 +3,11 @@ import { UseFormMethods, RegisterOptions } from 'react-hook-form';
 
 type Register = Pick<UseFormMethods, 'register'>;
 
-interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>,
-    Partial<Register> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement>, Partial<Register> {
   name: string;
   labeled: boolean;
   type: string;
+  label?: string;
   placeholder?: string;
   required?: boolean;
   error?: string;
@@ -17,6 +16,7 @@ interface InputProps
 
 const Input: FC<InputProps> = ({
   name,
+  label,
   labeled,
   type,
   placeholder,
@@ -29,11 +29,8 @@ const Input: FC<InputProps> = ({
   return (
     <>
       {labeled ? (
-        <label
-          className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto"
-          htmlFor={name}
-        >
-          {name}
+        <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto" htmlFor={name}>
+          {label || name}
         </label>
       ) : null}
       <input

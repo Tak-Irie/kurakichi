@@ -18,9 +18,10 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     return this.props.password;
   }
 
-  public static create(props: UserPasswordProps): Result<UserPassword> {
+  public static async create(props: UserPasswordProps): Promise<Result<UserPassword>> {
+    let password = props.password;
     const propsResult = Guard.falsyCheck({
-      argument: props.password,
+      argument: password,
       argumentName: 'password',
     });
 
@@ -28,15 +29,17 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
       return Result.fail<UserPassword>(propsResult.message);
     }
     if (!props.isHashed && !this.isAppropriateLength(props.password)) {
-      return Result.fail<UserPassword>(
-        'パスワードは8文字以上に設定してください',
-      );
+      return Result.fail<UserPassword>('パスワードは8文字以上に設定してください');
+    }
+
+    if (props.isHashed == undefined) {
+      password = await this.hashPassword(password);
     }
 
     return Result.success<UserPassword>(
       new UserPassword({
-        password: props.password,
-        isHashed: !!props.isHashed === true,
+        password,
+        isHashed: true,
       }),
     );
   }
@@ -45,13 +48,13 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     return password.length >= 8;
   }
 
-  public async getHashedValue(): Promise<string> {
-    if (this.isAlreadyHashed()) return this.props.password;
+  // public async getHashedValue(): Promise<string> {
+  //   if (this.isAlreadyHashed()) return this.props.password;
 
-    return await this.hashPassword(this.props.password);
-  }
+  //   return await this.hashPassword(this.props.password);
+  // }
 
-  private async hashPassword(password: string): Promise<string> {
+  private static async hashPassword(password: string): Promise<string> {
     const hashedPassword = await argon2.hash(password);
 
     return hashedPassword;
@@ -68,10 +71,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
   //   return this.props.password === plainTextPassword;
   // }
 
-  public static async verifyPassword(
-    plainText: string,
-    hashed: string,
-  ): Promise<boolean> {
+  public static async verifyPassword(plainText: string, hashed: string): Promise<boolean> {
     const result = await argon2.verify(hashed, plainText);
 
     return result;

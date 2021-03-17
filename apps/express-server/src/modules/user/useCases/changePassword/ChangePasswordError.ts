@@ -9,6 +9,6 @@ export class InvalidPasswordError extends Result<IUseCaseError> {
 
 export class InvalidNewPasswordError extends Result<IUseCaseError> {
   constructor() {
-    super(false, '入力された"新しいパスワード"が不正な値です。');
+    super(false, '入力された新しいパスワードが不正な値です。');
   }
 }

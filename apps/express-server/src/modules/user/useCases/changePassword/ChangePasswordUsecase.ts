@@ -26,21 +26,24 @@ export class ChangePasswordUseCase
 
   public async execute(req: ChangePasswordArg): Promise<ChangePasswordResponse> {
     try {
-      const newPass = UserPassword.create({ password: req.newPass });
+      const newPass = await UserPassword.create({ password: req.newPass });
+      // FIXME:need fix error message handling
       if (newPass.isFailure) return left(new InvalidNewPasswordError());
 
       const id = new UniqueEntityId(req.userId);
+
       const foundUser = await this.userRepository.getUserByUserId(id);
 
       if (foundUser === undefined) return left(new StoreConnectionError());
 
-      const passExisted = foundUser.getPassword();
+      const storedEncryptedPass = foundUser.getPassword();
+      console.log(':', storedEncryptedPass);
 
       // TODO: add pattern foundUser use sso
       // FIXME:
-      if (passExisted === undefined) return left(new UnexpectedError());
+      if (storedEncryptedPass === undefined) return left(new UnexpectedError());
 
-      const passVerified = await UserPassword.verifyPassword(req.currentPass, passExisted);
+      const passVerified = await UserPassword.verifyPassword(req.currentPass, storedEncryptedPass);
 
       if (passVerified === false) return left(new InvalidPasswordError());
 

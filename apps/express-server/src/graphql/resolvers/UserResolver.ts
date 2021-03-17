@@ -131,7 +131,7 @@ const userMutation = extendType({
         newPass: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        const id = context.req.session.id;
+        const id = context.req.session.userId;
         if (id === undefined) return { result: false, message: 'ログインして下さい' };
         const result = await useChangePasswordUseCase.execute({
           currentPass: args.currentPass,
@@ -139,7 +139,7 @@ const userMutation = extendType({
           userId: id,
         });
         if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
-        return { result: true };
+        return { result: true, message: '変更に成功しました' };
       },
     });
   },

@@ -12,12 +12,7 @@ const Header: FC = () => {
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
       <div className="relative flex items-center justify-between">
         <Link href="/">
-          <a
-            href="/"
-            aria-label="Company"
-            title="Company"
-            className="inline-flex items-center"
-          >
+          <a href="/" aria-label="Company" title="Company" className="inline-flex items-center">
             <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
               Test
             </span>
@@ -28,7 +23,7 @@ const Header: FC = () => {
           <HeaderList href="/users" title="users" label="users" />
           <HeaderList href="/login" title="login" label="login" />
           <HeaderList href="/private" title="private" label="private" />
-          <HeaderList href="/" title="none3" label="None3" />
+          <HeaderList href="/ex/ex1" title="ex1" label="ex1" />
           <li>
             <SingUpButton />
           </li>
@@ -65,11 +60,7 @@ const Header: FC = () => {
                 <nav>
                   <ul>
                     <HeaderList href="/" title="Home" label="Home" />
-                    <HeaderList
-                      href="/product"
-                      title="our product"
-                      label="Product"
-                    />
+                    <HeaderList href="/product" title="our product" label="Product" />
                     <HeaderList href="/" title="none" label="None" />
 
                     <li>
