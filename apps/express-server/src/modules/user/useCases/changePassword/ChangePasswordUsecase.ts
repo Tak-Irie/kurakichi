@@ -37,7 +37,6 @@ export class ChangePasswordUseCase
       if (foundUser === undefined) return left(new StoreConnectionError());
 
       const storedEncryptedPass = foundUser.getPassword();
-      console.log(':', storedEncryptedPass);
 
       // TODO: add pattern foundUser use sso
       // FIXME:
