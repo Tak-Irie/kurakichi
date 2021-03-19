@@ -3,25 +3,15 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../tailwind.css';
 
-import {
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache,
-  ApolloLink,
-} from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
 
 import { Layout } from '../components/presentational/templates/Layouts';
+import { splitLink } from '../util/createApolloLink';
 
 const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_API_URL,
+  link: splitLink,
   credentials: 'include',
   cache: new InMemoryCache(),
-  // }),
-  // headers: {
-  //   cookie:
-  //     (typeof window === 'undefined' ? ctx?.req?.headers.cookie : undefined) ||
-  //     '',
-  // },
 });
 
 function CustomApp({ Component, pageProps }: AppProps) {

@@ -1,5 +1,16 @@
-import Redis from 'ioredis';
+import * as Redis from 'ioredis';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 
-const redis = new Redis(process.env.NX_REDIS_URL);
+const redisUrl = 'redis://0.0.0.0:6379';
 
-export { redis };
+const redis = new Redis(redisUrl);
+
+const pubRedis = new Redis(redisUrl);
+const subRedis = new Redis(redisUrl);
+
+const pubsub = new RedisPubSub({
+  publisher: pubRedis,
+  subscriber: subRedis,
+});
+
+export { redis, pubsub };

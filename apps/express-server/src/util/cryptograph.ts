@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 class Cryptograph {
   private static ALGORITHM = 'aes-256-cbc';

@@ -6,7 +6,7 @@ import { ValueObject } from '../../../shared/domain/ValueObject';
 
 type UserPasswordProps = {
   password: string;
-  isHashed?: boolean;
+  isHashed: boolean;
 };
 
 export class UserPassword extends ValueObject<UserPasswordProps> {

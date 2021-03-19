@@ -3,16 +3,11 @@
  * Do not make changes to this file directly
  */
 
-
+import * as types from "./../sourceTypes"
 import { Context } from "./../../util/context"
 
 
-declare global {
-  interface NexusGenCustomOutputProperties<TypeName extends string> {
-    model: NexusPrisma<TypeName, 'model'>
-    crud: any
-  }
-}
+
 
 declare global {
   interface NexusGen extends NexusGenTypes {}
@@ -33,25 +28,15 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Dialog: types.Dialog;
   GeneralResponse: { // root type
     message?: string | null; // String
     result?: boolean | null; // Boolean
   }
   Mutation: {};
   Query: {};
-  Test: { // root type
-    id: string; // String!
-    name: string; // String!
-  }
-  Tests: { // root type
-    tests?: Array<NexusGenRootTypes['Test'] | null> | null; // [Test]
-  }
-  User: { // root type
-    email: string; // String!
-    id: string; // String!
-    password?: string | null; // String
-    username: string; // String!
-  }
+  Subscription: {};
+  User: types.User;
   UserResponse: { // root type
     email?: string | null; // String
     id: string; // String!
@@ -75,6 +60,10 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Dialog: { // field return type
+    id: string; // String!
+    text: string; // String!
+  }
   GeneralResponse: { // field return type
     message: string | null; // String
     result: boolean | null; // Boolean
@@ -85,26 +74,21 @@ export interface NexusGenFieldTypes {
     forgetPassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     login: NexusGenRootTypes['getUser'] | null; // getUser
     logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
-    testRegister: NexusGenRootTypes['Test'] | null; // Test
+    postDialog: NexusGenRootTypes['Dialog'] | null; // Dialog
     userRegister: NexusGenRootTypes['getUser'] | null; // getUser
   }
   Query: { // field return type
-    getTests: Array<NexusGenRootTypes['Test'] | null> | null; // [Test]
     getUsers: NexusGenRootTypes['getUser']; // getUser!
     me: NexusGenRootTypes['getUser'] | null; // getUser
   }
-  Test: { // field return type
-    id: string; // String!
-    name: string; // String!
-  }
-  Tests: { // field return type
-    tests: Array<NexusGenRootTypes['Test'] | null> | null; // [Test]
+  Subscription: { // field return type
+    dialogPosted: NexusGenRootTypes['Dialog'] | null; // Dialog
   }
   User: { // field return type
     email: string; // String!
     id: string; // String!
     password: string | null; // String
-    username: string; // String!
+    username: string | null; // String
   }
   UserResponse: { // field return type
     email: string | null; // String
@@ -119,6 +103,10 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Dialog: { // field return type name
+    id: 'String'
+    text: 'String'
+  }
   GeneralResponse: { // field return type name
     message: 'String'
     result: 'Boolean'
@@ -129,20 +117,15 @@ export interface NexusGenFieldTypeNames {
     forgetPassword: 'GeneralResponse'
     login: 'getUser'
     logout: 'GeneralResponse'
-    testRegister: 'Test'
+    postDialog: 'Dialog'
     userRegister: 'getUser'
   }
   Query: { // field return type name
-    getTests: 'Test'
     getUsers: 'getUser'
     me: 'getUser'
   }
-  Test: { // field return type name
-    id: 'String'
-    name: 'String'
-  }
-  Tests: { // field return type name
-    tests: 'Test'
+  Subscription: { // field return type name
+    dialogPosted: 'Dialog'
   }
   User: { // field return type name
     email: 'String'
@@ -175,8 +158,9 @@ export interface NexusGenArgTypes {
       email: string; // String!
       password: string; // String!
     }
-    testRegister: { // args
-      name: string; // String!
+    postDialog: { // args
+      id: string; // String!
+      text: string; // String!
     }
     userRegister: { // args
       email: string; // String!

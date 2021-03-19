@@ -2,6 +2,11 @@
 ### Do not make changes to this file directly
 
 
+type Dialog {
+  id: String!
+  text: String!
+}
+
 type GeneralResponse {
   message: String
   result: Boolean
@@ -13,30 +18,24 @@ type Mutation {
   forgetPassword(email: String!): GeneralResponse
   login(email: String!, password: String!): getUser
   logout: GeneralResponse
-  testRegister(name: String!): Test
+  postDialog(id: String!, text: String!): Dialog
   userRegister(email: String!, password: String!, username: String!): getUser
 }
 
 type Query {
-  getTests: [Test]
   getUsers: getUser!
   me: getUser
 }
 
-type Test {
-  id: String!
-  name: String!
-}
-
-type Tests {
-  tests: [Test]
+type Subscription {
+  dialogPosted: Dialog
 }
 
 type User {
   email: String!
   id: String!
   password: String
-  username: String!
+  username: String
 }
 
 type UserResponse {

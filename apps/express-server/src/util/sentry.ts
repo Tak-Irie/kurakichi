@@ -3,8 +3,7 @@ import * as Sentry from '@sentry/node';
 
 export const sentryTest = () => {
   Sentry.init({
-    dsn:
-      'https://42dc821fd601459da88a8a3966ec911f@o545615.ingest.sentry.io/5667857',
+    dsn: 'https://42dc821fd601459da88a8a3966ec911f@o545615.ingest.sentry.io/5667857',
 
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control

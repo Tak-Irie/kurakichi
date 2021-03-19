@@ -1,24 +1,22 @@
-import express from 'express';
-import session from 'express-session';
-import cors from 'cors';
+import * as express from 'express';
+import * as session from 'express-session';
+import * as cors from 'cors';
+import * as http from 'http';
 
 import { ApolloServer } from 'apollo-server-express';
 
-import connectRedis from 'connect-redis';
+import * as connectRedis from 'connect-redis';
 import { isProduction } from './util/isProduction';
 import { COOKIE_NAME } from './util/constants';
-import { PrismaClient } from '@prisma/client';
 
 import { GraphqlSchema as schema } from './graphql/makeSchema';
 import { sentryTest } from './util/sentry';
 import { googleRouter } from './route/googleRouter';
 import { yahooRouter } from './route/yahooRouter';
-import { redis } from './util/redisClient';
+import { redis, pubsub } from './util/redisClient';
 
 const main = async () => {
   const app = express();
-
-  const prisma = new PrismaClient();
 
   const RedisStore = connectRedis(session);
 
@@ -51,18 +49,30 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({
-      req,
-      res,
-      prisma,
-      redis,
-    }),
+    context: ({ req, res, connection }) => {
+      // if (connection) {
+      //   const token = connection.context.authorization || '';
+      //   return token;
+      // } else {
+      // console.log('ws connection:', connection);
+      return { req, res, pubsub };
+      // }
+    },
+    subscriptions: {
+      onConnect: async (connectionParams, webSocket) => {
+        console.log('xxxxxxxxxxxxx');
+        console.log(connectionParams);
+      },
+    },
   });
 
+  const httpServer = http.createServer(app);
   apolloServer.applyMiddleware({
     app,
     cors: false,
   });
+
+  apolloServer.installSubscriptionHandlers(httpServer);
 
   app.use('/google', googleRouter);
   app.use('/yahoo', yahooRouter);
@@ -75,9 +85,6 @@ const main = async () => {
   });
 
   app.get('/ex', async (req, res) => {
-    // req.session.temp1 = 'hoge';
-    // req.session.temp2 = req.session.id;
-
     console.log('sessionId:', req.session.id);
     res.json({ done: "it's experimental page" });
   });
@@ -86,10 +93,13 @@ const main = async () => {
     res.json({ done: 'check redis' });
   });
 
-  app.listen(process.env.NX_PORT, () => {
+  const port = process.env.NX_PORT || 4000;
+
+  app.listen(port, () => {
     console.log('next connection:', process.env.NX_CORS_ORIGIN);
     console.log('redis connection:', process.env.NX_REDIS_URL);
-    console.log('server started on localhost:4000');
+    console.log(`server started on localhost:${port}`);
+    console.log(`Sub ready at ws://localhost:${port}${apolloServer.subscriptionsPath}`);
   });
 };
 

@@ -25,6 +25,11 @@ model Test {
   updatedAt DateTime @updatedAt
 }
 
+model Dialog {
+  id   String @id
+  text String
+}
+
 enum Role {
   USER
   ADMIN

@@ -22,12 +22,11 @@
     "paths": {
       "@/ddd-modules": [
         "libs/ddd-modules/src/index.ts"
-      ]
+      ],
     },
-    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",
     "tmp"
-  ]
+  ],
 }

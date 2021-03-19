@@ -26,7 +26,7 @@ export class ChangePasswordUseCase
 
   public async execute(req: ChangePasswordArg): Promise<ChangePasswordResponse> {
     try {
-      const newPass = await UserPassword.create({ password: req.newPass });
+      const newPass = await UserPassword.create({ password: req.newPass, isHashed: false });
       // FIXME:need fix error message handling
       if (newPass.isFailure) return left(new InvalidNewPasswordError());
 

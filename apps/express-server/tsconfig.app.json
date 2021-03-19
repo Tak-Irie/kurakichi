@@ -5,8 +5,7 @@
     "types": [
       "node",
       "express",
-      "reflect-metadata"
-    ]
+    ],
   },
   "exclude": [
     "**/*.spec.ts"

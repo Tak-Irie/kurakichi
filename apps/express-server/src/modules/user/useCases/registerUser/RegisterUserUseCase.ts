@@ -50,6 +50,7 @@ export class RegisterUserUseCase
 
     const passwordOrError = await UserPassword.create({
       password: request.password,
+      isHashed: false,
     });
 
     const verifiedResult = Result.verifyResults<UserTypes>([
