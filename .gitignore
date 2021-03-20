@@ -37,11 +37,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-<<<<<<< HEAD
 .env.local
 .env
 psql
 redis
-**/.env
-=======
->>>>>>> e505725 (initial commit)
