@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "strict": true,
     "declaration": false,
-    "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -19,14 +17,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {
-      "@/ddd-modules": [
-        "libs/ddd-modules/src/index.ts"
-      ],
-    },
+    "paths": {}
   },
   "exclude": [
     "node_modules",
     "tmp"
-  ],
+  ]
 }
