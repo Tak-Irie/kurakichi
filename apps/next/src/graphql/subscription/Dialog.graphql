@@ -1,0 +1,6 @@
+subscription subDialog {
+  dialogPosted {
+    id
+    text
+  }
+}
