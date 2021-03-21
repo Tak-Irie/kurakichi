@@ -1,6 +1,4 @@
-import * as Redis from 'ioredis';
-
-const redis = new Redis('redis://localhost:6379');
+import { redis } from '../util/redisClient';
 
 type StoreAuthArg = {
   sessionId: string;

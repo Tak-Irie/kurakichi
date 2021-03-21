@@ -1,5 +1,5 @@
-import { Result } from '../../../../shared/Result';
-import { IUseCaseError } from '../../../../shared/useCase/IUseCaseError';
+import { Result } from '../../../shared/Result';
+import { IUseCaseError } from '../../../shared/useCase';
 
 export class UserNotExistsOrDeletedError extends Result<IUseCaseError> {
   constructor(error?: Error) {

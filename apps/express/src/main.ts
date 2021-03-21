@@ -22,7 +22,7 @@ const main = async () => {
   app.set('trust proxy', 1);
   app.use(
     cors({
-      origin: [process.env.NX_CORS_ORIGIN as string, 'https://studio.apollographql.com'],
+      origin: [process.env.NX_CORS_NEXT as string, 'https://studio.apollographql.com'],
       credentials: true,
     }),
   );
@@ -65,14 +65,6 @@ const main = async () => {
     },
   });
 
-  const httpServer = http.createServer(app);
-  apolloServer.applyMiddleware({
-    app,
-    cors: false,
-  });
-
-  apolloServer.installSubscriptionHandlers(httpServer);
-
   app.use('/google', googleRouter);
   app.use('/yahoo', yahooRouter);
 
@@ -92,10 +84,18 @@ const main = async () => {
     res.json({ done: 'check redis' });
   });
 
+  const httpServer = http.createServer(app);
+
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
+  apolloServer.installSubscriptionHandlers(httpServer);
+
   const port = process.env.NX_PORT || 4000;
 
-  app.listen(port, () => {
-    console.log('next connection:', process.env.NX_CORS_ORIGIN);
+  httpServer.listen(port, () => {
+    console.log('next connection:', process.env.NX_CORS_NEXT);
     console.log('redis connection:', process.env.NX_REDIS_URL);
     console.log(`server started on localhost:${port}`);
     console.log(`Sub ready at ws://localhost:${port}${apolloServer.subscriptionsPath}`);

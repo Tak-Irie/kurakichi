@@ -1,4 +1,4 @@
-import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
+import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { User } from './User';
 import { UserEmail } from './UserEmail';
 import { UserPassword } from './UserPassword';

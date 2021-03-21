@@ -1,6 +1,6 @@
 import { User as StoredUser } from '@prisma/client';
 import { UniqueEntityId } from '../../shared';
-import { User, UserPassword } from '../domain';
+import { User, UserEmail, UserName, UserPassword } from '../domain';
 
 export class UserMapper {
   public static async ToDomain(storedUser: StoredUser): Promise<User> {

@@ -1,5 +1,5 @@
-import { Result } from '../../../../shared/Result';
-import { IUseCaseError } from '../../../../shared/useCase/IUseCaseError';
+import { Result } from '../../../shared/Result';
+import { IUseCaseError } from '../../../shared/useCase/IUseCaseError';
 
 export class EmailAlreadyExistsError extends Result<IUseCaseError> {
   constructor(email: string, error?: Error) {

@@ -1,5 +1,5 @@
-import { Result } from '../../../shared/Result';
-import { ValueObject } from '../../../shared/domain/ValueObject';
+import { Result } from '../../shared/Result';
+import { ValueObject } from '../../shared/domain/ValueObject';
 
 export type UserEmailProps = {
   email: string;

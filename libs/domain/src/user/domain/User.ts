@@ -1,6 +1,6 @@
-import { AggregateRoot } from '../../../shared/domain/AggregateRoot';
-import { UniqueEntityId } from '../../../shared/domain/UniqueEntityId';
-import { Result } from '../../../shared/Result';
+import { AggregateRoot } from '../../shared/domain/AggregateRoot';
+import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
+import { Result } from '../../shared/Result';
 // import { UserCreated } from './events/UserCreated';
 import { UserEmail } from './UserEmail';
 import { UserName } from './UserName';

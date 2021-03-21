@@ -24,6 +24,16 @@
       "projectType": "application",
       "prefix": "express",
       "targets": {
+        "nexus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "npm ts-node --transpile-only src/graphql/makeSchema"
+              }
+            ]
+          }
+        },
         "build": {
           "executor": "@nrwl/node:build",
           "outputs": ["{options.outputPath}"],

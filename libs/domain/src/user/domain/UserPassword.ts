@@ -1,8 +1,8 @@
 import * as argon2 from 'argon2';
 
-import { Guard } from '../../../shared/Guard';
-import { Result } from '../../../shared/Result';
-import { ValueObject } from '../../../shared/domain/ValueObject';
+import { Guard } from '../../shared/Guard';
+import { Result } from '../../shared/Result';
+import { ValueObject } from '../../shared/domain/ValueObject';
 
 type UserPasswordProps = {
   password: string;
