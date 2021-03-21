@@ -1,12 +1,7 @@
-import {
-  IUserRepository,
-  UniqueEntityId,
-  User,
-  UserEmail,
-  UserMapper,
-  UserPassword,
-} from '@kurakichi/domain';
 import { PrismaClient } from '@prisma/client';
+import { UserMapper } from './UserMapper';
+import { IUserRepository, User, UserEmail, UserPassword } from '../domain';
+import { UniqueEntityId } from '../../shared';
 
 export class UserRepository implements IUserRepository {
   private prisma: PrismaClient;
