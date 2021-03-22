@@ -1,8 +1,8 @@
 overwrite: true
 schema: 'http://localhost:4000/graphql'
-documents: 'apps/next-web/src/graphql/**/*.graphql'
+documents: 'apps/next/src/graphql/**/*.graphql'
 generates:
-  apps/next-web/src/graphql/generated/graphql.tsx:
+  apps/next/src/graphql/generated/graphql.tsx:
     plugins:
       - 'typescript'
       - 'typescript-operations'

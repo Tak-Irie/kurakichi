@@ -3,30 +3,21 @@
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "strict": true,
     "declaration": false,
-    "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/ddd-modules": [
-        "libs/ddd-modules/src/index.ts"
-      ],
-    },
+      "@kurakichi/node-util": ["libs/node-util/src/index.ts"],
+      "@kurakichi/domain": ["libs/domain/src/index.ts"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ],
+  "exclude": ["node_modules", "tmp"]
 }

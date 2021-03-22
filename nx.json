@@ -7,7 +7,7 @@
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": { "defaultBase": "trunk" },
+  "affected": { "defaultBase": "master" },
   "npmScope": "kurakichi",
   "tasksRunnerOptions": {
     "default": {
@@ -16,9 +16,10 @@
     }
   },
   "projects": {
-    "next-web": { "tags": [] },
-    "next-web-e2e": { "tags": [], "implicitDependencies": ["next-web"] },
-    "express-server": { "tags": [] },
-    "ddd-modules": { "tags": [] }
+    "express": { "tags": [] },
+    "next": { "tags": [] },
+    "next-e2e": { "tags": [], "implicitDependencies": ["next"] },
+    "node-util": { "tags": [] },
+    "domain": { "tags": [] }
   }
 }
