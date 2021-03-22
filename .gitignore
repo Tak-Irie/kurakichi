@@ -40,4 +40,5 @@ Thumbs.db
 .env.local
 .env
 psql
+psql2
 redis

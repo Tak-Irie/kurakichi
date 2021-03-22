@@ -1,8 +1,0 @@
-mutation UserLogin($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    message
-    user {
-      id
-    }
-  }
-}

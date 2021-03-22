@@ -1,8 +1,0 @@
-mutation UserRegister($email: String!, $password: String!, $username: String!) {
-  userRegister(email: $email, password: $password, username: $username) {
-    user {
-      id
-    }
-    message
-  }
-}
