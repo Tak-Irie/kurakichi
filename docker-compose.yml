@@ -18,24 +18,24 @@ services:
       - ./redis/data:/data
       - ./redis/redis.conf:/redis.conf
     command: ['redis-server', '/redis.conf']
+  # postgres_store:
+  #   image: postgres:11-alpine
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - ./psql:/var/lib/postgresql/data
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: test
+  #     POSTGRES_PASSWORD: test
+  #     POSTGRES_DB: test
+  #     POSTGRES_INITDB_ARGS: --encoding=UTF-8 --locale=C
   postgres_store:
-    image: postgres:11-alpine
+    image: postgres:13.1
     ports:
       - 5432:5432
     volumes:
       - ./psql:/var/lib/postgresql/data
-    restart: always
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test
-      POSTGRES_INITDB_ARGS: --encoding=UTF-8 --locale=C
-  postgres_store2:
-    image: postgres:13.1
-    ports:
-      - 5433:5432
-    volumes:
-      - ./psql2:/var/lib/postgresql/data
     restart: always
     environment:
       POSTGRES_USER: test

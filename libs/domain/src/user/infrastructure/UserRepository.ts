@@ -10,7 +10,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async confirmExistence(userEmail: UserEmail): Promise<boolean> {
-    const { email } = userEmail.props;
+    const email = userEmail.getValue();
     const result = await this.prisma.user.findUnique({ where: { email } });
     return !!result;
   }
@@ -30,8 +30,10 @@ export class UserRepository implements IUserRepository {
     if (registeredEmail === true) return undefined;
 
     const data = await UserMapper.toStore(user);
+    console.log('data:', data);
 
-    await this.prisma.user.create({ data });
+    const result = await this.prisma.user.create({ data });
+    console.log('result:', result);
 
     return user;
   }

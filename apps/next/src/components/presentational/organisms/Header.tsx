@@ -5,6 +5,7 @@ import { MiddleButton } from '../atoms/Button';
 import { MenuSVG } from '../atoms/SVG';
 import { SingUpButton } from '../../container/SingUp';
 
+// FIXME:rename to NavBar
 const Header: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -24,6 +25,8 @@ const Header: FC = () => {
           <HeaderList href="/login" title="login" label="login" />
           <HeaderList href="/private" title="private" label="private" />
           <HeaderList href="/ex/ex1" title="ex1" label="ex1" />
+          <HeaderList href="/ex/ex2" title="ex2" label="ex2" />
+
           <li>
             <SingUpButton />
           </li>

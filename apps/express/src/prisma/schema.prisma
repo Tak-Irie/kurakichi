@@ -8,19 +8,26 @@ generator client {
 }
 
 model User {
-  id        String   @id
-  email     String   @unique
-  username  String
-  password  String?
-  ssoSub    String?
-  picture   String?
-  // role      Role?    @default(USER)
-  createdAt DateTime @default(now())
+  id         String         @id
+  email      String         @unique
+  name       String
+  password   String         @default("IT_IS_SSO_USER")
+  ssoSub     String         @default("IT_IS_KURAKICHI_ORIGINAL_USER")
+  picture    String         @default("UNKNOWN")
+  rooms      Room[]
+  orgs       Organization[]
+  createdAt  DateTime       @default(now())
+  manageOrg  Organization[] @relation("orgAdmin")
+  manageRoom Room[]         @relation("roomAdmin")
 }
 
-model Test {
+model Organization {
   id        String   @id
-  name      String
+  name      String   @unique
+  admin     User     @relation("orgAdmin", fields: [adminId], references: [id])
+  adminId   String
+  members   User[]
+  location  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -28,6 +35,21 @@ model Test {
 model Dialog {
   id   String @id
   text String
+}
+
+model Room {
+  id      String @id
+  admin   User   @relation("roomAdmin", fields: [adminId], references: [id])
+  adminId String
+  members User[]
+  karte   Karte?
+}
+
+model Karte {
+  id     String @id
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId String
+  record String
 }
 
 enum Role {

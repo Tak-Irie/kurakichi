@@ -5,7 +5,7 @@ import { User, UserEmail, UserName, UserPassword } from '../domain';
 export class UserMapper {
   public static async ToDomain(storedUser: StoredUser): Promise<User> {
     let password: UserPassword | undefined;
-    const userNameResult = UserName.create({ username: storedUser.username });
+    const userNameResult = UserName.create({ username: storedUser.name });
 
     if (storedUser.password) {
       const result = await UserPassword.create({
@@ -28,21 +28,13 @@ export class UserMapper {
   }
 
   public static async toStore(user: User): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
-    const result = () => {
-      const data = user.getPassword();
-      if (data === undefined) {
-        return null;
-      }
-      return data;
-    };
-
     return {
       id: user.getId(),
-      username: user.getUsername(),
+      name: user.getUsername(),
       email: user.getEmail(),
-      password: result(),
-      ssoSub: user.props.ssoSub || null,
-      picture: user.props.picture || null,
+      password: user.getPassword() || 'IT_IS_SSO_USER',
+      ssoSub: user.props.ssoSub || 'IT_IS_KURAKICHI_ORIGINAL_USER',
+      picture: user.props.picture || 'UNKNOWN',
     };
   }
 }
