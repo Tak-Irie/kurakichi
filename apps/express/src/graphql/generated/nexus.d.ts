@@ -34,6 +34,11 @@ export interface NexusGenObjects {
     result?: boolean | null; // Boolean
   }
   Mutation: {};
+  Org: { // root type
+    id: string; // String!
+    location: string; // String!
+    name: string; // String!
+  }
   Query: {};
   Subscription: {};
   User: types.User;
@@ -75,7 +80,13 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['getUser'] | null; // getUser
     logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     postDialog: NexusGenRootTypes['Dialog'] | null; // Dialog
+    registerOrg: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     userRegister: NexusGenRootTypes['getUser'] | null; // getUser
+  }
+  Org: { // field return type
+    id: string; // String!
+    location: string; // String!
+    name: string; // String!
   }
   Query: { // field return type
     getUsers: NexusGenRootTypes['getUser']; // getUser!
@@ -118,7 +129,13 @@ export interface NexusGenFieldTypeNames {
     login: 'getUser'
     logout: 'GeneralResponse'
     postDialog: 'Dialog'
+    registerOrg: 'GeneralResponse'
     userRegister: 'getUser'
+  }
+  Org: { // field return type name
+    id: 'String'
+    location: 'String'
+    name: 'String'
   }
   Query: { // field return type name
     getUsers: 'getUser'
@@ -161,6 +178,10 @@ export interface NexusGenArgTypes {
     postDialog: { // args
       id: string; // String!
       text: string; // String!
+    }
+    registerOrg: { // args
+      location: string; // String!
+      name: string; // String!
     }
     userRegister: { // args
       email: string; // String!

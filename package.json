@@ -113,6 +113,7 @@
     "fast-memoize": "^2.5.2",
     "graphql-redis-subscriptions": "^2.3.1",
     "helmet": "^4.4.1",
+    "ken-all": "^0.2.3",
     "next": "10.0.1",
     "next-secure-headers": "^2.2.0",
     "nexus": "^1.0.0",

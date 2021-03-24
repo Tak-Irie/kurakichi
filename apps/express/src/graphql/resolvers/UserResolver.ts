@@ -13,7 +13,7 @@ import { COOKIE_NAME } from '@kurakichi/node-util';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 import { userToPresentation } from '../toPresentationDTO/userToPresentation';
 
-const userQuery = extendType({
+export const userQuery = extendType({
   type: 'Query',
   definition(t) {
     t.nonNull.field('getUsers', {
@@ -32,10 +32,10 @@ const userQuery = extendType({
       type: 'getUser',
       resolve: async (_, __, context) => {
         console.log('me query called');
-        const userId = getUserIdByCookie(context);
+        const idRes = getUserIdByCookie(context);
         // console.log('id:', userId);
-        if (userId === undefined) return { message: 'not logged in' };
-        const result = await useGetUserById.execute(userId);
+        if (idRes.result === false) return { message: idRes.errMessage };
+        const result = await useGetUserById.execute(idRes.id);
         // console.log('res:', result);
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
@@ -49,7 +49,7 @@ const userQuery = extendType({
   },
 });
 
-const userMutation = extendType({
+export const userMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.field('userRegister', {
@@ -144,5 +144,3 @@ const userMutation = extendType({
     });
   },
 });
-
-export { userQuery, userMutation };

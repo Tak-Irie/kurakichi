@@ -1,0 +1,6 @@
+mutation OrgRegister($registerOrgName: String!, $registerOrgLocation: String!) {
+  registerOrg(name: $registerOrgName, location: $registerOrgLocation) {
+    result
+    message
+  }
+}

@@ -10,7 +10,7 @@ type PostDialogInput = {
   text: string;
 };
 
-const Ex2: NextPage = () => {
+const Dialog: NextPage = () => {
   const { data, loading, error } = useSubDialogSubscription();
   const [postDialog] = useDialogPostMutation();
   const { register, handleSubmit } = useForm();
@@ -39,4 +39,4 @@ const Ex2: NextPage = () => {
   );
 };
 
-export default Ex2;
+export default Dialog;

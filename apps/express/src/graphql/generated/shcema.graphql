@@ -19,7 +19,14 @@ type Mutation {
   login(email: String!, password: String!): getUser
   logout: GeneralResponse
   postDialog(id: String!, text: String!): Dialog
+  registerOrg(location: String!, name: String!): GeneralResponse
   userRegister(email: String!, password: String!, username: String!): getUser
+}
+
+type Org {
+  id: String!
+  location: String!
+  name: String!
 }
 
 type Query {
