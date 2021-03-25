@@ -17,6 +17,21 @@ import { redis, pubsub } from './util/redisClient';
 const main = async () => {
   const app = express();
 
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req, res }) => ({
+      req,
+      res,
+      pubsub,
+      redis,
+    }),
+  });
+
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
+
   const RedisStore = connectRedis(session);
 
   app.set('trust proxy', 1);
@@ -45,25 +60,7 @@ const main = async () => {
       resave: false,
     }),
   );
-
-  const apolloServer = new ApolloServer({
-    schema,
-    context: ({ req, res, connection }) => {
-      // if (connection) {
-      //   const token = connection.context.authorization || '';
-      //   return token;
-      // } else {
-      // console.log('ws connection:', connection);
-      return { req, res, pubsub };
-      // }
-    },
-    subscriptions: {
-      onConnect: async (connectionParams, webSocket) => {
-        console.log('xxxxxxxxxxxxx');
-        console.log(connectionParams);
-      },
-    },
-  });
+  console.log('cookie:', COOKIE_NAME);
 
   app.use('/google', googleRouter);
   app.use('/yahoo', yahooRouter);
@@ -86,20 +83,18 @@ const main = async () => {
 
   const httpServer = http.createServer(app);
 
-  apolloServer.applyMiddleware({
-    app,
-    cors: false,
-  });
   apolloServer.installSubscriptionHandlers(httpServer);
 
-  const port = process.env.NX_PORT || 4000;
+  const PORT = process.env.NX_PORT || 4000;
 
-  httpServer.listen(port, () => {
-    console.log('next connection:', process.env.NX_CORS_NEXT);
-    console.log('redis connection:', process.env.NX_REDIS_URL);
-    console.log(`server started on localhost:${port}`);
-    console.log(`Sub ready at ws://localhost:${port}${apolloServer.subscriptionsPath}`);
+  httpServer.listen(PORT, () => {
+    console.log(`server ready at ${PORT}`);
   });
+
+  // await new Promise((resolve) => httpServer.listen(PORT, resolve));
+  // console.log(`🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`);
+  // console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${apolloServer.subscriptionsPath}`);
+  // return { apolloServer, app, httpServer };
 };
 
 main().catch((err) => {

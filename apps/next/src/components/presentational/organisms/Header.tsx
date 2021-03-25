@@ -12,7 +12,7 @@ const Header: FC = () => {
         <Link href="/">
           <a href="/" aria-label="Company" title="Company" className="inline-flex items-center">
             <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-              Test
+              くらきち ｰ くらしのあんぜんきち_アルファ版 -
             </span>
           </a>
         </Link>

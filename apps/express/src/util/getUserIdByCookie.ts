@@ -1,4 +1,4 @@
-import { Context } from './context';
+import { MyContext } from './context';
 
 type IdResponse = {
   result: boolean;
@@ -6,7 +6,7 @@ type IdResponse = {
   id?: string;
 };
 
-export function getUserIdByCookie(context: Context): IdResponse {
+export function getUserIdByCookie(context: MyContext): IdResponse {
   const id = context.req.session.userId;
   if (id == undefined) return { result: false, errMessage: 'ログインを確認できませんでした' };
 

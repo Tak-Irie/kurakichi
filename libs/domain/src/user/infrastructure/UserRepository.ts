@@ -30,10 +30,8 @@ export class UserRepository implements IUserRepository {
     if (registeredEmail === true) return undefined;
 
     const data = await UserMapper.toStore(user);
-    console.log('data:', data);
 
-    const result = await this.prisma.user.create({ data });
-    console.log('result:', result);
+    await this.prisma.user.create({ data });
 
     return user;
   }

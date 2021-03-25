@@ -12,16 +12,19 @@ export const orgMutation = extendType({
         location: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        console.log('catch mutation:', context.req.session);
         const idRes = getUserIdByCookie(context);
+        console.log('id:', idRes);
         if (idRes.result == false) return { result: false, message: idRes.errMessage };
         const result = await useRegisterOrgUseCase.execute({
           adminId: idRes.id,
           orgName: args.name,
           location: args.location,
         });
+        console.log('res:', result);
         if (result.isLeft) return { result: false, message: result.value.getErrorValue() };
         // FIXME:
-        return { result: true, message: 'success<temp>' };
+        return { result: true, message: 'success' };
       },
     });
   },

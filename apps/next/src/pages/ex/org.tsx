@@ -1,9 +1,8 @@
 import { NextPage } from 'next';
-import { useOrgRegisterMutation } from '../../graphql/generated/graphql';
+import { OrgRegister } from '../../components/container/OrgRegister';
 
 const Org: NextPage = () => {
-  const {} = useOrgRegisterMutation();
-  return <p>this is ex3</p>;
+  return <OrgRegister />;
 };
 
 export default Org;

@@ -1,6 +1,6 @@
 import * as Redis from 'ioredis';
 
-const redis = new Redis('redis://localhost:6379');
+const redis = new Redis('redis://0.0.0.0:6379');
 
 type StoreAuthArg = {
   sessionId: string;
@@ -27,8 +27,10 @@ class RedisAuthService {
   }
 
   public static async getStoredAuthParam(sessionId: string) {
+    console.log('ses:', sessionId);
     const storedParam = await redis.hmget(`auth:${sessionId}`, 'state', 'nonce', 'code_verifier');
 
+    console.log('stored:', storedParam);
     if (storedParam.includes(null) === true) return undefined;
     const result = await this.deleteStoredAuthParam(sessionId);
     if (result === false) return undefined;

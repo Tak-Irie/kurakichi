@@ -33,7 +33,7 @@
     "gen:gql": "graphql-codegen",
     "gen:nexus": "ts-node --transpile-only apps/express/src/graphql/makeSchema",
     "nexus": "ts-node-dev --no-notify --respawn --transpile-only ./app/express/src/main.ts",
-    "gen:prisma": "prisma generate --schema=./apps/express-server/prisma/schema.prisma",
+    "gen:prisma": "prisma generate --schema=./apps/express/src/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --preview-feature --schema=./apps/express/src//prisma/schema.prisma"
   },
   "private": true,

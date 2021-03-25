@@ -33,10 +33,10 @@ export const userQuery = extendType({
       resolve: async (_, __, context) => {
         console.log('me query called');
         const idRes = getUserIdByCookie(context);
-        // console.log('id:', userId);
+        console.log('idRes:', idRes);
         if (idRes.result === false) return { message: idRes.errMessage };
         const result = await useGetUserById.execute(idRes.id);
-        // console.log('res:', result);
+        console.log('res:', result);
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
         // console.log('user:', user);
@@ -60,10 +60,13 @@ export const userMutation = extendType({
         username: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        console.log('getConn');
         const result = await useRegisterUserUseCase.execute({ ...args });
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
+        console.log('user:', user);
         context.req.session.userId = user.id;
+        console.log('session:', context.req.session.userId);
         return { message: 'success!', user: { id: user.id } };
       },
     });
@@ -74,9 +77,11 @@ export const userMutation = extendType({
         password: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        console.log('arg:', args);
         const user = await useLoginUserUseCase.execute({ ...args });
         if (user.isLeft()) return { message: user.value.getErrorValue() };
         const data = user.value.getValue();
+        console.log('data:', data);
         context.req.session.userId = data.id;
         return { message: 'success!', user: { ...user.value.getValue() } };
       },

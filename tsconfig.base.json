@@ -7,17 +7,28 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@kurakichi/node-util": ["libs/node-util/src/index.ts"],
-      "@kurakichi/domain": ["libs/domain/src/index.ts"]
+      "@kurakichi/node-util": [
+        "libs/node-util/src/index.ts"
+      ],
+      "@kurakichi/domain": [
+        "libs/domain/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

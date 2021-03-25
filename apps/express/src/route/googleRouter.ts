@@ -17,6 +17,7 @@ googleRouter.get('/callback', async (req, res) => {
   try {
     const client = await memoizedGoogleClient();
 
+    console.log('session:', req.session);
     const tokenSet = await OidcAuthService.verifyAuthCode(
       req,
       client,

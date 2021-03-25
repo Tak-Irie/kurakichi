@@ -13,7 +13,6 @@ interface UserLoginInput {
 
 const UserLogin: FC = () => {
   const [userLogin, { data, loading, error }] = useUserLoginMutation();
-  const [meQuery] = useUserMeLazyQuery();
   const router = useRouter();
 
   const { register, handleSubmit } = useForm();
@@ -24,9 +23,9 @@ const UserLogin: FC = () => {
         variables: { ...value },
         fetchPolicy: 'no-cache',
       });
-      router.push('/private');
+      // router.replace('/private');
     } catch (err) {
-      console.log('err:', err);
+      console.log('mutationErr:', err);
     }
   };
 

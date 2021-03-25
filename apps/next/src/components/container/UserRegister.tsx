@@ -3,10 +3,7 @@ import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
-import {
-  useUserMeLazyQuery,
-  useUserRegisterMutation,
-} from '../../graphql/generated/graphql';
+import { useUserMeLazyQuery, useUserRegisterMutation } from '../../graphql/generated/graphql';
 
 interface UserRegisterInput {
   email: string;
@@ -24,7 +21,7 @@ const UserRegister: FC = () => {
     try {
       await userRegister({
         variables: { ...value },
-        fetchPolicy: 'no-cache',
+        // fetchPolicy: 'no-cache',
       });
       meQuery();
     } catch (err) {
@@ -37,12 +34,7 @@ const UserRegister: FC = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input name="username" type="text" labeled={true} register={register} />
         <Input name="email" type="email" labeled={true} register={register} />
-        <Input
-          name="password"
-          type="password"
-          labeled={true}
-          register={register}
-        />
+        <Input name="password" type="password" labeled={true} register={register} />
         <MiddleButton type="submit">UserRegister</MiddleButton>
       </Form>
       {loading && <p>loading!</p>}
