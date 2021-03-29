@@ -17,20 +17,27 @@ googleRouter.get('/callback', async (req, res) => {
   try {
     const client = await memoizedGoogleClient();
 
-    console.log('session:', req.session);
+    // console.log('CbSession:', req.session);
+
     const tokenSet = await OidcAuthService.verifyAuthCode(
       req,
       client,
-      'https://localhost/google/callback',
+      'http://localhost:4000/google/callback',
     );
     if (tokenSet === undefined) throw Error('token not exist');
+
+    // console.log('tokenSet:', tokenSet);
 
     const storeTokenResult = await OidcAuthService.storeAndCryptTokenSet(tokenSet);
     if (storeTokenResult !== 'OK') throw Error('fail to store token');
 
     req.session.authSession = undefined;
 
+    // console.log('storeToken:', storeTokenResult);
+
     const userInfo = await OidcAuthService.getUserInfo(client, tokenSet);
+
+    // console.log('userInfo:', userInfo);
 
     const result = await useSsoUserUseCase.execute({
       ssoSub: userInfo.sub,
@@ -47,7 +54,7 @@ googleRouter.get('/callback', async (req, res) => {
     res.redirect('http://localhost:4200/auth/success');
   } catch (err) {
     console.log('err:', err);
-    res.send('http://localhost:4200/auth/fail');
+    res.redirect('http://localhost:4200/auth/fail');
   }
 });
 

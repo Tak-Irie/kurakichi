@@ -16,6 +16,7 @@ type Mutation {
   changePassword(currentPass: String!, newPass: String!): GeneralResponse
   deleteUser: GeneralResponse
   forgetPassword(email: String!): GeneralResponse
+  joinOrg(orgId: String!): GeneralResponse
   login(email: String!, password: String!): getUser
   logout: GeneralResponse
   postDialog(id: String!, text: String!): Dialog
@@ -29,7 +30,13 @@ type Org {
   name: String!
 }
 
+type OrgResponse {
+  message: String!
+  orgs: [Org]
+}
+
 type Query {
+  getOrgs: OrgResponse
   getUsers: getUser!
   me: getUser
 }

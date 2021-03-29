@@ -4,15 +4,13 @@ import GoogleButton from 'react-google-button';
 const GoogleLoginButton: FC = () => {
   const handleClick = async () => {
     try {
-      const res = await fetch('https://localhost/google/login', {
+      const res = await fetch('http://localhost:4000/google/login', {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',
       });
       const data = await res.text();
-      const verified = data.match(
-        'https://accounts.google.com/o/oauth2/v2/auth.*',
-      );
+      const verified = data.match('https://accounts.google.com/o/oauth2/v2/auth.*');
 
       if (verified === null) return;
 

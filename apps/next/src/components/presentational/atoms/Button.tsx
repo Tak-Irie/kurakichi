@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent } from 'react';
+import { FC, ForwardedRef, forwardRef, SyntheticEvent } from 'react';
 
 type ButtonProps = {
   onClick?: (e: SyntheticEvent) => void | Promise<void>;

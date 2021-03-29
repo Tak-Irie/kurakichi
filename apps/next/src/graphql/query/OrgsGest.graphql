@@ -1,0 +1,10 @@
+query OrgsGet {
+  getOrgs {
+    orgs {
+      id
+      name
+      location
+    }
+    message
+  }
+}

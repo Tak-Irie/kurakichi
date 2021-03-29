@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { HeaderList } from '../atoms/HeaderList';
-import { SingUpButton } from '../../container/SingUp';
 import { HeaderDropDown } from '../molecules/HeaderDropDown';
+import { NavAuthSection } from '../molecules/NavAuthSection';
 
 // FIXME:rename to NavBar
 const Header: FC = () => {
@@ -17,15 +17,13 @@ const Header: FC = () => {
           </a>
         </Link>
         <ul className="flex items-center space-x-8 lg:flex">
+          <HeaderList href="/ex/playground" title="playground" label="PlayGround" />
           <HeaderList href="/product" title="our product" label="Product" />
           <HeaderList href="/users" title="users" label="users" />
-          <HeaderList href="/login" title="login" label="login" />
-          <HeaderList href="/private" title="private" label="private" />
-          <li>
-            <SingUpButton />
-            <HeaderDropDown />
-          </li>
+          <HeaderList href="/orgs" title="orgs" label="orgs" />
+          <HeaderDropDown />
         </ul>
+        <NavAuthSection />
       </div>
     </div>
   );

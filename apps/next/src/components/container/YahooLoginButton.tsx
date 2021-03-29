@@ -4,7 +4,7 @@ import { YahooButton } from '../presentational/atoms/YahooButton';
 const YahooLoginButton: FC = () => {
   const handleClick = async () => {
     try {
-      const res = await fetch('https://localhost/yahoo/login', {
+      const res = await fetch('http://localhost:4000/yahoo/login', {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',

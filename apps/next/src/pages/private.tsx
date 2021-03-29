@@ -30,7 +30,6 @@ const Private: NextPage = () => {
         <p>aaa</p>
         <p>bbb</p>
         {data.me.user?.username && <p>こんにちは {data.me.user.username} !</p>}
-        <LogoutButton />
         <UserDeleteButton />
         <UserChangePassword />
       </>

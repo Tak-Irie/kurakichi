@@ -4,6 +4,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GQL_HTTP,
+  // uri: 'https://localhost/graphql',
   credentials: 'include',
 });
 

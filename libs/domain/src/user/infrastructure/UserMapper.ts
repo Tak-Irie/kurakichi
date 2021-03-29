@@ -35,6 +35,7 @@ export class UserMapper {
       password: user.getPassword() || 'IT_IS_SSO_USER',
       ssoSub: user.props.ssoSub || 'IT_IS_KURAKICHI_ORIGINAL_USER',
       picture: user.props.picture || 'UNKNOWN',
+      role: 'USER',
     };
   }
 }

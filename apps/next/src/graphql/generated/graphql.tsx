@@ -14,28 +14,6 @@ export type Scalars = {
   Float: number;
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['String'];
-  email: Scalars['String'];
-  username?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-};
-
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  id: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
-};
-
-export type GetUser = {
-  __typename?: 'getUser';
-  message: Scalars['String'];
-  user?: Maybe<UserResponse>;
-  users?: Maybe<Array<Maybe<UserResponse>>>;
-};
-
 export type Dialog = {
   __typename?: 'Dialog';
   id: Scalars['String'];
@@ -48,19 +26,6 @@ export type GeneralResponse = {
   message?: Maybe<Scalars['String']>;
 };
 
-export type Org = {
-  __typename?: 'Org';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  location: Scalars['String'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  getUsers: GetUser;
-  me?: Maybe<GetUser>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   userRegister?: Maybe<GetUser>;
@@ -71,6 +36,7 @@ export type Mutation = {
   changePassword?: Maybe<GeneralResponse>;
   postDialog?: Maybe<Dialog>;
   registerOrg?: Maybe<GeneralResponse>;
+  joinOrg?: Maybe<GeneralResponse>;
 };
 
 
@@ -109,9 +75,56 @@ export type MutationRegisterOrgArgs = {
   location: Scalars['String'];
 };
 
+
+export type MutationJoinOrgArgs = {
+  orgId: Scalars['String'];
+};
+
+export type Org = {
+  __typename?: 'Org';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  location: Scalars['String'];
+};
+
+export type OrgResponse = {
+  __typename?: 'OrgResponse';
+  message: Scalars['String'];
+  orgs?: Maybe<Array<Maybe<Org>>>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  getUsers: GetUser;
+  me?: Maybe<GetUser>;
+  getOrgs?: Maybe<OrgResponse>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   dialogPosted?: Maybe<Dialog>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  email: Scalars['String'];
+  username?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  id: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type GetUser = {
+  __typename?: 'getUser';
+  message: Scalars['String'];
+  user?: Maybe<UserResponse>;
+  users?: Maybe<Array<Maybe<UserResponse>>>;
 };
 
 export type DialogPostMutationVariables = Exact<{
@@ -125,6 +138,19 @@ export type DialogPostMutation = (
   & { postDialog?: Maybe<(
     { __typename?: 'Dialog' }
     & Pick<Dialog, 'id' | 'text'>
+  )> }
+);
+
+export type OrgJoinMutationVariables = Exact<{
+  OrgId: Scalars['String'];
+}>;
+
+
+export type OrgJoinMutation = (
+  { __typename?: 'Mutation' }
+  & { joinOrg?: Maybe<(
+    { __typename?: 'GeneralResponse' }
+    & Pick<GeneralResponse, 'result' | 'message'>
   )> }
 );
 
@@ -228,6 +254,21 @@ export type UserRegisterMutation = (
   )> }
 );
 
+export type OrgsGetQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrgsGetQuery = (
+  { __typename?: 'Query' }
+  & { getOrgs?: Maybe<(
+    { __typename?: 'OrgResponse' }
+    & Pick<OrgResponse, 'message'>
+    & { orgs?: Maybe<Array<Maybe<(
+      { __typename?: 'Org' }
+      & Pick<Org, 'id' | 'name' | 'location'>
+    )>>> }
+  )> }
+);
+
 export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -303,6 +344,40 @@ export function useDialogPostMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DialogPostMutationHookResult = ReturnType<typeof useDialogPostMutation>;
 export type DialogPostMutationResult = Apollo.MutationResult<DialogPostMutation>;
 export type DialogPostMutationOptions = Apollo.BaseMutationOptions<DialogPostMutation, DialogPostMutationVariables>;
+export const OrgJoinDocument = gql`
+    mutation OrgJoin($OrgId: String!) {
+  joinOrg(orgId: $OrgId) {
+    result
+    message
+  }
+}
+    `;
+export type OrgJoinMutationFn = Apollo.MutationFunction<OrgJoinMutation, OrgJoinMutationVariables>;
+
+/**
+ * __useOrgJoinMutation__
+ *
+ * To run a mutation, you first call `useOrgJoinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useOrgJoinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [orgJoinMutation, { data, loading, error }] = useOrgJoinMutation({
+ *   variables: {
+ *      OrgId: // value for 'OrgId'
+ *   },
+ * });
+ */
+export function useOrgJoinMutation(baseOptions?: Apollo.MutationHookOptions<OrgJoinMutation, OrgJoinMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<OrgJoinMutation, OrgJoinMutationVariables>(OrgJoinDocument, options);
+      }
+export type OrgJoinMutationHookResult = ReturnType<typeof useOrgJoinMutation>;
+export type OrgJoinMutationResult = Apollo.MutationResult<OrgJoinMutation>;
+export type OrgJoinMutationOptions = Apollo.BaseMutationOptions<OrgJoinMutation, OrgJoinMutationVariables>;
 export const OrgRegisterDocument = gql`
     mutation OrgRegister($registerOrgName: String!, $registerOrgLocation: String!) {
   registerOrg(name: $registerOrgName, location: $registerOrgLocation) {
@@ -548,6 +623,45 @@ export function useUserRegisterMutation(baseOptions?: Apollo.MutationHookOptions
 export type UserRegisterMutationHookResult = ReturnType<typeof useUserRegisterMutation>;
 export type UserRegisterMutationResult = Apollo.MutationResult<UserRegisterMutation>;
 export type UserRegisterMutationOptions = Apollo.BaseMutationOptions<UserRegisterMutation, UserRegisterMutationVariables>;
+export const OrgsGetDocument = gql`
+    query OrgsGet {
+  getOrgs {
+    orgs {
+      id
+      name
+      location
+    }
+    message
+  }
+}
+    `;
+
+/**
+ * __useOrgsGetQuery__
+ *
+ * To run a query within a React component, call `useOrgsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrgsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrgsGetQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrgsGetQuery(baseOptions?: Apollo.QueryHookOptions<OrgsGetQuery, OrgsGetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrgsGetQuery, OrgsGetQueryVariables>(OrgsGetDocument, options);
+      }
+export function useOrgsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrgsGetQuery, OrgsGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrgsGetQuery, OrgsGetQueryVariables>(OrgsGetDocument, options);
+        }
+export type OrgsGetQueryHookResult = ReturnType<typeof useOrgsGetQuery>;
+export type OrgsGetLazyQueryHookResult = ReturnType<typeof useOrgsGetLazyQuery>;
+export type OrgsGetQueryResult = Apollo.QueryResult<OrgsGetQuery, OrgsGetQueryVariables>;
 export const UserGetDocument = gql`
     query UserGet {
   getUsers {

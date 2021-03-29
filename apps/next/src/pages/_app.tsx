@@ -23,7 +23,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
           href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap"
           rel="stylesheet"
         />
-        <title>くらしのあんぜんきち -kurakichi-</title>
+        <title>くらきち -くらしのあんぜんきち</title>
       </Head>
       <Layout>
         <Component {...pageProps} />

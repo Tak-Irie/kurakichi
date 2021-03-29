@@ -4,7 +4,7 @@ import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useUserLoginMutation, useUserMeLazyQuery } from '../../graphql/generated/graphql';
+import { useUserLoginMutation } from '../../graphql/generated/graphql';
 
 interface UserLoginInput {
   email: string;
@@ -23,7 +23,7 @@ const UserLogin: FC = () => {
         variables: { ...value },
         fetchPolicy: 'no-cache',
       });
-      // router.replace('/private');
+      router.replace('/private');
     } catch (err) {
       console.log('mutationErr:', err);
     }

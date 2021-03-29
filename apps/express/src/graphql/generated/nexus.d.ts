@@ -39,6 +39,10 @@ export interface NexusGenObjects {
     location: string; // String!
     name: string; // String!
   }
+  OrgResponse: { // root type
+    message: string; // String!
+    orgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+  }
   Query: {};
   Subscription: {};
   User: types.User;
@@ -77,6 +81,7 @@ export interface NexusGenFieldTypes {
     changePassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     deleteUser: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     forgetPassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    joinOrg: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     login: NexusGenRootTypes['getUser'] | null; // getUser
     logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     postDialog: NexusGenRootTypes['Dialog'] | null; // Dialog
@@ -88,7 +93,12 @@ export interface NexusGenFieldTypes {
     location: string; // String!
     name: string; // String!
   }
+  OrgResponse: { // field return type
+    message: string; // String!
+    orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+  }
   Query: { // field return type
+    getOrgs: NexusGenRootTypes['OrgResponse'] | null; // OrgResponse
     getUsers: NexusGenRootTypes['getUser']; // getUser!
     me: NexusGenRootTypes['getUser'] | null; // getUser
   }
@@ -126,6 +136,7 @@ export interface NexusGenFieldTypeNames {
     changePassword: 'GeneralResponse'
     deleteUser: 'GeneralResponse'
     forgetPassword: 'GeneralResponse'
+    joinOrg: 'GeneralResponse'
     login: 'getUser'
     logout: 'GeneralResponse'
     postDialog: 'Dialog'
@@ -137,7 +148,12 @@ export interface NexusGenFieldTypeNames {
     location: 'String'
     name: 'String'
   }
+  OrgResponse: { // field return type name
+    message: 'String'
+    orgs: 'Org'
+  }
   Query: { // field return type name
+    getOrgs: 'OrgResponse'
     getUsers: 'getUser'
     me: 'getUser'
   }
@@ -170,6 +186,9 @@ export interface NexusGenArgTypes {
     }
     forgetPassword: { // args
       email: string; // String!
+    }
+    joinOrg: { // args
+      orgId: string; // String!
     }
     login: { // args
       email: string; // String!

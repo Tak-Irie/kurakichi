@@ -17,12 +17,18 @@ yahooRouter.get('/callback', async (req, res) => {
   try {
     const client = await memoizedYahooClient();
 
+    console.log('CbSession:', req.session);
+
     const tokenSet = await OidcAuthService.verifyAuthCode(
       req,
       client,
-      'https://localhost/yahoo/callback',
+      'http://localhost:4000/yahoo/callback',
     );
+
     if (tokenSet === undefined) throw Error('token not exist');
+
+    const storeTokenResult = await OidcAuthService.storeAndCryptTokenSet(tokenSet);
+    if (storeTokenResult !== 'OK') throw Error('fail to store token');
 
     req.session.authSession = undefined;
 
@@ -43,7 +49,7 @@ yahooRouter.get('/callback', async (req, res) => {
     res.redirect('http://localhost:4200/auth/success');
   } catch (err) {
     console.log('err:', err);
-    res.send('http://localhost:4200/auth/fail');
+    res.redirect('http://localhost:4200/auth/fail');
   }
 });
 

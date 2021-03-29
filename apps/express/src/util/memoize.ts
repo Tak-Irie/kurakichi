@@ -9,7 +9,7 @@ const YahooClient = async () => {
     client_secret: process.env.NX_YAHOO_OIDC_CLIENT_SECRET,
 
     // TODO:dev
-    redirect_uris: ['https://localhost/yahoo/callback'],
+    redirect_uris: ['http://localhost:4000/yahoo/callback'],
   });
 
   return yahooRP;
@@ -23,7 +23,7 @@ const GoogleClient = async () => {
     client_secret: process.env.NX_GOOGLE_OIDC_CLIENT_SECRET,
 
     // TODO:dev
-    redirect_uris: ['https://localhost/google/callback'],
+    redirect_uris: ['http://localhost:4000/google/callback'],
   });
 
   return googleRP;
