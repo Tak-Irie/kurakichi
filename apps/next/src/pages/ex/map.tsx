@@ -10,7 +10,7 @@ const center = {
   lng: 139.7673,
 };
 
-const Ex1: NextPage = () => {
+const Map: NextPage = () => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
   });
@@ -29,4 +29,4 @@ const Ex1: NextPage = () => {
   );
 };
 
-export default Ex1;
+export default Map;

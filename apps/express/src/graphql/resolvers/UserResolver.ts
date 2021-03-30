@@ -13,7 +13,7 @@ import { COOKIE_NAME } from '@kurakichi/node-util';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 import { userToPresentation } from '../toPresentationDTO/userToPresentation';
 
-const userQuery = extendType({
+export const userQuery = extendType({
   type: 'Query',
   definition(t) {
     t.nonNull.field('getUsers', {
@@ -32,11 +32,11 @@ const userQuery = extendType({
       type: 'getUser',
       resolve: async (_, __, context) => {
         console.log('me query called');
-        const userId = getUserIdByCookie(context);
-        // console.log('id:', userId);
-        if (userId === undefined) return { message: 'not logged in' };
-        const result = await useGetUserById.execute(userId);
-        // console.log('res:', result);
+        const idRes = getUserIdByCookie(context);
+        console.log('idRes:', idRes);
+        if (idRes.result === false) return { message: idRes.errMessage };
+        const result = await useGetUserById.execute(idRes.id);
+        console.log('res:', result);
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
         // console.log('user:', user);
@@ -49,7 +49,7 @@ const userQuery = extendType({
   },
 });
 
-const userMutation = extendType({
+export const userMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.field('userRegister', {
@@ -60,10 +60,13 @@ const userMutation = extendType({
         username: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        console.log('getConn');
         const result = await useRegisterUserUseCase.execute({ ...args });
         if (result.isLeft()) return { message: result.value.getErrorValue() };
         const user = result.value.getValue();
+        console.log('user:', user);
         context.req.session.userId = user.id;
+        console.log('session:', context.req.session.userId);
         return { message: 'success!', user: { id: user.id } };
       },
     });
@@ -74,9 +77,11 @@ const userMutation = extendType({
         password: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        console.log('arg:', args);
         const user = await useLoginUserUseCase.execute({ ...args });
         if (user.isLeft()) return { message: user.value.getErrorValue() };
         const data = user.value.getValue();
+        console.log('data:', data);
         context.req.session.userId = data.id;
         return { message: 'success!', user: { ...user.value.getValue() } };
       },
@@ -144,5 +149,3 @@ const userMutation = extendType({
     });
   },
 });
-
-export { userQuery, userMutation };

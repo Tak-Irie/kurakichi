@@ -4,7 +4,7 @@
  */
 
 import * as types from "./../sourceTypes"
-import { Context } from "./../../util/context"
+import { MyContext } from "./../../util/context"
 
 
 
@@ -34,6 +34,15 @@ export interface NexusGenObjects {
     result?: boolean | null; // Boolean
   }
   Mutation: {};
+  Org: { // root type
+    id: string; // String!
+    location: string; // String!
+    name: string; // String!
+  }
+  OrgResponse: { // root type
+    message: string; // String!
+    orgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+  }
   Query: {};
   Subscription: {};
   User: types.User;
@@ -72,12 +81,24 @@ export interface NexusGenFieldTypes {
     changePassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     deleteUser: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     forgetPassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    joinOrg: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     login: NexusGenRootTypes['getUser'] | null; // getUser
     logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     postDialog: NexusGenRootTypes['Dialog'] | null; // Dialog
+    registerOrg: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
     userRegister: NexusGenRootTypes['getUser'] | null; // getUser
   }
+  Org: { // field return type
+    id: string; // String!
+    location: string; // String!
+    name: string; // String!
+  }
+  OrgResponse: { // field return type
+    message: string; // String!
+    orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+  }
   Query: { // field return type
+    getOrgs: NexusGenRootTypes['OrgResponse'] | null; // OrgResponse
     getUsers: NexusGenRootTypes['getUser']; // getUser!
     me: NexusGenRootTypes['getUser'] | null; // getUser
   }
@@ -115,12 +136,24 @@ export interface NexusGenFieldTypeNames {
     changePassword: 'GeneralResponse'
     deleteUser: 'GeneralResponse'
     forgetPassword: 'GeneralResponse'
+    joinOrg: 'GeneralResponse'
     login: 'getUser'
     logout: 'GeneralResponse'
     postDialog: 'Dialog'
+    registerOrg: 'GeneralResponse'
     userRegister: 'getUser'
   }
+  Org: { // field return type name
+    id: 'String'
+    location: 'String'
+    name: 'String'
+  }
+  OrgResponse: { // field return type name
+    message: 'String'
+    orgs: 'Org'
+  }
   Query: { // field return type name
+    getOrgs: 'OrgResponse'
     getUsers: 'getUser'
     me: 'getUser'
   }
@@ -154,6 +187,9 @@ export interface NexusGenArgTypes {
     forgetPassword: { // args
       email: string; // String!
     }
+    joinOrg: { // args
+      orgId: string; // String!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!
@@ -161,6 +197,10 @@ export interface NexusGenArgTypes {
     postDialog: { // args
       id: string; // String!
       text: string; // String!
+    }
+    registerOrg: { // args
+      location: string; // String!
+      name: string; // String!
     }
     userRegister: { // args
       email: string; // String!
@@ -201,7 +241,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: Context;
+  context: MyContext;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

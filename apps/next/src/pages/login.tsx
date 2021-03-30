@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import { ForgetPassword } from '../components/container/ForgetPassword';
 import { GoogleLoginButton } from '../components/container/GoogleLoginButton';
 import { UserLogin } from '../components/container/UserLogin';
 import { YahooLoginButton } from '../components/container/YahooLoginButton';
+import Link from 'next/link';
 
 const Login: NextPage = () => {
   return (
@@ -10,7 +10,9 @@ const Login: NextPage = () => {
       <UserLogin />
       <GoogleLoginButton />
       <YahooLoginButton />
-      <ForgetPassword />
+      <Link href="/ex/forgetPassword">
+        <button>パスワードを忘れてしまった方</button>
+      </Link>
     </>
   );
 };

@@ -5,6 +5,7 @@ type HeaderListProps = {
   href: string;
   title: string;
   label: string;
+  onClick?: () => void;
 };
 
 const HeaderList: FC<HeaderListProps> = (props) => {
@@ -12,6 +13,7 @@ const HeaderList: FC<HeaderListProps> = (props) => {
     <li key={props.title}>
       <Link href={props.href}>
         <a
+          onClick={props.onClick}
           href={props.href}
           aria-label={props.title}
           title={props.title}

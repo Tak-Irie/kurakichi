@@ -2,6 +2,7 @@ import * as crypto from 'crypto';
 
 class Cryptograph {
   private static ALGORITHM = 'aes-256-cbc';
+  // TODO:PassとSaltは引数として与えたほうが良い,Libの中に環境変数があるのは意味不明
   private static PASSWORD = process.env.NX_CRYPT_PASS as string;
   private static SALT = process.env.NX_CRYPT_SALT as string;
 

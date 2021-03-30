@@ -1,7 +1,26 @@
 import { FC } from 'react';
 import Link from 'next/link';
 
-const LightningSVG: FC = () => {
+export const LoadingSpinnerSVG: FC = () => {
+  return (
+    <svg className="animate-spin h-5 w-5 mr-3" stroke="currentColor" viewBox="0 0 24 24">
+      <path d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z" />
+    </svg>
+  );
+};
+
+export const XMarkSVG: FC = () => {
+  return (
+    <svg className="w-5 text-gray-600 bg-black" viewBox="0 0 24 24">
+      <path
+        fill="currentColor"
+        d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z"
+      />
+    </svg>
+  );
+};
+
+export const LightningSVG: FC = () => {
   return (
     <div className="mr-2">
       <svg
@@ -21,7 +40,7 @@ const LightningSVG: FC = () => {
   );
 };
 
-const DownwardCurveSVG: FC = () => {
+export const DownwardCurveSVG: FC = () => {
   return (
     <div className="absolute inset-x-0 bottom-0">
       <svg
@@ -36,7 +55,7 @@ const DownwardCurveSVG: FC = () => {
   );
 };
 
-const MenuSVG: FC = () => {
+export const HamburgerMenuSVG: FC = () => {
   return (
     <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
       <path
@@ -55,7 +74,7 @@ const MenuSVG: FC = () => {
   );
 };
 
-const DownArrowInCircleSVG: FC = () => {
+export const DownArrowInCircleSVG: FC = () => {
   return (
     <Link href="/">
       <button
@@ -75,5 +94,3 @@ const DownArrowInCircleSVG: FC = () => {
     </Link>
   );
 };
-
-export { LightningSVG, DownwardCurveSVG, DownArrowInCircleSVG, MenuSVG };

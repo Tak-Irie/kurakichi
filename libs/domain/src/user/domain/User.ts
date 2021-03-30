@@ -13,9 +13,7 @@ interface UserProps {
   password?: UserPassword;
   ssoSub?: string;
   picture?: string;
-  // role: "USER" | "ADMIN";
-  // // isEmailVerified: boolean;
-  // profilePicture?: string;
+  role?: 'USER' | 'PRO' | 'SYSADMIN';
   // firstName?: string;
   // lastName?: string;
 }

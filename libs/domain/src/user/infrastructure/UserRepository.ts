@@ -10,7 +10,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async confirmExistence(userEmail: UserEmail): Promise<boolean> {
-    const { email } = userEmail.props;
+    const email = userEmail.getValue();
     const result = await this.prisma.user.findUnique({ where: { email } });
     return !!result;
   }

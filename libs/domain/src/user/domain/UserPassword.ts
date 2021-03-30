@@ -32,7 +32,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
       return Result.fail<UserPassword>('パスワードは8文字以上に設定してください');
     }
 
-    if (props.isHashed == undefined) {
+    if (props.isHashed == false) {
       password = await this.hashPassword(password);
     }
 
