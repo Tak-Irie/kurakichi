@@ -7,11 +7,13 @@ import { useOrgJoinMutation, useOrgsGetQuery } from '../graphql/generated/graphq
 const Orgs: NextPage = () => {
   const { data, loading, error, refetch } = useOrgsGetQuery();
 
-  const [joinOrg] = useOrgJoinMutation();
+  const [joinOrg, { data: joinData }] = useOrgJoinMutation();
 
-  const handleCardClick = () => {
+  const handleCardClick = (id: string, e: SyntheticEvent) => {
+    e.preventDefault();
+    console.log('fire:');
     joinOrg({
-      variables: { OrgId: key },
+      variables: { OrgId: id },
     });
   };
 
@@ -32,7 +34,7 @@ const Orgs: NextPage = () => {
                 title={org.name}
                 content={org.location}
                 link={
-                  <MiddleButton type="button" onClick={handleCardClick}>
+                  <MiddleButton type="button" onClick={(e) => handleCardClick(org.id, e)}>
                     登録申請
                   </MiddleButton>
                 }
@@ -40,6 +42,7 @@ const Orgs: NextPage = () => {
             </ul>
           </div>
         ))}
+      {joinData?.joinOrg.message && <p>{joinData.joinOrg.message}</p>}
       <MiddleButton type="button" onClick={handleClick}>
         再読み込み
       </MiddleButton>

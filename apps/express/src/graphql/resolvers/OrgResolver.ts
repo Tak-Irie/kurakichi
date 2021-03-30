@@ -43,7 +43,7 @@ export const orgMutation = extendType({
         });
 
         if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
-        return { result: true };
+        return { result: true, message: '申請が成功しました、管理者の許可をお待ち下さい' };
       },
     });
   },
