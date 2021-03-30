@@ -33,11 +33,17 @@ export interface NexusGenObjects {
     message?: string | null; // String
     result?: boolean | null; // Boolean
   }
+  Message: { // root type
+    id: string; // ID!
+  }
   Mutation: {};
   Org: { // root type
     id: string; // String!
     location: string; // String!
     name: string; // String!
+  }
+  OrgPayload: { // root type
+    Org?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   OrgResponse: { // root type
     message: string; // String!
@@ -59,12 +65,13 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
+  Node: NexusGenRootTypes['Message'];
 }
 
 export interface NexusGenUnions {
 }
 
-export type NexusGenRootTypes = NexusGenObjects
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
@@ -76,6 +83,9 @@ export interface NexusGenFieldTypes {
   GeneralResponse: { // field return type
     message: string | null; // String
     result: boolean | null; // Boolean
+  }
+  Message: { // field return type
+    id: string; // ID!
   }
   Mutation: { // field return type
     changePassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
@@ -92,6 +102,9 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     location: string; // String!
     name: string; // String!
+  }
+  OrgPayload: { // field return type
+    Org: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   OrgResponse: { // field return type
     message: string; // String!
@@ -121,6 +134,9 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['UserResponse'] | null; // UserResponse
     users: Array<NexusGenRootTypes['UserResponse'] | null> | null; // [UserResponse]
   }
+  Node: { // field return type
+    id: string; // ID!
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -131,6 +147,9 @@ export interface NexusGenFieldTypeNames {
   GeneralResponse: { // field return type name
     message: 'String'
     result: 'Boolean'
+  }
+  Message: { // field return type name
+    id: 'ID'
   }
   Mutation: { // field return type name
     changePassword: 'GeneralResponse'
@@ -147,6 +166,9 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     location: 'String'
     name: 'String'
+  }
+  OrgPayload: { // field return type name
+    Org: 'Org'
   }
   OrgResponse: { // field return type name
     message: 'String'
@@ -175,6 +197,9 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
     user: 'UserResponse'
     users: 'UserResponse'
+  }
+  Node: { // field return type name
+    id: 'ID'
   }
 }
 
@@ -211,9 +236,11 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
+  Node: "Message"
 }
 
 export interface NexusGenTypeInterfaces {
+  Message: "Node"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -222,7 +249,7 @@ export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = never;
 
-export type NexusGenInterfaceNames = never;
+export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
@@ -230,7 +257,7 @@ export type NexusGenUnionNames = never;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = never;
+export type NexusGenAbstractsUsingStrategyResolveType = "Node";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {

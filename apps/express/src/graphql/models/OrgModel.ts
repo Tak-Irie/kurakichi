@@ -16,3 +16,10 @@ export const OrgResponse = objectType({
     t.nullable.field('orgs', { type: list('Org') });
   },
 });
+
+export const OrgPayload = objectType({
+  name: 'OrgPayload',
+  definition(t) {
+    t.nullable.field('Org', { type: list('Org') });
+  },
+});

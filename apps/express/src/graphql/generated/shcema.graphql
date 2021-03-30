@@ -12,6 +12,11 @@ type GeneralResponse {
   result: Boolean
 }
 
+type Message implements Node {
+  """GUID for a resource"""
+  id: ID!
+}
+
 type Mutation {
   changePassword(currentPass: String!, newPass: String!): GeneralResponse
   deleteUser: GeneralResponse
@@ -24,10 +29,19 @@ type Mutation {
   userRegister(email: String!, password: String!, username: String!): getUser
 }
 
+interface Node {
+  """GUID for a resource"""
+  id: ID!
+}
+
 type Org {
   id: String!
   location: String!
   name: String!
+}
+
+type OrgPayload {
+  Org: [Org]
 }
 
 type OrgResponse {
