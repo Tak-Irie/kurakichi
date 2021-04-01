@@ -1,11 +1,12 @@
 import { Org } from '@kurakichi/domain';
-import { NexusGenObjects } from '../generated/nexus';
+import { NexusGenFieldTypes, NexusGenObjects } from '../generated/nexus';
 
-export const orgToPresentation = (org: Org): NexusGenObjects['Org'] => {
+export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
   const data = {
     id: org.getId(),
-    name: org.getOrgName(),
+    orgName: org.getOrgName(),
     location: org.getOrgLocation(),
+    member: [],
   };
   return data;
 };

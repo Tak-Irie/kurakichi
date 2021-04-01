@@ -2,9 +2,22 @@
 ### Do not make changes to this file directly
 
 
-type Dialog {
-  id: String!
-  text: String!
+type Dialog implements Node {
+  dialogContent: String!
+
+  """GUID for a resource"""
+  id: ID!
+}
+
+type DialogPayload {
+  dialog: [Dialog]
+  error: Error
+}
+
+"""Generally Used as Error at business logic"""
+type Error {
+  field: [String!]
+  message: String!
 }
 
 type GeneralResponse {
@@ -13,6 +26,8 @@ type GeneralResponse {
 }
 
 type Message implements Node {
+  content: String!
+
   """GUID for a resource"""
   id: ID!
 }
@@ -22,58 +37,52 @@ type Mutation {
   deleteUser: GeneralResponse
   forgetPassword(email: String!): GeneralResponse
   joinOrg(orgId: String!): GeneralResponse
-  login(email: String!, password: String!): getUser
+  login(email: String!, password: String!): UserPayload
   logout: GeneralResponse
-  postDialog(id: String!, text: String!): Dialog
+  postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(location: String!, name: String!): GeneralResponse
-  userRegister(email: String!, password: String!, username: String!): getUser
+  userRegister(email: String!, password: String!, username: String!): UserPayload
 }
 
+"""Identifier"""
 interface Node {
   """GUID for a resource"""
   id: ID!
 }
 
-type Org {
-  id: String!
+type Org implements Node {
+  """GUID for a resource"""
+  id: ID!
   location: String!
-  name: String!
+  member: [User]
+  orgName: String!
 }
 
 type OrgPayload {
-  Org: [Org]
-}
-
-type OrgResponse {
-  message: String!
-  orgs: [Org]
+  error: Error
+  org: [Org]
 }
 
 type Query {
-  getOrgs: OrgResponse
-  getUsers: getUser!
-  me: getUser
+  getOrg(orgId: String!): OrgPayload
+  getOrgs: OrgPayload
+  getUsers: UserPayload!
+  me: UserPayload
 }
 
 type Subscription {
   dialogPosted: Dialog
 }
 
-type User {
+type User implements Node {
   email: String!
-  id: String!
-  password: String
-  username: String
+
+  """GUID for a resource"""
+  id: ID!
+  userName: String
 }
 
-type UserResponse {
-  email: String
-  id: String!
-  username: String
-}
-
-type getUser {
-  message: String!
-  user: UserResponse
-  users: [UserResponse]
+type UserPayload {
+  error: Error
+  user: [User]
 }

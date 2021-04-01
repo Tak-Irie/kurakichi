@@ -17,7 +17,7 @@ export const userQuery = extendType({
   type: 'Query',
   definition(t) {
     t.nonNull.field('getUsers', {
-      type: 'getUser',
+      type: 'UserPayload',
       resolve: async () => {
         const users = await useGetUsersUseCase.execute();
         if (users.isLeft()) return { message: users.value.getErrorValue() };
@@ -29,7 +29,7 @@ export const userQuery = extendType({
     });
 
     t.nullable.field('me', {
-      type: 'getUser',
+      type: 'UserPayload',
       resolve: async (_, __, context) => {
         console.log('me query called');
         const idRes = getUserIdByCookie(context);
@@ -53,7 +53,7 @@ export const userMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.field('userRegister', {
-      type: 'getUser',
+      type: 'UserPayload',
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
@@ -71,7 +71,7 @@ export const userMutation = extendType({
       },
     });
     t.field('login', {
-      type: 'getUser',
+      type: 'UserPayload',
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),

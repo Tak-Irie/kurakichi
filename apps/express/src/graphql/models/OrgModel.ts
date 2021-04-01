@@ -3,23 +3,17 @@ import { list, objectType } from 'nexus';
 export const Org = objectType({
   name: 'Org',
   definition(t) {
-    t.nonNull.string('id');
-    t.nonNull.string('name');
+    t.implements('Node');
+    t.nonNull.string('orgName');
     t.nonNull.string('location');
-  },
-});
-
-export const OrgResponse = objectType({
-  name: 'OrgResponse',
-  definition(t) {
-    t.nonNull.string('message');
-    t.nullable.field('orgs', { type: list('Org') });
+    t.list.field('member', { type: 'User' });
   },
 });
 
 export const OrgPayload = objectType({
   name: 'OrgPayload',
   definition(t) {
-    t.nullable.field('Org', { type: list('Org') });
+    t.field('org', { type: list('Org') });
+    t.field('error', { type: 'Error' });
   },
 });

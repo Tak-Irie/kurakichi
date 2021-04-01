@@ -11,18 +11,18 @@ import {
 import { IOrgRepo, Org } from '../../domain';
 import { NotFoundOrgError } from './getOrgError';
 
-type OrgInput = { orgId: string };
+type GetOrgInput = { orgId: string };
 
-type getOrgResponse = Either<
-  NotFoundOrgError | UnexpectedError | StoreConnectionError | Result<Org>,
+type GetOrgResponse = Either<
+  NotFoundOrgError | UnexpectedError | StoreConnectionError,
   Result<Org>
 >;
 
-export class getOrgUseCase implements IUseCase<OrgInput, Promise<getOrgResponse>> {
+export class GetOrgUseCase implements IUseCase<GetOrgInput, Promise<GetOrgResponse>> {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
-  public async execute(req: OrgInput): Promise<getOrgResponse> {
+  public async execute(req: GetOrgInput): Promise<GetOrgResponse> {
     try {
       const idOrError = new UniqueEntityId(req.orgId);
       if (idOrError == undefined) return left(new NotFoundOrgError());

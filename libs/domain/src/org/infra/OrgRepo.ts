@@ -37,6 +37,7 @@ export class OrgRepo implements IOrgRepo {
   async getOrgById(orgId: UniqueEntityId): Promise<Org | undefined> {
     const orgResult = await this.prisma.organization.findUnique({
       where: { id: orgId.getId() },
+      include: { members: true },
     });
     if (orgResult == undefined) return undefined;
     const data = await OrgMapper.ToDomain(orgResult);
