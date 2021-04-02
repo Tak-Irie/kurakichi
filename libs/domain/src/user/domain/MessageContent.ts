@@ -1,0 +1,21 @@
+import { Result } from '../../shared/Result';
+import { ValueObject } from '../../shared/domain/ValueObject';
+
+type MessageContentProps = { text: string };
+
+export class MessageContent extends ValueObject<MessageContentProps> {
+  constructor(readonly props: MessageContentProps) {
+    super(props);
+  }
+  public getText(): string {
+    return this.props.text;
+  }
+
+  // TODO:need verification? like long, improper word/expression
+  public static create(props: MessageContentProps): Result<MessageContent> {
+    const _MessageContent = new MessageContent({
+      ...props,
+    });
+    return Result.success<MessageContent>(_MessageContent);
+  }
+}

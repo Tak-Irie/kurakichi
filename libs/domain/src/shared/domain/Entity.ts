@@ -15,9 +15,13 @@ export abstract class Entity<T> {
   protected readonly _id: UniqueEntityId;
   private identifier: Identifier;
 
-  constructor(public readonly props: T, id?: UniqueEntityId) {
+  constructor(readonly props: T, id?: UniqueEntityId) {
     this._id = id || new UniqueEntityId();
     this.props = props;
+  }
+
+  public getProps() {
+    return this.props;
   }
 
   public equals(object?: Entity<T> | UniqueEntityId): boolean {

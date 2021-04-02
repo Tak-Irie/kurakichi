@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { DownArrowInCircleSVG, DownwardCurveSVG } from '../atoms/SVG';
 import { BigText, SmallText, Text } from '../atoms/Text';
 
-import { UserRegister } from '../../container/UserRegister';
+import { RegisterUser } from '../../container/RegisterUser';
 
 const Feature2: FC = () => {
   return (
@@ -12,7 +12,7 @@ const Feature2: FC = () => {
         <div className="relative max-w-2xl sm:mx-auto sm:max-w-xl md:max-w-2xl sm:text-center">
           <BigText>this is BigText components</BigText>
           <Text>this is regular size text components</Text>
-          <UserRegister />
+          <RegisterUser />
           <SmallText>this is small text</SmallText>
           <DownArrowInCircleSVG />
         </div>

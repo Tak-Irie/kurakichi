@@ -40,6 +40,7 @@ export interface NexusGenObjects {
   MessagePayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
     message?: NexusGenRootTypes['Message'] | null; // Message
+    messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
   }
   Mutation: {};
   Org: types.Org;
@@ -97,6 +98,7 @@ export interface NexusGenFieldTypes {
   MessagePayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
     message: NexusGenRootTypes['Message'] | null; // Message
+    messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
   }
   Mutation: { // field return type
     changePassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
@@ -107,6 +109,7 @@ export interface NexusGenFieldTypes {
     logout: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
     registerOrg: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
+    senMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
@@ -121,6 +124,7 @@ export interface NexusGenFieldTypes {
     orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   Query: { // field return type
+    getMessages: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     getOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgs: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getUsers: NexusGenRootTypes['UserPayload']; // UserPayload!
@@ -168,6 +172,7 @@ export interface NexusGenFieldTypeNames {
   MessagePayload: { // field return type name
     error: 'RegularError'
     message: 'Message'
+    messages: 'Message'
   }
   Mutation: { // field return type name
     changePassword: 'RegularPayload'
@@ -178,6 +183,7 @@ export interface NexusGenFieldTypeNames {
     logout: 'RegularPayload'
     postDialog: 'DialogPayload'
     registerOrg: 'RegularPayload'
+    senMessage: 'MessagePayload'
     userRegister: 'UserPayload'
   }
   Org: { // field return type name
@@ -192,6 +198,7 @@ export interface NexusGenFieldTypeNames {
     orgs: 'Org'
   }
   Query: { // field return type name
+    getMessages: 'MessagePayload'
     getOrg: 'OrgPayload'
     getOrgs: 'OrgPayload'
     getUsers: 'UserPayload'
@@ -246,6 +253,10 @@ export interface NexusGenArgTypes {
     registerOrg: { // args
       location: string; // String!
       name: string; // String!
+    }
+    senMessage: { // args
+      receiverId: string; // String!
+      textInput: string; // String!
     }
     userRegister: { // args
       email: string; // String!

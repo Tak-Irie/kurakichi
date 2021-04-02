@@ -1,4 +1,5 @@
 import { UserRepository } from '../infrastructure/UserRepository';
+import { MessageRepo } from '../infrastructure';
 
 import { RegisterUserUseCase } from './registerUser/RegisterUserUseCase';
 import { GetUsersUseCase } from './getUsers/GetUsersUseCase';
@@ -9,8 +10,11 @@ import { DeleteUserUseCase } from './deleteUser/DeleteUserUseCase';
 import { SsoUserUseCase } from './ssoUser/ssoUserUseCase';
 import { ForgotPasswordUseCase } from './forgotPassword/ForgotPasswordUseCase';
 import { ChangePasswordUseCase } from './changePassword/ChangePasswordUseCase';
+import { SendMessageUseCase } from './sendMessage/sendMessageUseCase';
+import { GetMessagesUseCase } from './getMessages/getMessagesUseCase';
 
 const userRepo = new UserRepository();
+const messageRepo = new MessageRepo();
 
 export const useGetUserById = new GetUserByIdUseCase(userRepo);
 export const useRegisterUserUseCase = new RegisterUserUseCase(userRepo);
@@ -21,3 +25,6 @@ export const useDeleteUserUseCase = new DeleteUserUseCase(userRepo);
 export const useSsoUserUseCase = new SsoUserUseCase(userRepo);
 export const useForgotPasswordUseCase = new ForgotPasswordUseCase(userRepo);
 export const useChangePasswordUseCase = new ChangePasswordUseCase(userRepo);
+
+export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
+export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);

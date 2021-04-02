@@ -1,0 +1,10 @@
+mutation sendMessage($TextInput: String!, $ReceiverId: String!) {
+  senMessage(textInput: $TextInput, receiverId: $ReceiverId) {
+    message {
+      ...MessagePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query getMessages {
+  getMessages {
+    messages {
+      ...MessagePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

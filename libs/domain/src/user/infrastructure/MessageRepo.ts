@@ -1,0 +1,27 @@
+import { PrismaClient } from '@prisma/client';
+import { UniqueEntityId } from '../../shared';
+import { IMessageRepo, Message } from '../domain';
+import { MessageMapper } from './MessageMapper';
+
+export class MessageRepo implements IMessageRepo {
+  private prisma: PrismaClient;
+  constructor() {
+    this.prisma = new PrismaClient();
+  }
+  async getMessages(userId: UniqueEntityId): Promise<Message[] | false> {
+    const messages = await this.prisma.message.findMany({ where: { receiverId: userId.getId() } });
+    if (messages == undefined) return false;
+
+    const domainMessages = await Promise.all(
+      messages.map(async (message) => await MessageMapper.ToDomain(message)),
+    );
+
+    return domainMessages;
+  }
+  async sendMessage(message: Message): Promise<Message | false> {
+    const rawData = await MessageMapper.toStore(message);
+    const result = await this.prisma.message.create({ data: rawData });
+    if (result == undefined) return false;
+    return message;
+  }
+}

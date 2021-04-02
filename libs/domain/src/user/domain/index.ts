@@ -5,3 +5,7 @@ export * from './UserName';
 export * from './UserPassword';
 export * from './UserReadModel';
 export * from './events/UserCreated';
+
+export * from './IMessageRepo';
+export * from './Message';
+export * from './MessageContent';

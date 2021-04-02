@@ -1,0 +1,4 @@
+fragment MessagePayload on Message {
+  id
+  content
+}

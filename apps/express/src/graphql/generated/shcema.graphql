@@ -24,6 +24,7 @@ type Message implements Node {
 type MessagePayload {
   error: RegularError
   message: Message
+  messages: [Message]
 }
 
 type Mutation {
@@ -35,6 +36,7 @@ type Mutation {
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(location: String!, name: String!): RegularPayload
+  senMessage(receiverId: String!, textInput: String!): MessagePayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
@@ -59,6 +61,7 @@ type OrgPayload {
 }
 
 type Query {
+  getMessages: MessagePayload
   getOrg(orgId: String!): OrgPayload
   getOrgs: OrgPayload
   getUsers: UserPayload!

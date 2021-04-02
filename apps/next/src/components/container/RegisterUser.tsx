@@ -8,10 +8,10 @@ import { useRegisterUserMutation, useMeUserLazyQuery } from '../../graphql/gener
 interface UserRegisterInput {
   email: string;
   password: string;
-  username: string;
+  userName: string;
 }
 
-const UserRegister: FC = () => {
+export const RegisterUser: FC = () => {
   const [userRegister, { data, loading, error }] = useRegisterUserMutation();
   const [meQuery] = useMeUserLazyQuery();
 
@@ -32,7 +32,7 @@ const UserRegister: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input name="username" type="text" labeled={true} register={register} />
+        <Input name="userName" type="text" labeled={true} register={register} />
         <Input name="email" type="email" labeled={true} register={register} />
         <Input name="password" type="password" labeled={true} register={register} />
         <MiddleButton type="submit">UserRegister</MiddleButton>
@@ -43,5 +43,3 @@ const UserRegister: FC = () => {
     </>
   );
 };
-
-export { UserRegister };

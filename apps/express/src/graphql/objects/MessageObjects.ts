@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { list, objectType } from 'nexus';
 
 export const Message = objectType({
   name: 'Message',
@@ -12,6 +12,7 @@ export const MessagePayload = objectType({
   name: 'MessagePayload',
   definition(t) {
     t.field('message', { type: 'Message' });
+    t.field('messages', { type: list('Message') });
     t.field('error', { type: 'RegularError' });
   },
 });
