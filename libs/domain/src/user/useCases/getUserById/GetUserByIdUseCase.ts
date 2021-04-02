@@ -26,11 +26,12 @@ export class GetUserByIdUseCase implements IUseCase<string, Promise<GetUserByIdR
 
       if (result === undefined) return left(new GetUserByIdErrors.UserNotFoundError(userId));
 
+      // FIXME:delete UserModel, its not UseCase business
       return right(
         Result.success<UserReadModel>({
           id: result.getId(),
           email: result.getEmail(),
-          username: result.getUsername(),
+          userName: result.getUsername(),
         }),
       );
     } catch (err) {

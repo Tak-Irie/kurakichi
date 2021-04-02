@@ -53,6 +53,7 @@ export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOr
         adminId: new UniqueEntityId(req.adminId),
         name,
         location,
+        members: [],
       });
 
       if (orgOrError.isFailure) return left(Result.fail<Org>(orgOrError.getErrorValue()));

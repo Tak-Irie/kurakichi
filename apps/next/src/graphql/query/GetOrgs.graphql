@@ -1,0 +1,12 @@
+query GetOrgs {
+  getOrgs {
+    orgs {
+      id
+      orgName
+      location
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

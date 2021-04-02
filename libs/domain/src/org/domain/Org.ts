@@ -1,3 +1,4 @@
+import { Member } from '.';
 import { AggregateRoot } from '../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
@@ -9,6 +10,7 @@ interface OrgProps {
   name: OrgName;
   location: OrgLocation;
   adminId: UniqueEntityId;
+  members: Member[];
 }
 
 export class Org extends AggregateRoot<OrgProps> {
@@ -30,6 +32,10 @@ export class Org extends AggregateRoot<OrgProps> {
 
   public getOrgLocation(): string {
     return this.props.location.getValue();
+  }
+
+  public getMembers(): Member[] {
+    return this.props.members;
   }
 
   public static create(props: OrgProps): Result<Org> {

@@ -18,7 +18,7 @@ type SsoUserArgs = {
 
 type SsoUserDTO = {
   id: string;
-  username: string;
+  userName: string;
 };
 
 type UserTypes = UserEmail | UserName;
@@ -39,7 +39,7 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
     });
 
     const usernameOrError = UserName.create({
-      username: request.email.split('@')[0],
+      userName: request.email.split('@')[0],
     });
 
     const verifiedResult = Result.verifyResults<UserTypes>([emailOrError, usernameOrError]);
@@ -49,7 +49,7 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
     }
 
     const email = emailOrError.getValue();
-    const username = usernameOrError.getValue();
+    const userName = usernameOrError.getValue();
 
     try {
       const existed = await this.userRepository.getUserByEmail(email);
@@ -58,7 +58,7 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
         return right(
           Result.success<SsoUserDTO>({
             id: existed.getId(),
-            username: existed.getUsername(),
+            userName: existed.getUsername(),
           }),
         );
       }
@@ -66,7 +66,7 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
       const userOrError = User.create({
         id: UniqueEntityId.create(),
         email,
-        username,
+        userName,
         ssoSub: request.ssoSub,
         picture: request.picture,
       });
@@ -82,7 +82,7 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
       return right(
         Result.success<SsoUserDTO>({
           id: result.getId(),
-          username: result.getUsername(),
+          userName: result.getUsername(),
         }),
       );
     } catch (err) {

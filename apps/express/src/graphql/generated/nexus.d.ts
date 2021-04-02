@@ -31,27 +31,32 @@ export interface NexusGenObjects {
   Dialog: types.Dialog;
   DialogPayload: { // root type
     dialog?: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
-    error?: NexusGenRootTypes['Error'] | null; // Error
-  }
-  Error: { // root type
-    field?: string[] | null; // [String!]
-    message: string; // String!
-  }
-  GeneralResponse: { // root type
-    message?: string | null; // String
-    result?: boolean | null; // Boolean
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
   Message: { // root type
     content: string; // String!
     id: string; // ID!
   }
+  MessagePayload: { // root type
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+    message?: NexusGenRootTypes['Message'] | null; // Message
+  }
   Mutation: {};
   Org: types.Org;
   OrgPayload: { // root type
-    error?: NexusGenRootTypes['Error'] | null; // Error
-    org?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+    org?: NexusGenRootTypes['Org'] | null; // Org
+    orgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   Query: {};
+  RegularError: { // root type
+    invalidField?: string[] | null; // [String!]
+    message: string; // String!
+  }
+  RegularPayload: { // root type
+    message?: string | null; // String
+    result?: boolean | null; // Boolean
+  }
   Subscription: {};
   User: { // root type
     email: string; // String!
@@ -59,8 +64,9 @@ export interface NexusGenObjects {
     userName?: string | null; // String
   }
   UserPayload: { // root type
-    error?: NexusGenRootTypes['Error'] | null; // Error
-    user?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+    user?: NexusGenRootTypes['User'] | null; // User
+    users?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
 }
 
@@ -82,46 +88,51 @@ export interface NexusGenFieldTypes {
   }
   DialogPayload: { // field return type
     dialog: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
-    error: NexusGenRootTypes['Error'] | null; // Error
-  }
-  Error: { // field return type
-    field: string[] | null; // [String!]
-    message: string; // String!
-  }
-  GeneralResponse: { // field return type
-    message: string | null; // String
-    result: boolean | null; // Boolean
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
   Message: { // field return type
     content: string; // String!
     id: string; // ID!
   }
+  MessagePayload: { // field return type
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
+    message: NexusGenRootTypes['Message'] | null; // Message
+  }
   Mutation: { // field return type
-    changePassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
-    deleteUser: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
-    forgetPassword: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
-    joinOrg: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    changePassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
+    deleteUser: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
+    forgetPassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
+    joinOrg: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     login: NexusGenRootTypes['UserPayload'] | null; // UserPayload
-    logout: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    logout: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
-    registerOrg: NexusGenRootTypes['GeneralResponse'] | null; // GeneralResponse
+    registerOrg: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
     id: string; // ID!
     location: string; // String!
-    member: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     orgName: string; // String!
   }
   OrgPayload: { // field return type
-    error: NexusGenRootTypes['Error'] | null; // Error
-    org: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
+    org: NexusGenRootTypes['Org'] | null; // Org
+    orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   Query: { // field return type
     getOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgs: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getUsers: NexusGenRootTypes['UserPayload']; // UserPayload!
     me: NexusGenRootTypes['UserPayload'] | null; // UserPayload
+  }
+  RegularError: { // field return type
+    invalidField: string[] | null; // [String!]
+    message: string; // String!
+  }
+  RegularPayload: { // field return type
+    message: string | null; // String
+    result: boolean | null; // Boolean
   }
   Subscription: { // field return type
     dialogPosted: NexusGenRootTypes['Dialog'] | null; // Dialog
@@ -132,8 +143,9 @@ export interface NexusGenFieldTypes {
     userName: string | null; // String
   }
   UserPayload: { // field return type
-    error: NexusGenRootTypes['Error'] | null; // Error
-    user: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
+    user: NexusGenRootTypes['User'] | null; // User
+    users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   Node: { // field return type
     id: string; // ID!
@@ -147,46 +159,51 @@ export interface NexusGenFieldTypeNames {
   }
   DialogPayload: { // field return type name
     dialog: 'Dialog'
-    error: 'Error'
-  }
-  Error: { // field return type name
-    field: 'String'
-    message: 'String'
-  }
-  GeneralResponse: { // field return type name
-    message: 'String'
-    result: 'Boolean'
+    error: 'RegularError'
   }
   Message: { // field return type name
     content: 'String'
     id: 'ID'
   }
+  MessagePayload: { // field return type name
+    error: 'RegularError'
+    message: 'Message'
+  }
   Mutation: { // field return type name
-    changePassword: 'GeneralResponse'
-    deleteUser: 'GeneralResponse'
-    forgetPassword: 'GeneralResponse'
-    joinOrg: 'GeneralResponse'
+    changePassword: 'RegularPayload'
+    deleteUser: 'RegularPayload'
+    forgetPassword: 'RegularPayload'
+    joinOrg: 'RegularPayload'
     login: 'UserPayload'
-    logout: 'GeneralResponse'
+    logout: 'RegularPayload'
     postDialog: 'DialogPayload'
-    registerOrg: 'GeneralResponse'
+    registerOrg: 'RegularPayload'
     userRegister: 'UserPayload'
   }
   Org: { // field return type name
     id: 'ID'
     location: 'String'
-    member: 'User'
+    members: 'User'
     orgName: 'String'
   }
   OrgPayload: { // field return type name
-    error: 'Error'
+    error: 'RegularError'
     org: 'Org'
+    orgs: 'Org'
   }
   Query: { // field return type name
     getOrg: 'OrgPayload'
     getOrgs: 'OrgPayload'
     getUsers: 'UserPayload'
     me: 'UserPayload'
+  }
+  RegularError: { // field return type name
+    invalidField: 'String'
+    message: 'String'
+  }
+  RegularPayload: { // field return type name
+    message: 'String'
+    result: 'Boolean'
   }
   Subscription: { // field return type name
     dialogPosted: 'Dialog'
@@ -197,8 +214,9 @@ export interface NexusGenFieldTypeNames {
     userName: 'String'
   }
   UserPayload: { // field return type name
-    error: 'Error'
+    error: 'RegularError'
     user: 'User'
+    users: 'User'
   }
   Node: { // field return type name
     id: 'ID'
@@ -232,7 +250,7 @@ export interface NexusGenArgTypes {
     userRegister: { // args
       email: string; // String!
       password: string; // String!
-      username: string; // String!
+      userName: string; // String!
     }
   }
   Query: {

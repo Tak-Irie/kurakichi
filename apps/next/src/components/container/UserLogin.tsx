@@ -4,7 +4,7 @@ import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useUserLoginMutation } from '../../graphql/generated/graphql';
+import { useLoginUserMutation } from '../../graphql/generated/graphql';
 
 interface UserLoginInput {
   email: string;
@@ -12,14 +12,14 @@ interface UserLoginInput {
 }
 
 const UserLogin: FC = () => {
-  const [userLogin, { data, loading, error }] = useUserLoginMutation();
+  const [loginUser, { data, loading, error }] = useLoginUserMutation();
   const router = useRouter();
 
   const { register, handleSubmit } = useForm();
 
   const handleMutation = async (value: UserLoginInput) => {
     try {
-      await userLogin({
+      await loginUser({
         variables: { ...value },
         fetchPolicy: 'no-cache',
       });
@@ -38,7 +38,7 @@ const UserLogin: FC = () => {
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
-      {data && <p>{data.login.message} data</p>}
+      {data && <p>{data.login.user.userName} data</p>}
     </>
   );
 };

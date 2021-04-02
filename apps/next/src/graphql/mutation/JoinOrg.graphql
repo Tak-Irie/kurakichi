@@ -1,4 +1,4 @@
-mutation OrgJoin($OrgId: String!) {
+mutation JoinOrg($OrgId: String!) {
   joinOrg(orgId: $OrgId) {
     result
     message

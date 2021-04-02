@@ -3,7 +3,7 @@ import { Form } from '../presentational/molecules/Form';
 import { Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
-import { useUserMeLazyQuery, useUserRegisterMutation } from '../../graphql/generated/graphql';
+import { useRegisterUserMutation, useMeUserLazyQuery } from '../../graphql/generated/graphql';
 
 interface UserRegisterInput {
   email: string;
@@ -12,8 +12,8 @@ interface UserRegisterInput {
 }
 
 const UserRegister: FC = () => {
-  const [userRegister, { data, loading, error }] = useUserRegisterMutation();
-  const [meQuery] = useUserMeLazyQuery();
+  const [userRegister, { data, loading, error }] = useRegisterUserMutation();
+  const [meQuery] = useMeUserLazyQuery();
 
   const { register, handleSubmit } = useForm();
 
@@ -39,7 +39,7 @@ const UserRegister: FC = () => {
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
-      {data && <p>{data.userRegister.message} data</p>}
+      {data && <p>{data.userRegister.user.userName} data</p>}
     </>
   );
 };

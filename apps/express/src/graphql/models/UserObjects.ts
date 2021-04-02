@@ -12,7 +12,8 @@ export const User = objectType({
 export const UserPayload = objectType({
   name: 'UserPayload',
   definition(t) {
-    t.field('user', { type: list('User') });
-    t.field('error', { type: 'Error' });
+    t.field('user', { type: 'User' });
+    t.field('users', { type: list('User') });
+    t.field('error', { type: 'RegularError' });
   },
 });

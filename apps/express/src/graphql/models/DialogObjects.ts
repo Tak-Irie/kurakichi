@@ -12,6 +12,6 @@ export const DialogPayload = objectType({
   name: 'DialogPayload',
   definition(t) {
     t.field('dialog', { type: list('Dialog') });
-    t.field('error', { type: 'Error' });
+    t.field('error', { type: 'RegularError' });
   },
 });

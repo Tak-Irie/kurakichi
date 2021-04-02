@@ -1,5 +1,5 @@
-import { makeSchema, connectionPlugin } from 'nexus';
-import * as path from 'path';
+import { makeSchema } from 'nexus';
+// import * as path from 'path';
 
 import * as types from './bundleTypes';
 

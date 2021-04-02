@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
 import { MiddleButton } from '../components/presentational/atoms/Button';
-import { useUserGetQuery } from '../graphql/generated/graphql';
+import { useGetUsersQuery } from '../graphql/generated/graphql';
 
 const Users: NextPage = () => {
-  const { data, loading, error, refetch } = useUserGetQuery();
+  const { data, loading, error, refetch } = useGetUsersQuery();
 
   const handleClick = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -20,8 +20,7 @@ const Users: NextPage = () => {
           <div className="m-3" key={user.id}>
             <ul>
               <li>{user.id}</li>
-              <li>{user.email}</li>
-              <li>{user.username}</li>
+              <li>{user.userName}</li>
             </ul>
           </div>
         ))}

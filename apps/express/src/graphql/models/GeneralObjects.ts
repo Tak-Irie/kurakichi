@@ -20,17 +20,17 @@ export const Node = interfaceType({
 });
 
 export const Error = objectType({
-  name: 'Error',
+  name: 'RegularError',
   description: 'Generally Used as Error at business logic',
   definition(t) {
     t.nonNull.string('message');
-    t.list.nonNull.string('field');
+    t.list.nonNull.string('invalidField');
   },
 });
 
 // TODO: temp, expand it later
 export const GeneralResponse = objectType({
-  name: 'GeneralResponse',
+  name: 'RegularPayload',
   definition(t) {
     t.boolean('result');
     t.nullable.string('message');

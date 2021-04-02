@@ -6,14 +6,15 @@ export const Org = objectType({
     t.implements('Node');
     t.nonNull.string('orgName');
     t.nonNull.string('location');
-    t.list.field('member', { type: 'User' });
+    t.field('members', { type: list('User') });
   },
 });
 
 export const OrgPayload = objectType({
   name: 'OrgPayload',
   definition(t) {
-    t.field('org', { type: list('Org') });
-    t.field('error', { type: 'Error' });
+    t.field('org', { type: 'Org' });
+    t.field('orgs', { type: list('Org') });
+    t.field('error', { type: 'RegularError' });
   },
 });

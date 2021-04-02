@@ -26,7 +26,7 @@ const DialogMutation = extendType({
       },
       resolve: async (_, args, context) => {
         await context.pubsub.publish('post', {
-          data: { id: args.id, text: args.dialogContent },
+          data: { id: args.id, dialogContent: args.dialogContent },
         });
         return { dialog: [{ id: args.id, dialogContent: args.dialogContent }] };
       },

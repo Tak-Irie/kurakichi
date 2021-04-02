@@ -14,29 +14,43 @@ export type Scalars = {
   Float: number;
 };
 
-export type Dialog = {
+export type Dialog = Node & {
   __typename?: 'Dialog';
-  id: Scalars['String'];
-  text: Scalars['String'];
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  dialogContent: Scalars['String'];
 };
 
-export type GeneralResponse = {
-  __typename?: 'GeneralResponse';
-  result?: Maybe<Scalars['Boolean']>;
-  message?: Maybe<Scalars['String']>;
+export type DialogPayload = {
+  __typename?: 'DialogPayload';
+  dialog?: Maybe<Array<Maybe<Dialog>>>;
+  error?: Maybe<RegularError>;
+};
+
+export type Message = Node & {
+  __typename?: 'Message';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  content: Scalars['String'];
+};
+
+export type MessagePayload = {
+  __typename?: 'MessagePayload';
+  message?: Maybe<Message>;
+  error?: Maybe<RegularError>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  userRegister?: Maybe<GetUser>;
-  login?: Maybe<GetUser>;
-  logout?: Maybe<GeneralResponse>;
-  deleteUser?: Maybe<GeneralResponse>;
-  forgetPassword?: Maybe<GeneralResponse>;
-  changePassword?: Maybe<GeneralResponse>;
-  postDialog?: Maybe<Dialog>;
-  registerOrg?: Maybe<GeneralResponse>;
-  joinOrg?: Maybe<GeneralResponse>;
+  userRegister?: Maybe<UserPayload>;
+  login?: Maybe<UserPayload>;
+  logout?: Maybe<RegularPayload>;
+  deleteUser?: Maybe<RegularPayload>;
+  forgetPassword?: Maybe<RegularPayload>;
+  changePassword?: Maybe<RegularPayload>;
+  postDialog?: Maybe<DialogPayload>;
+  registerOrg?: Maybe<RegularPayload>;
+  joinOrg?: Maybe<RegularPayload>;
 };
 
 
@@ -66,7 +80,7 @@ export type MutationChangePasswordArgs = {
 
 export type MutationPostDialogArgs = {
   id: Scalars['String'];
-  text: Scalars['String'];
+  dialogContent: Scalars['String'];
 };
 
 
@@ -80,24 +94,52 @@ export type MutationJoinOrgArgs = {
   orgId: Scalars['String'];
 };
 
-export type Org = {
-  __typename?: 'Org';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  location: Scalars['String'];
+/** Identifier */
+export type Node = {
+  /** GUID for a resource */
+  id: Scalars['ID'];
 };
 
-export type OrgResponse = {
-  __typename?: 'OrgResponse';
-  message: Scalars['String'];
+export type Org = Node & {
+  __typename?: 'Org';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  orgName: Scalars['String'];
+  location: Scalars['String'];
+  members?: Maybe<Array<Maybe<User>>>;
+};
+
+export type OrgPayload = {
+  __typename?: 'OrgPayload';
+  org?: Maybe<Org>;
   orgs?: Maybe<Array<Maybe<Org>>>;
+  error?: Maybe<RegularError>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  getUsers: GetUser;
-  me?: Maybe<GetUser>;
-  getOrgs?: Maybe<OrgResponse>;
+  getUsers: UserPayload;
+  me?: Maybe<UserPayload>;
+  getOrgs?: Maybe<OrgPayload>;
+  getOrg?: Maybe<OrgPayload>;
+};
+
+
+export type QueryGetOrgArgs = {
+  orgId: Scalars['String'];
+};
+
+/** Generally Used as Error at business logic */
+export type RegularError = {
+  __typename?: 'RegularError';
+  message: Scalars['String'];
+  invalidField?: Maybe<Array<Scalars['String']>>;
+};
+
+export type RegularPayload = {
+  __typename?: 'RegularPayload';
+  result?: Maybe<Scalars['Boolean']>;
+  message?: Maybe<Scalars['String']>;
 };
 
 export type Subscription = {
@@ -105,52 +147,72 @@ export type Subscription = {
   dialogPosted?: Maybe<Dialog>;
 };
 
-export type User = {
+export type User = Node & {
   __typename?: 'User';
-  id: Scalars['String'];
+  /** GUID for a resource */
+  id: Scalars['ID'];
   email: Scalars['String'];
-  username?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
+  userName?: Maybe<Scalars['String']>;
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  id: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+export type UserPayload = {
+  __typename?: 'UserPayload';
+  user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
+  error?: Maybe<RegularError>;
 };
 
-export type GetUser = {
-  __typename?: 'getUser';
-  message: Scalars['String'];
-  user?: Maybe<UserResponse>;
-  users?: Maybe<Array<Maybe<UserResponse>>>;
-};
-
-export type DialogPostMutationVariables = Exact<{
-  postDialogId: Scalars['String'];
-  postDialogText: Scalars['String'];
-}>;
-
-
-export type DialogPostMutation = (
-  { __typename?: 'Mutation' }
-  & { postDialog?: Maybe<(
-    { __typename?: 'Dialog' }
-    & Pick<Dialog, 'id' | 'text'>
-  )> }
+export type DialogPayloadFragment = (
+  { __typename?: 'Dialog' }
+  & Pick<Dialog, 'id' | 'dialogContent'>
 );
 
-export type OrgJoinMutationVariables = Exact<{
+export type OrgPayloadFragment = (
+  { __typename?: 'Org' }
+  & Pick<Org, 'id' | 'orgName' | 'location'>
+  & { members?: Maybe<Array<Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'userName'>
+  )>>> }
+);
+
+export type RegularErrorFragment = (
+  { __typename?: 'RegularError' }
+  & Pick<RegularError, 'message' | 'invalidField'>
+);
+
+export type UserPayloadFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'userName'>
+);
+
+export type JoinOrgMutationVariables = Exact<{
   OrgId: Scalars['String'];
 }>;
 
 
-export type OrgJoinMutation = (
+export type JoinOrgMutation = (
   { __typename?: 'Mutation' }
   & { joinOrg?: Maybe<(
-    { __typename?: 'GeneralResponse' }
-    & Pick<GeneralResponse, 'result' | 'message'>
+    { __typename?: 'RegularPayload' }
+    & Pick<RegularPayload, 'result' | 'message'>
+  )> }
+);
+
+export type LoginUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginUserMutation = (
+  { __typename?: 'Mutation' }
+  & { login?: Maybe<(
+    { __typename?: 'UserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )> }
   )> }
 );
 
@@ -163,8 +225,49 @@ export type OrgRegisterMutationVariables = Exact<{
 export type OrgRegisterMutation = (
   { __typename?: 'Mutation' }
   & { registerOrg?: Maybe<(
-    { __typename?: 'GeneralResponse' }
-    & Pick<GeneralResponse, 'result' | 'message'>
+    { __typename?: 'RegularPayload' }
+    & Pick<RegularPayload, 'result' | 'message'>
+  )> }
+);
+
+export type PostDialogMutationVariables = Exact<{
+  DialogId: Scalars['String'];
+  DialogContent: Scalars['String'];
+}>;
+
+
+export type PostDialogMutation = (
+  { __typename?: 'Mutation' }
+  & { postDialog?: Maybe<(
+    { __typename?: 'DialogPayload' }
+    & { dialog?: Maybe<Array<Maybe<(
+      { __typename?: 'Dialog' }
+      & DialogPayloadFragment
+    )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type RegisterUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
+}>;
+
+
+export type RegisterUserMutation = (
+  { __typename?: 'Mutation' }
+  & { userRegister?: Maybe<(
+    { __typename?: 'UserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
   )> }
 );
 
@@ -177,8 +280,8 @@ export type UserChangePasswordMutationVariables = Exact<{
 export type UserChangePasswordMutation = (
   { __typename?: 'Mutation' }
   & { changePassword?: Maybe<(
-    { __typename?: 'GeneralResponse' }
-    & Pick<GeneralResponse, 'result' | 'message'>
+    { __typename?: 'RegularPayload' }
+    & Pick<RegularPayload, 'result' | 'message'>
   )> }
 );
 
@@ -188,8 +291,8 @@ export type UserDeleteMutationVariables = Exact<{ [key: string]: never; }>;
 export type UserDeleteMutation = (
   { __typename?: 'Mutation' }
   & { deleteUser?: Maybe<(
-    { __typename?: 'GeneralResponse' }
-    & Pick<GeneralResponse, 'result' | 'message'>
+    { __typename?: 'RegularPayload' }
+    & Pick<RegularPayload, 'result' | 'message'>
   )> }
 );
 
@@ -201,26 +304,8 @@ export type UserForgetPasswordMutationVariables = Exact<{
 export type UserForgetPasswordMutation = (
   { __typename?: 'Mutation' }
   & { forgetPassword?: Maybe<(
-    { __typename?: 'GeneralResponse' }
-    & Pick<GeneralResponse, 'result' | 'message'>
-  )> }
-);
-
-export type UserLoginMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-}>;
-
-
-export type UserLoginMutation = (
-  { __typename?: 'Mutation' }
-  & { login?: Maybe<(
-    { __typename?: 'getUser' }
-    & Pick<GetUser, 'message'>
-    & { user?: Maybe<(
-      { __typename?: 'UserResponse' }
-      & Pick<UserResponse, 'id'>
-    )> }
+    { __typename?: 'RegularPayload' }
+    & Pick<RegularPayload, 'result' | 'message'>
   )> }
 );
 
@@ -230,154 +315,191 @@ export type UserLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type UserLogoutMutation = (
   { __typename?: 'Mutation' }
   & { logout?: Maybe<(
-    { __typename?: 'GeneralResponse' }
-    & Pick<GeneralResponse, 'message' | 'result'>
+    { __typename?: 'RegularPayload' }
+    & Pick<RegularPayload, 'message' | 'result'>
   )> }
 );
 
-export type UserRegisterMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-  username: Scalars['String'];
+export type GetOrgQueryVariables = Exact<{
+  OrgId: Scalars['String'];
 }>;
 
 
-export type UserRegisterMutation = (
-  { __typename?: 'Mutation' }
-  & { userRegister?: Maybe<(
-    { __typename?: 'getUser' }
-    & Pick<GetUser, 'message'>
-    & { user?: Maybe<(
-      { __typename?: 'UserResponse' }
-      & Pick<UserResponse, 'id'>
+export type GetOrgQuery = (
+  { __typename?: 'Query' }
+  & { getOrg?: Maybe<(
+    { __typename?: 'OrgPayload' }
+    & { org?: Maybe<(
+      { __typename?: 'Org' }
+      & OrgPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
     )> }
   )> }
 );
 
-export type OrgsGetQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetOrgsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OrgsGetQuery = (
+export type GetOrgsQuery = (
   { __typename?: 'Query' }
   & { getOrgs?: Maybe<(
-    { __typename?: 'OrgResponse' }
-    & Pick<OrgResponse, 'message'>
+    { __typename?: 'OrgPayload' }
     & { orgs?: Maybe<Array<Maybe<(
       { __typename?: 'Org' }
-      & Pick<Org, 'id' | 'name' | 'location'>
-    )>>> }
+      & Pick<Org, 'id' | 'orgName' | 'location'>
+    )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
   )> }
 );
 
-export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGetQuery = (
+export type GetUsersQuery = (
   { __typename?: 'Query' }
   & { getUsers: (
-    { __typename?: 'getUser' }
+    { __typename?: 'UserPayload' }
     & { users?: Maybe<Array<Maybe<(
-      { __typename?: 'UserResponse' }
-      & Pick<UserResponse, 'id' | 'email' | 'username'>
-    )>>> }
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
   ) }
 );
 
-export type UserMeQueryVariables = Exact<{ [key: string]: never; }>;
+export type MeUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserMeQuery = (
+export type MeUserQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
-    { __typename?: 'getUser' }
+    { __typename?: 'UserPayload' }
     & { user?: Maybe<(
-      { __typename?: 'UserResponse' }
-      & Pick<UserResponse, 'id' | 'username'>
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
     )> }
   )> }
 );
 
-export type SubDialogSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type SubscriptDialogSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubDialogSubscription = (
+export type SubscriptDialogSubscription = (
   { __typename?: 'Subscription' }
   & { dialogPosted?: Maybe<(
     { __typename?: 'Dialog' }
-    & Pick<Dialog, 'id' | 'text'>
+    & DialogPayloadFragment
   )> }
 );
 
-
-export const DialogPostDocument = gql`
-    mutation DialogPost($postDialogId: String!, $postDialogText: String!) {
-  postDialog(id: $postDialogId, text: $postDialogText) {
+export const DialogPayloadFragmentDoc = gql`
+    fragment DialogPayload on Dialog {
+  id
+  dialogContent
+}
+    `;
+export const OrgPayloadFragmentDoc = gql`
+    fragment OrgPayload on Org {
+  id
+  orgName
+  location
+  members {
     id
-    text
+    userName
   }
 }
     `;
-export type DialogPostMutationFn = Apollo.MutationFunction<DialogPostMutation, DialogPostMutationVariables>;
-
-/**
- * __useDialogPostMutation__
- *
- * To run a mutation, you first call `useDialogPostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDialogPostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [dialogPostMutation, { data, loading, error }] = useDialogPostMutation({
- *   variables: {
- *      postDialogId: // value for 'postDialogId'
- *      postDialogText: // value for 'postDialogText'
- *   },
- * });
- */
-export function useDialogPostMutation(baseOptions?: Apollo.MutationHookOptions<DialogPostMutation, DialogPostMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DialogPostMutation, DialogPostMutationVariables>(DialogPostDocument, options);
-      }
-export type DialogPostMutationHookResult = ReturnType<typeof useDialogPostMutation>;
-export type DialogPostMutationResult = Apollo.MutationResult<DialogPostMutation>;
-export type DialogPostMutationOptions = Apollo.BaseMutationOptions<DialogPostMutation, DialogPostMutationVariables>;
-export const OrgJoinDocument = gql`
-    mutation OrgJoin($OrgId: String!) {
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on RegularError {
+  message
+  invalidField
+}
+    `;
+export const UserPayloadFragmentDoc = gql`
+    fragment UserPayload on User {
+  id
+  userName
+}
+    `;
+export const JoinOrgDocument = gql`
+    mutation JoinOrg($OrgId: String!) {
   joinOrg(orgId: $OrgId) {
     result
     message
   }
 }
     `;
-export type OrgJoinMutationFn = Apollo.MutationFunction<OrgJoinMutation, OrgJoinMutationVariables>;
+export type JoinOrgMutationFn = Apollo.MutationFunction<JoinOrgMutation, JoinOrgMutationVariables>;
 
 /**
- * __useOrgJoinMutation__
+ * __useJoinOrgMutation__
  *
- * To run a mutation, you first call `useOrgJoinMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useOrgJoinMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useJoinOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinOrgMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [orgJoinMutation, { data, loading, error }] = useOrgJoinMutation({
+ * const [joinOrgMutation, { data, loading, error }] = useJoinOrgMutation({
  *   variables: {
  *      OrgId: // value for 'OrgId'
  *   },
  * });
  */
-export function useOrgJoinMutation(baseOptions?: Apollo.MutationHookOptions<OrgJoinMutation, OrgJoinMutationVariables>) {
+export function useJoinOrgMutation(baseOptions?: Apollo.MutationHookOptions<JoinOrgMutation, JoinOrgMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<OrgJoinMutation, OrgJoinMutationVariables>(OrgJoinDocument, options);
+        return Apollo.useMutation<JoinOrgMutation, JoinOrgMutationVariables>(JoinOrgDocument, options);
       }
-export type OrgJoinMutationHookResult = ReturnType<typeof useOrgJoinMutation>;
-export type OrgJoinMutationResult = Apollo.MutationResult<OrgJoinMutation>;
-export type OrgJoinMutationOptions = Apollo.BaseMutationOptions<OrgJoinMutation, OrgJoinMutationVariables>;
+export type JoinOrgMutationHookResult = ReturnType<typeof useJoinOrgMutation>;
+export type JoinOrgMutationResult = Apollo.MutationResult<JoinOrgMutation>;
+export type JoinOrgMutationOptions = Apollo.BaseMutationOptions<JoinOrgMutation, JoinOrgMutationVariables>;
+export const LoginUserDocument = gql`
+    mutation LoginUser($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    user {
+      ...UserPayload
+    }
+  }
+}
+    ${UserPayloadFragmentDoc}`;
+export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
+
+/**
+ * __useLoginUserMutation__
+ *
+ * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
+export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
+export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
+export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
 export const OrgRegisterDocument = gql`
     mutation OrgRegister($registerOrgName: String!, $registerOrgLocation: String!) {
   registerOrg(name: $registerOrgName, location: $registerOrgLocation) {
@@ -413,6 +535,87 @@ export function useOrgRegisterMutation(baseOptions?: Apollo.MutationHookOptions<
 export type OrgRegisterMutationHookResult = ReturnType<typeof useOrgRegisterMutation>;
 export type OrgRegisterMutationResult = Apollo.MutationResult<OrgRegisterMutation>;
 export type OrgRegisterMutationOptions = Apollo.BaseMutationOptions<OrgRegisterMutation, OrgRegisterMutationVariables>;
+export const PostDialogDocument = gql`
+    mutation PostDialog($DialogId: String!, $DialogContent: String!) {
+  postDialog(id: $DialogId, dialogContent: $DialogContent) {
+    dialog {
+      ...DialogPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${DialogPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type PostDialogMutationFn = Apollo.MutationFunction<PostDialogMutation, PostDialogMutationVariables>;
+
+/**
+ * __usePostDialogMutation__
+ *
+ * To run a mutation, you first call `usePostDialogMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostDialogMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postDialogMutation, { data, loading, error }] = usePostDialogMutation({
+ *   variables: {
+ *      DialogId: // value for 'DialogId'
+ *      DialogContent: // value for 'DialogContent'
+ *   },
+ * });
+ */
+export function usePostDialogMutation(baseOptions?: Apollo.MutationHookOptions<PostDialogMutation, PostDialogMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostDialogMutation, PostDialogMutationVariables>(PostDialogDocument, options);
+      }
+export type PostDialogMutationHookResult = ReturnType<typeof usePostDialogMutation>;
+export type PostDialogMutationResult = Apollo.MutationResult<PostDialogMutation>;
+export type PostDialogMutationOptions = Apollo.BaseMutationOptions<PostDialogMutation, PostDialogMutationVariables>;
+export const RegisterUserDocument = gql`
+    mutation RegisterUser($email: String!, $password: String!, $username: String!) {
+  userRegister(email: $email, password: $password, username: $username) {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutation, RegisterUserMutationVariables>;
+
+/**
+ * __useRegisterUserMutation__
+ *
+ * To run a mutation, you first call `useRegisterUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerUserMutation, { data, loading, error }] = useRegisterUserMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterUserMutation, RegisterUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
+      }
+export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
+export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
+export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
 export const UserChangePasswordDocument = gql`
     mutation UserChangePassword($CurrentPass: String!, $NewPass: String!) {
   changePassword(currentPass: $CurrentPass, newPass: $NewPass) {
@@ -515,43 +718,6 @@ export function useUserForgetPasswordMutation(baseOptions?: Apollo.MutationHookO
 export type UserForgetPasswordMutationHookResult = ReturnType<typeof useUserForgetPasswordMutation>;
 export type UserForgetPasswordMutationResult = Apollo.MutationResult<UserForgetPasswordMutation>;
 export type UserForgetPasswordMutationOptions = Apollo.BaseMutationOptions<UserForgetPasswordMutation, UserForgetPasswordMutationVariables>;
-export const UserLoginDocument = gql`
-    mutation UserLogin($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    message
-    user {
-      id
-    }
-  }
-}
-    `;
-export type UserLoginMutationFn = Apollo.MutationFunction<UserLoginMutation, UserLoginMutationVariables>;
-
-/**
- * __useUserLoginMutation__
- *
- * To run a mutation, you first call `useUserLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [userLoginMutation, { data, loading, error }] = useUserLoginMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useUserLoginMutation(baseOptions?: Apollo.MutationHookOptions<UserLoginMutation, UserLoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserLoginMutation, UserLoginMutationVariables>(UserLoginDocument, options);
-      }
-export type UserLoginMutationHookResult = ReturnType<typeof useUserLoginMutation>;
-export type UserLoginMutationResult = Apollo.MutationResult<UserLoginMutation>;
-export type UserLoginMutationOptions = Apollo.BaseMutationOptions<UserLoginMutation, UserLoginMutationVariables>;
 export const UserLogoutDocument = gql`
     mutation UserLogout {
   logout {
@@ -585,185 +751,194 @@ export function useUserLogoutMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UserLogoutMutationHookResult = ReturnType<typeof useUserLogoutMutation>;
 export type UserLogoutMutationResult = Apollo.MutationResult<UserLogoutMutation>;
 export type UserLogoutMutationOptions = Apollo.BaseMutationOptions<UserLogoutMutation, UserLogoutMutationVariables>;
-export const UserRegisterDocument = gql`
-    mutation UserRegister($email: String!, $password: String!, $username: String!) {
-  userRegister(email: $email, password: $password, username: $username) {
-    user {
-      id
+export const GetOrgDocument = gql`
+    query GetOrg($OrgId: String!) {
+  getOrg(orgId: $OrgId) {
+    org {
+      ...OrgPayload
     }
-    message
+    error {
+      ...RegularError
+    }
   }
 }
-    `;
-export type UserRegisterMutationFn = Apollo.MutationFunction<UserRegisterMutation, UserRegisterMutationVariables>;
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
 
 /**
- * __useUserRegisterMutation__
+ * __useGetOrgQuery__
  *
- * To run a mutation, you first call `useUserRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserRegisterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useGetOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [userRegisterMutation, { data, loading, error }] = useUserRegisterMutation({
+ * const { data, loading, error } = useGetOrgQuery({
  *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *      username: // value for 'username'
+ *      OrgId: // value for 'OrgId'
  *   },
  * });
  */
-export function useUserRegisterMutation(baseOptions?: Apollo.MutationHookOptions<UserRegisterMutation, UserRegisterMutationVariables>) {
+export function useGetOrgQuery(baseOptions: Apollo.QueryHookOptions<GetOrgQuery, GetOrgQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserRegisterMutation, UserRegisterMutationVariables>(UserRegisterDocument, options);
+        return Apollo.useQuery<GetOrgQuery, GetOrgQueryVariables>(GetOrgDocument, options);
       }
-export type UserRegisterMutationHookResult = ReturnType<typeof useUserRegisterMutation>;
-export type UserRegisterMutationResult = Apollo.MutationResult<UserRegisterMutation>;
-export type UserRegisterMutationOptions = Apollo.BaseMutationOptions<UserRegisterMutation, UserRegisterMutationVariables>;
-export const OrgsGetDocument = gql`
-    query OrgsGet {
+export function useGetOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrgQuery, GetOrgQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrgQuery, GetOrgQueryVariables>(GetOrgDocument, options);
+        }
+export type GetOrgQueryHookResult = ReturnType<typeof useGetOrgQuery>;
+export type GetOrgLazyQueryHookResult = ReturnType<typeof useGetOrgLazyQuery>;
+export type GetOrgQueryResult = Apollo.QueryResult<GetOrgQuery, GetOrgQueryVariables>;
+export const GetOrgsDocument = gql`
+    query GetOrgs {
   getOrgs {
     orgs {
       id
-      name
+      orgName
       location
     }
-    message
+    error {
+      ...RegularError
+    }
   }
 }
-    `;
+    ${RegularErrorFragmentDoc}`;
 
 /**
- * __useOrgsGetQuery__
+ * __useGetOrgsQuery__
  *
- * To run a query within a React component, call `useOrgsGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrgsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetOrgsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrgsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOrgsGetQuery({
+ * const { data, loading, error } = useGetOrgsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useOrgsGetQuery(baseOptions?: Apollo.QueryHookOptions<OrgsGetQuery, OrgsGetQueryVariables>) {
+export function useGetOrgsQuery(baseOptions?: Apollo.QueryHookOptions<GetOrgsQuery, GetOrgsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OrgsGetQuery, OrgsGetQueryVariables>(OrgsGetDocument, options);
+        return Apollo.useQuery<GetOrgsQuery, GetOrgsQueryVariables>(GetOrgsDocument, options);
       }
-export function useOrgsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrgsGetQuery, OrgsGetQueryVariables>) {
+export function useGetOrgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrgsQuery, GetOrgsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OrgsGetQuery, OrgsGetQueryVariables>(OrgsGetDocument, options);
+          return Apollo.useLazyQuery<GetOrgsQuery, GetOrgsQueryVariables>(GetOrgsDocument, options);
         }
-export type OrgsGetQueryHookResult = ReturnType<typeof useOrgsGetQuery>;
-export type OrgsGetLazyQueryHookResult = ReturnType<typeof useOrgsGetLazyQuery>;
-export type OrgsGetQueryResult = Apollo.QueryResult<OrgsGetQuery, OrgsGetQueryVariables>;
-export const UserGetDocument = gql`
-    query UserGet {
+export type GetOrgsQueryHookResult = ReturnType<typeof useGetOrgsQuery>;
+export type GetOrgsLazyQueryHookResult = ReturnType<typeof useGetOrgsLazyQuery>;
+export type GetOrgsQueryResult = Apollo.QueryResult<GetOrgsQuery, GetOrgsQueryVariables>;
+export const GetUsersDocument = gql`
+    query GetUsers {
   getUsers {
     users {
-      id
-      email
-      username
+      ...UserPayload
+    }
+    error {
+      ...RegularError
     }
   }
 }
-    `;
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
 
 /**
- * __useUserGetQuery__
+ * __useGetUsersQuery__
  *
- * To run a query within a React component, call `useUserGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserGetQuery({
+ * const { data, loading, error } = useGetUsersQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUserGetQuery(baseOptions?: Apollo.QueryHookOptions<UserGetQuery, UserGetQueryVariables>) {
+export function useGetUsersQuery(baseOptions?: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserGetQuery, UserGetQueryVariables>(UserGetDocument, options);
+        return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, options);
       }
-export function useUserGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserGetQuery, UserGetQueryVariables>) {
+export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserGetQuery, UserGetQueryVariables>(UserGetDocument, options);
+          return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, options);
         }
-export type UserGetQueryHookResult = ReturnType<typeof useUserGetQuery>;
-export type UserGetLazyQueryHookResult = ReturnType<typeof useUserGetLazyQuery>;
-export type UserGetQueryResult = Apollo.QueryResult<UserGetQuery, UserGetQueryVariables>;
-export const UserMeDocument = gql`
-    query UserMe {
+export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
+export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
+export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
+export const MeUserDocument = gql`
+    query MeUser {
   me {
     user {
-      id
-      username
+      ...UserPayload
+    }
+    error {
+      ...RegularError
     }
   }
 }
-    `;
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
 
 /**
- * __useUserMeQuery__
+ * __useMeUserQuery__
  *
- * To run a query within a React component, call `useUserMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMeUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserMeQuery({
+ * const { data, loading, error } = useMeUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUserMeQuery(baseOptions?: Apollo.QueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
+export function useMeUserQuery(baseOptions?: Apollo.QueryHookOptions<MeUserQuery, MeUserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, options);
+        return Apollo.useQuery<MeUserQuery, MeUserQueryVariables>(MeUserDocument, options);
       }
-export function useUserMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserMeQuery, UserMeQueryVariables>) {
+export function useMeUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeUserQuery, MeUserQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserMeQuery, UserMeQueryVariables>(UserMeDocument, options);
+          return Apollo.useLazyQuery<MeUserQuery, MeUserQueryVariables>(MeUserDocument, options);
         }
-export type UserMeQueryHookResult = ReturnType<typeof useUserMeQuery>;
-export type UserMeLazyQueryHookResult = ReturnType<typeof useUserMeLazyQuery>;
-export type UserMeQueryResult = Apollo.QueryResult<UserMeQuery, UserMeQueryVariables>;
-export const SubDialogDocument = gql`
-    subscription subDialog {
+export type MeUserQueryHookResult = ReturnType<typeof useMeUserQuery>;
+export type MeUserLazyQueryHookResult = ReturnType<typeof useMeUserLazyQuery>;
+export type MeUserQueryResult = Apollo.QueryResult<MeUserQuery, MeUserQueryVariables>;
+export const SubscriptDialogDocument = gql`
+    subscription SubscriptDialog {
   dialogPosted {
-    id
-    text
+    ...DialogPayload
   }
 }
-    `;
+    ${DialogPayloadFragmentDoc}`;
 
 /**
- * __useSubDialogSubscription__
+ * __useSubscriptDialogSubscription__
  *
- * To run a query within a React component, call `useSubDialogSubscription` and pass it any options that fit your needs.
- * When your component renders, `useSubDialogSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useSubscriptDialogSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscriptDialogSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSubDialogSubscription({
+ * const { data, loading, error } = useSubscriptDialogSubscription({
  *   variables: {
  *   },
  * });
  */
-export function useSubDialogSubscription(baseOptions?: Apollo.SubscriptionHookOptions<SubDialogSubscription, SubDialogSubscriptionVariables>) {
+export function useSubscriptDialogSubscription(baseOptions?: Apollo.SubscriptionHookOptions<SubscriptDialogSubscription, SubscriptDialogSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<SubDialogSubscription, SubDialogSubscriptionVariables>(SubDialogDocument, options);
+        return Apollo.useSubscription<SubscriptDialogSubscription, SubscriptDialogSubscriptionVariables>(SubscriptDialogDocument, options);
       }
-export type SubDialogSubscriptionHookResult = ReturnType<typeof useSubDialogSubscription>;
-export type SubDialogSubscriptionResult = Apollo.SubscriptionResult<SubDialogSubscription>;
+export type SubscriptDialogSubscriptionHookResult = ReturnType<typeof useSubscriptDialogSubscription>;
+export type SubscriptDialogSubscriptionResult = Apollo.SubscriptionResult<SubscriptDialogSubscription>;

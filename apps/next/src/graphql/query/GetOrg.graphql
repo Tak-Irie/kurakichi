@@ -1,0 +1,10 @@
+query GetOrg($OrgId: String!) {
+  getOrg(orgId: $OrgId) {
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

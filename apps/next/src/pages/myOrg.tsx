@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
 import { MiddleButton } from '../components/presentational/atoms/Button';
-import { useOrgsGetQuery } from '../graphql/generated/graphql';
+import { useGetOrgsQuery } from '../graphql/generated/graphql';
 
 const MyOrg: NextPage = () => {
-  const { data, loading, error, refetch } = useOrgsGetQuery();
+  const { data, loading, error, refetch } = useGetOrgsQuery();
 
   const handleClick = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const MyOrg: NextPage = () => {
           <div className="m-3" key={orgs.id}>
             <ul>
               <li>{orgs.id}</li>
-              <li>{orgs.name}</li>
+              <li>{orgs.orgName}</li>
               <li>{orgs.location}</li>
             </ul>
           </div>

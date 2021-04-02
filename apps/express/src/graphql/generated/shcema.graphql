@@ -11,18 +11,7 @@ type Dialog implements Node {
 
 type DialogPayload {
   dialog: [Dialog]
-  error: Error
-}
-
-"""Generally Used as Error at business logic"""
-type Error {
-  field: [String!]
-  message: String!
-}
-
-type GeneralResponse {
-  message: String
-  result: Boolean
+  error: RegularError
 }
 
 type Message implements Node {
@@ -32,16 +21,21 @@ type Message implements Node {
   id: ID!
 }
 
+type MessagePayload {
+  error: RegularError
+  message: Message
+}
+
 type Mutation {
-  changePassword(currentPass: String!, newPass: String!): GeneralResponse
-  deleteUser: GeneralResponse
-  forgetPassword(email: String!): GeneralResponse
-  joinOrg(orgId: String!): GeneralResponse
+  changePassword(currentPass: String!, newPass: String!): RegularPayload
+  deleteUser: RegularPayload
+  forgetPassword(email: String!): RegularPayload
+  joinOrg(orgId: String!): RegularPayload
   login(email: String!, password: String!): UserPayload
-  logout: GeneralResponse
+  logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
-  registerOrg(location: String!, name: String!): GeneralResponse
-  userRegister(email: String!, password: String!, username: String!): UserPayload
+  registerOrg(location: String!, name: String!): RegularPayload
+  userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
 """Identifier"""
@@ -54,13 +48,14 @@ type Org implements Node {
   """GUID for a resource"""
   id: ID!
   location: String!
-  member: [User]
+  members: [User]
   orgName: String!
 }
 
 type OrgPayload {
-  error: Error
-  org: [Org]
+  error: RegularError
+  org: Org
+  orgs: [Org]
 }
 
 type Query {
@@ -68,6 +63,17 @@ type Query {
   getOrgs: OrgPayload
   getUsers: UserPayload!
   me: UserPayload
+}
+
+"""Generally Used as Error at business logic"""
+type RegularError {
+  invalidField: [String!]
+  message: String!
+}
+
+type RegularPayload {
+  message: String
+  result: Boolean
 }
 
 type Subscription {
@@ -83,6 +89,7 @@ type User implements Node {
 }
 
 type UserPayload {
-  error: Error
-  user: [User]
+  error: RegularError
+  user: User
+  users: [User]
 }

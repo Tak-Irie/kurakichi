@@ -2,12 +2,12 @@ import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
 import { MiddleButton } from '../components/presentational/atoms/Button';
 import { Card } from '../components/presentational/atoms/Card';
-import { useOrgJoinMutation, useOrgsGetQuery } from '../graphql/generated/graphql';
+import { useJoinOrgMutation, useGetOrgsQuery } from '../graphql/generated/graphql';
 
 const Orgs: NextPage = () => {
-  const { data, loading, error, refetch } = useOrgsGetQuery();
+  const { data, loading, error, refetch } = useGetOrgsQuery();
 
-  const [joinOrg, { data: joinData }] = useOrgJoinMutation();
+  const [joinOrg, { data: joinData }] = useJoinOrgMutation();
 
   const handleCardClick = (id: string, e: SyntheticEvent) => {
     e.preventDefault();
@@ -31,7 +31,7 @@ const Orgs: NextPage = () => {
           <div className="m-3" key={org.id}>
             <ul>
               <Card
-                title={org.name}
+                title={org.orgName}
                 content={org.location}
                 link={
                   <MiddleButton type="button" onClick={(e) => handleCardClick(org.id, e)}>

@@ -1,0 +1,10 @@
+mutation PostDialog($DialogId: String!, $DialogContent: String!) {
+  postDialog(id: $DialogId, dialogContent: $DialogContent) {
+    dialog {
+      ...DialogPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

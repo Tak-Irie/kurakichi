@@ -1,0 +1,4 @@
+fragment UserPayload on User {
+  id
+  userName
+}

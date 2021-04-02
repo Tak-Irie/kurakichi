@@ -1,17 +1,17 @@
 import { NextPage } from 'next';
-import { LogoutButton } from '../components/container/LogoutButton';
 import { UserDeleteButton } from '../components/container/UserDeleteButton';
-import { useUserMeQuery } from '../graphql/generated/graphql';
+import { useMeUserQuery } from '../graphql/generated/graphql';
 import { IsAuth } from '../util/isAuth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { UserChangePassword } from '../components/container/UserChangePassword';
 
-const Private: NextPage = () => {
+const MyPage: NextPage = () => {
   // IsAuth();
-  const { data, loading, error } = useUserMeQuery({
+  const { data, loading, error } = useMeUserQuery({
     fetchPolicy: 'network-only',
   });
+
   const router = useRouter();
 
   useEffect(() => {
@@ -29,11 +29,11 @@ const Private: NextPage = () => {
       <>
         <p>aaa</p>
         <p>bbb</p>
-        {data.me.user?.username && <p>こんにちは {data.me.user.username} !</p>}
-        <UserDeleteButton />
+        {data.me.user && <p>こんにちは {data.me.user.userName} !</p>}
         <UserChangePassword />
+        <UserDeleteButton />
       </>
     );
 };
 
-export default Private;
+export default MyPage;
