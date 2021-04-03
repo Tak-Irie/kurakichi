@@ -5,6 +5,7 @@ import { IsAuth } from '../util/isAuth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { UserChangePassword } from '../components/container/UserChangePassword';
+import { GetMessages } from '../components/container/GetMessages';
 
 const MyPage: NextPage = () => {
   // IsAuth();
@@ -27,9 +28,8 @@ const MyPage: NextPage = () => {
   if (!loading && data)
     return (
       <>
-        <p>aaa</p>
-        <p>bbb</p>
         {data.me.user && <p>こんにちは {data.me.user.userName} !</p>}
+        <GetMessages />
         <UserChangePassword />
         <UserDeleteButton />
       </>

@@ -9,7 +9,9 @@ export const MessageQuery = extendType({
   definition(t) {
     t.field('getMessages', {
       type: 'MessagePayload',
+      description: "get User's id, then show their own messages",
       resolve: async (_, __, context) => {
+        // console.log('queryConfirm:');
         const idResponse = getUserIdByCookie(context);
         if (idResponse.result == false) return { error: { message: idResponse.errMessage } };
 
@@ -29,13 +31,14 @@ export const MessageQuery = extendType({
 export const MessageMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('senMessage', {
+    t.field('sendMessage', {
       type: 'MessagePayload',
       args: {
         textInput: nonNull(stringArg()),
         receiverId: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        // console.log('arg:', args);
         const idResponse = getUserIdByCookie(context);
         if (idResponse.result == false) return { error: { message: idResponse.errMessage } };
         const domainResponse = await useSendMessageUseCase.execute({

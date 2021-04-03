@@ -4,8 +4,8 @@ class SendGridMailerService {
   public static async sendMail(to: string, token: string) {
     mailer.setApiKey(process.env.NX_SENDGRID_API_KEY as string);
 
-    console.log('to:', to);
-    console.log('token:', token);
+    // console.log('to:', to);
+    // console.log('token:', token);
 
     const message = {
       to,

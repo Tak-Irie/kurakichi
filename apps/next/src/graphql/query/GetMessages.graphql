@@ -1,4 +1,4 @@
-query getMessages {
+query GetMessages {
   getMessages {
     messages {
       ...MessagePayload

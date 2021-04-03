@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
 import { MiddleButton } from '../components/presentational/atoms/Button';
-import { Card } from '../components/presentational/atoms/Card';
+import { Card } from '../components/presentational/atoms/Cards';
 import { useJoinOrgMutation, useGetOrgsQuery } from '../graphql/generated/graphql';
 
 const Orgs: NextPage = () => {

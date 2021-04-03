@@ -6,6 +6,7 @@ type IdResponse = {
   id?: string;
 };
 
+//TODO: return id:string or errorField:Object
 export function getUserIdByCookie(context: MyContext): IdResponse {
   const id = context.req.session.userId;
   if (id == undefined) return { result: false, errMessage: 'ログインを確認できませんでした' };

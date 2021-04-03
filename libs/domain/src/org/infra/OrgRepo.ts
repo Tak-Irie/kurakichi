@@ -28,12 +28,12 @@ export class OrgRepo implements IOrgRepo {
 
   async getOrgs(): Promise<Org[]> {
     const orgs = await this.prisma.organization.findMany({ include: { members: true } });
-    console.log('repoOrgs:', orgs);
+    // console.log('repoOrgs:', orgs);
 
     const toDomainOrgs = await Promise.all(
       orgs.map(async (org) => await OrgMapper.ToDomain({ org })),
     );
-    console.log('toDomOrgs:', toDomainOrgs);
+    // console.log('toDomOrgs:', toDomainOrgs);
 
     return toDomainOrgs;
   }

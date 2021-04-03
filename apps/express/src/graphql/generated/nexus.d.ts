@@ -5,6 +5,7 @@
 
 import * as types from "./../sourceTypes"
 import { MyContext } from "./../../util/context"
+import { FieldAuthorizeResolver } from "nexus/dist/plugins/fieldAuthorizePlugin"
 
 
 
@@ -109,7 +110,7 @@ export interface NexusGenFieldTypes {
     logout: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
     registerOrg: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
-    senMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
+    sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
@@ -183,7 +184,7 @@ export interface NexusGenFieldTypeNames {
     logout: 'RegularPayload'
     postDialog: 'DialogPayload'
     registerOrg: 'RegularPayload'
-    senMessage: 'MessagePayload'
+    sendMessage: 'MessagePayload'
     userRegister: 'UserPayload'
   }
   Org: { // field return type name
@@ -254,7 +255,7 @@ export interface NexusGenArgTypes {
       location: string; // String!
       name: string; // String!
     }
-    senMessage: { // args
+    sendMessage: { // args
       receiverId: string; // String!
       textInput: string; // String!
     }
@@ -337,6 +338,15 @@ declare global {
   interface NexusGenPluginTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
+    /**
+     * Authorization for an individual field. Returning "true"
+     * or "Promise<true>" means the field can be accessed.
+     * Returning "false" or "Promise<false>" will respond
+     * with a "Not Authorized" error for the field.
+     * Returning or throwing an error will also prevent the
+     * resolver from executing.
+     */
+    authorize?: FieldAuthorizeResolver<TypeName, FieldName>
   }
   interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
   }

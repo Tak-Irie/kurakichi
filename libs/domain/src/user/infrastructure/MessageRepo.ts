@@ -11,11 +11,12 @@ export class MessageRepo implements IMessageRepo {
   async getMessages(userId: UniqueEntityId): Promise<Message[] | false> {
     const messages = await this.prisma.message.findMany({ where: { receiverId: userId.getId() } });
     if (messages == undefined) return false;
-
+    // console.log('messagesRepo:', messages);
     const domainMessages = await Promise.all(
       messages.map(async (message) => await MessageMapper.ToDomain(message)),
     );
 
+    // console.log('domainMessages:', domainMessages);
     return domainMessages;
   }
   async sendMessage(message: Message): Promise<Message | false> {

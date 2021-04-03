@@ -42,7 +42,7 @@ export const userQuery = extendType({
         if (result.isLeft()) return { message: result.value.getErrorValue() };
 
         const domainUser = result.value.getValue();
-        console.log('domainUser:', domainUser);
+        // console.log('domainUser:', domainUser);
         return {
           user: domainUser,
         };

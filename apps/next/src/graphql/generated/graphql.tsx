@@ -52,7 +52,7 @@ export type Mutation = {
   postDialog?: Maybe<DialogPayload>;
   registerOrg?: Maybe<RegularPayload>;
   joinOrg?: Maybe<RegularPayload>;
-  senMessage?: Maybe<MessagePayload>;
+  sendMessage?: Maybe<MessagePayload>;
 };
 
 
@@ -97,7 +97,7 @@ export type MutationJoinOrgArgs = {
 };
 
 
-export type MutationSenMessageArgs = {
+export type MutationSendMessageArgs = {
   textInput: Scalars['String'];
   receiverId: Scalars['String'];
 };
@@ -130,6 +130,7 @@ export type Query = {
   me?: Maybe<UserPayload>;
   getOrgs?: Maybe<OrgPayload>;
   getOrg?: Maybe<OrgPayload>;
+  /** get User's id, then show their own messages */
   getMessages?: Maybe<MessagePayload>;
 };
 
@@ -293,7 +294,7 @@ export type SendMessageMutationVariables = Exact<{
 
 export type SendMessageMutation = (
   { __typename?: 'Mutation' }
-  & { senMessage?: Maybe<(
+  & { sendMessage?: Maybe<(
     { __typename?: 'MessagePayload' }
     & { message?: Maybe<(
       { __typename?: 'Message' }
@@ -674,8 +675,8 @@ export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMu
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
 export const SendMessageDocument = gql`
-    mutation sendMessage($TextInput: String!, $ReceiverId: String!) {
-  senMessage(textInput: $TextInput, receiverId: $ReceiverId) {
+    mutation SendMessage($TextInput: String!, $ReceiverId: String!) {
+  sendMessage(textInput: $TextInput, receiverId: $ReceiverId) {
     message {
       ...MessagePayload
     }
@@ -849,7 +850,7 @@ export type UserLogoutMutationHookResult = ReturnType<typeof useUserLogoutMutati
 export type UserLogoutMutationResult = Apollo.MutationResult<UserLogoutMutation>;
 export type UserLogoutMutationOptions = Apollo.BaseMutationOptions<UserLogoutMutation, UserLogoutMutationVariables>;
 export const GetMessagesDocument = gql`
-    query getMessages {
+    query GetMessages {
   getMessages {
     messages {
       ...MessagePayload

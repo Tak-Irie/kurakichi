@@ -1,4 +1,5 @@
 import React from 'react';
+import { SendMessage } from '../components/container/SendMessage';
 import { LoadingCard } from '../components/presentational/atoms/LoadingCard';
 import {
   LoadingSimpleSpinner,
@@ -18,6 +19,7 @@ export function Index() {
       <p>フォントテスト:彼らの機器や装置はすべて生命体だ</p>
       <Feature />
       <Feature2 />
+      <SendMessage />
     </div>
   );
 }

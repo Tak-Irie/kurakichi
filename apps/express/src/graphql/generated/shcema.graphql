@@ -36,7 +36,7 @@ type Mutation {
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(location: String!, name: String!): RegularPayload
-  senMessage(receiverId: String!, textInput: String!): MessagePayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
@@ -61,6 +61,7 @@ type OrgPayload {
 }
 
 type Query {
+  """get User's id, then show their own messages"""
   getMessages: MessagePayload
   getOrg(orgId: String!): OrgPayload
   getOrgs: OrgPayload
