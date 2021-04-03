@@ -24,6 +24,9 @@
       ],
       "@kurakichi/domain": [
         "libs/domain/src/index.ts"
+      ],
+      "@next/ui": [
+        "apps/next/src/components/presentational"
       ]
     }
   },

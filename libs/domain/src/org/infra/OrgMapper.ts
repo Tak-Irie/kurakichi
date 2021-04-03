@@ -1,19 +1,38 @@
-import { Organization as StoredOrg } from '@prisma/client';
+import { Organization as StoredOrg, User as StoredUser } from '@prisma/client';
 import { UniqueEntityId } from '../../shared';
-import { Org } from '../domain';
+import { UserEmail, UserName } from '../../user';
+import { Member, Org } from '../domain';
 import { OrgLocation } from '../domain/OrgLocation';
 import { OrgName } from '../domain/OrgName';
 
+type ToDomainProps = {
+  org: StoredOrg & {
+    members?: StoredUser[];
+  };
+};
 export class OrgMapper {
-  public static async ToDomain(storedOrg: StoredOrg): Promise<Org> {
-    const orgName = OrgName.create({ name: storedOrg.name });
-    const orgLocation = OrgLocation.create({ location: storedOrg.location });
+  public static async ToDomain(props: ToDomainProps): Promise<Org> {
+    const orgName = OrgName.create({ name: props.org.name });
+    const orgLocation = OrgLocation.create({ location: props.org.location });
+
+    let members: Member[];
+
+    if (props.org.members) {
+      members = props.org.members.map((member) => {
+        return new Member({
+          id: new UniqueEntityId(member.id),
+          memberName: UserName.create({ userName: member.name }).getValue(),
+          email: UserEmail.create({ email: member.email }).getValue(),
+        });
+      });
+    }
 
     const OrgResult = new Org({
-      id: new UniqueEntityId(storedOrg.id),
+      id: new UniqueEntityId(props.org.id),
       name: orgName.getValue(),
       location: orgLocation.getValue(),
-      adminId: new UniqueEntityId(storedOrg.adminId),
+      adminId: new UniqueEntityId(props.org.adminId),
+      members,
     });
 
     return OrgResult;

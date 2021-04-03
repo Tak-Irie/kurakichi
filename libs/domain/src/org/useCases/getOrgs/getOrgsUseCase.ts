@@ -19,6 +19,7 @@ export class GetOrgsUseCase implements IUseCase<unknown, Promise<GetOrgsResponse
   public async execute(): Promise<GetOrgsResponse> {
     try {
       const result = await this.OrgsRepo.getOrgs();
+      // console.log('ucRes:', result);
       return right(Result.success<Org[]>(result));
     } catch (err) {
       return left(new UnexpectedError(err));

@@ -1,6 +1,0 @@
-mutation DialogPost($postDialogId: String!, $postDialogText: String!) {
-  postDialog(id: $postDialogId, text: $postDialogText) {
-    id
-    text
-  }
-}

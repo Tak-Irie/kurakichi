@@ -2,64 +2,98 @@
 ### Do not make changes to this file directly
 
 
-type Dialog {
-  id: String!
-  text: String!
+type Dialog implements Node {
+  dialogContent: String!
+
+  """GUID for a resource"""
+  id: ID!
 }
 
-type GeneralResponse {
-  message: String
-  result: Boolean
+type DialogPayload {
+  dialog: [Dialog]
+  error: RegularError
+}
+
+type Message implements Node {
+  content: String!
+
+  """GUID for a resource"""
+  id: ID!
+}
+
+type MessagePayload {
+  error: RegularError
+  message: Message
+  messages: [Message]
 }
 
 type Mutation {
-  changePassword(currentPass: String!, newPass: String!): GeneralResponse
-  deleteUser: GeneralResponse
-  forgetPassword(email: String!): GeneralResponse
-  joinOrg(orgId: String!): GeneralResponse
-  login(email: String!, password: String!): getUser
-  logout: GeneralResponse
-  postDialog(id: String!, text: String!): Dialog
-  registerOrg(location: String!, name: String!): GeneralResponse
-  userRegister(email: String!, password: String!, username: String!): getUser
+  changePassword(currentPass: String!, newPass: String!): RegularPayload
+  deleteUser: RegularPayload
+  forgetPassword(email: String!): RegularPayload
+  joinOrg(orgId: String!): RegularPayload
+  login(email: String!, password: String!): UserPayload
+  logout: RegularPayload
+  postDialog(dialogContent: String!, id: String!): DialogPayload
+  registerOrg(location: String!, name: String!): RegularPayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
-type Org {
-  id: String!
+"""Identifier"""
+interface Node {
+  """GUID for a resource"""
+  id: ID!
+}
+
+type Org implements Node {
+  """GUID for a resource"""
+  id: ID!
   location: String!
-  name: String!
+  members: [User]
+  orgName: String!
 }
 
-type OrgResponse {
-  message: String!
+type OrgPayload {
+  error: RegularError
+  org: Org
   orgs: [Org]
 }
 
 type Query {
-  getOrgs: OrgResponse
-  getUsers: getUser!
-  me: getUser
+  """get User's id, then show their own messages"""
+  getMessages: MessagePayload
+  getOrg(orgId: String!): OrgPayload
+  getOrgs: OrgPayload
+  getUsers: UserPayload!
+  me: UserPayload
+}
+
+"""Generally Used as Error at business logic"""
+type RegularError {
+  invalidField: [String!]
+  message: String!
+}
+
+type RegularPayload {
+  message: String
+  result: Boolean
 }
 
 type Subscription {
   dialogPosted: Dialog
 }
 
-type User {
+type User implements Node {
   email: String!
-  id: String!
-  password: String
-  username: String
+
+  """GUID for a resource"""
+  id: ID!
+  userName: String
 }
 
-type UserResponse {
-  email: String
-  id: String!
-  username: String
-}
-
-type getUser {
-  message: String!
-  user: UserResponse
-  users: [UserResponse]
+type UserPayload {
+  error: RegularError
+  user: User
+  users: [User]
 }

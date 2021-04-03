@@ -1,0 +1,4 @@
+fragment DialogPayload on Dialog {
+  id
+  dialogContent
+}

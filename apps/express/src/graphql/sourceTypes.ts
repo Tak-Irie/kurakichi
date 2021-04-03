@@ -1,13 +1,9 @@
-export type User = {
-  id: string;
-  email: string;
-  username: string;
-};
-
 export type Dialog = {
   id: string;
-  text: string;
+  dialogContent: string;
 };
+
+// export type Org = {};
 
 export type Event<T> = {
   data: T;

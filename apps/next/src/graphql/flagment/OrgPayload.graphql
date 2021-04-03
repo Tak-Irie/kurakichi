@@ -1,0 +1,9 @@
+fragment OrgPayload on Org {
+  id
+  orgName
+  location
+  members {
+    id
+    userName
+  }
+}

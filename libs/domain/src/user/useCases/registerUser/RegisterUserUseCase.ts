@@ -12,14 +12,15 @@ import { IUserRepository, User, UserEmail, UserName, UserPassword } from '../../
 import { EmailAlreadyExistsError } from './RegisterUserError';
 
 type RegisterUserInput = {
-  username: string;
+  userName: string;
   email: string;
   password: string;
 };
 
 type RegisterUserDTO = {
   id: string;
-  username: string;
+  userName: string;
+  email: string;
 };
 
 type UserTypes = UserEmail | UserName | UserPassword;
@@ -41,7 +42,7 @@ export class RegisterUserUseCase
 
   public async execute(request: RegisterUserInput): Promise<RegisterUserResponse> {
     const usernameOrError = UserName.create({
-      username: request.username,
+      userName: request.userName,
     });
 
     const emailOrError = UserEmail.create({
@@ -65,7 +66,7 @@ export class RegisterUserUseCase
 
     const email = emailOrError.getValue();
     const password = passwordOrError.getValue();
-    const username = usernameOrError.getValue();
+    const userName = usernameOrError.getValue();
 
     try {
       const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(email);
@@ -77,7 +78,7 @@ export class RegisterUserUseCase
         id: UniqueEntityId.create(),
         email,
         password,
-        username,
+        userName,
       });
 
       if (userOrError.isFailure) return left(Result.fail<User>(userOrError.getErrorValue()));
@@ -91,7 +92,8 @@ export class RegisterUserUseCase
       return right(
         Result.success<RegisterUserDTO>({
           id: result.getId(),
-          username: result.getUsername(),
+          userName: result.getUsername(),
+          email: result.getEmail(),
         }),
       );
     } catch (err) {

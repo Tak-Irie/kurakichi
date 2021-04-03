@@ -8,7 +8,7 @@ import { UserPassword } from './UserPassword';
 
 interface UserProps {
   id: UniqueEntityId;
-  username: UserName;
+  userName: UserName;
   email: UserEmail;
   password?: UserPassword;
   ssoSub?: string;
@@ -29,7 +29,7 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   getUsername(): string {
-    return this.props.username.getValue();
+    return this.props.userName.getValue();
   }
 
   getEmail(): string {

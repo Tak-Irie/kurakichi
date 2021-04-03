@@ -1,36 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("NX_PSQL_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id         String         @id
-  email      String         @unique
-  name       String
-  password   String         @default("IT_IS_SSO_USER")
-  ssoSub     String         @default("IT_IS_KURAKICHI_ORIGINAL_USER")
-  picture    String         @default("UNKNOWN")
-  role       Role           @default(USER)
-  rooms      Room[]
-  orgs       Organization[]
-  createdAt  DateTime       @default(now())
-  manageOrg  Organization[] @relation("orgAdmin")
-  manageRoom Room[]         @relation("roomAdmin")
+  id               String         @id
+  email            String         @unique
+  password         String         @default("IT_IS_SSO_USER")
+  createdAt        DateTime       @default(now())
+  ssoSub           String         @default("IT_IS_KURAKICHI_ORIGINAL_USER")
+  picture          String         @default("UNKNOWN")
+  name             String
+  role             Role           @default(USER)
+  receivedMessages Message[]      @relation("receive")
+  sentMessages     Message[]      @relation("sent")
+  manageOrg        Organization[] @relation("orgAdmin")
+  manageRoom       Room[]         @relation("roomAdmin")
+  belongOrg        Organization[] @relation("orgMember")
+  belongRoom       Room[]         @relation("roomMember")
 }
 
 model Organization {
   id        String   @id
   name      String   @unique
-  admin     User     @relation("orgAdmin", fields: [adminId], references: [id])
   adminId   String
-  members   User[]
   location  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  admin     User     @relation("orgAdmin", fields: [adminId], references: [id])
+  members   User[]   @relation("orgMember")
+}
+
+model Message {
+  id         String   @id
+  text       String
+  senderId   String
+  receiverId String
+  read_flag  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  receiver   User     @relation("receive", fields: [receiverId], references: [id])
+  sender     User     @relation("sent", fields: [senderId], references: [id])
 }
 
 model Dialog {
@@ -40,17 +53,17 @@ model Dialog {
 
 model Room {
   id      String @id
-  admin   User   @relation("roomAdmin", fields: [adminId], references: [id])
   adminId String
-  members User[]
+  admin   User   @relation("roomAdmin", fields: [adminId], references: [id])
   karte   Karte?
+  member  User[] @relation("roomMember")
 }
 
 model Karte {
   id     String @id
-  room   Room   @relation(fields: [roomId], references: [id])
-  roomId String
+  roomId String @unique
   record String
+  room   Room   @relation(fields: [roomId], references: [id])
 }
 
 enum Role {

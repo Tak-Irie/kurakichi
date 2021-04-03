@@ -1,0 +1,6 @@
+mutation JoinOrg($OrgId: String!) {
+  joinOrg(orgId: $OrgId) {
+    result
+    message
+  }
+}

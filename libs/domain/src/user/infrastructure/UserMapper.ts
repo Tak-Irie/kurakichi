@@ -5,7 +5,7 @@ import { User, UserEmail, UserName, UserPassword } from '../domain';
 export class UserMapper {
   public static async ToDomain(storedUser: StoredUser): Promise<User> {
     let password: UserPassword | undefined;
-    const userNameResult = UserName.create({ username: storedUser.name });
+    const userNameResult = UserName.create({ userName: storedUser.name });
 
     if (storedUser.password) {
       const result = await UserPassword.create({
@@ -19,7 +19,7 @@ export class UserMapper {
 
     const userResult = new User({
       id: new UniqueEntityId(storedUser.id),
-      username: userNameResult.getValue(),
+      userName: userNameResult.getValue(),
       password,
       email: userEmailResult.getValue(),
     });

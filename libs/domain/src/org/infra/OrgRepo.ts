@@ -27,19 +27,25 @@ export class OrgRepo implements IOrgRepo {
   }
 
   async getOrgs(): Promise<Org[]> {
-    const orgs = await this.prisma.organization.findMany();
+    const orgs = await this.prisma.organization.findMany({ include: { members: true } });
+    // console.log('repoOrgs:', orgs);
 
-    const result = await Promise.all(orgs.map(async (org) => await OrgMapper.ToDomain(org)));
+    const toDomainOrgs = await Promise.all(
+      orgs.map(async (org) => await OrgMapper.ToDomain({ org })),
+    );
+    // console.log('toDomOrgs:', toDomainOrgs);
 
-    return result;
+    return toDomainOrgs;
   }
 
   async getOrgById(orgId: UniqueEntityId): Promise<Org | undefined> {
     const orgResult = await this.prisma.organization.findUnique({
       where: { id: orgId.getId() },
+      include: { members: true },
     });
     if (orgResult == undefined) return undefined;
-    const data = await OrgMapper.ToDomain(orgResult);
+
+    const data = await OrgMapper.ToDomain({ org: orgResult });
     return data;
   }
 

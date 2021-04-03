@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { useUserMeQuery } from '../../../graphql/generated/graphql';
+import { useMeUserQuery } from '../../../graphql/generated/graphql';
 import { isServer } from '../../../util/isServer';
 import { MiddleButton } from '../atoms/Button';
 import { LoadingStylishSpinner } from '../atoms/LoadingSpinner';
@@ -8,16 +8,11 @@ import Link from 'next/link';
 import { LogoutButton } from '../../container/LogoutButton';
 
 const NavAuthSection: FC = () => {
-  const { data, loading } = useUserMeQuery({
+  const { data, loading } = useMeUserQuery({
     skip: isServer(),
   });
 
-  if (loading)
-    return (
-      <div>
-        <LoadingStylishSpinner />
-      </div>
-    );
+  if (loading) return <LoadingStylishSpinner />;
 
   if (!data?.me.user)
     return (
@@ -34,9 +29,9 @@ const NavAuthSection: FC = () => {
   return (
     <>
       <div>
-        <p>{data.me.user.username}さん</p>
-        <Link href="/private">
-          <a href="/private">マイページ</a>
+        <p>{data.me.user.userName}さん</p>
+        <Link href="/myPage">
+          <a href="/myPage">マイページ</a>
         </Link>
       </div>
       <LogoutButton />

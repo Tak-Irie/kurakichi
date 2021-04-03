@@ -17,32 +17,34 @@ export const userQuery = extendType({
   type: 'Query',
   definition(t) {
     t.nonNull.field('getUsers', {
-      type: 'getUser',
+      type: 'UserPayload',
       resolve: async () => {
         const users = await useGetUsersUseCase.execute();
-        if (users.isLeft()) return { message: users.value.getErrorValue() };
-        const data = users.value.getValue();
-        const data2 = data.map((user) => userToPresentation(user));
+        if (users.isLeft()) return { error: { message: users.value.getErrorValue() } };
+        const domainData = users.value.getValue();
+        const gqlField = domainData.map((user) => userToPresentation(user));
 
-        return { message: 'success!', users: data2 };
+        return { users: gqlField };
       },
     });
 
     t.nullable.field('me', {
-      type: 'getUser',
+      type: 'UserPayload',
       resolve: async (_, __, context) => {
-        console.log('me query called');
+        // console.log('me query called');
+
         const idRes = getUserIdByCookie(context);
-        console.log('idRes:', idRes);
+        // console.log('idRes:', idRes);
         if (idRes.result === false) return { message: idRes.errMessage };
+
         const result = await useGetUserById.execute(idRes.id);
-        console.log('res:', result);
+        // console.log('res:', result);
         if (result.isLeft()) return { message: result.value.getErrorValue() };
-        const user = result.value.getValue();
-        // console.log('user:', user);
+
+        const domainUser = result.value.getValue();
+        // console.log('domainUser:', domainUser);
         return {
-          message: 'logged in',
-          user: { id: user.id, username: user.username },
+          user: domainUser,
         };
       },
     });
@@ -53,42 +55,42 @@ export const userMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.field('userRegister', {
-      type: 'getUser',
+      type: 'UserPayload',
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
-        username: nonNull(stringArg()),
+        userName: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
         console.log('getConn');
         const result = await useRegisterUserUseCase.execute({ ...args });
-        if (result.isLeft()) return { message: result.value.getErrorValue() };
+        if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
         const user = result.value.getValue();
-        console.log('user:', user);
+        // console.log('user:', user);
         context.req.session.userId = user.id;
-        console.log('session:', context.req.session.userId);
-        return { message: 'success!', user: { id: user.id } };
+        // console.log('session:', context.req.session.userId);
+        return { user };
       },
     });
     t.field('login', {
-      type: 'getUser',
+      type: 'UserPayload',
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        console.log('arg:', args);
+        // console.log('arg:', args);
         const user = await useLoginUserUseCase.execute({ ...args });
-        if (user.isLeft()) return { message: user.value.getErrorValue() };
+        if (user.isLeft()) return { error: { message: user.value.getErrorValue() } };
         const data = user.value.getValue();
-        console.log('data:', data);
+        // console.log('data:', data);
         context.req.session.userId = data.id;
-        return { message: 'success!', user: { ...user.value.getValue() } };
+        return { user: data };
       },
     });
     // TODO::check below
     t.field('logout', {
-      type: 'GeneralResponse',
+      type: 'RegularPayload',
       resolve: async (_, __, context) => {
         const req = context.req;
         const userId = req.session.userId;
@@ -105,7 +107,7 @@ export const userMutation = extendType({
       },
     });
     t.field('deleteUser', {
-      type: 'GeneralResponse',
+      type: 'RegularPayload',
       resolve: async (_, __, context) => {
         const req = context.req;
         const userId = req.session.userId;
@@ -121,7 +123,7 @@ export const userMutation = extendType({
       },
     });
     t.field('forgetPassword', {
-      type: 'GeneralResponse',
+      type: 'RegularPayload',
       args: { email: nonNull(stringArg()) },
       resolve: async (_, args) => {
         const result = await useForgotPasswordUseCase.execute(args.email);
@@ -130,7 +132,7 @@ export const userMutation = extendType({
       },
     });
     t.field('changePassword', {
-      type: 'GeneralResponse',
+      type: 'RegularPayload',
       args: {
         currentPass: nonNull(stringArg()),
         newPass: nonNull(stringArg()),

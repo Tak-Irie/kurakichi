@@ -27,10 +27,10 @@ class RedisAuthService {
   }
 
   public static async getStoredAuthParam(sessionId: string) {
-    console.log('ses:', sessionId);
+    // console.log('ses:', sessionId);
     const storedParam = await redis.hmget(`auth:${sessionId}`, 'state', 'nonce', 'code_verifier');
 
-    console.log('stored:', storedParam);
+    // console.log('stored:', storedParam);
     if (storedParam.includes(null) === true) return undefined;
     const result = await this.deleteStoredAuthParam(sessionId);
     if (result === false) return undefined;

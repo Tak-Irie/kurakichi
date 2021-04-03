@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import { useUserMeQuery } from '../../graphql/generated/graphql';
+import { useMeUserQuery } from '../../graphql/generated/graphql';
 
 const AuthSuccess: NextPage = () => {
-  const { data, loading, error } = useUserMeQuery();
+  const { data, loading, error } = useMeUserQuery();
 
   if (loading) return <p>読込中です</p>;
 
@@ -11,7 +11,7 @@ const AuthSuccess: NextPage = () => {
   return (
     <>
       <p>認証に成功しました！</p>
-      <p>こんにちは！ {data.me.user.username}</p>
+      <p>こんにちは！ {data.me.user.userName}</p>
     </>
   );
 };

@@ -1,5 +1,5 @@
-import { makeSchema } from 'nexus';
-import * as path from 'path';
+import { makeSchema, fieldAuthorizePlugin } from 'nexus';
+// import * as path from 'path';
 
 import * as types from './bundleTypes';
 
@@ -30,6 +30,7 @@ const GraphqlSchema = makeSchema({
       },
     ],
   },
+  plugins: [fieldAuthorizePlugin()],
 });
 
 export { GraphqlSchema };

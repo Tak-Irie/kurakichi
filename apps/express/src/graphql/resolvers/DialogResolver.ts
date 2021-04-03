@@ -19,16 +19,16 @@ const DialogMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.field('postDialog', {
-      type: 'Dialog',
+      type: 'DialogPayload',
       args: {
         id: nonNull(stringArg()),
-        text: nonNull(stringArg()),
+        dialogContent: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
         await context.pubsub.publish('post', {
-          data: { id: args.id, text: args.text },
+          data: { id: args.id, dialogContent: args.dialogContent },
         });
-        return { id: args.id, text: args.text };
+        return { dialog: [{ id: args.id, dialogContent: args.dialogContent }] };
       },
     });
   },

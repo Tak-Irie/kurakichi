@@ -57,13 +57,13 @@ class OidcAuthService {
 
   // TODO:add storage limitation
   public static async storeAndCryptTokenSet(tokenSet: TokenSet) {
-    console.log('catch process:encryptToken');
+    // console.log('catch process:encryptToken');
     const token = tokenSet.claims();
 
-    console.log('token:', token);
+    // console.log('token:', token);
     const encryptedToken = Cryptograph.encrypt(JSON.stringify(token));
 
-    console.log('encryptedToken:', encryptedToken);
+    // console.log('encryptedToken:', encryptedToken);
     const result = await RedisAuthService.storeTokenSet({
       iv: encryptedToken.iv,
       encryptedToken: encryptedToken.encryptedData,

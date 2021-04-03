@@ -1,11 +1,11 @@
 import { User } from '@kurakichi/domain';
-import { NexusGenObjects } from '../generated/nexus';
+import { NexusGenFieldTypes } from '../generated/nexus';
 
-export const userToPresentation = (user: User): NexusGenObjects['UserResponse'] => {
+export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
   const data = {
     id: user.getId(),
     email: user.getEmail(),
-    username: user.getUsername(),
+    userName: user.getUsername(),
   };
   return data;
 };
