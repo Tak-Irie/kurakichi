@@ -50,8 +50,8 @@ export type Mutation = {
   forgetPassword?: Maybe<RegularPayload>;
   changePassword?: Maybe<RegularPayload>;
   postDialog?: Maybe<DialogPayload>;
-  registerOrg?: Maybe<RegularPayload>;
-  joinOrg?: Maybe<RegularPayload>;
+  registerOrg?: Maybe<OrgPayload>;
+  joinOrg?: Maybe<OrgPayload>;
   sendMessage?: Maybe<MessagePayload>;
 };
 
@@ -89,6 +89,8 @@ export type MutationPostDialogArgs = {
 export type MutationRegisterOrgArgs = {
   name: Scalars['String'];
   location: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
 };
 
 
@@ -114,6 +116,12 @@ export type Org = Node & {
   id: Scalars['ID'];
   orgName: Scalars['String'];
   location: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
+  icon?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  homePage?: Maybe<Scalars['String']>;
   members?: Maybe<Array<Maybe<User>>>;
 };
 
@@ -184,7 +192,7 @@ export type MessagePayloadFragment = (
 
 export type OrgPayloadFragment = (
   { __typename?: 'Org' }
-  & Pick<Org, 'id' | 'orgName' | 'location'>
+  & Pick<Org, 'id' | 'orgName' | 'location' | 'email' | 'phoneNumber' | 'image' | 'icon' | 'description' | 'homePage'>
   & { members?: Maybe<Array<Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'userName'>
@@ -209,8 +217,14 @@ export type JoinOrgMutationVariables = Exact<{
 export type JoinOrgMutation = (
   { __typename?: 'Mutation' }
   & { joinOrg?: Maybe<(
-    { __typename?: 'RegularPayload' }
-    & Pick<RegularPayload, 'result' | 'message'>
+    { __typename?: 'OrgPayload' }
+    & { org?: Maybe<(
+      { __typename?: 'Org' }
+      & OrgPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
   )> }
 );
 
@@ -231,20 +245,6 @@ export type LoginUserMutation = (
   )> }
 );
 
-export type OrgRegisterMutationVariables = Exact<{
-  registerOrgName: Scalars['String'];
-  registerOrgLocation: Scalars['String'];
-}>;
-
-
-export type OrgRegisterMutation = (
-  { __typename?: 'Mutation' }
-  & { registerOrg?: Maybe<(
-    { __typename?: 'RegularPayload' }
-    & Pick<RegularPayload, 'result' | 'message'>
-  )> }
-);
-
 export type PostDialogMutationVariables = Exact<{
   DialogId: Scalars['String'];
   DialogContent: Scalars['String'];
@@ -259,6 +259,28 @@ export type PostDialogMutation = (
       { __typename?: 'Dialog' }
       & DialogPayloadFragment
     )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type RegisterOrgMutationVariables = Exact<{
+  orgName: Scalars['String'];
+  orgEmail: Scalars['String'];
+  orgPhoneNumber: Scalars['String'];
+  orgLocation: Scalars['String'];
+}>;
+
+
+export type RegisterOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { registerOrg?: Maybe<(
+    { __typename?: 'OrgPayload' }
+    & { org?: Maybe<(
+      { __typename?: 'Org' }
+      & OrgPayloadFragment
+    )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
     )> }
@@ -470,6 +492,12 @@ export const OrgPayloadFragmentDoc = gql`
   id
   orgName
   location
+  email
+  phoneNumber
+  image
+  icon
+  description
+  homePage
   members {
     id
     userName
@@ -491,11 +519,16 @@ export const UserPayloadFragmentDoc = gql`
 export const JoinOrgDocument = gql`
     mutation JoinOrg($OrgId: String!) {
   joinOrg(orgId: $OrgId) {
-    result
-    message
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
   }
 }
-    `;
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
 export type JoinOrgMutationFn = Apollo.MutationFunction<JoinOrgMutation, JoinOrgMutationVariables>;
 
 /**
@@ -558,41 +591,6 @@ export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<Lo
 export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
 export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
 export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
-export const OrgRegisterDocument = gql`
-    mutation OrgRegister($registerOrgName: String!, $registerOrgLocation: String!) {
-  registerOrg(name: $registerOrgName, location: $registerOrgLocation) {
-    result
-    message
-  }
-}
-    `;
-export type OrgRegisterMutationFn = Apollo.MutationFunction<OrgRegisterMutation, OrgRegisterMutationVariables>;
-
-/**
- * __useOrgRegisterMutation__
- *
- * To run a mutation, you first call `useOrgRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useOrgRegisterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [orgRegisterMutation, { data, loading, error }] = useOrgRegisterMutation({
- *   variables: {
- *      registerOrgName: // value for 'registerOrgName'
- *      registerOrgLocation: // value for 'registerOrgLocation'
- *   },
- * });
- */
-export function useOrgRegisterMutation(baseOptions?: Apollo.MutationHookOptions<OrgRegisterMutation, OrgRegisterMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<OrgRegisterMutation, OrgRegisterMutationVariables>(OrgRegisterDocument, options);
-      }
-export type OrgRegisterMutationHookResult = ReturnType<typeof useOrgRegisterMutation>;
-export type OrgRegisterMutationResult = Apollo.MutationResult<OrgRegisterMutation>;
-export type OrgRegisterMutationOptions = Apollo.BaseMutationOptions<OrgRegisterMutation, OrgRegisterMutationVariables>;
 export const PostDialogDocument = gql`
     mutation PostDialog($DialogId: String!, $DialogContent: String!) {
   postDialog(id: $DialogId, dialogContent: $DialogContent) {
@@ -633,6 +631,53 @@ export function usePostDialogMutation(baseOptions?: Apollo.MutationHookOptions<P
 export type PostDialogMutationHookResult = ReturnType<typeof usePostDialogMutation>;
 export type PostDialogMutationResult = Apollo.MutationResult<PostDialogMutation>;
 export type PostDialogMutationOptions = Apollo.BaseMutationOptions<PostDialogMutation, PostDialogMutationVariables>;
+export const RegisterOrgDocument = gql`
+    mutation RegisterOrg($orgName: String!, $orgEmail: String!, $orgPhoneNumber: String!, $orgLocation: String!) {
+  registerOrg(
+    name: $orgName
+    email: $orgEmail
+    phoneNumber: $orgPhoneNumber
+    location: $orgLocation
+  ) {
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type RegisterOrgMutationFn = Apollo.MutationFunction<RegisterOrgMutation, RegisterOrgMutationVariables>;
+
+/**
+ * __useRegisterOrgMutation__
+ *
+ * To run a mutation, you first call `useRegisterOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerOrgMutation, { data, loading, error }] = useRegisterOrgMutation({
+ *   variables: {
+ *      orgName: // value for 'orgName'
+ *      orgEmail: // value for 'orgEmail'
+ *      orgPhoneNumber: // value for 'orgPhoneNumber'
+ *      orgLocation: // value for 'orgLocation'
+ *   },
+ * });
+ */
+export function useRegisterOrgMutation(baseOptions?: Apollo.MutationHookOptions<RegisterOrgMutation, RegisterOrgMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterOrgMutation, RegisterOrgMutationVariables>(RegisterOrgDocument, options);
+      }
+export type RegisterOrgMutationHookResult = ReturnType<typeof useRegisterOrgMutation>;
+export type RegisterOrgMutationResult = Apollo.MutationResult<RegisterOrgMutation>;
+export type RegisterOrgMutationOptions = Apollo.BaseMutationOptions<RegisterOrgMutation, RegisterOrgMutationVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($email: String!, $password: String!, $userName: String!) {
   userRegister(email: $email, password: $password, userName: $userName) {

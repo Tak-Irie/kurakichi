@@ -12,10 +12,10 @@ export const MessageQuery = extendType({
       description: "get User's id, then show their own messages",
       resolve: async (_, __, context) => {
         // console.log('queryConfirm:');
-        const idResponse = getUserIdByCookie(context);
-        if (idResponse.result == false) return { error: { message: idResponse.errMessage } };
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
 
-        const domainResponse = await useGetMessagesUseCase.execute({ userId: idResponse.id });
+        const domainResponse = await useGetMessagesUseCase.execute({ userId: idOrErr });
         if (domainResponse.isLeft())
           return { error: { message: domainResponse.value.getErrorValue() } };
 
@@ -39,10 +39,10 @@ export const MessageMutation = extendType({
       },
       resolve: async (_, args, context) => {
         // console.log('arg:', args);
-        const idResponse = getUserIdByCookie(context);
-        if (idResponse.result == false) return { error: { message: idResponse.errMessage } };
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
         const domainResponse = await useSendMessageUseCase.execute({
-          senderId: idResponse.id,
+          senderId: idOrErr,
           receiverId: args.receiverId,
           textInput: args.textInput,
         });

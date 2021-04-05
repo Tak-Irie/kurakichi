@@ -14,6 +14,10 @@ export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
     id: org.getId(),
     orgName: org.getOrgName(),
     location: org.getOrgLocation(),
+    email: org.getEmail(),
+    phoneNumber: org.getProps().phoneNumber.getValue(),
+    description: 'UNKNOWN',
+    homePage: 'UNKNOWN',
     members,
   };
 

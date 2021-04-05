@@ -1,15 +1,14 @@
 import { MyContext } from './context';
 
-type IdResponse = {
-  result: boolean;
-  errMessage?: string;
-  id?: string;
+type NotAuthErr = {
+  error: {
+    message: string;
+  };
 };
-
 //TODO: return id:string or errorField:Object
-export function getUserIdByCookie(context: MyContext): IdResponse {
+export function getUserIdByCookie(context: MyContext): string | NotAuthErr {
   const id = context.req.session.userId;
-  if (id == undefined) return { result: false, errMessage: 'ログインを確認できませんでした' };
+  if (id == undefined) return { error: { message: 'ログインが確認できませんでした' } };
 
-  return { result: true, id };
+  return id;
 }

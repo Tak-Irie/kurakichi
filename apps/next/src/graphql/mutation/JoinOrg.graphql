@@ -1,6 +1,10 @@
 mutation JoinOrg($OrgId: String!) {
   joinOrg(orgId: $OrgId) {
-    result
-    message
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
   }
 }

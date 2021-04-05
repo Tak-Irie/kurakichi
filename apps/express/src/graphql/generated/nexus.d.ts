@@ -105,19 +105,25 @@ export interface NexusGenFieldTypes {
     changePassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     deleteUser: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     forgetPassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
-    joinOrg: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
+    joinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     login: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     logout: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
-    registerOrg: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
+    registerOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
+    description: string | null; // String
+    email: string; // String!
+    homePage: string | null; // String
+    icon: string | null; // String
     id: string; // ID!
+    image: string | null; // String
     location: string; // String!
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     orgName: string; // String!
+    phoneNumber: string; // String!
   }
   OrgPayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -179,19 +185,25 @@ export interface NexusGenFieldTypeNames {
     changePassword: 'RegularPayload'
     deleteUser: 'RegularPayload'
     forgetPassword: 'RegularPayload'
-    joinOrg: 'RegularPayload'
+    joinOrg: 'OrgPayload'
     login: 'UserPayload'
     logout: 'RegularPayload'
     postDialog: 'DialogPayload'
-    registerOrg: 'RegularPayload'
+    registerOrg: 'OrgPayload'
     sendMessage: 'MessagePayload'
     userRegister: 'UserPayload'
   }
   Org: { // field return type name
+    description: 'String'
+    email: 'String'
+    homePage: 'String'
+    icon: 'String'
     id: 'ID'
+    image: 'String'
     location: 'String'
     members: 'User'
     orgName: 'String'
+    phoneNumber: 'String'
   }
   OrgPayload: { // field return type name
     error: 'RegularError'
@@ -252,8 +264,10 @@ export interface NexusGenArgTypes {
       id: string; // String!
     }
     registerOrg: { // args
+      email: string; // String!
       location: string; // String!
       name: string; // String!
+      phoneNumber: string; // String!
     }
     sendMessage: { // args
       receiverId: string; // String!

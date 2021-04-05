@@ -1,4 +1,5 @@
 export * from './Button';
+export * from './IconButton';
 export * from './Cards';
 export * from './HeaderList';
 export * from './Input';
@@ -8,3 +9,6 @@ export * from './SVG';
 export * from './Text';
 export * from './YahooButton';
 export * from './SideBarItems';
+export * from './GridTemplate';
+export * from './GridItem';
+export * from './GridItemWithPic';

@@ -6,6 +6,12 @@ export const Org = objectType({
     t.implements('Node');
     t.nonNull.string('orgName');
     t.nonNull.string('location');
+    t.nonNull.string('email');
+    t.nonNull.string('phoneNumber');
+    t.string('image');
+    t.string('icon');
+    t.string('description');
+    t.string('homePage');
     t.field('members', { type: list('User') });
   },
 });

@@ -25,14 +25,20 @@ model User {
 }
 
 model Organization {
-  id        String   @id
-  name      String   @unique
-  adminId   String
-  location  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  admin     User     @relation("orgAdmin", fields: [adminId], references: [id])
-  members   User[]   @relation("orgMember")
+  id          String   @id
+  name        String   @unique
+  phone       String   @default("UNKNOWN")
+  email       String   @default("UNKNOWN")
+  location    String   @default("UNKNOWN")
+  description String   @default("UNKNOWN")
+  homePage    String   @default("UNKNOWN")
+  image       String   @default("UNKNOWN")
+  icon        String   @default("UNKNOWN")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  adminId     String
+  admin       User     @relation("orgAdmin", fields: [adminId], references: [id])
+  members     User[]   @relation("orgMember")
 }
 
 model Message {

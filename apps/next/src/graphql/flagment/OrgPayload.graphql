@@ -2,6 +2,12 @@ fragment OrgPayload on Org {
   id
   orgName
   location
+  email
+  phoneNumber
+  image
+  icon
+  description
+  homePage
   members {
     id
     userName

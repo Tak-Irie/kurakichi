@@ -31,11 +31,11 @@ type Mutation {
   changePassword(currentPass: String!, newPass: String!): RegularPayload
   deleteUser: RegularPayload
   forgetPassword(email: String!): RegularPayload
-  joinOrg(orgId: String!): RegularPayload
+  joinOrg(orgId: String!): OrgPayload
   login(email: String!, password: String!): UserPayload
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
-  registerOrg(location: String!, name: String!): RegularPayload
+  registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
@@ -47,11 +47,18 @@ interface Node {
 }
 
 type Org implements Node {
+  description: String
+  email: String!
+  homePage: String
+  icon: String
+
   """GUID for a resource"""
   id: ID!
+  image: String
   location: String!
   members: [User]
   orgName: String!
+  phoneNumber: String!
 }
 
 type OrgPayload {

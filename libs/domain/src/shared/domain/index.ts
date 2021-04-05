@@ -4,3 +4,6 @@ export * from './Identifier';
 export * from './UniqueEntityId';
 export * from './Validation';
 export * from './ValueObject';
+export * from './Email';
+export * from './ValidURL';
+export * from './PhoneNumber';

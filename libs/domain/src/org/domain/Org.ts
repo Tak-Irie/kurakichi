@@ -1,16 +1,18 @@
 import { Member } from '.';
-import { AggregateRoot } from '../../shared/domain/AggregateRoot';
-import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
-import { Result } from '../../shared/Result';
+import { Result, Email, ValidURL, UniqueEntityId, AggregateRoot, PhoneNumber } from '../../shared';
 import { OrgLocation } from './OrgLocation';
 import { OrgName } from './OrgName';
 
 interface OrgProps {
   id: UniqueEntityId;
   name: OrgName;
+  email: Email;
+  phoneNumber: PhoneNumber;
   location: OrgLocation;
   adminId: UniqueEntityId;
   members: Member[];
+  img: ValidURL | 'UNKNOWN';
+  homePage: string | 'UNKNOWN';
 }
 
 export class Org extends AggregateRoot<OrgProps> {
@@ -32,6 +34,10 @@ export class Org extends AggregateRoot<OrgProps> {
 
   public getOrgLocation(): string {
     return this.props.location.getValue();
+  }
+
+  public getEmail(): string {
+    return this.props.email.getValue();
   }
 
   public getMembers(): Member[] {

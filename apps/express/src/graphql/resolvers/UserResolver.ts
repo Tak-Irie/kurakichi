@@ -33,11 +33,11 @@ export const userQuery = extendType({
       resolve: async (_, __, context) => {
         // console.log('me query called');
 
-        const idRes = getUserIdByCookie(context);
-        // console.log('idRes:', idRes);
-        if (idRes.result === false) return { message: idRes.errMessage };
+        const idOrErr = getUserIdByCookie(context);
+        // console.log('idOrErr:', idOrErr);
+        if (typeof idOrErr === 'object') return idOrErr;
 
-        const result = await useGetUserById.execute(idRes.id);
+        const result = await useGetUserById.execute(idOrErr);
         // console.log('res:', result);
         if (result.isLeft()) return { message: result.value.getErrorValue() };
 

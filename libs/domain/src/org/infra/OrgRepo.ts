@@ -21,7 +21,16 @@ export class OrgRepo implements IOrgRepo {
     if (existed === true) return undefined;
 
     const data = await OrgMapper.toStore(org);
-    const result = await this.prisma.organization.create({ data });
+    const result = await this.prisma.$transaction([
+      this.prisma.organization.create({
+        data,
+      }),
+      this.prisma.user.update({
+        where: { id: data.adminId },
+        data: { belongOrg: { connect: { id: data.id } }, role: 'PRO' },
+      }),
+    ]);
+
     if (result == undefined) return undefined;
     return org;
   }

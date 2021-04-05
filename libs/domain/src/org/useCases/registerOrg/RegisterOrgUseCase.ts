@@ -7,6 +7,8 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
+  Email,
+  PhoneNumber,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
 import { OrgLocation } from '../../domain/OrgLocation';
@@ -17,16 +19,15 @@ type OrgInput = {
   adminId: string;
   orgName: string;
   location: string;
-};
-type RegisterOrgDTO = {
-  some: unknown;
+  phoneNumber: string;
+  email: string;
 };
 
-type OrgTypes = OrgName | OrgLocation;
+type OrgTypes = OrgName | OrgLocation | Email | PhoneNumber;
 
 type RegisterOrgResponse = Either<
-  SomeError | UnexpectedError | StoreConnectionError | Result<OrgTypes> | Result<Org>,
-  Result<RegisterOrgDTO>
+  SomeError | UnexpectedError | StoreConnectionError | Result<OrgTypes> | Result<false>,
+  Result<Org>
 >;
 
 export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOrgResponse>> {
@@ -35,34 +36,42 @@ export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOr
   }
   public async execute(req: OrgInput): Promise<RegisterOrgResponse> {
     try {
-      const orgNameOrError = OrgName.create({ name: req.orgName });
-      const orgLocationOrError = OrgLocation.create({ location: req.location });
+      const nameOrError = OrgName.create({ name: req.orgName });
+      const locationOrError = OrgLocation.create({ location: req.location });
+      const emailOrError = Email.create({ email: req.email });
+      const phoneOrError = PhoneNumber.create({ phoneNumber: req.phoneNumber });
 
-      const verifiedResult = Result.verifyResults<OrgTypes>([orgNameOrError, orgLocationOrError]);
+      const verifiedResult = Result.verifyResults<OrgTypes>([
+        nameOrError,
+        locationOrError,
+        emailOrError,
+        phoneOrError,
+      ]);
 
       if (verifiedResult.isFailure) {
         return left(Result.fail<OrgTypes>(verifiedResult.getErrorValue()));
       }
 
-      const name = orgNameOrError.getValue();
-      const location = orgLocationOrError.getValue();
-
       const orgOrError = Org.create({
         id: UniqueEntityId.create(),
-        // FIXME:
+        // FIXME:forget to write, what should I fix.
         adminId: new UniqueEntityId(req.adminId),
-        name,
-        location,
+        name: nameOrError.getValue(),
+        email: emailOrError.getValue(),
+        location: locationOrError.getValue(),
+        phoneNumber: phoneOrError.getValue(),
+        img: 'UNKNOWN',
+        homePage: 'UNKNOWN',
         members: [],
       });
 
-      if (orgOrError.isFailure) return left(Result.fail<Org>(orgOrError.getErrorValue()));
+      if (orgOrError.isFailure) return left(Result.fail<false>(orgOrError.getErrorValue()));
 
       const result = await this.OrgRepo.registerOrg(orgOrError.getValue());
 
       if (result == undefined) return left(new StoreConnectionError());
 
-      return right(Result.success<RegisterOrgDTO>());
+      return right(Result.success<Org>());
     } catch (err) {
       return left(new UnexpectedError(err));
     }
