@@ -7,3 +7,4 @@ export * from './LoadingSpinner';
 export * from './SVG';
 export * from './Text';
 export * from './YahooButton';
+export * from './SideBarItems';

@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
 import { MiddleButton } from '../components/presentational/atoms/Button';
-import { Card } from '../components/presentational/atoms/Cards';
+import { Card, SmallCard } from '@next/ui';
 import { useJoinOrgMutation, useGetOrgsQuery } from '../graphql/generated/graphql';
+import Link from 'next/link';
 
 const Orgs: NextPage = () => {
   const { data, loading, error, refetch } = useGetOrgsQuery();
@@ -28,17 +29,18 @@ const Orgs: NextPage = () => {
       {error && <p>{error.message}</p>}
       {data &&
         data.getOrgs.orgs.map((org) => (
-          <div className="m-3" key={org.id}>
+          <div className="m-3">
             <ul>
-              <Card
-                title={org.orgName}
-                content={org.location}
-                link={
-                  <MiddleButton type="button" onClick={(e) => handleCardClick(org.id, e)}>
-                    登録申請
-                  </MiddleButton>
-                }
-              />
+              <SmallCard title={org.orgName} content={org.location} key={org.id}>
+                <MiddleButton type="button">
+                  <Link href="/org/[id]" as={`/org/${org.id}`}>
+                    <a>組織詳細</a>
+                  </Link>
+                </MiddleButton>
+                <MiddleButton type="button" onClick={(e) => handleCardClick(org.id, e)}>
+                  登録申請
+                </MiddleButton>
+              </SmallCard>
             </ul>
           </div>
         ))}
