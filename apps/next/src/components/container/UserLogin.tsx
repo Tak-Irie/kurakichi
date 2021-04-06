@@ -23,7 +23,7 @@ const UserLogin: FC = () => {
         variables: { ...value },
         fetchPolicy: 'no-cache',
       });
-      router.replace('/private');
+      router.replace('/myPage');
     } catch (err) {
       console.log('mutationErr:', err);
     }
@@ -38,7 +38,7 @@ const UserLogin: FC = () => {
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
-      {data && <p>{data.login.user.userName} data</p>}
+      {data && <p>{data?.login.user.userName} data</p>}
     </>
   );
 };

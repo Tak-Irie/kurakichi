@@ -1,0 +1,8 @@
+fragment RoomPayload on Room {
+  id
+  roomName
+  members {
+    id
+    userName
+  }
+}

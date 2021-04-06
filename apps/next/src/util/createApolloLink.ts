@@ -21,7 +21,7 @@ const wsLink = process.browser
     })
   : null;
 
-const splitLink = process.browser
+export const splitApolloLink = process.browser
   ? split(
       ({ query }) => {
         const definition = getMainDefinition(query);
@@ -31,5 +31,3 @@ const splitLink = process.browser
       httpLink,
     )
   : httpLink;
-
-export { splitLink };

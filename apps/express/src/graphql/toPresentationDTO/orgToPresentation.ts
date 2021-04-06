@@ -1,8 +1,9 @@
 import { Org } from '@kurakichi/domain';
 import { NexusGenFieldTypes } from '../generated/nexus';
+import { UserDTO } from './userToPresentation';
 
 export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
-  const members: NexusGenFieldTypes['User'][] = org.getMembers().map((member) => {
+  const members: UserDTO[] = org.getMembers().map((member) => {
     return {
       id: member.getId(),
       email: member.getEmail(),
@@ -10,14 +11,18 @@ export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
     };
   });
 
+  const props = org.getProps();
+
   const data = {
     id: org.getId(),
     orgName: org.getOrgName(),
     location: org.getOrgLocation(),
     email: org.getEmail(),
-    phoneNumber: org.getProps().phoneNumber.getValue(),
+    phoneNumber: props.phoneNumber.getValue(),
     description: 'UNKNOWN',
     homePage: 'UNKNOWN',
+    icon: props.icon,
+    image: 'UNKNOWN',
     members,
   };
 

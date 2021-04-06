@@ -5,22 +5,22 @@ import { Member, Org } from '../domain';
 import { OrgLocation } from '../domain/OrgLocation';
 import { OrgName } from '../domain/OrgName';
 
-type ToDomainProps = {
-  org: StoredOrg & {
-    members?: StoredUser[];
-  };
+type StoredOrgRelation = StoredOrg & {
+  members?: StoredUser[];
 };
+
 export class OrgMapper {
-  public static async ToDomain(props: ToDomainProps): Promise<Org> {
-    const orgName = OrgName.create({ name: props.org.name });
-    const orgLocation = OrgLocation.create({ location: props.org.location });
-    const orgEmail = Email.create({ email: props.org.email });
-    const orgPhone = PhoneNumber.create({ phoneNumber: props.org.phone });
+  public static ToDomain(props: StoredOrgRelation): Org {
+    const orgName = OrgName.create({ name: props.name });
+
+    const orgLocation = OrgLocation.create({ location: props.location });
+    const orgEmail = Email.create({ email: props.email });
+    const orgPhone = PhoneNumber.create({ phoneNumber: props.phone });
 
     let members: Member[];
 
-    if (props.org.members) {
-      members = props.org.members.map((member) => {
+    if (props.members) {
+      members = props.members.map((member) => {
         return new Member({
           id: new UniqueEntityId(member.id),
           memberName: UserName.create({ userName: member.name }).getValue(),
@@ -30,15 +30,16 @@ export class OrgMapper {
     }
 
     const OrgResult = new Org({
-      id: new UniqueEntityId(props.org.id),
+      id: new UniqueEntityId(props.id),
       name: orgName.getValue(),
       location: orgLocation.getValue(),
-      adminId: new UniqueEntityId(props.org.adminId),
+      adminId: new UniqueEntityId(props.adminId),
       members,
       email: orgEmail.getValue(),
       phoneNumber: orgPhone.getValue(),
       homePage: 'UNKNOWN',
       img: 'UNKNOWN',
+      icon: 'UNKNOWN',
     });
 
     return OrgResult;

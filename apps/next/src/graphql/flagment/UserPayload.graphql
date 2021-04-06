@@ -1,4 +1,19 @@
 fragment UserPayload on User {
   id
   userName
+  email
+  picture
+  Role
+  belongedOrg {
+    id
+    orgName
+  }
+  belongedRoom {
+    id
+    roomName
+  }
+  messages {
+    id
+    content
+  }
 }

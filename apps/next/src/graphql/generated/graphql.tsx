@@ -19,6 +19,7 @@ export type Dialog = Node & {
   /** GUID for a resource */
   id: Scalars['ID'];
   dialogContent: Scalars['String'];
+  room: Room;
 };
 
 export type DialogPayload = {
@@ -160,6 +161,20 @@ export type RegularPayload = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type Room = Node & {
+  __typename?: 'Room';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  roomName?: Maybe<Scalars['String']>;
+  members?: Maybe<Array<Maybe<User>>>;
+};
+
+export type RoomPayload = {
+  __typename?: 'RoomPayload';
+  room?: Maybe<Room>;
+  error?: Maybe<RegularError>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   dialogPosted?: Maybe<Dialog>;
@@ -170,7 +185,13 @@ export type User = Node & {
   /** GUID for a resource */
   id: Scalars['ID'];
   email: Scalars['String'];
-  userName?: Maybe<Scalars['String']>;
+  userName: Scalars['String'];
+  /** user's image */
+  picture?: Maybe<Scalars['String']>;
+  belongedOrg?: Maybe<Array<Maybe<Org>>>;
+  belongedRoom?: Maybe<Array<Maybe<Room>>>;
+  messages?: Maybe<Array<Maybe<Message>>>;
+  Role?: Maybe<UserRole>;
 };
 
 export type UserPayload = {
@@ -180,9 +201,18 @@ export type UserPayload = {
   error?: Maybe<RegularError>;
 };
 
+export enum UserRole {
+  User = 'USER',
+  Pro = 'PRO'
+}
+
 export type DialogPayloadFragment = (
   { __typename?: 'Dialog' }
   & Pick<Dialog, 'id' | 'dialogContent'>
+  & { room: (
+    { __typename?: 'Room' }
+    & Pick<Room, 'id'>
+  ) }
 );
 
 export type MessagePayloadFragment = (
@@ -204,9 +234,28 @@ export type RegularErrorFragment = (
   & Pick<RegularError, 'message' | 'invalidField'>
 );
 
+export type RoomPayloadFragment = (
+  { __typename?: 'Room' }
+  & Pick<Room, 'id' | 'roomName'>
+  & { members?: Maybe<Array<Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'userName'>
+  )>>> }
+);
+
 export type UserPayloadFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'userName'>
+  & Pick<User, 'id' | 'userName' | 'email' | 'picture' | 'Role'>
+  & { belongedOrg?: Maybe<Array<Maybe<(
+    { __typename?: 'Org' }
+    & Pick<Org, 'id' | 'orgName'>
+  )>>>, belongedRoom?: Maybe<Array<Maybe<(
+    { __typename?: 'Room' }
+    & Pick<Room, 'id' | 'roomName'>
+  )>>>, messages?: Maybe<Array<Maybe<(
+    { __typename?: 'Message' }
+    & Pick<Message, 'id' | 'content'>
+  )>>> }
 );
 
 export type JoinOrgMutationVariables = Exact<{
@@ -479,6 +528,9 @@ export const DialogPayloadFragmentDoc = gql`
     fragment DialogPayload on Dialog {
   id
   dialogContent
+  room {
+    id
+  }
 }
     `;
 export const MessagePayloadFragmentDoc = gql`
@@ -510,10 +562,35 @@ export const RegularErrorFragmentDoc = gql`
   invalidField
 }
     `;
+export const RoomPayloadFragmentDoc = gql`
+    fragment RoomPayload on Room {
+  id
+  roomName
+  members {
+    id
+    userName
+  }
+}
+    `;
 export const UserPayloadFragmentDoc = gql`
     fragment UserPayload on User {
   id
   userName
+  email
+  picture
+  Role
+  belongedOrg {
+    id
+    orgName
+  }
+  belongedRoom {
+    id
+    roomName
+  }
+  messages {
+    id
+    content
+  }
 }
     `;
 export const JoinOrgDocument = gql`

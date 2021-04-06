@@ -9,14 +9,14 @@ describe('ユーザー登録テスト', () => {
     const result = await registerUserUseCase.execute({
       email: validUser.getEmail(),
       password: validUser.getPassword(),
-      username: validUser.getUsername(),
+      userName: validUser.getUsername(),
     });
 
     expect(result.isRight()).toBeTruthy();
     done();
   });
   test('短すぎる名前により登録失敗', async (done) => {
-    const invalidNameMock = { username: 'f', email: 'valid@test.com', password: 'validPassword' };
+    const invalidNameMock = { userName: 'f', email: 'valid@test.com', password: 'validPassword' };
     const result = await registerUserUseCase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
@@ -25,7 +25,7 @@ describe('ユーザー登録テスト', () => {
   });
   test('長過ぎる名前により登録失敗', async (done) => {
     const invalidNameMock = {
-      username: 'YourNameIsSoLongPleaseChangeThis',
+      userName: 'YourNameIsSoLongPleaseChangeThis',
       email: 'valid@test.com',
       password: 'validPassword',
     };
@@ -36,7 +36,7 @@ describe('ユーザー登録テスト', () => {
     done();
   });
   test('不正なメールアドレスにより登録失敗', async (done) => {
-    const invalidNameMock = { username: 'validName', email: 'invalid', password: 'validPassword' };
+    const invalidNameMock = { userName: 'validName', email: 'invalid', password: 'validPassword' };
     const result = await registerUserUseCase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
@@ -44,7 +44,7 @@ describe('ユーザー登録テスト', () => {
     done();
   });
   test('不正なパスワードにより登録失敗', async (done) => {
-    const invalidNameMock = { username: 'validName', email: 'valid@test.com', password: 'invalid' };
+    const invalidNameMock = { userName: 'validName', email: 'valid@test.com', password: 'invalid' };
     const result = await registerUserUseCase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
@@ -53,7 +53,7 @@ describe('ユーザー登録テスト', () => {
   });
   test('メールアドレスの重複により登録失敗', async (done) => {
     const invalidNameMock = {
-      username: 'validName',
+      userName: 'validName',
       email: 'dupulicate@test.com',
       password: 'validPassword',
     };

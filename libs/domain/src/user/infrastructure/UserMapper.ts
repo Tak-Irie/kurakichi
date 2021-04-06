@@ -1,9 +1,15 @@
-import { User as StoredUser } from '@prisma/client';
+import { User as StoredUser, Message, Organization, Room } from '@prisma/client';
 import { UniqueEntityId } from '../../shared';
 import { User, UserEmail, UserName, UserPassword } from '../domain';
 
+type StoredUserRelation = StoredUser & {
+  receivedMessages?: Message[];
+  belongOrg?: Organization[];
+  belongRoom?: Room[];
+};
+
 export class UserMapper {
-  public static async ToDomain(storedUser: StoredUser): Promise<User> {
+  public static async ToDomain(storedUser: StoredUserRelation): Promise<User> {
     let password: UserPassword | undefined;
     const userNameResult = UserName.create({ userName: storedUser.name });
 

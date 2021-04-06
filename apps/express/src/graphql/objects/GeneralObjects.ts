@@ -12,6 +12,8 @@ export const Node = interfaceType({
       ? 'User'
       : 'dialogName' in data
       ? 'Dialog'
+      : 'roomName' in data
+      ? 'Room'
       : undefined;
   },
   definition(t) {

@@ -3,7 +3,7 @@ import { UniqueEntityId } from '../../shared';
 import { Message, MessageContent } from '../domain';
 
 export class MessageMapper {
-  public static async ToDomain(storedMessage: StoredMessage): Promise<Message> {
+  public static ToDomain(storedMessage: StoredMessage): Message {
     const MessageResult = new Message({
       id: new UniqueEntityId(storedMessage.id),
       content: new MessageContent({ text: storedMessage.text }),

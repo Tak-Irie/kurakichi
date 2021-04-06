@@ -18,6 +18,7 @@ export class UserRepository implements IUserRepository {
   async getUserByUserId(userId: UniqueEntityId): Promise<User | undefined> {
     const result = await this.prisma.user.findUnique({
       where: { id: userId.getId() },
+      include: { receivedMessages: true, belongOrg: true, belongRoom: true },
     });
     if (!result) return undefined;
 

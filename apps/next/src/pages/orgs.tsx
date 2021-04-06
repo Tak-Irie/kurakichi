@@ -12,7 +12,7 @@ const Orgs: NextPage = () => {
 
   const handleCardClick = (id: string, e: SyntheticEvent) => {
     e.preventDefault();
-    console.log('fire:');
+    console.log('fire, id is:', id);
     joinOrg({
       variables: { OrgId: id },
     });
@@ -29,12 +29,12 @@ const Orgs: NextPage = () => {
       {error && <p>{error.message}</p>}
       {data &&
         data.getOrgs.orgs.map((org) => (
-          <div className="m-3">
+          <div className="m-3" key={org.id}>
             <ul>
-              <SmallCard title={org.orgName} content={org.location} key={org.id}>
+              <SmallCard title={org.orgName} content={org.location}>
                 <MiddleButton type="button">
                   <Link href="/org/[id]" as={`/org/${org.id}`}>
-                    <a>組織詳細</a>
+                    <a href="/org/[id]">組織詳細</a>
                   </Link>
                 </MiddleButton>
                 <MiddleButton type="button" onClick={(e) => handleCardClick(org.id, e)}>
@@ -47,6 +47,7 @@ const Orgs: NextPage = () => {
       {joinData?.joinOrg.org && (
         <p>{joinData.joinOrg.org.orgName}への申請が完了しました。申請許可をお待ち下さい</p>
       )}
+      {joinData?.joinOrg.error && <p>{joinData.joinOrg.error.message}</p>}
       <MiddleButton type="button" onClick={handleClick}>
         再読み込み
       </MiddleButton>

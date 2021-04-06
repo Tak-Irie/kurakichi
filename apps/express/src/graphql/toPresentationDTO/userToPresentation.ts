@@ -1,7 +1,12 @@
 import { User } from '@kurakichi/domain';
-import { NexusGenFieldTypes } from '../generated/nexus';
 
-export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
+export type UserDTO = {
+  id: string;
+  email: string;
+  userName: string;
+};
+
+export const userToPresentation = (user: User): UserDTO => {
   const data = {
     id: user.getId(),
     email: user.getEmail(),

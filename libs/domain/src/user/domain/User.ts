@@ -1,6 +1,7 @@
 import { AggregateRoot } from '../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
+import { Message } from './Message';
 // import { UserCreated } from './events/UserCreated';
 import { UserEmail } from './UserEmail';
 import { UserName } from './UserName';
@@ -10,12 +11,11 @@ interface UserProps {
   id: UniqueEntityId;
   userName: UserName;
   email: UserEmail;
+  messages?: Message[];
   password?: UserPassword;
   ssoSub?: string;
   picture?: string;
   role?: 'USER' | 'PRO' | 'SYSADMIN';
-  // firstName?: string;
-  // lastName?: string;
 }
 
 export class User extends AggregateRoot<UserProps> {

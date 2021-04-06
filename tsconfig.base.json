@@ -27,6 +27,9 @@
       ],
       "@next/ui": [
         "apps/next/src/components/presentational"
+      ],
+      "@next/container": [
+        "apps/next/src/components/container"
       ]
     }
   },

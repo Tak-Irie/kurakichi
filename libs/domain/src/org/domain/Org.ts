@@ -11,6 +11,7 @@ interface OrgProps {
   location: OrgLocation;
   adminId: UniqueEntityId;
   members: Member[];
+  icon: string | 'UNKNOWN';
   img: ValidURL | 'UNKNOWN';
   homePage: string | 'UNKNOWN';
 }

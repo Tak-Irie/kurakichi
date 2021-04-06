@@ -39,6 +39,7 @@ export class LoginUserUseCase implements IUseCase<LoginUserDTO, Promise<LoginUse
         Result.success<UserReadModel>({
           id: foundUser.getId(),
           email: foundUser.getEmail(),
+          userName: foundUser.getUsername(),
         }),
       );
     } catch (err) {

@@ -9,3 +9,4 @@ export * from './UserChangePassword';
 export * from './UserDeleteButton';
 export * from './UserLogin';
 export * from './YahooLoginButton';
+export * from './GetOrgDetail';

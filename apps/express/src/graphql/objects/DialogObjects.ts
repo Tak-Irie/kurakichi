@@ -5,6 +5,7 @@ export const Dialog = objectType({
   definition(t) {
     t.implements('Node');
     t.nonNull.string('dialogContent');
+    t.nonNull.field('room', { type: 'Room' });
   },
 });
 

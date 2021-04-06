@@ -62,6 +62,7 @@ export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOr
         phoneNumber: phoneOrError.getValue(),
         img: 'UNKNOWN',
         homePage: 'UNKNOWN',
+        icon: 'UNKNOWN',
         members: [],
       });
 

@@ -39,9 +39,7 @@ export class OrgRepo implements IOrgRepo {
     const orgs = await this.prisma.organization.findMany({ include: { members: true } });
     // console.log('repoOrgs:', orgs);
 
-    const toDomainOrgs = await Promise.all(
-      orgs.map(async (org) => await OrgMapper.ToDomain({ org })),
-    );
+    const toDomainOrgs = orgs.map((org) => OrgMapper.ToDomain(org));
     // console.log('toDomOrgs:', toDomainOrgs);
 
     return toDomainOrgs;
@@ -54,7 +52,7 @@ export class OrgRepo implements IOrgRepo {
     });
     if (orgResult == undefined) return undefined;
 
-    const data = await OrgMapper.ToDomain({ org: orgResult });
+    const data = await OrgMapper.ToDomain(orgResult);
     return data;
   }
 

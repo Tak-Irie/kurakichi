@@ -1,18 +1,23 @@
 import { FC } from 'react';
 
 type GridItemWithPicProps = {
-  imgSrc?: string;
   name: string;
   description: string;
+  imgSrc?: string;
+  key?: string;
 };
 
 export const GridItemWithPic: FC<GridItemWithPicProps> = ({
   name = '日本 太郎',
   description = '架空の人物',
   imgSrc = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=bYR969hCec&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  key,
 }) => {
   return (
-    <div className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500">
+    <div
+      key={key}
+      className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500"
+    >
       <div className="flex-shrink-0">
         <img className="h-10 w-10 rounded-full" src={imgSrc} alt="" />
       </div>

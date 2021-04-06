@@ -43,14 +43,16 @@ export const orgMutation = extendType({
         orgId: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
+        console.log('arg:', args);
         const idOrErr = getUserIdByCookie(context);
+        console.log('id:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
 
         const result = await useJoinOrgsUseCase.execute({
           joinUserId: idOrErr,
           joinedOrgId: args.orgId,
         });
-
+        console.log('result:', result);
         if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
         return { org: result.value.getValue() };
       },

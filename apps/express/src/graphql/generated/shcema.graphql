@@ -7,6 +7,7 @@ type Dialog implements Node {
 
   """GUID for a resource"""
   id: ID!
+  room: Room!
 }
 
 type DialogPayload {
@@ -87,20 +88,44 @@ type RegularPayload {
   result: Boolean
 }
 
+type Room implements Node {
+  """GUID for a resource"""
+  id: ID!
+  members: [User]
+  roomName: String
+}
+
+type RoomPayload {
+  error: RegularError
+  room: Room
+}
+
 type Subscription {
   dialogPosted: Dialog
 }
 
 type User implements Node {
+  Role: UserRole
+  belongedOrg: [Org]
+  belongedRoom: [Room]
   email: String!
 
   """GUID for a resource"""
   id: ID!
-  userName: String
+  messages: [Message]
+
+  """user's image"""
+  picture: String
+  userName: String!
 }
 
 type UserPayload {
   error: RegularError
   user: User
   users: [User]
+}
+
+enum UserRole {
+  PRO
+  USER
 }
