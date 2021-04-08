@@ -1,10 +1,6 @@
 import { NextPage } from 'next';
-import Image from 'next/image';
-import { Card, SmallCard, LightningSVG, SideBar, ActivityTable } from '@next/ui';
-import Link from 'next/link';
-import { GetMessages } from '../../components/container/';
 
-const PlayGround: NextPage = () => {
+const MyOrg: NextPage = () => {
   return (
     <div>
       <div className="h-screen flex overflow-hidden bg-gray-100">
@@ -143,4 +139,4 @@ const PlayGround: NextPage = () => {
   );
 };
 
-export default PlayGround;
+export default MyOrg;

@@ -22,6 +22,7 @@ export const userQuery = extendType({
         const users = await useGetUsersUseCase.execute();
         if (users.isLeft()) return { error: { message: users.value.getErrorValue() } };
         const domainData = users.value.getValue();
+        // console.log('domainData:', domainData);
         const gqlField = domainData.map((user) => userToPresentation(user));
 
         return { users: gqlField };
@@ -32,19 +33,18 @@ export const userQuery = extendType({
       type: 'UserPayload',
       resolve: async (_, __, context) => {
         // console.log('me query called');
-
         const idOrErr = getUserIdByCookie(context);
         // console.log('idOrErr:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
 
-        const result = await useGetUserById.execute(idOrErr);
+        const useCaseResult = await useGetUserById.execute(idOrErr);
         // console.log('res:', result);
-        if (result.isLeft()) return { message: result.value.getErrorValue() };
+        if (useCaseResult.isLeft()) return { message: useCaseResult.value.getErrorValue() };
 
-        const domainUser = result.value.getValue();
+        const gqlField = userToPresentation(useCaseResult.value.getValue());
         // console.log('domainUser:', domainUser);
         return {
-          user: domainUser,
+          user: gqlField,
         };
       },
     });
@@ -80,12 +80,13 @@ export const userMutation = extendType({
       },
       resolve: async (_, args, context) => {
         // console.log('arg:', args);
-        const user = await useLoginUserUseCase.execute({ ...args });
-        if (user.isLeft()) return { error: { message: user.value.getErrorValue() } };
-        const data = user.value.getValue();
-        // console.log('data:', data);
-        context.req.session.userId = data.id;
-        return { user: data };
+        const useCaseResult = await useLoginUserUseCase.execute({ ...args });
+        if (useCaseResult.isLeft())
+          return { error: { message: useCaseResult.value.getErrorValue() } };
+        const gqlUser = userToPresentation(useCaseResult.value.getValue());
+        // console.log('gqluser:', gqlUser);
+        context.req.session.userId = gqlUser.id;
+        return { user: gqlUser };
       },
     });
     // TODO::check below

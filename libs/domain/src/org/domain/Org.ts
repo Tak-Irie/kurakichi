@@ -14,6 +14,7 @@ interface OrgProps {
   icon: string | 'UNKNOWN';
   img: ValidURL | 'UNKNOWN';
   homePage: string | 'UNKNOWN';
+  messages?: UniqueEntityId[];
 }
 
 export class Org extends AggregateRoot<OrgProps> {

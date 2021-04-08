@@ -4,7 +4,7 @@ export const Message = objectType({
   name: 'Message',
   definition(t) {
     t.implements('Node');
-    t.nonNull.string('content');
+    t.string('content');
   },
 });
 

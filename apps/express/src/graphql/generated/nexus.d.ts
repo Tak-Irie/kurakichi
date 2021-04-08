@@ -36,7 +36,7 @@ export interface NexusGenObjects {
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
   Message: { // root type
-    content: string; // String!
+    content?: string | null; // String
     id: string; // ID!
   }
   MessagePayload: { // root type
@@ -71,14 +71,14 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
-    Role?: NexusGenEnums['UserRole'] | null; // UserRole
-    belongedOrg?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
-    belongedRoom?: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
-    email: string; // String!
+    belongOrg?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    belongRoom?: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
+    email?: string | null; // String
     id: string; // ID!
     messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
     picture?: string | null; // String
-    userName: string; // String!
+    role?: NexusGenEnums['UserRole'] | null; // UserRole
+    userName?: string | null; // String
   }
   UserPayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -100,16 +100,16 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Dialog: { // field return type
-    dialogContent: string; // String!
+    dialogContent: string | null; // String
     id: string; // ID!
-    room: NexusGenRootTypes['Room']; // Room!
+    room: NexusGenRootTypes['Room'] | null; // Room
   }
   DialogPayload: { // field return type
     dialog: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
   Message: { // field return type
-    content: string; // String!
+    content: string | null; // String
     id: string; // ID!
   }
   MessagePayload: { // field return type
@@ -131,15 +131,15 @@ export interface NexusGenFieldTypes {
   }
   Org: { // field return type
     description: string | null; // String
-    email: string; // String!
+    email: string | null; // String
     homePage: string | null; // String
     icon: string | null; // String
     id: string; // ID!
     image: string | null; // String
-    location: string; // String!
+    location: string | null; // String
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    orgName: string; // String!
-    phoneNumber: string; // String!
+    orgName: string | null; // String
+    phoneNumber: string | null; // String
   }
   OrgPayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -174,14 +174,14 @@ export interface NexusGenFieldTypes {
     dialogPosted: NexusGenRootTypes['Dialog'] | null; // Dialog
   }
   User: { // field return type
-    Role: NexusGenEnums['UserRole'] | null; // UserRole
-    belongedOrg: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
-    belongedRoom: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
-    email: string; // String!
+    belongOrg: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    belongRoom: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
+    email: string | null; // String
     id: string; // ID!
     messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
     picture: string | null; // String
-    userName: string; // String!
+    role: NexusGenEnums['UserRole'] | null; // UserRole
+    userName: string | null; // String
   }
   UserPayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -269,13 +269,13 @@ export interface NexusGenFieldTypeNames {
     dialogPosted: 'Dialog'
   }
   User: { // field return type name
-    Role: 'UserRole'
-    belongedOrg: 'Org'
-    belongedRoom: 'Room'
+    belongOrg: 'Org'
+    belongRoom: 'Room'
     email: 'String'
     id: 'ID'
     messages: 'Message'
     picture: 'String'
+    role: 'UserRole'
     userName: 'String'
   }
   UserPayload: { // field return type name

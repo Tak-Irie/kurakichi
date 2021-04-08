@@ -27,7 +27,7 @@ export class OrgRepo implements IOrgRepo {
       }),
       this.prisma.user.update({
         where: { id: data.adminId },
-        data: { belongOrg: { connect: { id: data.id } }, role: 'PRO' },
+        data: { belongOrgs: { connect: { id: data.id } }, role: 'PRO' },
       }),
     ]);
 
@@ -52,23 +52,42 @@ export class OrgRepo implements IOrgRepo {
     });
     if (orgResult == undefined) return undefined;
 
-    const data = await OrgMapper.ToDomain(orgResult);
+    const data = OrgMapper.ToDomain(orgResult);
     return data;
   }
 
-  async registerMember(orgId: UniqueEntityId, MemberId: UniqueEntityId): Promise<boolean> {
+  async acceptJoinOrg(orgId: UniqueEntityId, MemberId: UniqueEntityId): Promise<boolean> {
     const userId = MemberId.getId();
-    const result = await this.prisma.organization.update({
-      where: { id: orgId.getId() },
-      data: {
-        members: {
-          connect: { id: userId },
-          update: { where: { id: userId }, data: { role: 'PRO' } },
+    const _orgId = orgId.getId();
+
+    const result = await this.prisma.$transaction([
+      this.prisma.organization.update({
+        where: { id: _orgId },
+        data: {
+          members: {
+            connect: { id: userId },
+            update: { where: { id: userId }, data: { role: 'PRO' } },
+          },
         },
-      },
-    });
+      }),
+      this.prisma.organization.delete({
+        where: { id: _orgId },
+        select: { requestedMembers: { where: { id: userId } } },
+      }),
+    ]);
 
     if (result == undefined) return false;
     return true;
+  }
+
+  async requestJoinOrg(reqId: UniqueEntityId, orgId: UniqueEntityId): Promise<Org | false> {
+    const result = await this.prisma.organization.update({
+      where: { id: orgId.getId() },
+      data: { requestedMembers: { connect: { id: reqId.getId() } } },
+    });
+    if (result == undefined) return false;
+
+    const data = OrgMapper.ToDomain(result);
+    return data;
   }
 }

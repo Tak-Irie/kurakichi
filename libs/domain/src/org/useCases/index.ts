@@ -3,12 +3,13 @@ import { OrgRepo } from '../infra/OrgRepo';
 import { RegisterOrgUseCase } from './registerOrg//RegisterOrgUseCase';
 import { GetOrgsUseCase } from './getOrgs/getOrgsUseCase';
 import { GetOrgUseCase } from './getOrg/getOrgUseCase';
-
-import { JoinOrgUseCase } from './joinOrg/joinOrgUseCase';
+import { AcceptJoinOrgUseCase } from './acceptJoinOrg/acceptJoinOrgUseCase';
+import { RequestJoinOrgUseCase } from './requestJoinOrg/requestJoinOrgUseCase';
 
 const orgRepo = new OrgRepo();
 
 export const useRegisterOrgUseCase = new RegisterOrgUseCase(orgRepo);
 export const useGetOrgsUseCase = new GetOrgsUseCase(orgRepo);
 export const useGetOrgUseCase = new GetOrgUseCase(orgRepo);
-export const useJoinOrgsUseCase = new JoinOrgUseCase(orgRepo);
+export const useJoinOrgsUseCase = new AcceptJoinOrgUseCase(orgRepo);
+export const useRequestJoinOrgsUseCase = new RequestJoinOrgUseCase(orgRepo);

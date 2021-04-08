@@ -9,10 +9,10 @@ type Member = {
 };
 
 type OrgProfileProps = {
-  orgName: string;
-  email: string;
-  phoneNumber: string;
-  location: string;
+  orgName?: string;
+  email?: string;
+  phoneNumber?: string;
+  location?: string;
   image?: string;
   icon?: string;
   homePage?: string;
@@ -41,13 +41,17 @@ const OrgProfile: FC<OrgProfileProps> = (props) => {
         >
           <article className="bg-gray-100">
             <div>
-              <img className="h-32 w-full object-cover lg:h-56" src={image} alt="団体イメージ" />
+              <img
+                className="h-32 w-full object-cover lg:h-56"
+                src={image || 'hands_mid-reso.jpg'}
+                alt="団体イメージ"
+              />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                   <div className="flex">
                     <img
                       className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
-                      src={icon}
+                      src={icon || '/logo_temp.png'}
                       alt="団体アイコン"
                     />
                   </div>

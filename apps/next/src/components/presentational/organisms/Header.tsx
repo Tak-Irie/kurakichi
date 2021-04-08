@@ -21,6 +21,7 @@ const Header: FC = () => {
           <HeaderList href="/product" title="our product" label="Product" />
           <HeaderList href="/users" title="users" label="users" />
           <HeaderList href="/orgs" title="orgs" label="orgs" />
+          <HeaderList href="/user/mypage" title="mypage" label="MyPage" />
           <HeaderDropDown />
         </ul>
         <NavAuthSection />

@@ -4,10 +4,10 @@ export const Org = objectType({
   name: 'Org',
   definition(t) {
     t.implements('Node');
-    t.nonNull.string('orgName');
-    t.nonNull.string('location');
-    t.nonNull.string('email');
-    t.nonNull.string('phoneNumber');
+    t.string('orgName');
+    t.string('location');
+    t.string('email');
+    t.string('phoneNumber');
     t.string('image');
     t.string('icon');
     t.string('description');

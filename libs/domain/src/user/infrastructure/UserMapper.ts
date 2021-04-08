@@ -1,9 +1,9 @@
-import { User as StoredUser, Message, Organization, Room } from '@prisma/client';
+import { User as StoredUser, Message as StoredMessage, Organization, Room } from '@prisma/client';
 import { UniqueEntityId } from '../../shared';
 import { User, UserEmail, UserName, UserPassword } from '../domain';
 
 type StoredUserRelation = StoredUser & {
-  receivedMessages?: Message[];
+  receivedMessages?: StoredMessage[];
   belongOrg?: Organization[];
   belongRoom?: Room[];
 };
@@ -11,6 +11,10 @@ type StoredUserRelation = StoredUser & {
 export class UserMapper {
   public static async ToDomain(storedUser: StoredUserRelation): Promise<User> {
     let password: UserPassword | undefined;
+    let messages: UniqueEntityId[] | undefined;
+    let belongOrg: UniqueEntityId[] | undefined;
+    let belongRoom: UniqueEntityId[] | undefined;
+
     const userNameResult = UserName.create({ userName: storedUser.name });
 
     if (storedUser.password) {
@@ -21,6 +25,17 @@ export class UserMapper {
       password = result.getValue();
     }
 
+    // FIXME:abstract them
+    if (storedUser.receivedMessages) {
+      messages = storedUser.receivedMessages.map((m) => new UniqueEntityId(m.id));
+    }
+    if (storedUser.belongOrg) {
+      belongOrg = storedUser.belongOrg.map((m) => new UniqueEntityId(m.id));
+    }
+    if (storedUser.belongRoom) {
+      belongRoom = storedUser.belongRoom.map((m) => new UniqueEntityId(m.id));
+    }
+
     const userEmailResult = UserEmail.create({ email: storedUser.email });
 
     const userResult = new User({
@@ -28,6 +43,10 @@ export class UserMapper {
       userName: userNameResult.getValue(),
       password,
       email: userEmailResult.getValue(),
+      messages,
+      belongOrg,
+      belongRoom,
+      role: storedUser.role,
     });
 
     return userResult;

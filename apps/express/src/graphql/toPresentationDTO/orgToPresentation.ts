@@ -1,9 +1,14 @@
 import { Org } from '@kurakichi/domain';
 import { NexusGenFieldTypes } from '../generated/nexus';
-import { UserDTO } from './userToPresentation';
+
+type MemberDTO = {
+  id: string;
+  email: string;
+  userName: string;
+};
 
 export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
-  const members: UserDTO[] = org.getMembers().map((member) => {
+  const members: MemberDTO[] = org.getMembers().map((member) => {
     return {
       id: member.getId(),
       email: member.getEmail(),

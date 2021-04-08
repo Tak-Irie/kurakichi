@@ -4,13 +4,13 @@ export const User = objectType({
   name: 'User',
   definition(t) {
     t.implements('Node');
-    t.nonNull.string('email');
-    t.nonNull.string('userName');
+    t.string('email');
+    t.string('userName');
     t.string('picture', { description: "user's image" });
-    t.field('belongedOrg', { type: list('Org') });
-    t.field('belongedRoom', { type: list('Room') });
+    t.field('belongOrg', { type: list('Org') });
+    t.field('belongRoom', { type: list('Room') });
     t.field('messages', { type: list('Message') });
-    t.field('Role', { type: 'UserRole' });
+    t.field('role', { type: 'UserRole' });
   },
 });
 

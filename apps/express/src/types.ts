@@ -12,3 +12,9 @@ declare module 'express-serve-static-core' {
     session: Session & Partial<SessionData>;
   }
 }
+
+export type IDs =
+  | {
+      id: string;
+    }[]
+  | undefined;

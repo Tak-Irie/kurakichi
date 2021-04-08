@@ -47,7 +47,6 @@ const Orgs: NextPage = () => {
       {joinData?.joinOrg.org && (
         <p>{joinData.joinOrg.org.orgName}への申請が完了しました。申請許可をお待ち下さい</p>
       )}
-      {joinData?.joinOrg.error && <p>{joinData.joinOrg.error.message}</p>}
       <MiddleButton type="button" onClick={handleClick}>
         再読み込み
       </MiddleButton>

@@ -18,8 +18,8 @@ export type Dialog = Node & {
   __typename?: 'Dialog';
   /** GUID for a resource */
   id: Scalars['ID'];
-  dialogContent: Scalars['String'];
-  room: Room;
+  dialogContent?: Maybe<Scalars['String']>;
+  room?: Maybe<Room>;
 };
 
 export type DialogPayload = {
@@ -32,7 +32,7 @@ export type Message = Node & {
   __typename?: 'Message';
   /** GUID for a resource */
   id: Scalars['ID'];
-  content: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
 };
 
 export type MessagePayload = {
@@ -115,10 +115,10 @@ export type Org = Node & {
   __typename?: 'Org';
   /** GUID for a resource */
   id: Scalars['ID'];
-  orgName: Scalars['String'];
-  location: Scalars['String'];
-  email: Scalars['String'];
-  phoneNumber: Scalars['String'];
+  orgName?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
   icon?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -184,14 +184,14 @@ export type User = Node & {
   __typename?: 'User';
   /** GUID for a resource */
   id: Scalars['ID'];
-  email: Scalars['String'];
-  userName: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  userName?: Maybe<Scalars['String']>;
   /** user's image */
   picture?: Maybe<Scalars['String']>;
-  belongedOrg?: Maybe<Array<Maybe<Org>>>;
-  belongedRoom?: Maybe<Array<Maybe<Room>>>;
+  belongOrg?: Maybe<Array<Maybe<Org>>>;
+  belongRoom?: Maybe<Array<Maybe<Room>>>;
   messages?: Maybe<Array<Maybe<Message>>>;
-  Role?: Maybe<UserRole>;
+  role?: Maybe<UserRole>;
 };
 
 export type UserPayload = {
@@ -209,10 +209,10 @@ export enum UserRole {
 export type DialogPayloadFragment = (
   { __typename?: 'Dialog' }
   & Pick<Dialog, 'id' | 'dialogContent'>
-  & { room: (
+  & { room?: Maybe<(
     { __typename?: 'Room' }
     & Pick<Room, 'id'>
-  ) }
+  )> }
 );
 
 export type MessagePayloadFragment = (
@@ -245,16 +245,16 @@ export type RoomPayloadFragment = (
 
 export type UserPayloadFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'userName' | 'email' | 'picture' | 'Role'>
-  & { belongedOrg?: Maybe<Array<Maybe<(
+  & Pick<User, 'id' | 'userName' | 'email' | 'picture' | 'role'>
+  & { belongOrg?: Maybe<Array<Maybe<(
     { __typename?: 'Org' }
-    & Pick<Org, 'id' | 'orgName'>
-  )>>>, belongedRoom?: Maybe<Array<Maybe<(
+    & Pick<Org, 'id'>
+  )>>>, belongRoom?: Maybe<Array<Maybe<(
     { __typename?: 'Room' }
-    & Pick<Room, 'id' | 'roomName'>
+    & Pick<Room, 'id'>
   )>>>, messages?: Maybe<Array<Maybe<(
     { __typename?: 'Message' }
-    & Pick<Message, 'id' | 'content'>
+    & Pick<Message, 'id'>
   )>>> }
 );
 
@@ -578,18 +578,15 @@ export const UserPayloadFragmentDoc = gql`
   userName
   email
   picture
-  Role
-  belongedOrg {
+  role
+  belongOrg {
     id
-    orgName
   }
-  belongedRoom {
+  belongRoom {
     id
-    roomName
   }
   messages {
     id
-    content
   }
 }
     `;

@@ -12,3 +12,6 @@ export * from './SideBarItems';
 export * from './GridTemplate';
 export * from './GridItem';
 export * from './GridItemWithPic';
+export * from './TableHead';
+export * from './TableData';
+export * from './TablePagination';

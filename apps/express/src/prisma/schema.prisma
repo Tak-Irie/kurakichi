@@ -20,25 +20,27 @@ model User {
   sentMessages     Message[]      @relation("sent")
   manageOrg        Organization[] @relation("orgAdmin")
   manageRoom       Room[]         @relation("roomAdmin")
-  belongOrg        Organization[] @relation("orgMember")
-  belongRoom       Room[]         @relation("roomMember")
+  belongOrgs       Organization[] @relation("orgMember")
+  requestJoinOrgs  Organization[] @relation("requestedMember")
+  belongRooms      Room[]         @relation("roomMember")
 }
 
 model Organization {
-  id          String   @id
-  name        String   @unique
-  phone       String   @default("UNKNOWN")
-  email       String   @default("UNKNOWN")
-  location    String   @default("UNKNOWN")
-  description String   @default("UNKNOWN")
-  homePage    String   @default("UNKNOWN")
-  image       String   @default("UNKNOWN")
-  icon        String   @default("UNKNOWN")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  adminId     String
-  admin       User     @relation("orgAdmin", fields: [adminId], references: [id])
-  members     User[]   @relation("orgMember")
+  id               String   @id
+  name             String   @unique
+  phone            String   @default("UNKNOWN")
+  email            String   @default("UNKNOWN")
+  location         String   @default("UNKNOWN")
+  description      String   @default("UNKNOWN")
+  homePage         String   @default("UNKNOWN")
+  image            String   @default("UNKNOWN")
+  icon             String   @default("UNKNOWN")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  adminId          String
+  admin            User     @relation("orgAdmin", fields: [adminId], references: [id])
+  members          User[]   @relation("orgMember")
+  requestedMembers User[]   @relation("requestedMember")
 }
 
 model Message {
@@ -75,5 +77,4 @@ model Karte {
 enum Role {
   USER
   PRO
-  SYSADMIN
 }

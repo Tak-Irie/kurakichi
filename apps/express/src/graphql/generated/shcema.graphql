@@ -3,11 +3,11 @@
 
 
 type Dialog implements Node {
-  dialogContent: String!
+  dialogContent: String
 
   """GUID for a resource"""
   id: ID!
-  room: Room!
+  room: Room
 }
 
 type DialogPayload {
@@ -16,7 +16,7 @@ type DialogPayload {
 }
 
 type Message implements Node {
-  content: String!
+  content: String
 
   """GUID for a resource"""
   id: ID!
@@ -49,17 +49,17 @@ interface Node {
 
 type Org implements Node {
   description: String
-  email: String!
+  email: String
   homePage: String
   icon: String
 
   """GUID for a resource"""
   id: ID!
   image: String
-  location: String!
+  location: String
   members: [User]
-  orgName: String!
-  phoneNumber: String!
+  orgName: String
+  phoneNumber: String
 }
 
 type OrgPayload {
@@ -105,10 +105,9 @@ type Subscription {
 }
 
 type User implements Node {
-  Role: UserRole
-  belongedOrg: [Org]
-  belongedRoom: [Room]
-  email: String!
+  belongOrg: [Org]
+  belongRoom: [Room]
+  email: String
 
   """GUID for a resource"""
   id: ID!
@@ -116,7 +115,8 @@ type User implements Node {
 
   """user's image"""
   picture: String
-  userName: String!
+  role: UserRole
+  userName: String
 }
 
 type UserPayload {

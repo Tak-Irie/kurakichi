@@ -4,8 +4,8 @@ export const Dialog = objectType({
   name: 'Dialog',
   definition(t) {
     t.implements('Node');
-    t.nonNull.string('dialogContent');
-    t.nonNull.field('room', { type: 'Room' });
+    t.string('dialogContent');
+    t.field('room', { type: 'Room' });
   },
 });
 

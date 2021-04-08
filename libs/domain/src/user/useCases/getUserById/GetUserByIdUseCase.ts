@@ -7,12 +7,12 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from '../../../shared';
-import { IUserRepository, UserReadModel } from '../../domain';
+import { IUserRepository, UserReadModel, User } from '../../domain';
 import * as GetUserByIdErrors from './GetUserByIdErrors';
 
 type GetUserByIdResponse = Either<
   GetUserByIdErrors.UserNotFoundError | UnexpectedError,
-  Result<UserReadModel>
+  Result<User>
 >;
 
 export class GetUserByIdUseCase implements IUseCase<string, Promise<GetUserByIdResponse>> {
@@ -26,14 +26,7 @@ export class GetUserByIdUseCase implements IUseCase<string, Promise<GetUserByIdR
 
       if (result === undefined) return left(new GetUserByIdErrors.UserNotFoundError(userId));
 
-      // FIXME:delete UserModel, its not UseCase business
-      return right(
-        Result.success<UserReadModel>({
-          id: result.getId(),
-          email: result.getEmail(),
-          userName: result.getUsername(),
-        }),
-      );
+      return right(Result.success<User>(result));
     } catch (err) {
       return left(new UnexpectedError());
     }

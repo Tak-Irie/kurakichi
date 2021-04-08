@@ -18,7 +18,7 @@ export class UserRepository implements IUserRepository {
   async getUserByUserId(userId: UniqueEntityId): Promise<User | undefined> {
     const result = await this.prisma.user.findUnique({
       where: { id: userId.getId() },
-      include: { receivedMessages: true, belongOrg: true, belongRoom: true },
+      include: { receivedMessages: true, belongOrgs: true, belongRooms: true },
     });
     if (!result) return undefined;
 
@@ -38,7 +38,9 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUsers(): Promise<User[] | undefined> {
-    const users = await this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany({
+      include: { belongOrgs: true, belongRooms: true, receivedMessages: true },
+    });
 
     const data = await Promise.all(users.map(async (user) => await UserMapper.ToDomain(user)));
 
@@ -46,13 +48,14 @@ export class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(userEmail: UserEmail): Promise<User | undefined> {
-    const user = await this.prisma.user.findUnique({
+    const prismaUser = await this.prisma.user.findUnique({
       where: { email: userEmail.getValue() },
+      include: { belongOrgs: true, belongRooms: true, receivedMessages: true },
     });
-    if (user === null) return undefined;
+    if (prismaUser === null) return undefined;
 
-    const data = UserMapper.ToDomain(user);
-    return data;
+    const domainUser = await UserMapper.ToDomain(prismaUser);
+    return domainUser;
   }
 
   async deleteUser(userId: UniqueEntityId): Promise<boolean> {
