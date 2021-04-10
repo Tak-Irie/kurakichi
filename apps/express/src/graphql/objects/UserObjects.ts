@@ -8,7 +8,7 @@ export const User = objectType({
     t.string('userName');
     t.string('picture', { description: "user's image" });
     t.field('belongOrgs', { type: list('Org') });
-    t.field('belongDialogRooms', { type: list('DialogRoom') });
+    t.field('belongSecureBases', { type: list('SecureBase') });
     t.field('messages', { type: list('Message') });
     t.field('role', { type: 'UserRole' });
   },

@@ -9,8 +9,8 @@ query GetMyInfoDetail {
       belongOrgs {
         ...OrgPayload
       }
-      belongDialogRooms {
-        ...DialogRoomPayload
+      belongSecureBases {
+        ...SecureBasePayload
       }
       messages {
         ...MessagePayload

@@ -12,8 +12,8 @@ export const Node = interfaceType({
       ? 'User'
       : 'dialogName' in data
       ? 'Dialog'
-      : 'dialogRoomName' in data
-      ? 'DialogRoom'
+      : 'secureBaseName' in data
+      ? 'SecureBase'
       : undefined;
   },
   definition(t) {

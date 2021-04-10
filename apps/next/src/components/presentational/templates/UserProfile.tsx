@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { IconButton, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
 import { MailIcon, CogIcon } from '@heroicons/react/outline';
-import { Message, Org, DialogRoom } from '../../../graphql/generated/graphql';
+import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
 
 type UserProfileProps = {
   userName: string;
@@ -11,7 +11,7 @@ type UserProfileProps = {
   email: string;
   orgs: Org[];
   messages: Message[];
-  dialogRooms: DialogRoom[];
+  secureBases: SecureBase[];
 };
 
 export const UserProfile: FC<UserProfileProps> = ({
@@ -22,7 +22,7 @@ export const UserProfile: FC<UserProfileProps> = ({
   orgs,
   messages,
   email,
-  dialogRooms,
+  secureBases,
 }) => {
   return (
     <div className="bg-white min-h-screen">
@@ -87,13 +87,13 @@ export const UserProfile: FC<UserProfileProps> = ({
             <div className="mt-8 max-w-5xl mx-auto px-4  sm:px-6 lg:px-8">
               <h2 className="text-sm font-medium text-gray-500">ダイアローグベース</h2>
               <GridTemplate>
-                {dialogRooms ? (
-                  dialogRooms.map((room) => {
+                {secureBases ? (
+                  secureBases.map((base) => {
                     return (
-                      <div key={room.id}>
+                      <div key={base.id}>
                         <GridItemWithPic
-                          name={room.roomOwner.userName}
-                          description={room.id}
+                          name={base.baseOwner.userName}
+                          description={base.id}
                           // url={`/org/${org.id}`}
                         />
                       </div>

@@ -35,15 +35,6 @@ export interface NexusGenObjects {
     dialog?: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
-  DialogRoom: { // root type
-    id: string; // ID!
-    members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    roomOwner?: NexusGenRootTypes['User'] | null; // User
-  }
-  DialogRoomPayload: { // root type
-    dialogRoom?: NexusGenRootTypes['DialogRoom'] | null; // DialogRoom
-    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
-  }
   Message: { // root type
     content?: string | null; // String
     id: string; // ID!
@@ -69,10 +60,19 @@ export interface NexusGenObjects {
     message?: string | null; // String
     result?: boolean | null; // Boolean
   }
+  SecureBase: { // root type
+    baseOwner?: NexusGenRootTypes['User'] | null; // User
+    id: string; // ID!
+    members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
+  SecureBasePayload: { // root type
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+    secureBase?: NexusGenRootTypes['SecureBase'] | null; // SecureBase
+  }
   Subscription: {};
   User: { // root type
-    belongDialogRooms?: Array<NexusGenRootTypes['DialogRoom'] | null> | null; // [DialogRoom]
     belongOrgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    belongSecureBases?: Array<NexusGenRootTypes['SecureBase'] | null> | null; // [SecureBase]
     email?: string | null; // String
     id: string; // ID!
     messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
@@ -88,7 +88,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['Dialog'] | NexusGenRootTypes['DialogRoom'] | NexusGenRootTypes['Message'] | NexusGenRootTypes['Org'] | NexusGenRootTypes['User'];
+  Node: NexusGenRootTypes['Dialog'] | NexusGenRootTypes['Message'] | NexusGenRootTypes['Org'] | NexusGenRootTypes['SecureBase'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -100,21 +100,12 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Dialog: { // field return type
+    base: NexusGenRootTypes['SecureBase'] | null; // SecureBase
     dialogContent: string | null; // String
     id: string; // ID!
-    room: NexusGenRootTypes['DialogRoom'] | null; // DialogRoom
   }
   DialogPayload: { // field return type
     dialog: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
-    error: NexusGenRootTypes['RegularError'] | null; // RegularError
-  }
-  DialogRoom: { // field return type
-    id: string; // ID!
-    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    roomOwner: NexusGenRootTypes['User'] | null; // User
-  }
-  DialogRoomPayload: { // field return type
-    dialogRoom: NexusGenRootTypes['DialogRoom'] | null; // DialogRoom
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
   Message: { // field return type
@@ -171,12 +162,21 @@ export interface NexusGenFieldTypes {
     message: string | null; // String
     result: boolean | null; // Boolean
   }
+  SecureBase: { // field return type
+    baseOwner: NexusGenRootTypes['User'] | null; // User
+    id: string; // ID!
+    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
+  SecureBasePayload: { // field return type
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
+    secureBase: NexusGenRootTypes['SecureBase'] | null; // SecureBase
+  }
   Subscription: { // field return type
     dialogPosted: NexusGenRootTypes['Dialog'] | null; // Dialog
   }
   User: { // field return type
-    belongDialogRooms: Array<NexusGenRootTypes['DialogRoom'] | null> | null; // [DialogRoom]
     belongOrgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    belongSecureBases: Array<NexusGenRootTypes['SecureBase'] | null> | null; // [SecureBase]
     email: string | null; // String
     id: string; // ID!
     messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
@@ -196,21 +196,12 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Dialog: { // field return type name
+    base: 'SecureBase'
     dialogContent: 'String'
     id: 'ID'
-    room: 'DialogRoom'
   }
   DialogPayload: { // field return type name
     dialog: 'Dialog'
-    error: 'RegularError'
-  }
-  DialogRoom: { // field return type name
-    id: 'ID'
-    members: 'User'
-    roomOwner: 'User'
-  }
-  DialogRoomPayload: { // field return type name
-    dialogRoom: 'DialogRoom'
     error: 'RegularError'
   }
   Message: { // field return type name
@@ -267,12 +258,21 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
     result: 'Boolean'
   }
+  SecureBase: { // field return type name
+    baseOwner: 'User'
+    id: 'ID'
+    members: 'User'
+  }
+  SecureBasePayload: { // field return type name
+    error: 'RegularError'
+    secureBase: 'SecureBase'
+  }
   Subscription: { // field return type name
     dialogPosted: 'Dialog'
   }
   User: { // field return type name
-    belongDialogRooms: 'DialogRoom'
     belongOrgs: 'Org'
+    belongSecureBases: 'SecureBase'
     email: 'String'
     id: 'ID'
     messages: 'Message'
@@ -338,14 +338,14 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "Dialog" | "DialogRoom" | "Message" | "Org" | "User"
+  Node: "Dialog" | "Message" | "Org" | "SecureBase" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
   Dialog: "Node"
-  DialogRoom: "Node"
   Message: "Node"
   Org: "Node"
+  SecureBase: "Node"
   User: "Node"
 }
 

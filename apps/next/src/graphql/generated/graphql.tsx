@@ -19,27 +19,12 @@ export type Dialog = Node & {
   /** GUID for a resource */
   id: Scalars['ID'];
   dialogContent?: Maybe<Scalars['String']>;
-  room?: Maybe<DialogRoom>;
+  base?: Maybe<SecureBase>;
 };
 
 export type DialogPayload = {
   __typename?: 'DialogPayload';
   dialog?: Maybe<Array<Maybe<Dialog>>>;
-  error?: Maybe<RegularError>;
-};
-
-export type DialogRoom = Node & {
-  __typename?: 'DialogRoom';
-  /** GUID for a resource */
-  id: Scalars['ID'];
-  /** it indicate Client/Patient */
-  roomOwner?: Maybe<User>;
-  members?: Maybe<Array<Maybe<User>>>;
-};
-
-export type DialogRoomPayload = {
-  __typename?: 'DialogRoomPayload';
-  dialogRoom?: Maybe<DialogRoom>;
   error?: Maybe<RegularError>;
 };
 
@@ -183,6 +168,21 @@ export type RegularPayload = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type SecureBase = Node & {
+  __typename?: 'SecureBase';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  /** it indicate Client/Patient */
+  baseOwner?: Maybe<User>;
+  members?: Maybe<Array<Maybe<User>>>;
+};
+
+export type SecureBasePayload = {
+  __typename?: 'SecureBasePayload';
+  secureBase?: Maybe<SecureBase>;
+  error?: Maybe<RegularError>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   dialogPosted?: Maybe<Dialog>;
@@ -197,7 +197,7 @@ export type User = Node & {
   /** user's image */
   picture?: Maybe<Scalars['String']>;
   belongOrgs?: Maybe<Array<Maybe<Org>>>;
-  belongDialogRooms?: Maybe<Array<Maybe<DialogRoom>>>;
+  belongSecureBases?: Maybe<Array<Maybe<SecureBase>>>;
   messages?: Maybe<Array<Maybe<Message>>>;
   role?: Maybe<UserRole>;
 };
@@ -217,22 +217,10 @@ export enum UserRole {
 export type DialogPayloadFragment = (
   { __typename?: 'Dialog' }
   & Pick<Dialog, 'id' | 'dialogContent'>
-  & { room?: Maybe<(
-    { __typename?: 'DialogRoom' }
-    & Pick<DialogRoom, 'id'>
+  & { base?: Maybe<(
+    { __typename?: 'SecureBase' }
+    & Pick<SecureBase, 'id'>
   )> }
-);
-
-export type DialogRoomPayloadFragment = (
-  { __typename?: 'DialogRoom' }
-  & Pick<DialogRoom, 'id'>
-  & { roomOwner?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id'>
-  )>, members?: Maybe<Array<Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id'>
-  )>>> }
 );
 
 export type MessagePayloadFragment = (
@@ -254,15 +242,27 @@ export type RegularErrorFragment = (
   & Pick<RegularError, 'message' | 'invalidField'>
 );
 
+export type SecureBasePayloadFragment = (
+  { __typename?: 'SecureBase' }
+  & Pick<SecureBase, 'id'>
+  & { baseOwner?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>, members?: Maybe<Array<Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>>> }
+);
+
 export type UserPayloadFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'email' | 'userName' | 'picture' | 'role'>
   & { belongOrgs?: Maybe<Array<Maybe<(
     { __typename?: 'Org' }
     & Pick<Org, 'id'>
-  )>>>, belongDialogRooms?: Maybe<Array<Maybe<(
-    { __typename?: 'DialogRoom' }
-    & Pick<DialogRoom, 'id'>
+  )>>>, belongSecureBases?: Maybe<Array<Maybe<(
+    { __typename?: 'SecureBase' }
+    & Pick<SecureBase, 'id'>
   )>>>, messages?: Maybe<Array<Maybe<(
     { __typename?: 'Message' }
     & Pick<Message, 'id'>
@@ -487,9 +487,9 @@ export type GetMyInfoDetailQuery = (
       & { belongOrgs?: Maybe<Array<Maybe<(
         { __typename?: 'Org' }
         & OrgPayloadFragment
-      )>>>, belongDialogRooms?: Maybe<Array<Maybe<(
-        { __typename?: 'DialogRoom' }
-        & DialogRoomPayloadFragment
+      )>>>, belongSecureBases?: Maybe<Array<Maybe<(
+        { __typename?: 'SecureBase' }
+        & SecureBasePayloadFragment
       )>>>, messages?: Maybe<Array<Maybe<(
         { __typename?: 'Message' }
         & MessagePayloadFragment
@@ -586,18 +586,7 @@ export const DialogPayloadFragmentDoc = gql`
     fragment DialogPayload on Dialog {
   id
   dialogContent
-  room {
-    id
-  }
-}
-    `;
-export const DialogRoomPayloadFragmentDoc = gql`
-    fragment DialogRoomPayload on DialogRoom {
-  id
-  roomOwner {
-    id
-  }
-  members {
+  base {
     id
   }
 }
@@ -631,6 +620,17 @@ export const RegularErrorFragmentDoc = gql`
   invalidField
 }
     `;
+export const SecureBasePayloadFragmentDoc = gql`
+    fragment SecureBasePayload on SecureBase {
+  id
+  baseOwner {
+    id
+  }
+  members {
+    id
+  }
+}
+    `;
 export const UserPayloadFragmentDoc = gql`
     fragment UserPayload on User {
   id
@@ -641,7 +641,7 @@ export const UserPayloadFragmentDoc = gql`
   belongOrgs {
     id
   }
-  belongDialogRooms {
+  belongSecureBases {
     id
   }
   messages {
@@ -1119,8 +1119,8 @@ export const GetMyInfoDetailDocument = gql`
       belongOrgs {
         ...OrgPayload
       }
-      belongDialogRooms {
-        ...DialogRoomPayload
+      belongSecureBases {
+        ...SecureBasePayload
       }
       messages {
         ...MessagePayload
@@ -1132,7 +1132,7 @@ export const GetMyInfoDetailDocument = gql`
   }
 }
     ${OrgPayloadFragmentDoc}
-${DialogRoomPayloadFragmentDoc}
+${SecureBasePayloadFragmentDoc}
 ${MessagePayloadFragmentDoc}
 ${RegularErrorFragmentDoc}`;
 

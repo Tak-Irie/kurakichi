@@ -10,6 +10,6 @@ export * from './IMessageRepo';
 export * from './Message';
 export * from './MessageContent';
 
-export * from './DialogRoom';
-export * from './IDialogRoomRepo';
+export * from './SecureBase';
+export * from './ISecureBaseRepo';
 export * from './Karte';

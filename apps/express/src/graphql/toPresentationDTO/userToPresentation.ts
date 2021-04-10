@@ -2,7 +2,7 @@ import { User } from '@kurakichi/domain';
 import { NexusGenFieldTypes } from '../generated/nexus';
 import { messageToPresentation } from './messageToPresentation';
 import { orgToPresentation } from './orgToPresentation';
-import { dialogRoomToPresentation } from './dialogRoomToPresentation';
+import { secureBaseToPresentation } from './secureBaseToPresentation';
 
 // export type UserDTO = {
 //   id: string;
@@ -21,20 +21,20 @@ export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
     email,
     userName,
     belongOrgs,
-    belongDialogRooms,
+    belongSecureBases,
     messages,
     picture,
     role,
   } = user.getProps();
 
   let gqlOrgs: NexusGenFieldTypes['Org'][] | undefined;
-  let gqlDialogRooms: NexusGenFieldTypes['DialogRoom'][] | undefined;
+  let gqlSecureBases: NexusGenFieldTypes['SecureBase'][] | undefined;
   let gqlMessages: NexusGenFieldTypes['Message'][] | undefined;
   // console.log('userToPresent:', user);
 
   if (belongOrgs) gqlOrgs = belongOrgs.map((org) => orgToPresentation(org));
-  if (belongDialogRooms)
-    gqlDialogRooms = belongDialogRooms.map((dialogRoom) => dialogRoomToPresentation(dialogRoom));
+  if (belongSecureBases)
+    gqlSecureBases = belongSecureBases.map((secureBase) => secureBaseToPresentation(secureBase));
   if (messages) gqlMessages = messages.map((message) => messageToPresentation(message));
 
   const data = {
@@ -44,7 +44,7 @@ export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
     role,
     picture,
     belongOrgs: gqlOrgs,
-    belongDialogRooms: gqlDialogRooms,
+    belongSecureBases: gqlSecureBases,
     messages: gqlMessages,
   };
   return data;

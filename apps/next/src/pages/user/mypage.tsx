@@ -9,7 +9,7 @@ const MyPage: NextPage = () => {
   if (loading) return <p>loading</p>;
   if (error) return <p>{error.message}</p>;
 
-  const { userName, belongOrgs, picture, messages, email, belongDialogRooms } = data.me.user;
+  const { userName, belongOrgs, picture, messages, email, belongSecureBases } = data.me.user;
   console.log('MyPageData:', data.me.user);
   return (
     <div>
@@ -21,7 +21,7 @@ const MyPage: NextPage = () => {
         orgs={belongOrgs}
         messages={messages}
         email={email}
-        dialogRooms={belongDialogRooms}
+        secureBases={belongSecureBases}
       />
     </div>
   );

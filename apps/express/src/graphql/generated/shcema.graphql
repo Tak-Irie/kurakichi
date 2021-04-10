@@ -3,29 +3,15 @@
 
 
 type Dialog implements Node {
+  base: SecureBase
   dialogContent: String
 
   """GUID for a resource"""
   id: ID!
-  room: DialogRoom
 }
 
 type DialogPayload {
   dialog: [Dialog]
-  error: RegularError
-}
-
-type DialogRoom implements Node {
-  """GUID for a resource"""
-  id: ID!
-  members: [User]
-
-  """it indicate Client/Patient"""
-  roomOwner: User
-}
-
-type DialogRoomPayload {
-  dialogRoom: DialogRoom
   error: RegularError
 }
 
@@ -103,13 +89,27 @@ type RegularPayload {
   result: Boolean
 }
 
+type SecureBase implements Node {
+  """it indicate Client/Patient"""
+  baseOwner: User
+
+  """GUID for a resource"""
+  id: ID!
+  members: [User]
+}
+
+type SecureBasePayload {
+  error: RegularError
+  secureBase: SecureBase
+}
+
 type Subscription {
   dialogPosted: Dialog
 }
 
 type User implements Node {
-  belongDialogRooms: [DialogRoom]
   belongOrgs: [Org]
+  belongSecureBases: [SecureBase]
   email: String
 
   """GUID for a resource"""

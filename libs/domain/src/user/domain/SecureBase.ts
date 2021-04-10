@@ -2,14 +2,14 @@ import { AggregateRoot } from '../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
 
-interface DialogRoomProps {
+interface SecureBaseProps {
   id: UniqueEntityId;
-  roomOwner: UniqueEntityId;
+  baseOwner: UniqueEntityId;
   members: UniqueEntityId[];
 }
 
-export class DialogRoom extends AggregateRoot<DialogRoomProps> {
-  constructor(readonly props: DialogRoomProps) {
+export class SecureBase extends AggregateRoot<SecureBaseProps> {
+  constructor(readonly props: SecureBaseProps) {
     super(props);
   }
 
@@ -19,19 +19,19 @@ export class DialogRoom extends AggregateRoot<DialogRoomProps> {
   }
 
   public getRoomOwner(): UniqueEntityId {
-    return this.props.roomOwner;
+    return this.props.baseOwner;
   }
 
   public getMembers(): UniqueEntityId[] {
     return this.props.members;
   }
 
-  public static create(props: DialogRoomProps): Result<DialogRoom> {
-    const room = new DialogRoom({
+  public static create(props: SecureBaseProps): Result<SecureBase> {
+    const base = new SecureBase({
       ...props,
     });
-    // DialogRoom.addDomainEvent(new RoomCreated(DialogRoom));
+    // SecureBase.addDomainEvent(new RoomCreated(SecureBase));
 
-    return Result.success<DialogRoom>(room);
+    return Result.success<SecureBase>(base);
   }
 }

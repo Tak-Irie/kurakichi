@@ -1,24 +1,24 @@
-import { DialogRoom as StoredDialogRoom, User as StoredUser } from '@prisma/client';
+import { SecureBase as StoredSecureBase, User as StoredUser } from '@prisma/client';
 import { UniqueEntityId } from '../../shared';
-import { DialogRoom } from '../domain';
+import { SecureBase } from '../domain';
 
-type DialogRoomRelations = StoredDialogRoom & {
+type SecureBaseRelations = StoredSecureBase & {
   members?: StoredUser[];
 };
 
-export class DialogRoomMapper {
-  public static ToDomain(storedRoom: DialogRoomRelations): DialogRoom {
-    const domainRoom = DialogRoom.create({
+export class SecureBaseMapper {
+  public static ToDomain(storedRoom: SecureBaseRelations): SecureBase {
+    const domainRoom = SecureBase.create({
       id: new UniqueEntityId(storedRoom.id),
-      roomOwner: new UniqueEntityId(storedRoom.adminId),
+      baseOwner: new UniqueEntityId(storedRoom.adminId),
       members: storedRoom.members.map((member) => new UniqueEntityId(member.id)),
     });
 
     return domainRoom.getValue();
   }
   // public static async toStore(
-  //   domainMessage: DialogRoom,
-  // ): Promise<Omit<StoredDialogRoom, 'createdAt' | 'read_flag'>> {
+  //   domainMessage: SecureBase,
+  // ): Promise<Omit<StoredSecureBase, 'createdAt' | 'read_flag'>> {
   //   const props = domainMessage.getProps();
   //   const rawData = {
   //     id: props.id.getId(),

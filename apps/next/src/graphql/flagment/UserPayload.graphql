@@ -7,7 +7,7 @@ fragment UserPayload on User {
   belongOrgs {
     id
   }
-  belongDialogRooms {
+  belongSecureBases {
     id
   }
   messages {

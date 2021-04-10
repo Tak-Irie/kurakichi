@@ -3,7 +3,7 @@ export * from './objects/DialogObjects';
 export * from './objects/GeneralObjects';
 export * from './objects/MessageObjects';
 export * from './objects/OrgObjects';
-export * from './objects/DialogRoomObject';
+export * from './objects/SecureBaseObject';
 
 export * from './resolvers/UserResolver';
 export * from './resolvers/DialogResolver';

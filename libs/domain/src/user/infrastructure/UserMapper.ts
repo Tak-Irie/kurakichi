@@ -2,19 +2,19 @@ import {
   User as StoredUser,
   Message as StoredMessage,
   Organization,
-  DialogRoom as StoredDialogRoom,
+  SecureBase as StoredSecureBase,
 } from '@prisma/client';
 import { Org } from '../../org/domain';
 import { OrgMapper } from '../../org/infra';
 import { UniqueEntityId } from '../../shared';
-import { Message, User, UserEmail, UserName, UserPassword, DialogRoom } from '../domain';
-import { DialogRoomMapper } from './DialogRoomMapper';
+import { Message, User, UserEmail, UserName, UserPassword, SecureBase } from '../domain';
+import { SecureBaseMapper } from './SecureBaseMapper';
 import { MessageMapper } from './MessageMapper';
 
 type StoredUserRelation = StoredUser & {
   receivedMessages?: StoredMessage[];
   belongOrgs?: Organization[];
-  belongDialogRooms?: StoredDialogRoom[];
+  belongSecureBases?: StoredSecureBase[];
 };
 
 // FIXME: re-architect whole persistence layer. below mapper is seriously ugly
@@ -25,7 +25,7 @@ export class UserMapper {
     let password: UserPassword | undefined;
     let messages: Message[];
     let belongOrgs: Org[];
-    let belongDialogRooms: DialogRoom[];
+    let belongSecureBases: SecureBase[];
 
     const userNameResult = UserName.create({ userName: storedUser.name });
 
@@ -44,12 +44,12 @@ export class UserMapper {
     if (storedUser.belongOrgs) {
       belongOrgs = storedUser.belongOrgs.map((org) => OrgMapper.ToDomain(org));
     }
-    if (storedUser.belongDialogRooms) {
-      belongDialogRooms = storedUser.belongDialogRooms.map((dialogRoom) =>
-        DialogRoomMapper.ToDomain(dialogRoom),
+    if (storedUser.belongSecureBases) {
+      belongSecureBases = storedUser.belongSecureBases.map((secureBase) =>
+        SecureBaseMapper.ToDomain(secureBase),
       );
     }
-    console.log('belongRooms:', belongDialogRooms);
+    console.log('belongRooms:', belongSecureBases);
     const userEmailResult = UserEmail.create({ email: storedUser.email });
 
     const userResult = new User({
@@ -59,7 +59,7 @@ export class UserMapper {
       email: userEmailResult.getValue(),
       messages,
       belongOrgs,
-      belongDialogRooms,
+      belongSecureBases,
       role: storedUser.role,
     });
 

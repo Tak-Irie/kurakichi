@@ -2,7 +2,7 @@ import { Org } from '../../org';
 import { AggregateRoot } from '../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
-import { Message, DialogRoom, UserEmail, UserPassword, UserName } from './';
+import { Message, SecureBase, UserEmail, UserPassword, UserName } from './';
 
 interface UserProps {
   id: UniqueEntityId;
@@ -13,7 +13,7 @@ interface UserProps {
   picture?: string;
   role?: 'USER' | 'PRO';
   messages?: Message[];
-  belongDialogRooms?: DialogRoom[];
+  belongSecureBases?: SecureBase[];
   belongOrgs?: Org[];
 }
 
