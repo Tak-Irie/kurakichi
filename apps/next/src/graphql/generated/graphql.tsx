@@ -19,12 +19,27 @@ export type Dialog = Node & {
   /** GUID for a resource */
   id: Scalars['ID'];
   dialogContent?: Maybe<Scalars['String']>;
-  room?: Maybe<Room>;
+  room?: Maybe<DialogRoom>;
 };
 
 export type DialogPayload = {
   __typename?: 'DialogPayload';
   dialog?: Maybe<Array<Maybe<Dialog>>>;
+  error?: Maybe<RegularError>;
+};
+
+export type DialogRoom = Node & {
+  __typename?: 'DialogRoom';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  /** it indicate Client/Patient */
+  roomOwner?: Maybe<User>;
+  members?: Maybe<Array<Maybe<User>>>;
+};
+
+export type DialogRoomPayload = {
+  __typename?: 'DialogRoomPayload';
+  dialogRoom?: Maybe<DialogRoom>;
   error?: Maybe<RegularError>;
 };
 
@@ -52,7 +67,8 @@ export type Mutation = {
   changePassword?: Maybe<RegularPayload>;
   postDialog?: Maybe<DialogPayload>;
   registerOrg?: Maybe<OrgPayload>;
-  joinOrg?: Maybe<OrgPayload>;
+  requestJoinOrg?: Maybe<OrgPayload>;
+  acceptJoinOrg?: Maybe<OrgPayload>;
   sendMessage?: Maybe<MessagePayload>;
 };
 
@@ -95,8 +111,14 @@ export type MutationRegisterOrgArgs = {
 };
 
 
-export type MutationJoinOrgArgs = {
+export type MutationRequestJoinOrgArgs = {
   orgId: Scalars['String'];
+};
+
+
+export type MutationAcceptJoinOrgArgs = {
+  requestUserId: Scalars['String'];
+  requestedOrgId: Scalars['String'];
 };
 
 
@@ -161,20 +183,6 @@ export type RegularPayload = {
   message?: Maybe<Scalars['String']>;
 };
 
-export type Room = Node & {
-  __typename?: 'Room';
-  /** GUID for a resource */
-  id: Scalars['ID'];
-  roomName?: Maybe<Scalars['String']>;
-  members?: Maybe<Array<Maybe<User>>>;
-};
-
-export type RoomPayload = {
-  __typename?: 'RoomPayload';
-  room?: Maybe<Room>;
-  error?: Maybe<RegularError>;
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   dialogPosted?: Maybe<Dialog>;
@@ -188,8 +196,8 @@ export type User = Node & {
   userName?: Maybe<Scalars['String']>;
   /** user's image */
   picture?: Maybe<Scalars['String']>;
-  belongOrg?: Maybe<Array<Maybe<Org>>>;
-  belongRoom?: Maybe<Array<Maybe<Room>>>;
+  belongOrgs?: Maybe<Array<Maybe<Org>>>;
+  belongDialogRooms?: Maybe<Array<Maybe<DialogRoom>>>;
   messages?: Maybe<Array<Maybe<Message>>>;
   role?: Maybe<UserRole>;
 };
@@ -210,9 +218,21 @@ export type DialogPayloadFragment = (
   { __typename?: 'Dialog' }
   & Pick<Dialog, 'id' | 'dialogContent'>
   & { room?: Maybe<(
-    { __typename?: 'Room' }
-    & Pick<Room, 'id'>
+    { __typename?: 'DialogRoom' }
+    & Pick<DialogRoom, 'id'>
   )> }
+);
+
+export type DialogRoomPayloadFragment = (
+  { __typename?: 'DialogRoom' }
+  & Pick<DialogRoom, 'id'>
+  & { roomOwner?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>, members?: Maybe<Array<Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>>> }
 );
 
 export type MessagePayloadFragment = (
@@ -234,38 +254,30 @@ export type RegularErrorFragment = (
   & Pick<RegularError, 'message' | 'invalidField'>
 );
 
-export type RoomPayloadFragment = (
-  { __typename?: 'Room' }
-  & Pick<Room, 'id' | 'roomName'>
-  & { members?: Maybe<Array<Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'userName'>
-  )>>> }
-);
-
 export type UserPayloadFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'userName' | 'email' | 'picture' | 'role'>
-  & { belongOrg?: Maybe<Array<Maybe<(
+  & Pick<User, 'id' | 'email' | 'userName' | 'picture' | 'role'>
+  & { belongOrgs?: Maybe<Array<Maybe<(
     { __typename?: 'Org' }
     & Pick<Org, 'id'>
-  )>>>, belongRoom?: Maybe<Array<Maybe<(
-    { __typename?: 'Room' }
-    & Pick<Room, 'id'>
+  )>>>, belongDialogRooms?: Maybe<Array<Maybe<(
+    { __typename?: 'DialogRoom' }
+    & Pick<DialogRoom, 'id'>
   )>>>, messages?: Maybe<Array<Maybe<(
     { __typename?: 'Message' }
     & Pick<Message, 'id'>
   )>>> }
 );
 
-export type JoinOrgMutationVariables = Exact<{
-  OrgId: Scalars['String'];
+export type AcceptJoinOrgMutationVariables = Exact<{
+  requestUserId: Scalars['String'];
+  requestedOrgId: Scalars['String'];
 }>;
 
 
-export type JoinOrgMutation = (
+export type AcceptJoinOrgMutation = (
   { __typename?: 'Mutation' }
-  & { joinOrg?: Maybe<(
+  & { acceptJoinOrg?: Maybe<(
     { __typename?: 'OrgPayload' }
     & { org?: Maybe<(
       { __typename?: 'Org' }
@@ -357,6 +369,25 @@ export type RegisterUserMutation = (
   )> }
 );
 
+export type RequestJoinOrgMutationVariables = Exact<{
+  requestOrgId: Scalars['String'];
+}>;
+
+
+export type RequestJoinOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { requestJoinOrg?: Maybe<(
+    { __typename?: 'OrgPayload' }
+    & { org?: Maybe<(
+      { __typename?: 'Org' }
+      & OrgPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
 export type SendMessageMutationVariables = Exact<{
   TextInput: Scalars['String'];
   ReceiverId: Scalars['String'];
@@ -437,6 +468,33 @@ export type GetMessagesQuery = (
       { __typename?: 'Message' }
       & MessagePayloadFragment
     )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type GetMyInfoDetailQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyInfoDetailQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'UserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'email' | 'userName' | 'picture' | 'role'>
+      & { belongOrgs?: Maybe<Array<Maybe<(
+        { __typename?: 'Org' }
+        & OrgPayloadFragment
+      )>>>, belongDialogRooms?: Maybe<Array<Maybe<(
+        { __typename?: 'DialogRoom' }
+        & DialogRoomPayloadFragment
+      )>>>, messages?: Maybe<Array<Maybe<(
+        { __typename?: 'Message' }
+        & MessagePayloadFragment
+      )>>> }
+    )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
     )> }
@@ -533,6 +591,17 @@ export const DialogPayloadFragmentDoc = gql`
   }
 }
     `;
+export const DialogRoomPayloadFragmentDoc = gql`
+    fragment DialogRoomPayload on DialogRoom {
+  id
+  roomOwner {
+    id
+  }
+  members {
+    id
+  }
+}
+    `;
 export const MessagePayloadFragmentDoc = gql`
     fragment MessagePayload on Message {
   id
@@ -562,27 +631,17 @@ export const RegularErrorFragmentDoc = gql`
   invalidField
 }
     `;
-export const RoomPayloadFragmentDoc = gql`
-    fragment RoomPayload on Room {
-  id
-  roomName
-  members {
-    id
-    userName
-  }
-}
-    `;
 export const UserPayloadFragmentDoc = gql`
     fragment UserPayload on User {
   id
-  userName
   email
+  userName
   picture
   role
-  belongOrg {
+  belongOrgs {
     id
   }
-  belongRoom {
+  belongDialogRooms {
     id
   }
   messages {
@@ -590,9 +649,9 @@ export const UserPayloadFragmentDoc = gql`
   }
 }
     `;
-export const JoinOrgDocument = gql`
-    mutation JoinOrg($OrgId: String!) {
-  joinOrg(orgId: $OrgId) {
+export const AcceptJoinOrgDocument = gql`
+    mutation AcceptJoinOrg($requestUserId: String!, $requestedOrgId: String!) {
+  acceptJoinOrg(requestUserId: $requestUserId, requestedOrgId: $requestedOrgId) {
     org {
       ...OrgPayload
     }
@@ -603,32 +662,33 @@ export const JoinOrgDocument = gql`
 }
     ${OrgPayloadFragmentDoc}
 ${RegularErrorFragmentDoc}`;
-export type JoinOrgMutationFn = Apollo.MutationFunction<JoinOrgMutation, JoinOrgMutationVariables>;
+export type AcceptJoinOrgMutationFn = Apollo.MutationFunction<AcceptJoinOrgMutation, AcceptJoinOrgMutationVariables>;
 
 /**
- * __useJoinOrgMutation__
+ * __useAcceptJoinOrgMutation__
  *
- * To run a mutation, you first call `useJoinOrgMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useJoinOrgMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAcceptJoinOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptJoinOrgMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [joinOrgMutation, { data, loading, error }] = useJoinOrgMutation({
+ * const [acceptJoinOrgMutation, { data, loading, error }] = useAcceptJoinOrgMutation({
  *   variables: {
- *      OrgId: // value for 'OrgId'
+ *      requestUserId: // value for 'requestUserId'
+ *      requestedOrgId: // value for 'requestedOrgId'
  *   },
  * });
  */
-export function useJoinOrgMutation(baseOptions?: Apollo.MutationHookOptions<JoinOrgMutation, JoinOrgMutationVariables>) {
+export function useAcceptJoinOrgMutation(baseOptions?: Apollo.MutationHookOptions<AcceptJoinOrgMutation, AcceptJoinOrgMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<JoinOrgMutation, JoinOrgMutationVariables>(JoinOrgDocument, options);
+        return Apollo.useMutation<AcceptJoinOrgMutation, AcceptJoinOrgMutationVariables>(AcceptJoinOrgDocument, options);
       }
-export type JoinOrgMutationHookResult = ReturnType<typeof useJoinOrgMutation>;
-export type JoinOrgMutationResult = Apollo.MutationResult<JoinOrgMutation>;
-export type JoinOrgMutationOptions = Apollo.BaseMutationOptions<JoinOrgMutation, JoinOrgMutationVariables>;
+export type AcceptJoinOrgMutationHookResult = ReturnType<typeof useAcceptJoinOrgMutation>;
+export type AcceptJoinOrgMutationResult = Apollo.MutationResult<AcceptJoinOrgMutation>;
+export type AcceptJoinOrgMutationOptions = Apollo.BaseMutationOptions<AcceptJoinOrgMutation, AcceptJoinOrgMutationVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -793,6 +853,45 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const RequestJoinOrgDocument = gql`
+    mutation requestJoinOrg($requestOrgId: String!) {
+  requestJoinOrg(orgId: $requestOrgId) {
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type RequestJoinOrgMutationFn = Apollo.MutationFunction<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>;
+
+/**
+ * __useRequestJoinOrgMutation__
+ *
+ * To run a mutation, you first call `useRequestJoinOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestJoinOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestJoinOrgMutation, { data, loading, error }] = useRequestJoinOrgMutation({
+ *   variables: {
+ *      requestOrgId: // value for 'requestOrgId'
+ *   },
+ * });
+ */
+export function useRequestJoinOrgMutation(baseOptions?: Apollo.MutationHookOptions<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>(RequestJoinOrgDocument, options);
+      }
+export type RequestJoinOrgMutationHookResult = ReturnType<typeof useRequestJoinOrgMutation>;
+export type RequestJoinOrgMutationResult = Apollo.MutationResult<RequestJoinOrgMutation>;
+export type RequestJoinOrgMutationOptions = Apollo.BaseMutationOptions<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>;
 export const SendMessageDocument = gql`
     mutation SendMessage($TextInput: String!, $ReceiverId: String!) {
   sendMessage(textInput: $TextInput, receiverId: $ReceiverId) {
@@ -1008,6 +1107,61 @@ export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
 export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
 export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
+export const GetMyInfoDetailDocument = gql`
+    query GetMyInfoDetail {
+  me {
+    user {
+      id
+      email
+      userName
+      picture
+      role
+      belongOrgs {
+        ...OrgPayload
+      }
+      belongDialogRooms {
+        ...DialogRoomPayload
+      }
+      messages {
+        ...MessagePayload
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${OrgPayloadFragmentDoc}
+${DialogRoomPayloadFragmentDoc}
+${MessagePayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetMyInfoDetailQuery__
+ *
+ * To run a query within a React component, call `useGetMyInfoDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyInfoDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyInfoDetailQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyInfoDetailQuery(baseOptions?: Apollo.QueryHookOptions<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>(GetMyInfoDetailDocument, options);
+      }
+export function useGetMyInfoDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>(GetMyInfoDetailDocument, options);
+        }
+export type GetMyInfoDetailQueryHookResult = ReturnType<typeof useGetMyInfoDetailQuery>;
+export type GetMyInfoDetailLazyQueryHookResult = ReturnType<typeof useGetMyInfoDetailLazyQuery>;
+export type GetMyInfoDetailQueryResult = Apollo.QueryResult<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>;
 export const GetOrgDocument = gql`
     query GetOrg($OrgId: String!) {
   getOrg(orgId: $OrgId) {

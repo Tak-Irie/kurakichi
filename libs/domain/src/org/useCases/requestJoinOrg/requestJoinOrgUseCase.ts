@@ -7,9 +7,8 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
-  Identifier,
 } from '../../../shared';
-import { IOrgRepo, Member, Org } from '../../domain';
+import { IOrgRepo, Org } from '../../domain';
 import { NotAcceptJoinError, NotFoundOrgError } from './requestJoinOrgError';
 
 type JoinOrgArg = { requestUserId: string; requestedOrgId: string };
@@ -26,13 +25,14 @@ export class RequestJoinOrgUseCase
   }
   public async execute(arg: JoinOrgArg): Promise<RequestJoinOrgResponse> {
     try {
-      const userId = new UniqueEntityId(arg.requestUserId);
-      const orgId = new UniqueEntityId(arg.requestedOrgId)
+      const requestUserId = new UniqueEntityId(arg.requestUserId);
+      const requestedOrgId = new UniqueEntityId(arg.requestedOrgId);
 
-      const result = await this.OrgRepo.requestJoinOrg(reqId:userId, orgId);
-      return right(
-        Result.success<Org>({ some: result.getValue() }),
-      );
+      const dbResult = await this.OrgRepo.requestJoinOrg(requestUserId, requestedOrgId);
+
+      if (dbResult == false) return left(new StoreConnectionError());
+
+      return right(Result.success<Org>(dbResult));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

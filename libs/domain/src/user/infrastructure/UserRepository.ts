@@ -22,6 +22,7 @@ export class UserRepository implements IUserRepository {
     });
     if (!result) return undefined;
 
+    // console.log('getUserByUserId:', result);
     return UserMapper.ToDomain(result);
   }
 

@@ -1,11 +1,14 @@
 import {
   useGetOrgsUseCase,
   useGetOrgUseCase,
-  useJoinOrgsUseCase,
   useRegisterOrgUseCase,
+  useAcceptJoinOrgUseCase,
+  useRequestJoinOrgUseCase,
 } from '@kurakichi/domain';
 import { extendType, nonNull, stringArg } from 'nexus';
+import { type } from 'node:os';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
+import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 import { orgToPresentation } from '../toPresentationDTO/orgToPresentation';
 
 export const orgMutation = extendType({
@@ -37,24 +40,45 @@ export const orgMutation = extendType({
         return { org: result.value.getValue() };
       },
     });
-    t.field('joinOrg', {
+    t.field('requestJoinOrg', {
       type: 'OrgPayload',
       args: {
         orgId: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        console.log('arg:', args);
+        // console.log('arg:', args);
         const idOrErr = getUserIdByCookie(context);
-        console.log('id:', idOrErr);
+        // console.log('id:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
 
-        const result = await useJoinOrgsUseCase.execute({
-          joinUserId: idOrErr,
-          joinedOrgId: args.orgId,
+        const result = await useRequestJoinOrgUseCase.execute({
+          requestUserId: idOrErr,
+          requestedOrgId: args.orgId,
         });
-        console.log('result:', result);
-        if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
-        return { org: result.value.getValue() };
+        // console.log('result:', result);
+        if (result.isLeft()) return returnErrorToGQL(result);
+
+        const gqlOrg = orgToPresentation(result.value.getValue());
+        return { org: gqlOrg };
+      },
+    });
+    t.field('acceptJoinOrg', {
+      type: 'OrgPayload',
+      args: {
+        requestUserId: nonNull(stringArg()),
+        requestedOrgId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const useCaseResult = await useAcceptJoinOrgUseCase.execute({
+          requestUserId: args.requestUserId,
+          requestedOrgId: args.requestedOrgId,
+        });
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+        const gqlOrg = orgToPresentation(useCaseResult.value.getValue());
+        return { org: gqlOrg };
       },
     });
   },

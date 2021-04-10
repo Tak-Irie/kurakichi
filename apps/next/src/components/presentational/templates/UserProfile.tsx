@@ -1,23 +1,31 @@
 import { FC } from 'react';
-import { IconButton, GridTemplate, GridItem, GridItemWithPic } from '@next/ui';
-import { MailIcon, PhoneIcon } from '@heroicons/react/outline';
-
-type Org = {
-  id: string;
-  orgName?: string;
-};
+import { IconButton, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
+import { MailIcon, CogIcon } from '@heroicons/react/outline';
+import { Message, Org, DialogRoom } from '../../../graphql/generated/graphql';
 
 type UserProfileProps = {
   userName: string;
   image: string;
   icon: string;
   description: string;
+  email: string;
   orgs: Org[];
+  messages: Message[];
+  dialogRooms: DialogRoom[];
 };
 
-export const UserProfile: FC<UserProfileProps> = ({ userName, image, icon, description, orgs }) => {
+export const UserProfile: FC<UserProfileProps> = ({
+  userName,
+  image,
+  icon,
+  description,
+  orgs,
+  messages,
+  email,
+  dialogRooms,
+}) => {
   return (
-    <div className="bg-white">
+    <div className="bg-white min-h-screen">
       <div className="flex-1 relative z-0 flex overflow-hidden">
         <main
           className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last"
@@ -41,8 +49,8 @@ export const UserProfile: FC<UserProfileProps> = ({ userName, image, icon, descr
                   </div>
                   <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                     <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                      <IconButton label="Message" svgIcon={<MailIcon />} />
-                      <IconButton label="Phone" svgIcon={<PhoneIcon />} />
+                      <IconButton label="メッセージ" svgIcon={<MailIcon />} />
+                      <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
                     </div>
                   </div>
                 </div>
@@ -52,9 +60,48 @@ export const UserProfile: FC<UserProfileProps> = ({ userName, image, icon, descr
               </div>
             </div>
 
-            <div className="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <GridTemplate>
-                <GridItem label="自己紹介" content={description} colSpan="col-span-2" />
+                <GridItem label="自己紹介" content={description} colSpan="col-span-1" />
+                <GridItem label="メールアドレス" content={email} colSpan="col-span-1" />
+              </GridTemplate>
+            </div>
+
+            <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-sm font-medium text-gray-500">新着メッセージ</h2>
+              <GridTemplate>
+                {messages[0] ? (
+                  messages.map((message) => {
+                    return (
+                      <div key={message.id}>
+                        <GridItem label={message.content} content={message.content} />
+                      </div>
+                    );
+                  })
+                ) : (
+                  <SmallText>新着メッセージはありません</SmallText>
+                )}
+              </GridTemplate>
+            </div>
+
+            <div className="mt-8 max-w-5xl mx-auto px-4  sm:px-6 lg:px-8">
+              <h2 className="text-sm font-medium text-gray-500">ダイアローグベース</h2>
+              <GridTemplate>
+                {dialogRooms ? (
+                  dialogRooms.map((room) => {
+                    return (
+                      <div key={room.id}>
+                        <GridItemWithPic
+                          name={room.roomOwner.userName}
+                          description={room.id}
+                          // url={`/org/${org.id}`}
+                        />
+                      </div>
+                    );
+                  })
+                ) : (
+                  <SmallText>所属ベースは有りません</SmallText>
+                )}
               </GridTemplate>
             </div>
 
@@ -64,8 +111,12 @@ export const UserProfile: FC<UserProfileProps> = ({ userName, image, icon, descr
                 {orgs
                   ? orgs.map((org) => {
                       return (
-                        <div key={org.id.toString()}>
-                          <GridItemWithPic name={org.orgName} description={org.id} />
+                        <div key={org.id}>
+                          <GridItemWithPic
+                            name={org.orgName}
+                            description={org.description}
+                            url={`/org/${org.id}`}
+                          />
                         </div>
                       );
                     })

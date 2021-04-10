@@ -1,12 +1,16 @@
 import { NextPage } from 'next';
 import { UserProfile } from '@next/ui';
 
-import { useMeUserQuery } from '../../graphql/generated/graphql';
+import { useGetMyInfoDetailQuery } from '../../graphql/generated/graphql';
 
 const MyPage: NextPage = () => {
-  const { data } = useMeUserQuery({ fetchPolicy: 'cache-only' });
-  const { userName, belongOrg, picture } = data.me.user;
+  const { data, loading, error } = useGetMyInfoDetailQuery({ fetchPolicy: 'cache-and-network' });
 
+  if (loading) return <p>loading</p>;
+  if (error) return <p>{error.message}</p>;
+
+  const { userName, belongOrgs, picture, messages, email, belongDialogRooms } = data.me.user;
+  console.log('MyPageData:', data.me.user);
   return (
     <div>
       <UserProfile
@@ -14,7 +18,10 @@ const MyPage: NextPage = () => {
         description="ここは自己紹介を記入する欄です"
         icon=""
         image={picture}
-        orgs={belongOrg}
+        orgs={belongOrgs}
+        messages={messages}
+        email={email}
+        dialogRooms={belongDialogRooms}
       />
     </div>
   );

@@ -1,19 +1,31 @@
-import { User as StoredUser, Message as StoredMessage, Organization, Room } from '@prisma/client';
+import {
+  User as StoredUser,
+  Message as StoredMessage,
+  Organization,
+  DialogRoom as StoredDialogRoom,
+} from '@prisma/client';
+import { Org } from '../../org/domain';
+import { OrgMapper } from '../../org/infra';
 import { UniqueEntityId } from '../../shared';
-import { User, UserEmail, UserName, UserPassword } from '../domain';
+import { Message, User, UserEmail, UserName, UserPassword, DialogRoom } from '../domain';
+import { DialogRoomMapper } from './DialogRoomMapper';
+import { MessageMapper } from './MessageMapper';
 
 type StoredUserRelation = StoredUser & {
   receivedMessages?: StoredMessage[];
-  belongOrg?: Organization[];
-  belongRoom?: Room[];
+  belongOrgs?: Organization[];
+  belongDialogRooms?: StoredDialogRoom[];
 };
 
+// FIXME: re-architect whole persistence layer. below mapper is seriously ugly
+// this distortion is made by coexistence of simple CRUD and DDD. need to implement CQRS
 export class UserMapper {
   public static async ToDomain(storedUser: StoredUserRelation): Promise<User> {
+    console.log('storedUser:', storedUser);
     let password: UserPassword | undefined;
-    let messages: UniqueEntityId[] | undefined;
-    let belongOrg: UniqueEntityId[] | undefined;
-    let belongRoom: UniqueEntityId[] | undefined;
+    let messages: Message[];
+    let belongOrgs: Org[];
+    let belongDialogRooms: DialogRoom[];
 
     const userNameResult = UserName.create({ userName: storedUser.name });
 
@@ -25,17 +37,19 @@ export class UserMapper {
       password = result.getValue();
     }
 
-    // FIXME:abstract them
     if (storedUser.receivedMessages) {
-      messages = storedUser.receivedMessages.map((m) => new UniqueEntityId(m.id));
-    }
-    if (storedUser.belongOrg) {
-      belongOrg = storedUser.belongOrg.map((m) => new UniqueEntityId(m.id));
-    }
-    if (storedUser.belongRoom) {
-      belongRoom = storedUser.belongRoom.map((m) => new UniqueEntityId(m.id));
+      messages = storedUser.receivedMessages.map((message) => MessageMapper.ToDomain(message));
     }
 
+    if (storedUser.belongOrgs) {
+      belongOrgs = storedUser.belongOrgs.map((org) => OrgMapper.ToDomain(org));
+    }
+    if (storedUser.belongDialogRooms) {
+      belongDialogRooms = storedUser.belongDialogRooms.map((dialogRoom) =>
+        DialogRoomMapper.ToDomain(dialogRoom),
+      );
+    }
+    console.log('belongRooms:', belongDialogRooms);
     const userEmailResult = UserEmail.create({ email: storedUser.email });
 
     const userResult = new User({
@@ -44,8 +58,8 @@ export class UserMapper {
       password,
       email: userEmailResult.getValue(),
       messages,
-      belongOrg,
-      belongRoom,
+      belongOrgs,
+      belongDialogRooms,
       role: storedUser.role,
     });
 

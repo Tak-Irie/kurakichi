@@ -38,9 +38,9 @@ export const userQuery = extendType({
         if (typeof idOrErr === 'object') return idOrErr;
 
         const useCaseResult = await useGetUserById.execute(idOrErr);
-        // console.log('res:', result);
         if (useCaseResult.isLeft()) return { message: useCaseResult.value.getErrorValue() };
 
+        // console.log('me/useCaseResult:', useCaseResult.value.getValue());
         const gqlField = userToPresentation(useCaseResult.value.getValue());
         // console.log('domainUser:', domainUser);
         return {
@@ -62,7 +62,7 @@ export const userMutation = extendType({
         userName: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        console.log('getConn');
+        // console.log('getConn');
         const result = await useRegisterUserUseCase.execute({ ...args });
         if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
         const user = result.value.getValue();

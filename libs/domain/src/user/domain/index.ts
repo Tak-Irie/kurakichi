@@ -9,3 +9,7 @@ export * from './events/UserCreated';
 export * from './IMessageRepo';
 export * from './Message';
 export * from './MessageContent';
+
+export * from './DialogRoom';
+export * from './IDialogRoomRepo';
+export * from './Karte';

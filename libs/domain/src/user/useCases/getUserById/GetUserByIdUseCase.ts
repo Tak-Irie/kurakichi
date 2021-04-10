@@ -7,7 +7,7 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from '../../../shared';
-import { IUserRepository, UserReadModel, User } from '../../domain';
+import { IUserRepository, User } from '../../domain';
 import * as GetUserByIdErrors from './GetUserByIdErrors';
 
 type GetUserByIdResponse = Either<
@@ -22,11 +22,12 @@ export class GetUserByIdUseCase implements IUseCase<string, Promise<GetUserByIdR
 
   public async execute(userId: string): Promise<GetUserByIdResponse> {
     try {
-      const result = await this.userRepository.getUserByUserId(new UniqueEntityId(userId));
+      const dbResult = await this.userRepository.getUserByUserId(new UniqueEntityId(userId));
 
-      if (result === undefined) return left(new GetUserByIdErrors.UserNotFoundError(userId));
+      if (dbResult === undefined) return left(new GetUserByIdErrors.UserNotFoundError(userId));
 
-      return right(Result.success<User>(result));
+      // console.log('getUseByIdUC:', dbResult);
+      return right(Result.success<User>(dbResult));
     } catch (err) {
       return left(new UnexpectedError());
     }

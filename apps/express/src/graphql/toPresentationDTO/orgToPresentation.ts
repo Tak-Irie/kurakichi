@@ -8,14 +8,18 @@ type MemberDTO = {
 };
 
 export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
-  const members: MemberDTO[] = org.getMembers().map((member) => {
-    return {
-      id: member.getId(),
-      email: member.getEmail(),
-      userName: member.getMemberName(),
-    };
-  });
+  // console.log('mapperOrg:', org);
+  let members: MemberDTO[];
 
+  if (org.getMembers()) {
+    members = org.getMembers().map((member) => {
+      return {
+        id: member.getId(),
+        email: member.getEmail(),
+        userName: member.getMemberName(),
+      };
+    });
+  }
   const props = org.getProps();
 
   const data = {
@@ -25,10 +29,10 @@ export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
     email: org.getEmail(),
     phoneNumber: props.phoneNumber.getValue(),
     description: 'UNKNOWN',
-    homePage: 'UNKNOWN',
+    homePage: props.homePage,
     icon: props.icon,
     image: 'UNKNOWN',
-    members,
+    members: members || null,
   };
 
   return data;

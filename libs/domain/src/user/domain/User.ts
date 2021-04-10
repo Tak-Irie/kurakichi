@@ -1,10 +1,8 @@
+import { Org } from '../../org';
 import { AggregateRoot } from '../../shared/domain/AggregateRoot';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
-// import { UserCreated } from './events/UserCreated';
-import { UserEmail } from './UserEmail';
-import { UserName } from './UserName';
-import { UserPassword } from './UserPassword';
+import { Message, DialogRoom, UserEmail, UserPassword, UserName } from './';
 
 interface UserProps {
   id: UniqueEntityId;
@@ -14,9 +12,9 @@ interface UserProps {
   ssoSub?: string;
   picture?: string;
   role?: 'USER' | 'PRO';
-  messages?: UniqueEntityId[];
-  belongOrg?: UniqueEntityId[];
-  belongRoom?: UniqueEntityId[];
+  messages?: Message[];
+  belongDialogRooms?: DialogRoom[];
+  belongOrgs?: Org[];
 }
 
 export class User extends AggregateRoot<UserProps> {

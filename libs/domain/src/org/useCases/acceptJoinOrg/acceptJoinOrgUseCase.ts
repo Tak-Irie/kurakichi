@@ -9,18 +9,30 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
-import { NotFoundOrgError, AlreadyBelongedError } from './joinOrgError';
+import {
+  NotAuthorizedError,
+  NotFoundUserError,
+  NotFoundOrgError,
+  AlreadyUserIsMemberError,
+} from './acceptJoinOrgError';
 
 type AcceptJoinOrgInput = {
-  joinedOrgId: string;
-  joinUserId: string;
+  requestedOrgId: string;
+  requestUserId: string;
+  // acceptorMemberId: string;
 };
 
 type AcceptJoinOrgResponse = Either<
-  NotFoundOrgError | AlreadyBelongedError | UnexpectedError | StoreConnectionError,
+  | AlreadyUserIsMemberError
+  | NotFoundOrgError
+  | NotAuthorizedError
+  | NotFoundUserError
+  | UnexpectedError
+  | StoreConnectionError,
   Result<Org>
 >;
 
+// FIXME: add auth to accept feature
 export class AcceptJoinOrgUseCase
   implements IUseCase<AcceptJoinOrgInput, Promise<AcceptJoinOrgResponse>> {
   constructor(private OrgRepo: IOrgRepo) {
@@ -28,30 +40,30 @@ export class AcceptJoinOrgUseCase
   }
   public async execute(req: AcceptJoinOrgInput): Promise<AcceptJoinOrgResponse> {
     try {
-      const foundOrg = await this.OrgRepo.getOrgById(new UniqueEntityId(req.joinedOrgId));
-      if (foundOrg == undefined) return left(new NotFoundOrgError());
+      const requestedOrg = await this.OrgRepo.getOrgById(new UniqueEntityId(req.requestedOrgId));
+      if (requestedOrg == undefined) return left(new NotFoundOrgError());
 
       // console.log(
-      //   'foundOrg:',
-      //   foundOrg.getMembers().map((member) => member.getId()),
+      //   'requestedOrg:',
+      //   requestedOrg.getMembers().map((member) => member.getId()),
       // );
-      console.log('joinId:', req.joinUserId);
-      const belonged = foundOrg.getMembers().some((member) => {
-        member.getId() === req.joinUserId;
+      // console.log('joinId:', req.requestUserId);
+      const alreadyBelongTo = requestedOrg.getMembers().some((member) => {
+        member.getId() === req.requestUserId;
         // console.log(typeof member.getId());
         // console.log(typeof req.joinUserId);
       });
       // console.log('be:', belonged);
-      if (belonged) return left(new AlreadyBelongedError());
+      if (alreadyBelongTo) return left(new AlreadyUserIsMemberError());
 
-      const registeredResult = await this.OrgRepo.registerMember(
-        new UniqueEntityId(req.joinedOrgId),
-        new UniqueEntityId(req.joinUserId),
+      const registeredResult = await this.OrgRepo.acceptJoinOrg(
+        new UniqueEntityId(req.requestedOrgId),
+        new UniqueEntityId(req.requestUserId),
       );
 
       if (registeredResult == false) return left(new StoreConnectionError());
 
-      return right(Result.success<Org>(foundOrg));
+      return right(Result.success<Org>(requestedOrg));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

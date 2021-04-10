@@ -1,13 +1,13 @@
 fragment UserPayload on User {
   id
-  userName
   email
+  userName
   picture
   role
-  belongOrg {
+  belongOrgs {
     id
   }
-  belongRoom {
+  belongDialogRooms {
     id
   }
   messages {

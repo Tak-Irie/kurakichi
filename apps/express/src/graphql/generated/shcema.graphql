@@ -7,11 +7,25 @@ type Dialog implements Node {
 
   """GUID for a resource"""
   id: ID!
-  room: Room
+  room: DialogRoom
 }
 
 type DialogPayload {
   dialog: [Dialog]
+  error: RegularError
+}
+
+type DialogRoom implements Node {
+  """GUID for a resource"""
+  id: ID!
+  members: [User]
+
+  """it indicate Client/Patient"""
+  roomOwner: User
+}
+
+type DialogRoomPayload {
+  dialogRoom: DialogRoom
   error: RegularError
 }
 
@@ -29,14 +43,15 @@ type MessagePayload {
 }
 
 type Mutation {
+  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
   changePassword(currentPass: String!, newPass: String!): RegularPayload
   deleteUser: RegularPayload
   forgetPassword(email: String!): RegularPayload
-  joinOrg(orgId: String!): OrgPayload
   login(email: String!, password: String!): UserPayload
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
+  requestJoinOrg(orgId: String!): OrgPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
@@ -88,25 +103,13 @@ type RegularPayload {
   result: Boolean
 }
 
-type Room implements Node {
-  """GUID for a resource"""
-  id: ID!
-  members: [User]
-  roomName: String
-}
-
-type RoomPayload {
-  error: RegularError
-  room: Room
-}
-
 type Subscription {
   dialogPosted: Dialog
 }
 
 type User implements Node {
-  belongOrg: [Org]
-  belongRoom: [Room]
+  belongDialogRooms: [DialogRoom]
+  belongOrgs: [Org]
   email: String
 
   """GUID for a resource"""

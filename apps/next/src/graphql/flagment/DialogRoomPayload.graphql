@@ -1,0 +1,9 @@
+fragment DialogRoomPayload on DialogRoom {
+  id
+  roomOwner {
+    id
+  }
+  members {
+    id
+  }
+}

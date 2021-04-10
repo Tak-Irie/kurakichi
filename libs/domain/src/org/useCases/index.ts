@@ -11,5 +11,5 @@ const orgRepo = new OrgRepo();
 export const useRegisterOrgUseCase = new RegisterOrgUseCase(orgRepo);
 export const useGetOrgsUseCase = new GetOrgsUseCase(orgRepo);
 export const useGetOrgUseCase = new GetOrgUseCase(orgRepo);
-export const useJoinOrgsUseCase = new AcceptJoinOrgUseCase(orgRepo);
-export const useRequestJoinOrgsUseCase = new RequestJoinOrgUseCase(orgRepo);
+export const useAcceptJoinOrgUseCase = new AcceptJoinOrgUseCase(orgRepo);
+export const useRequestJoinOrgUseCase = new RequestJoinOrgUseCase(orgRepo);

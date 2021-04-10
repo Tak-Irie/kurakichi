@@ -1,10 +1,12 @@
 import { FC } from 'react';
+import Link from 'next/link';
 
 type GridItemWithPicProps = {
   name: string;
   description: string;
   imgSrc?: string;
   key?: string;
+  url?: string;
 };
 
 export const GridItemWithPic: FC<GridItemWithPicProps> = ({
@@ -12,6 +14,7 @@ export const GridItemWithPic: FC<GridItemWithPicProps> = ({
   description = '架空の人物',
   imgSrc = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=bYR969hCec&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   key,
+  url = '/',
 }) => {
   return (
     <div
@@ -22,11 +25,13 @@ export const GridItemWithPic: FC<GridItemWithPicProps> = ({
         <img className="h-10 w-10 rounded-full" src={imgSrc} alt="" />
       </div>
       <div className="flex-1 min-w-0">
-        <a href="/" className="focus:outline-none">
-          <span className="absolute inset-0" aria-hidden="true"></span>
-          <p className="text-sm font-medium text-gray-900">{name}</p>
-          <p className="text-sm text-gray-500 truncate">{description}</p>
-        </a>
+        <Link href={url}>
+          <a href={url} className="focus:outline-none">
+            <span className="absolute inset-0" aria-hidden="true"></span>
+            <p className="text-sm font-medium text-gray-900">{name}</p>
+            <p className="text-sm text-gray-500 truncate">{description}</p>
+          </a>
+        </Link>
       </div>
     </div>
   );

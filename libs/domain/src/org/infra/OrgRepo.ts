@@ -60,6 +60,7 @@ export class OrgRepo implements IOrgRepo {
     const userId = MemberId.getId();
     const _orgId = orgId.getId();
 
+    // TODO: does any better solution?
     const result = await this.prisma.$transaction([
       this.prisma.organization.update({
         where: { id: _orgId },
@@ -84,6 +85,7 @@ export class OrgRepo implements IOrgRepo {
     const result = await this.prisma.organization.update({
       where: { id: orgId.getId() },
       data: { requestedMembers: { connect: { id: reqId.getId() } } },
+      include: { members: true },
     });
     if (result == undefined) return false;
 

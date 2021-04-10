@@ -1,27 +1,41 @@
 import { User } from '@kurakichi/domain';
-import { IDs } from '../../types';
-import { UIDsToGql } from '../../util/UIDsToGql';
+import { NexusGenFieldTypes } from '../generated/nexus';
+import { messageToPresentation } from './messageToPresentation';
+import { orgToPresentation } from './orgToPresentation';
+import { dialogRoomToPresentation } from './dialogRoomToPresentation';
 
-export type UserDTO = {
-  id: string;
-  email: string;
-  userName: string;
-  role: 'USER' | 'PRO';
-  picture: string;
-  belongOrg: IDs;
-  belongRoom: IDs;
-  messages: IDs;
-};
+// export type UserDTO = {
+//   id: string;
+//   email: string;
+//   userName: string;
+//   role: 'USER' | 'PRO';
+//   picture: string;
+//   belongOrgs: IDs;
+//   belongRooms: IDs;
+//   messages: IDs;
+// };
 
-export const userToPresentation = (user: User): UserDTO => {
-  const { id, email, userName, belongOrg, belongRoom, messages, picture, role } = user.getProps();
-  let orgs: IDs;
-  let rooms: IDs;
-  let _messages: IDs;
+export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
+  const {
+    id,
+    email,
+    userName,
+    belongOrgs,
+    belongDialogRooms,
+    messages,
+    picture,
+    role,
+  } = user.getProps();
 
-  if (belongOrg) orgs = UIDsToGql(belongOrg);
-  if (belongRoom) rooms = UIDsToGql(belongRoom);
-  if (messages) _messages = UIDsToGql(messages);
+  let gqlOrgs: NexusGenFieldTypes['Org'][] | undefined;
+  let gqlDialogRooms: NexusGenFieldTypes['DialogRoom'][] | undefined;
+  let gqlMessages: NexusGenFieldTypes['Message'][] | undefined;
+  // console.log('userToPresent:', user);
+
+  if (belongOrgs) gqlOrgs = belongOrgs.map((org) => orgToPresentation(org));
+  if (belongDialogRooms)
+    gqlDialogRooms = belongDialogRooms.map((dialogRoom) => dialogRoomToPresentation(dialogRoom));
+  if (messages) gqlMessages = messages.map((message) => messageToPresentation(message));
 
   const data = {
     id: id.getId(),
@@ -29,9 +43,9 @@ export const userToPresentation = (user: User): UserDTO => {
     userName: userName.getValue(),
     role,
     picture,
-    belongOrg: orgs,
-    belongRoom: rooms,
-    messages: _messages,
+    belongOrgs: gqlOrgs,
+    belongDialogRooms: gqlDialogRooms,
+    messages: gqlMessages,
   };
   return data;
 };

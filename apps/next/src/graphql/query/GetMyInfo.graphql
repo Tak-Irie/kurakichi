@@ -1,0 +1,23 @@
+query GetMyInfoDetail {
+  me {
+    user {
+      id
+      email
+      userName
+      picture
+      role
+      belongOrgs {
+        ...OrgPayload
+      }
+      belongDialogRooms {
+        ...DialogRoomPayload
+      }
+      messages {
+        ...MessagePayload
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

@@ -8,11 +8,7 @@ type TextProps = {
 // size should be controlled by components (also responsive feat)
 
 const SmallText: FC<TextProps> = (props) => {
-  return (
-    <p className="max-w-md mb-10 text-xs tracking-wide text-black sm:text-sm sm:mx-auto md:mb-16">
-      {props.children}
-    </p>
-  );
+  return <p className="mt-1 text-gray-900 text-sm">{props.children}</p>;
 };
 
 const Text: FC<TextProps> = (props) => {

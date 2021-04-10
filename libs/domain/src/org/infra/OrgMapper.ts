@@ -1,6 +1,6 @@
 import { Organization as StoredOrg, User as StoredUser } from '@prisma/client';
 import { Email, PhoneNumber, UniqueEntityId } from '../../shared';
-import { UserEmail, UserName } from '../../user';
+import { UserEmail, UserName } from '../../user/domain';
 import { Member, Org } from '../domain';
 import { OrgLocation } from '../domain/OrgLocation';
 import { OrgName } from '../domain/OrgName';

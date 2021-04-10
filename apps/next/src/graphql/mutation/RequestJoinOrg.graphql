@@ -1,0 +1,10 @@
+mutation requestJoinOrg($requestOrgId: String!) {
+  requestJoinOrg(orgId: $requestOrgId) {
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

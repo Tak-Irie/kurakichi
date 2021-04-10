@@ -35,6 +35,15 @@ export interface NexusGenObjects {
     dialog?: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
+  DialogRoom: { // root type
+    id: string; // ID!
+    members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    roomOwner?: NexusGenRootTypes['User'] | null; // User
+  }
+  DialogRoomPayload: { // root type
+    dialogRoom?: NexusGenRootTypes['DialogRoom'] | null; // DialogRoom
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+  }
   Message: { // root type
     content?: string | null; // String
     id: string; // ID!
@@ -60,19 +69,10 @@ export interface NexusGenObjects {
     message?: string | null; // String
     result?: boolean | null; // Boolean
   }
-  Room: { // root type
-    id: string; // ID!
-    members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    roomName?: string | null; // String
-  }
-  RoomPayload: { // root type
-    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
-    room?: NexusGenRootTypes['Room'] | null; // Room
-  }
   Subscription: {};
   User: { // root type
-    belongOrg?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
-    belongRoom?: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
+    belongDialogRooms?: Array<NexusGenRootTypes['DialogRoom'] | null> | null; // [DialogRoom]
+    belongOrgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
     email?: string | null; // String
     id: string; // ID!
     messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
@@ -88,7 +88,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['Dialog'] | NexusGenRootTypes['Message'] | NexusGenRootTypes['Org'] | NexusGenRootTypes['Room'] | NexusGenRootTypes['User'];
+  Node: NexusGenRootTypes['Dialog'] | NexusGenRootTypes['DialogRoom'] | NexusGenRootTypes['Message'] | NexusGenRootTypes['Org'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -102,10 +102,19 @@ export interface NexusGenFieldTypes {
   Dialog: { // field return type
     dialogContent: string | null; // String
     id: string; // ID!
-    room: NexusGenRootTypes['Room'] | null; // Room
+    room: NexusGenRootTypes['DialogRoom'] | null; // DialogRoom
   }
   DialogPayload: { // field return type
     dialog: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
+  }
+  DialogRoom: { // field return type
+    id: string; // ID!
+    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    roomOwner: NexusGenRootTypes['User'] | null; // User
+  }
+  DialogRoomPayload: { // field return type
+    dialogRoom: NexusGenRootTypes['DialogRoom'] | null; // DialogRoom
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
   }
   Message: { // field return type
@@ -118,14 +127,15 @@ export interface NexusGenFieldTypes {
     messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
   }
   Mutation: { // field return type
+    acceptJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     changePassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     deleteUser: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     forgetPassword: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
-    joinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     login: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     logout: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
     registerOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
@@ -161,21 +171,12 @@ export interface NexusGenFieldTypes {
     message: string | null; // String
     result: boolean | null; // Boolean
   }
-  Room: { // field return type
-    id: string; // ID!
-    members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-    roomName: string | null; // String
-  }
-  RoomPayload: { // field return type
-    error: NexusGenRootTypes['RegularError'] | null; // RegularError
-    room: NexusGenRootTypes['Room'] | null; // Room
-  }
   Subscription: { // field return type
     dialogPosted: NexusGenRootTypes['Dialog'] | null; // Dialog
   }
   User: { // field return type
-    belongOrg: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
-    belongRoom: Array<NexusGenRootTypes['Room'] | null> | null; // [Room]
+    belongDialogRooms: Array<NexusGenRootTypes['DialogRoom'] | null> | null; // [DialogRoom]
+    belongOrgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
     email: string | null; // String
     id: string; // ID!
     messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
@@ -197,10 +198,19 @@ export interface NexusGenFieldTypeNames {
   Dialog: { // field return type name
     dialogContent: 'String'
     id: 'ID'
-    room: 'Room'
+    room: 'DialogRoom'
   }
   DialogPayload: { // field return type name
     dialog: 'Dialog'
+    error: 'RegularError'
+  }
+  DialogRoom: { // field return type name
+    id: 'ID'
+    members: 'User'
+    roomOwner: 'User'
+  }
+  DialogRoomPayload: { // field return type name
+    dialogRoom: 'DialogRoom'
     error: 'RegularError'
   }
   Message: { // field return type name
@@ -213,14 +223,15 @@ export interface NexusGenFieldTypeNames {
     messages: 'Message'
   }
   Mutation: { // field return type name
+    acceptJoinOrg: 'OrgPayload'
     changePassword: 'RegularPayload'
     deleteUser: 'RegularPayload'
     forgetPassword: 'RegularPayload'
-    joinOrg: 'OrgPayload'
     login: 'UserPayload'
     logout: 'RegularPayload'
     postDialog: 'DialogPayload'
     registerOrg: 'OrgPayload'
+    requestJoinOrg: 'OrgPayload'
     sendMessage: 'MessagePayload'
     userRegister: 'UserPayload'
   }
@@ -256,21 +267,12 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
     result: 'Boolean'
   }
-  Room: { // field return type name
-    id: 'ID'
-    members: 'User'
-    roomName: 'String'
-  }
-  RoomPayload: { // field return type name
-    error: 'RegularError'
-    room: 'Room'
-  }
   Subscription: { // field return type name
     dialogPosted: 'Dialog'
   }
   User: { // field return type name
-    belongOrg: 'Org'
-    belongRoom: 'Room'
+    belongDialogRooms: 'DialogRoom'
+    belongOrgs: 'Org'
     email: 'String'
     id: 'ID'
     messages: 'Message'
@@ -290,15 +292,16 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    acceptJoinOrg: { // args
+      requestUserId: string; // String!
+      requestedOrgId: string; // String!
+    }
     changePassword: { // args
       currentPass: string; // String!
       newPass: string; // String!
     }
     forgetPassword: { // args
       email: string; // String!
-    }
-    joinOrg: { // args
-      orgId: string; // String!
     }
     login: { // args
       email: string; // String!
@@ -313,6 +316,9 @@ export interface NexusGenArgTypes {
       location: string; // String!
       name: string; // String!
       phoneNumber: string; // String!
+    }
+    requestJoinOrg: { // args
+      orgId: string; // String!
     }
     sendMessage: { // args
       receiverId: string; // String!
@@ -332,14 +338,14 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "Dialog" | "Message" | "Org" | "Room" | "User"
+  Node: "Dialog" | "DialogRoom" | "Message" | "Org" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
   Dialog: "Node"
+  DialogRoom: "Node"
   Message: "Node"
   Org: "Node"
-  Room: "Node"
   User: "Node"
 }
 

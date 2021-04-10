@@ -19,10 +19,10 @@ model User {
   receivedMessages Message[]      @relation("receive")
   sentMessages     Message[]      @relation("sent")
   manageOrg        Organization[] @relation("orgAdmin")
-  manageRoom       Room[]         @relation("roomAdmin")
+  manageRoom       DialogRoom[]   @relation("roomAdmin")
   belongOrgs       Organization[] @relation("orgMember")
   requestJoinOrgs  Organization[] @relation("requestedMember")
-  belongRooms      Room[]         @relation("roomMember")
+  belongRooms      DialogRoom[]   @relation("roomMember")
 }
 
 model Organization {
@@ -59,19 +59,19 @@ model Dialog {
   text String
 }
 
-model Room {
+model DialogRoom {
   id      String @id
   adminId String
   admin   User   @relation("roomAdmin", fields: [adminId], references: [id])
   karte   Karte?
-  member  User[] @relation("roomMember")
+  members User[] @relation("roomMember")
 }
 
 model Karte {
-  id     String @id
-  roomId String @unique
+  id     String     @id
+  roomId String     @unique
   record String
-  room   Room   @relation(fields: [roomId], references: [id])
+  room   DialogRoom @relation(fields: [roomId], references: [id])
 }
 
 enum Role {
