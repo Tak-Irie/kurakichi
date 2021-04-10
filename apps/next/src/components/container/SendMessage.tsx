@@ -1,19 +1,19 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../graphql/generated/graphql';
-import { Form, Input, MiddleButton } from '@next/ui';
+import { Form, Input } from '@next/ui';
 import {} from '@headlessui/react';
 
-type sendMessageProps = {
+type sendMessageInput = {
   textInput: string;
   receiverId: string;
 };
 
 export const SendMessage: FC = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<sendMessageInput>();
   const [sendMessage, { data, loading, error }] = useSendMessageMutation();
 
-  const submitHandler = async (value: sendMessageProps) => {
+  const onSubmit = async (value: sendMessageInput) => {
     try {
       await sendMessage({
         variables: { TextInput: value.textInput, ReceiverId: value.receiverId },
@@ -25,10 +25,14 @@ export const SendMessage: FC = () => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(submitHandler)}>
-        <Input name="textInput" type="text" labeled={true} register={register} />
-        <Input name="receiverId" type="text" labeled={true} register={register} />
-        <MiddleButton type="submit">Send Message</MiddleButton>
+      <Form<sendMessageInput> onSubmit={onSubmit}>
+        {({ register }) => (
+          <>
+            <Input {...register('textInput')} />
+            <Input {...register('receiverId')} />
+            <Input type="submit" />
+          </>
+        )}
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}

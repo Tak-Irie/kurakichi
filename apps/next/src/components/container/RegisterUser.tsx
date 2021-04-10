@@ -1,23 +1,26 @@
 import { FC } from 'react';
-import { Form } from '../presentational/molecules/Form';
-import { Input } from '../presentational/atoms/Input';
-import { MiddleButton } from '../presentational/atoms/Button';
+import { MiddleButton, Input } from '../presentational/atoms';
 import { useForm } from 'react-hook-form';
 import { useRegisterUserMutation, useMeUserLazyQuery } from '../../graphql/generated/graphql';
 
-interface UserRegisterInput {
+type UserRegisterInput = {
   email: string;
   password: string;
   userName: string;
-}
+};
 
 export const RegisterUser: FC = () => {
   const [userRegister, { data, loading, error }] = useRegisterUserMutation();
   const [meQuery] = useMeUserLazyQuery();
-
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<UserRegisterInput>();
 
   const onSubmit = async (value: UserRegisterInput) => {
+    console.log('registerValue:', value);
     try {
       await userRegister({
         variables: { ...value },
@@ -31,15 +34,15 @@ export const RegisterUser: FC = () => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input name="userName" type="text" labeled={true} register={register} />
-        <Input name="email" type="email" labeled={true} register={register} />
-        <Input name="password" type="password" labeled={true} register={register} />
-        <MiddleButton type="submit">UserRegister</MiddleButton>
-      </Form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input<UserRegisterInput> label="userName" register={register} required />
+        <Input<UserRegisterInput> label="email" register={register} required />
+        <Input<UserRegisterInput> label="password" register={register} required />
+        <input type="submit" />
+      </form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
-      {data && <p>{data.userRegister.user.userName} data</p>}
+      {data?.userRegister.user && <p>{data.userRegister.user.id} data</p>}
     </>
   );
 };

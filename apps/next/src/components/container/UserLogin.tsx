@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { Form } from '../presentational/molecules/Form';
-import { Input } from '../presentational/atoms/Input';
+import { Form, Input } from '../presentational/atoms/Input';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -15,9 +14,9 @@ const UserLogin: FC = () => {
   const [loginUser, { data, loading, error }] = useLoginUserMutation();
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<UserLoginInput>();
 
-  const handleMutation = async (value: UserLoginInput) => {
+  const onSubmit = async (value: UserLoginInput) => {
     try {
       await loginUser({
         variables: { ...value },
@@ -31,10 +30,14 @@ const UserLogin: FC = () => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(handleMutation)}>
-        <Input name="email" type="email" labeled={true} register={register} />
-        <Input name="password" type="password" labeled={true} register={register} />
-        <MiddleButton type="submit">Login</MiddleButton>
+      <Form<UserLoginInput> onSubmit={onSubmit}>
+        {({ register }) => (
+          <>
+            <Input {...register('email')} />
+            <Input {...register('password')} />
+            <Input type="submit" />
+          </>
+        )}
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
