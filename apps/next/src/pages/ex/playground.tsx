@@ -1,8 +1,5 @@
 import { NextPage } from 'next';
-import Image from 'next/image';
-import { Card, SmallCard, LightningSVG, SideBar, ActivityTable } from '@next/ui';
-import Link from 'next/link';
-import { GetMessages } from '../../components/container/';
+import { ActivityTable } from '@next/ui';
 
 const PlayGround: NextPage = () => {
   return (

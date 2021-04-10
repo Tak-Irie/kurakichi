@@ -49,6 +49,7 @@ model Message {
   senderId   String
   receiverId String
   read_flag  Boolean  @default(false)
+  send_flag  Boolean  @default(false)
   createdAt  DateTime @default(now())
   receiver   User     @relation("receive", fields: [receiverId], references: [id])
   sender     User     @relation("sent", fields: [senderId], references: [id])

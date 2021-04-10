@@ -1,26 +1,10 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import { SideParts, IconButton, GridTemplate, GridItem, GridItemWithPic } from '@next/ui';
+import { Transition } from '@headlessui/react';
 import { MailIcon, PhoneIcon } from '@heroicons/react/outline';
-import Image from 'next/image';
+import { Org } from '../../../graphql/generated/graphql';
 
-type Member = {
-  id: string;
-  userName?: string;
-};
-
-type OrgProfileProps = {
-  orgName?: string;
-  email?: string;
-  phoneNumber?: string;
-  location?: string;
-  image?: string;
-  icon?: string;
-  homePage?: string;
-  description?: string;
-  members?: Member[];
-};
-
-const OrgProfile: FC<OrgProfileProps> = (props) => {
+const OrgProfile: FC<Org> = (props) => {
   const {
     orgName,
     image,
@@ -32,6 +16,9 @@ const OrgProfile: FC<OrgProfileProps> = (props) => {
     description,
     members,
   } = props;
+
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="bg-white">
       <div className="flex-1 relative z-0 flex overflow-hidden">
@@ -43,7 +30,7 @@ const OrgProfile: FC<OrgProfileProps> = (props) => {
             <div>
               <img
                 className="h-32 w-full object-cover lg:h-56"
-                src={image || 'hands_mid-reso.jpg'}
+                src={image === 'UNKNOWN' ? '/hands_mid-reso.jpg' : image}
                 alt="団体イメージ"
               />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,14 +38,30 @@ const OrgProfile: FC<OrgProfileProps> = (props) => {
                   <div className="flex">
                     <img
                       className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
-                      src={icon || '/logo_temp.png'}
+                      src={icon === 'UNKNOWN' ? '/logo_temp.png' : icon}
                       alt="団体アイコン"
                     />
                   </div>
                   <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                     <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                      <IconButton label="Message" svgIcon={<MailIcon />} />
-                      <IconButton label="Phone" svgIcon={<PhoneIcon />} />
+                      <IconButton
+                        onClick={() => setIsOpen(!isOpen)}
+                        label="メッセージを送る"
+                        svgIcon={<MailIcon />}
+                      >
+                        <Transition
+                          show={isOpen}
+                          enter="transition-opacity duration-150"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="transition-opacity duration-150"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          I will fade in and out
+                        </Transition>
+                      </IconButton>
+                      {/* <IconButton label="電話をかける" svgIcon={<PhoneIcon />} /> */}
                     </div>
                   </div>
                 </div>
@@ -79,36 +82,17 @@ const OrgProfile: FC<OrgProfileProps> = (props) => {
             </div>
 
             <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">Team members</h2>
+              <h2 className="text-sm font-medium text-gray-500">団体メンバー</h2>
               <GridTemplate>
-                {members ? (
-                  members.map((member) => {
-                    return (
-                      <div key={member.id.toString()}>
-                        <GridItemWithPic name={member.userName} description={member.id} />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <>
-                    <GridItemWithPic name="its name" description="its description" />
-                    <GridItemWithPic
-                      name="its name"
-                      description="its description"
-                      imgSrc="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixqx=bYR969hCec&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    />
-                    <GridItemWithPic
-                      name="its name"
-                      description="its description"
-                      imgSrc="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixqx=bYR969hCec&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    />
-                    <GridItemWithPic
-                      name="its name"
-                      description="its description"
-                      imgSrc="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=bYR969hCec&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    />
-                  </>
-                )}
+                {members
+                  ? members.map((member) => {
+                      return (
+                        <div key={member.id}>
+                          <GridItemWithPic name={member.userName} />
+                        </div>
+                      );
+                    })
+                  : null}
               </GridTemplate>
             </div>
           </article>

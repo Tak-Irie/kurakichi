@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../graphql/generated/graphql';
 import { Form, Input, MiddleButton } from '@next/ui';
+import {} from '@headlessui/react';
 
 type sendMessageProps = {
   textInput: string;

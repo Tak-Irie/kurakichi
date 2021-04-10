@@ -15,3 +15,6 @@ export * from './GridItemWithPic';
 export * from './TableHead';
 export * from './TableData';
 export * from './TablePagination';
+export * from './Notifications';
+export * from './Alerts';
+export * from './Badges';

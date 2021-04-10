@@ -85,7 +85,7 @@ export const UserProfile: FC<UserProfileProps> = ({
             </div>
 
             <div className="mt-8 max-w-5xl mx-auto px-4  sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">ダイアローグベース</h2>
+              <h2 className="text-sm font-medium text-gray-500">セキュアベース</h2>
               <GridTemplate>
                 {secureBases ? (
                   secureBases.map((base) => {
@@ -100,7 +100,7 @@ export const UserProfile: FC<UserProfileProps> = ({
                     );
                   })
                 ) : (
-                  <SmallText>所属ベースは有りません</SmallText>
+                  <SmallText>所属ベースはありません</SmallText>
                 )}
               </GridTemplate>
             </div>
