@@ -554,10 +554,10 @@ export type GetUsersQuery = (
   ) }
 );
 
-export type MeUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeUserQuery = (
+export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'UserPayload' }
@@ -1284,8 +1284,8 @@ export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
-export const MeUserDocument = gql`
-    query MeUser {
+export const MeDocument = gql`
+    query Me {
   me {
     user {
       ...UserPayload
@@ -1299,31 +1299,31 @@ export const MeUserDocument = gql`
 ${RegularErrorFragmentDoc}`;
 
 /**
- * __useMeUserQuery__
+ * __useMeQuery__
  *
- * To run a query within a React component, call `useMeUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMeUserQuery({
+ * const { data, loading, error } = useMeQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMeUserQuery(baseOptions?: Apollo.QueryHookOptions<MeUserQuery, MeUserQueryVariables>) {
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeUserQuery, MeUserQueryVariables>(MeUserDocument, options);
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
       }
-export function useMeUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeUserQuery, MeUserQueryVariables>) {
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeUserQuery, MeUserQueryVariables>(MeUserDocument, options);
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
         }
-export type MeUserQueryHookResult = ReturnType<typeof useMeUserQuery>;
-export type MeUserLazyQueryHookResult = ReturnType<typeof useMeUserLazyQuery>;
-export type MeUserQueryResult = Apollo.QueryResult<MeUserQuery, MeUserQueryVariables>;
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SubscriptDialogDocument = gql`
     subscription SubscriptDialog {
   dialogPosted {

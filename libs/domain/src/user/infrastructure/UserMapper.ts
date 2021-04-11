@@ -21,7 +21,7 @@ type StoredUserRelation = StoredUser & {
 // this distortion is made by coexistence of simple CRUD and DDD. need to implement CQRS
 export class UserMapper {
   public static async ToDomain(storedUser: StoredUserRelation): Promise<User> {
-    console.log('storedUser:', storedUser);
+    // console.log('storedUser:', storedUser);
     let password: UserPassword | undefined;
     let messages: Message[];
     let belongOrgs: Org[];
@@ -49,7 +49,7 @@ export class UserMapper {
         SecureBaseMapper.ToDomain(secureBase),
       );
     }
-    console.log('belongRooms:', belongSecureBases);
+    // console.log('belongBases:', belongSecureBases);
     const userEmailResult = UserEmail.create({ email: storedUser.email });
 
     const userResult = new User({

@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import { useMeUserQuery } from '../../graphql/generated/graphql';
+import { useMeQuery } from '../../graphql/generated/graphql';
 
 const AuthSuccess: NextPage = () => {
-  const { data, loading, error } = useMeUserQuery({
+  const { data, loading, error } = useMeQuery({
     fetchPolicy: 'network-only',
   });
 

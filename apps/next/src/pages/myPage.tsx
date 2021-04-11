@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { UserDeleteButton } from '../components/container/UserDeleteButton';
-import { useMeUserQuery } from '../graphql/generated/graphql';
+import { useMeQuery } from '../graphql/generated/graphql';
 import { IsAuth } from '../util/isAuth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -9,7 +9,7 @@ import { GetMessages } from '../components/container/GetMessages';
 
 const MyPage: NextPage = () => {
   // IsAuth();
-  const { data, loading, error } = useMeUserQuery({
+  const { data, loading, error } = useMeQuery({
     fetchPolicy: 'network-only',
   });
 

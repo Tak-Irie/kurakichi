@@ -1,8 +1,9 @@
 import { FC, ReactElement, useState } from 'react';
 import { SideParts, IconButton, GridTemplate, GridItem, GridItemWithPic } from '@next/ui';
 import { Transition } from '@headlessui/react';
-import { MailIcon, PhoneIcon } from '@heroicons/react/outline';
-import { Org } from '../../../graphql/generated/graphql';
+import { MailIcon, ExclamationIcon } from '@heroicons/react/outline';
+import { Org, useMeQuery } from '../../../graphql/generated/graphql';
+import { IconsCaution } from '../atoms';
 
 const OrgProfile: FC<Org> = (props) => {
   const {
@@ -18,6 +19,7 @@ const OrgProfile: FC<Org> = (props) => {
   } = props;
 
   const [isOpen, setIsOpen] = useState(false);
+  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
 
   return (
     <div className="bg-white">
@@ -44,23 +46,36 @@ const OrgProfile: FC<Org> = (props) => {
                   </div>
                   <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                     <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                      <IconButton
-                        onClick={() => setIsOpen(!isOpen)}
-                        label="メッセージを送る"
-                        svgIcon={<MailIcon />}
-                      >
-                        <Transition
-                          show={isOpen}
-                          enter="transition-opacity duration-150"
-                          enterFrom="opacity-0"
-                          enterTo="opacity-100"
-                          leave="transition-opacity duration-150"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
+                      {data?.me.user ? (
+                        <IconButton
+                          onClick={() => setIsOpen(!isOpen)}
+                          label="メッセージを送る"
+                          svgIcon={<MailIcon />}
                         >
-                          I will fade in and out
-                        </Transition>
-                      </IconButton>
+                          <Transition
+                            show={isOpen}
+                            enter="transition-opacity duration-150"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity duration-150"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            I will fade in and out
+                          </Transition>
+                        </IconButton>
+                      ) : (
+                        <div className="flex items-center space-x-3">
+                          <IconsCaution />
+                          <IconButton
+                            onClick={() => setIsOpen(!isOpen)}
+                            label="メッセージを送る"
+                            disabled
+                            svgIcon={<MailIcon />}
+                          ></IconButton>
+                        </div>
+                      )}
+
                       {/* <IconButton label="電話をかける" svgIcon={<PhoneIcon />} /> */}
                     </div>
                   </div>

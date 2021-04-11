@@ -1,4 +1,4 @@
-query MeUser {
+query Me {
   me {
     user {
       ...UserPayload

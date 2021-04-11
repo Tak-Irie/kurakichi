@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { MiddleButton, Input, Form } from '../presentational/atoms';
 import { useForm } from 'react-hook-form';
-import { useRegisterUserMutation, useMeUserLazyQuery } from '../../graphql/generated/graphql';
+import { useRegisterUserMutation, useMeLazyQuery } from '../../graphql/generated/graphql';
 
 type UserRegisterInput = {
   email: string;
@@ -11,7 +11,7 @@ type UserRegisterInput = {
 
 export const RegisterUser: FC = () => {
   const [userRegister, { data, loading, error }] = useRegisterUserMutation();
-  const [meQuery] = useMeUserLazyQuery();
+  const [meQuery] = useMeLazyQuery();
   const {
     register,
     handleSubmit,

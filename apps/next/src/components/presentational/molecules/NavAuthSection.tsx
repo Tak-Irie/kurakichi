@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { useMeUserQuery } from '../../../graphql/generated/graphql';
+import { useMeQuery } from '../../../graphql/generated/graphql';
 import { isServer } from '../../../util/isServer';
 import { MiddleButton } from '../atoms/Button';
 import { LoadingStylishSpinner } from '../atoms/LoadingSpinner';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { LogoutButton } from '../../container/LogoutButton';
 
 const NavAuthSection: FC = () => {
-  const { data, loading } = useMeUserQuery({
+  const { data, loading } = useMeQuery({
     skip: isServer(),
   });
 

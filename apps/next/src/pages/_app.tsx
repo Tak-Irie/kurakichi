@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import '../tailwind.css';
+import 'tailwindcss/tailwind.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from '../util/createApolloClient';
