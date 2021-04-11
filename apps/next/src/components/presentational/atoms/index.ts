@@ -18,3 +18,4 @@ export * from './TablePagination';
 export * from './Notifications';
 export * from './Alerts';
 export * from './Badges';
+export * from './Form';

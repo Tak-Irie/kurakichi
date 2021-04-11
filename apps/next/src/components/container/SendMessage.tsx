@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../graphql/generated/graphql';
-import { Form, Input } from '@next/ui';
-import {} from '@headlessui/react';
+import { MiddleButton, Form, Input } from '@next/ui';
 
 type sendMessageInput = {
   textInput: string;
@@ -25,14 +24,10 @@ export const SendMessage: FC = () => {
 
   return (
     <>
-      <Form<sendMessageInput> onSubmit={onSubmit}>
-        {({ register }) => (
-          <>
-            <Input {...register('textInput')} />
-            <Input {...register('receiverId')} />
-            <Input type="submit" />
-          </>
-        )}
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input<sendMessageInput> type="text" label="textInput" required register={register} />
+        <Input<sendMessageInput> type="text" label="receiverId" required register={register} />
+        <MiddleButton type="submit">ログイン</MiddleButton>
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}

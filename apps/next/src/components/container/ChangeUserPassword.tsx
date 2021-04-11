@@ -1,21 +1,18 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUserChangePasswordMutation } from '../../graphql/generated/graphql';
-import { MiddleButton } from '../presentational/atoms/Button';
+import { Form, Input, MiddleButton } from '@next/ui';
 
-import { Form } from '../presentational/molecules/Form';
-import { Input } from '../presentational/atoms/Input';
-
-type ChangePasswordInput = {
+type ChangeUserPasswordInput = {
   currentPass: string;
   newPass: string;
 };
 
-const UserChangePassword: FC = () => {
+export const ChangeUserPassword: FC = () => {
   const [changePassword, { data }] = useUserChangePasswordMutation();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<ChangeUserPasswordInput>();
 
-  const onSubmit = async (value: ChangePasswordInput) => {
+  const onSubmit = async (value: ChangeUserPasswordInput) => {
     try {
       await changePassword({
         variables: { CurrentPass: value.currentPass, NewPass: value.newPass },
@@ -29,18 +26,16 @@ const UserChangePassword: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          name="currentPass"
+        <Input<ChangeUserPasswordInput>
           type="password"
-          label="現在のパスワード"
-          labeled={true}
+          label="currentPass"
+          required
           register={register}
         />
-        <Input
-          name="newPass"
+        <Input<ChangeUserPasswordInput>
           type="password"
-          label="新しいパスワード"
-          labeled={true}
+          label="newPass"
+          required
           register={register}
         />
         <MiddleButton type="submit">Change Password</MiddleButton>
@@ -49,5 +44,3 @@ const UserChangePassword: FC = () => {
     </>
   );
 };
-
-export { UserChangePassword };

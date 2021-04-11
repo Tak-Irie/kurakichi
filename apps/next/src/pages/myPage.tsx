@@ -4,7 +4,7 @@ import { useMeUserQuery } from '../graphql/generated/graphql';
 import { IsAuth } from '../util/isAuth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { UserChangePassword } from '../components/container/UserChangePassword';
+import { ChangeUserPassword } from '../components/container/ChangeUserPassword';
 import { GetMessages } from '../components/container/GetMessages';
 
 const MyPage: NextPage = () => {
@@ -30,7 +30,7 @@ const MyPage: NextPage = () => {
       <>
         {data.me.user && <p>こんにちは {data.me.user.userName} !</p>}
         <GetMessages />
-        <UserChangePassword />
+        <ChangeUserPassword />
         <UserDeleteButton />
       </>
     );

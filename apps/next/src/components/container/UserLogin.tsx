@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Form, Input } from '../presentational/atoms/Input';
+import { Form, Input } from '../presentational/atoms';
 import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -30,14 +30,10 @@ const UserLogin: FC = () => {
 
   return (
     <>
-      <Form<UserLoginInput> onSubmit={onSubmit}>
-        {({ register }) => (
-          <>
-            <Input {...register('email')} />
-            <Input {...register('password')} />
-            <Input type="submit" />
-          </>
-        )}
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input<UserLoginInput> type="email" label="email" required register={register} />
+        <Input<UserLoginInput> type="password" label="password" required register={register} />
+        <MiddleButton type="submit">ログイン</MiddleButton>
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}

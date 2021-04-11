@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { MiddleButton, Input } from '../presentational/atoms';
+import { MiddleButton, Input, Form } from '../presentational/atoms';
 import { useForm } from 'react-hook-form';
 import { useRegisterUserMutation, useMeUserLazyQuery } from '../../graphql/generated/graphql';
 
@@ -15,7 +15,6 @@ export const RegisterUser: FC = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<UserRegisterInput>();
 
@@ -34,12 +33,12 @@ export const RegisterUser: FC = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input<UserRegisterInput> label="userName" register={register} required />
-        <Input<UserRegisterInput> label="email" register={register} required />
-        <Input<UserRegisterInput> label="password" register={register} required />
-        <input type="submit" />
-      </form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input<UserRegisterInput> type="text" label="userName" register={register} required />
+        <Input<UserRegisterInput> type="email" label="email" register={register} required />
+        <Input<UserRegisterInput> type="password" label="password" register={register} required />
+        <MiddleButton type="submit">ユーザー登録</MiddleButton>
+      </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
       {data?.userRegister.user && <p>{data.userRegister.user.id} data</p>}
