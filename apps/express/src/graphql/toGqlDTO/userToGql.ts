@@ -1,8 +1,8 @@
 import { User } from '@kurakichi/domain';
 import { NexusGenFieldTypes } from '../generated/nexus';
-import { messageToPresentation } from './messageToPresentation';
-import { orgToPresentation } from './orgToPresentation';
-import { secureBaseToPresentation } from './secureBaseToPresentation';
+import { messageToGql } from './messageToGql';
+import { orgToGql } from './orgToGql';
+import { secureBaseToGql } from './secureBaseToGql';
 
 // export type UserDTO = {
 //   id: string;
@@ -15,7 +15,7 @@ import { secureBaseToPresentation } from './secureBaseToPresentation';
 //   messages: IDs;
 // };
 
-export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
+export const userToGql = (user: User): NexusGenFieldTypes['User'] => {
   const {
     id,
     email,
@@ -32,10 +32,10 @@ export const userToPresentation = (user: User): NexusGenFieldTypes['User'] => {
   let gqlMessages: NexusGenFieldTypes['Message'][] | undefined;
   // console.log('userToPresent:', user);
 
-  if (belongOrgs) gqlOrgs = belongOrgs.map((org) => orgToPresentation(org));
+  if (belongOrgs) gqlOrgs = belongOrgs.map((org) => orgToGql(org));
   if (belongSecureBases)
-    gqlSecureBases = belongSecureBases.map((secureBase) => secureBaseToPresentation(secureBase));
-  if (messages) gqlMessages = messages.map((message) => messageToPresentation(message));
+    gqlSecureBases = belongSecureBases.map((secureBase) => secureBaseToGql(secureBase));
+  if (messages) gqlMessages = messages.map((message) => messageToGql(message));
 
   const data = {
     id: id.getId(),

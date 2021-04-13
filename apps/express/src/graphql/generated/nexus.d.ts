@@ -18,6 +18,8 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  InquiryCategory: "APPLICATION" | "CONTACT" | "COUNSEL" | "INQUIRY" | "OTHERS"
+  InquiryStatus: "DONE" | "UNREAD" | "WORKING"
   UserRole: "PRO" | "USER"
 }
 
@@ -34,6 +36,17 @@ export interface NexusGenObjects {
   DialogPayload: { // root type
     dialog?: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+  }
+  Inquiry: { // root type
+    category?: NexusGenEnums['InquiryCategory'] | null; // InquiryCategory
+    content?: string | null; // String
+    id: string; // ID!
+    status?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+  }
+  InquiryPayload: { // root type
+    error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+    inquiries?: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
+    inquiry?: NexusGenRootTypes['Inquiry'] | null; // Inquiry
   }
   Message: { // root type
     content?: string | null; // String
@@ -88,7 +101,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  Node: NexusGenRootTypes['Dialog'] | NexusGenRootTypes['Message'] | NexusGenRootTypes['Org'] | NexusGenRootTypes['SecureBase'] | NexusGenRootTypes['User'];
+  Node: NexusGenRootTypes['Dialog'] | NexusGenRootTypes['Inquiry'] | NexusGenRootTypes['Message'] | NexusGenRootTypes['Org'] | NexusGenRootTypes['SecureBase'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -107,6 +120,17 @@ export interface NexusGenFieldTypes {
   DialogPayload: { // field return type
     dialog: Array<NexusGenRootTypes['Dialog'] | null> | null; // [Dialog]
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
+  }
+  Inquiry: { // field return type
+    category: NexusGenEnums['InquiryCategory'] | null; // InquiryCategory
+    content: string | null; // String
+    id: string; // ID!
+    status: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+  }
+  InquiryPayload: { // field return type
+    error: NexusGenRootTypes['RegularError'] | null; // RegularError
+    inquiries: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
+    inquiry: NexusGenRootTypes['Inquiry'] | null; // Inquiry
   }
   Message: { // field return type
     content: string | null; // String
@@ -127,6 +151,7 @@ export interface NexusGenFieldTypes {
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
     registerOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    sendInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
@@ -148,11 +173,14 @@ export interface NexusGenFieldTypes {
     orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   Query: { // field return type
+    getInquiries: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
+    getInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     getMessages: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     getOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgs: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getUsers: NexusGenRootTypes['UserPayload']; // UserPayload!
     me: NexusGenRootTypes['UserPayload'] | null; // UserPayload
+    node: NexusGenRootTypes['Node'] | null; // Node
   }
   RegularError: { // field return type
     invalidField: string[] | null; // [String!]
@@ -204,6 +232,17 @@ export interface NexusGenFieldTypeNames {
     dialog: 'Dialog'
     error: 'RegularError'
   }
+  Inquiry: { // field return type name
+    category: 'InquiryCategory'
+    content: 'String'
+    id: 'ID'
+    status: 'InquiryStatus'
+  }
+  InquiryPayload: { // field return type name
+    error: 'RegularError'
+    inquiries: 'Inquiry'
+    inquiry: 'Inquiry'
+  }
   Message: { // field return type name
     content: 'String'
     id: 'ID'
@@ -223,6 +262,7 @@ export interface NexusGenFieldTypeNames {
     postDialog: 'DialogPayload'
     registerOrg: 'OrgPayload'
     requestJoinOrg: 'OrgPayload'
+    sendInquiry: 'InquiryPayload'
     sendMessage: 'MessagePayload'
     userRegister: 'UserPayload'
   }
@@ -244,11 +284,14 @@ export interface NexusGenFieldTypeNames {
     orgs: 'Org'
   }
   Query: { // field return type name
+    getInquiries: 'InquiryPayload'
+    getInquiry: 'InquiryPayload'
     getMessages: 'MessagePayload'
     getOrg: 'OrgPayload'
     getOrgs: 'OrgPayload'
     getUsers: 'UserPayload'
     me: 'UserPayload'
+    node: 'Node'
   }
   RegularError: { // field return type name
     invalidField: 'String'
@@ -320,6 +363,12 @@ export interface NexusGenArgTypes {
     requestJoinOrg: { // args
       orgId: string; // String!
     }
+    sendInquiry: { // args
+      category?: NexusGenEnums['InquiryCategory'] | null; // InquiryCategory
+      receiverId: string; // String!
+      status?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+      textInput: string; // String!
+    }
     sendMessage: { // args
       receiverId: string; // String!
       textInput: string; // String!
@@ -331,18 +380,28 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    getInquiries: { // args
+      orgId: string; // String!
+    }
+    getInquiry: { // args
+      inquiryId: string; // String!
+    }
     getOrg: { // args
       orgId: string; // String!
+    }
+    node: { // args
+      id?: string | null; // ID
     }
   }
 }
 
 export interface NexusGenAbstractTypeMembers {
-  Node: "Dialog" | "Message" | "Org" | "SecureBase" | "User"
+  Node: "Dialog" | "Inquiry" | "Message" | "Org" | "SecureBase" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
   Dialog: "Node"
+  Inquiry: "Node"
   Message: "Node"
   Org: "Node"
   SecureBase: "Node"

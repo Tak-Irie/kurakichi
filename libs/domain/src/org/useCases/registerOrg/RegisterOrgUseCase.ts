@@ -13,7 +13,7 @@ import {
 import { IOrgRepo, Org } from '../../domain';
 import { OrgLocation } from '../../domain/OrgLocation';
 import { OrgName } from '../../domain/OrgName';
-import { SomeError } from './registerOrgError';
+import { AlreadyRegisteredNameError } from './registerOrgError';
 
 type OrgInput = {
   adminId: string;
@@ -26,7 +26,11 @@ type OrgInput = {
 type OrgTypes = OrgName | OrgLocation | Email | PhoneNumber;
 
 type RegisterOrgResponse = Either<
-  SomeError | UnexpectedError | StoreConnectionError | Result<OrgTypes> | Result<false>,
+  | AlreadyRegisteredNameError
+  | UnexpectedError
+  | StoreConnectionError
+  | Result<OrgTypes>
+  | Result<false>,
   Result<Org>
 >;
 
@@ -52,11 +56,15 @@ export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOr
         return left(Result.fail<OrgTypes>(verifiedResult.getErrorValue()));
       }
 
+      const orgName = nameOrError.getValue();
+      const duplicateCheck = await this.OrgRepo.getOrgByName(orgName);
+      if (duplicateCheck) return left(new AlreadyRegisteredNameError());
+
       const orgOrError = Org.create({
         id: UniqueEntityId.create(),
         // FIXME:forget to write, what should I fix.
         adminId: new UniqueEntityId(req.adminId),
-        name: nameOrError.getValue(),
+        name: orgName,
         email: emailOrError.getValue(),
         location: locationOrError.getValue(),
         phoneNumber: phoneOrError.getValue(),
@@ -72,7 +80,7 @@ export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOr
 
       if (result == undefined) return left(new StoreConnectionError());
 
-      return right(Result.success<Org>());
+      return right(Result.success<Org>(result));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

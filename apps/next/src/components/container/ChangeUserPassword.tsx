@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUserChangePasswordMutation } from '../../graphql/generated/graphql';
-import { Form, Input, MiddleButton } from '@next/ui';
+import { Form, Input, ButtonBig } from '@next/ui';
 
 type ChangeUserPasswordInput = {
   currentPass: string;
@@ -38,7 +38,7 @@ export const ChangeUserPassword: FC = () => {
           required
           register={register}
         />
-        <MiddleButton type="submit">Change Password</MiddleButton>
+        <ButtonBig type="submit">Change Password</ButtonBig>
       </Form>
       {data?.changePassword.message && <p>{data.changePassword.message}</p>}
     </>

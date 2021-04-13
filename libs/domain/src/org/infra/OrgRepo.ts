@@ -10,14 +10,14 @@ export class OrgRepo implements IOrgRepo {
     this.prisma = new PrismaClient();
   }
 
-  async confirmExistence(orgName: OrgName): Promise<boolean> {
+  async getOrgByName(orgName: OrgName): Promise<boolean> {
     const name = orgName.getValue();
     const result = await this.prisma.organization.findUnique({ where: { name } });
     return !!result;
   }
 
   async registerOrg(org: Org): Promise<Org | undefined> {
-    const existed = await this.confirmExistence(org.props.name);
+    const existed = await this.getOrgByName(org.props.name);
     if (existed === true) return undefined;
 
     const data = await OrgMapper.toStore(org);

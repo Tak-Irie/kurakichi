@@ -1,4 +1,4 @@
-import { Member } from '.';
+import { Inquiry, Member } from '.';
 import { Result, Email, ValidURL, UniqueEntityId, AggregateRoot, PhoneNumber } from '../../shared';
 import { OrgLocation } from './OrgLocation';
 import { OrgName } from './OrgName';
@@ -14,7 +14,7 @@ interface OrgProps {
   icon: string | 'UNKNOWN';
   img: ValidURL | 'UNKNOWN';
   homePage: string | 'UNKNOWN';
-  messages?: UniqueEntityId[];
+  inquiries?: Inquiry[];
 }
 
 export class Org extends AggregateRoot<OrgProps> {
@@ -44,6 +44,10 @@ export class Org extends AggregateRoot<OrgProps> {
 
   public getMembers(): Member[] {
     return this.props.members;
+  }
+
+  public getInquiries(): Inquiry[] {
+    return this.getProps().inquiries;
   }
 
   public static create(props: OrgProps): Result<Org> {

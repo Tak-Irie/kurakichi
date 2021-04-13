@@ -6,7 +6,9 @@ export class UniqueEntityId {
     const idReg = /[0-9A-Z]{26}/;
     const result = idReg.exec(id);
 
-    if (id && id === result[0]) this.id = id;
+    if (id && id === result[0]) {
+      this.id = id;
+    }
   }
 
   public static create(): UniqueEntityId {

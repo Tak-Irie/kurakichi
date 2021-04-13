@@ -15,6 +15,37 @@ type DialogPayload {
   error: RegularError
 }
 
+"""Inquiry from User to Org"""
+type Inquiry implements Node {
+  category: InquiryCategory
+  content: String
+
+  """GUID for a resource"""
+  id: ID!
+  status: InquiryStatus
+}
+
+enum InquiryCategory {
+  APPLICATION
+  CONTACT
+  COUNSEL
+  INQUIRY
+  OTHERS
+}
+
+type InquiryPayload {
+  error: RegularError
+  inquiries: [Inquiry]
+  inquiry: Inquiry
+}
+
+enum InquiryStatus {
+  DONE
+  UNREAD
+  WORKING
+}
+
+"""Message from User to User"""
 type Message implements Node {
   content: String
 
@@ -38,6 +69,7 @@ type Mutation {
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
   requestJoinOrg(orgId: String!): OrgPayload
+  sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
@@ -70,12 +102,17 @@ type OrgPayload {
 }
 
 type Query {
+  """get inquiries of one Org"""
+  getInquiries(orgId: String!): InquiryPayload
+  getInquiry(inquiryId: String!): InquiryPayload
+
   """get User's id, then show their own messages"""
   getMessages: MessagePayload
   getOrg(orgId: String!): OrgPayload
   getOrgs: OrgPayload
   getUsers: UserPayload!
   me: UserPayload
+  node(id: ID): Node
 }
 
 """Generally Used as Error at business logic"""
@@ -89,6 +126,7 @@ type RegularPayload {
   result: Boolean
 }
 
+"""Place to dialog used by Professionals and Clients"""
 type SecureBase implements Node {
   """it indicate Client/Patient"""
   baseOwner: User

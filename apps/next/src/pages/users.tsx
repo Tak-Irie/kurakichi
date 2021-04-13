@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
-import { MiddleButton } from '../components/presentational/atoms/Button';
+import { ButtonBig } from '../components/presentational/atoms/Buttons';
 import { useGetUsersQuery } from '../graphql/generated/graphql';
 
 const Users: NextPage = () => {
@@ -24,9 +24,9 @@ const Users: NextPage = () => {
             </ul>
           </div>
         ))}
-      <MiddleButton type="button" onClick={handleClick}>
+      <ButtonBig type="button" onClick={handleClick}>
         再読み込み
-      </MiddleButton>
+      </ButtonBig>
     </>
   );
 };

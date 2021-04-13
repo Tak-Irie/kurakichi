@@ -1,0 +1,20 @@
+mutation SendInquiry(
+  $textInput: String!
+  $receiverId: String!
+  $category: InquiryCategory
+  $status: InquiryStatus
+) {
+  sendInquiry(
+    textInput: $textInput
+    receiverId: $receiverId
+    category: $category
+    status: $status
+  ) {
+    inquiry {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

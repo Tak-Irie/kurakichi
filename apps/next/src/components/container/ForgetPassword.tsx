@@ -1,9 +1,8 @@
 import { FC } from 'react';
-import { Form } from '../presentational/molecules/Form';
-import { Input } from '../presentational/atoms/Input';
-import { MiddleButton } from '../presentational/atoms/Button';
 import { useForm } from 'react-hook-form';
 import { useUserForgetPasswordMutation } from '../../graphql/generated/graphql';
+
+import { Form, Input, ButtonBig } from '@next/ui';
 
 interface ForgetPasswordInput {
   email: string;
@@ -12,7 +11,7 @@ interface ForgetPasswordInput {
 const ForgetPassword: FC = () => {
   const [forgetPassword, { data, loading, error }] = useUserForgetPasswordMutation();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<ForgetPasswordInput>();
 
   const handleMutation = async (value: ForgetPasswordInput) => {
     try {
@@ -28,8 +27,8 @@ const ForgetPassword: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(handleMutation)}>
-        <Input name="email" type="email" labeled={true} register={register} />
-        <MiddleButton type="submit">パスワード再登録</MiddleButton>
+        <Input<ForgetPasswordInput> label="email" type="email" required register={register} />
+        <ButtonBig type="submit">パスワード再登録</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}

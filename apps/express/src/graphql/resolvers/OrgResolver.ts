@@ -6,10 +6,9 @@ import {
   useRequestJoinOrgUseCase,
 } from '@kurakichi/domain';
 import { extendType, nonNull, stringArg } from 'nexus';
-import { type } from 'node:os';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
-import { orgToPresentation } from '../toPresentationDTO/orgToPresentation';
+import { orgToGql } from '../toGqlDTO/orgToGql';
 
 export const orgMutation = extendType({
   type: 'Mutation',
@@ -27,7 +26,7 @@ export const orgMutation = extendType({
         const idOrErr = getUserIdByCookie(context);
         // console.log('id:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
-        const result = await useRegisterOrgUseCase.execute({
+        const useCaseResult = await useRegisterOrgUseCase.execute({
           adminId: idOrErr,
           orgName: args.name,
           location: args.location,
@@ -35,9 +34,10 @@ export const orgMutation = extendType({
           phoneNumber: args.phoneNumber,
         });
         // console.log('res:', result);
-        if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
-        // FIXME:Regular payload should be refactored
-        return { org: result.value.getValue() };
+        if (useCaseResult.isLeft())
+          return { error: { message: useCaseResult.value.getErrorValue() } };
+        const gqlField = orgToGql(useCaseResult.value.getValue());
+        return { org: gqlField };
       },
     });
     t.field('requestJoinOrg', {
@@ -58,7 +58,7 @@ export const orgMutation = extendType({
         // console.log('result:', result);
         if (result.isLeft()) return returnErrorToGQL(result);
 
-        const gqlOrg = orgToPresentation(result.value.getValue());
+        const gqlOrg = orgToGql(result.value.getValue());
         return { org: gqlOrg };
       },
     });
@@ -77,7 +77,7 @@ export const orgMutation = extendType({
           requestedOrgId: args.requestedOrgId,
         });
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
-        const gqlOrg = orgToPresentation(useCaseResult.value.getValue());
+        const gqlOrg = orgToGql(useCaseResult.value.getValue());
         return { org: gqlOrg };
       },
     });
@@ -96,7 +96,7 @@ export const orgQuery = extendType({
 
         const domainOrgs = result.value.getValue();
 
-        const gqlOrgs = domainOrgs.map((domainOrg) => orgToPresentation(domainOrg));
+        const gqlOrgs = domainOrgs.map((domainOrg) => orgToGql(domainOrg));
 
         return { orgs: gqlOrgs };
       },
@@ -108,7 +108,7 @@ export const orgQuery = extendType({
         const result = await useGetOrgUseCase.execute({ orgId: args.orgId });
         if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
         const domainOrg = result.value.getValue();
-        const gqlOrg = orgToPresentation(domainOrg);
+        const gqlOrg = orgToGql(domainOrg);
 
         return { org: gqlOrg };
       },

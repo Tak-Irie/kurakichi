@@ -28,6 +28,38 @@ export type DialogPayload = {
   error?: Maybe<RegularError>;
 };
 
+/** Inquiry from User to Org */
+export type Inquiry = Node & {
+  __typename?: 'Inquiry';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  content?: Maybe<Scalars['String']>;
+  category?: Maybe<InquiryCategory>;
+  status?: Maybe<InquiryStatus>;
+};
+
+export enum InquiryCategory {
+  Counsel = 'COUNSEL',
+  Inquiry = 'INQUIRY',
+  Contact = 'CONTACT',
+  Application = 'APPLICATION',
+  Others = 'OTHERS'
+}
+
+export type InquiryPayload = {
+  __typename?: 'InquiryPayload';
+  inquiry?: Maybe<Inquiry>;
+  inquiries?: Maybe<Array<Maybe<Inquiry>>>;
+  error?: Maybe<RegularError>;
+};
+
+export enum InquiryStatus {
+  Unread = 'UNREAD',
+  Done = 'DONE',
+  Working = 'WORKING'
+}
+
+/** Message from User to User */
 export type Message = Node & {
   __typename?: 'Message';
   /** GUID for a resource */
@@ -55,6 +87,7 @@ export type Mutation = {
   requestJoinOrg?: Maybe<OrgPayload>;
   acceptJoinOrg?: Maybe<OrgPayload>;
   sendMessage?: Maybe<MessagePayload>;
+  sendInquiry?: Maybe<InquiryPayload>;
 };
 
 
@@ -112,6 +145,14 @@ export type MutationSendMessageArgs = {
   receiverId: Scalars['String'];
 };
 
+
+export type MutationSendInquiryArgs = {
+  textInput: Scalars['String'];
+  receiverId: Scalars['String'];
+  category?: Maybe<InquiryCategory>;
+  status?: Maybe<InquiryStatus>;
+};
+
 /** Identifier */
 export type Node = {
   /** GUID for a resource */
@@ -142,17 +183,36 @@ export type OrgPayload = {
 
 export type Query = {
   __typename?: 'Query';
+  node?: Maybe<Node>;
   getUsers: UserPayload;
   me?: Maybe<UserPayload>;
   getOrgs?: Maybe<OrgPayload>;
   getOrg?: Maybe<OrgPayload>;
   /** get User's id, then show their own messages */
   getMessages?: Maybe<MessagePayload>;
+  /** get inquiries of one Org */
+  getInquiries?: Maybe<InquiryPayload>;
+  getInquiry?: Maybe<InquiryPayload>;
+};
+
+
+export type QueryNodeArgs = {
+  id?: Maybe<Scalars['ID']>;
 };
 
 
 export type QueryGetOrgArgs = {
   orgId: Scalars['String'];
+};
+
+
+export type QueryGetInquiriesArgs = {
+  orgId: Scalars['String'];
+};
+
+
+export type QueryGetInquiryArgs = {
+  inquiryId: Scalars['String'];
 };
 
 /** Generally Used as Error at business logic */
@@ -168,6 +228,7 @@ export type RegularPayload = {
   message?: Maybe<Scalars['String']>;
 };
 
+/** Place to dialog used by Professionals and Clients */
 export type SecureBase = Node & {
   __typename?: 'SecureBase';
   /** GUID for a resource */
@@ -221,6 +282,11 @@ export type DialogPayloadFragment = (
     { __typename?: 'SecureBase' }
     & Pick<SecureBase, 'id'>
   )> }
+);
+
+export type InquiryPayloadFragment = (
+  { __typename?: 'Inquiry' }
+  & Pick<Inquiry, 'id' | 'content' | 'category' | 'status'>
 );
 
 export type MessagePayloadFragment = (
@@ -388,6 +454,28 @@ export type RequestJoinOrgMutation = (
   )> }
 );
 
+export type SendInquiryMutationVariables = Exact<{
+  textInput: Scalars['String'];
+  receiverId: Scalars['String'];
+  category?: Maybe<InquiryCategory>;
+  status?: Maybe<InquiryStatus>;
+}>;
+
+
+export type SendInquiryMutation = (
+  { __typename?: 'Mutation' }
+  & { sendInquiry?: Maybe<(
+    { __typename?: 'InquiryPayload' }
+    & { inquiry?: Maybe<(
+      { __typename?: 'Inquiry' }
+      & InquiryPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
 export type SendMessageMutationVariables = Exact<{
   TextInput: Scalars['String'];
   ReceiverId: Scalars['String'];
@@ -454,6 +542,44 @@ export type UserLogoutMutation = (
   & { logout?: Maybe<(
     { __typename?: 'RegularPayload' }
     & Pick<RegularPayload, 'message' | 'result'>
+  )> }
+);
+
+export type GetInquiriesQueryVariables = Exact<{
+  orgId: Scalars['String'];
+}>;
+
+
+export type GetInquiriesQuery = (
+  { __typename?: 'Query' }
+  & { getInquiries?: Maybe<(
+    { __typename?: 'InquiryPayload' }
+    & { inquiries?: Maybe<Array<Maybe<(
+      { __typename?: 'Inquiry' }
+      & InquiryPayloadFragment
+    )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type GetInquiryQueryVariables = Exact<{
+  inquiryId: Scalars['String'];
+}>;
+
+
+export type GetInquiryQuery = (
+  { __typename?: 'Query' }
+  & { getInquiry?: Maybe<(
+    { __typename?: 'InquiryPayload' }
+    & { inquiry?: Maybe<(
+      { __typename?: 'Inquiry' }
+      & InquiryPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
   )> }
 );
 
@@ -589,6 +715,14 @@ export const DialogPayloadFragmentDoc = gql`
   base {
     id
   }
+}
+    `;
+export const InquiryPayloadFragmentDoc = gql`
+    fragment InquiryPayload on Inquiry {
+  id
+  content
+  category
+  status
 }
     `;
 export const MessagePayloadFragmentDoc = gql`
@@ -892,6 +1026,53 @@ export function useRequestJoinOrgMutation(baseOptions?: Apollo.MutationHookOptio
 export type RequestJoinOrgMutationHookResult = ReturnType<typeof useRequestJoinOrgMutation>;
 export type RequestJoinOrgMutationResult = Apollo.MutationResult<RequestJoinOrgMutation>;
 export type RequestJoinOrgMutationOptions = Apollo.BaseMutationOptions<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>;
+export const SendInquiryDocument = gql`
+    mutation SendInquiry($textInput: String!, $receiverId: String!, $category: InquiryCategory, $status: InquiryStatus) {
+  sendInquiry(
+    textInput: $textInput
+    receiverId: $receiverId
+    category: $category
+    status: $status
+  ) {
+    inquiry {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${InquiryPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type SendInquiryMutationFn = Apollo.MutationFunction<SendInquiryMutation, SendInquiryMutationVariables>;
+
+/**
+ * __useSendInquiryMutation__
+ *
+ * To run a mutation, you first call `useSendInquiryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendInquiryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendInquiryMutation, { data, loading, error }] = useSendInquiryMutation({
+ *   variables: {
+ *      textInput: // value for 'textInput'
+ *      receiverId: // value for 'receiverId'
+ *      category: // value for 'category'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useSendInquiryMutation(baseOptions?: Apollo.MutationHookOptions<SendInquiryMutation, SendInquiryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendInquiryMutation, SendInquiryMutationVariables>(SendInquiryDocument, options);
+      }
+export type SendInquiryMutationHookResult = ReturnType<typeof useSendInquiryMutation>;
+export type SendInquiryMutationResult = Apollo.MutationResult<SendInquiryMutation>;
+export type SendInquiryMutationOptions = Apollo.BaseMutationOptions<SendInquiryMutation, SendInquiryMutationVariables>;
 export const SendMessageDocument = gql`
     mutation SendMessage($TextInput: String!, $ReceiverId: String!) {
   sendMessage(textInput: $TextInput, receiverId: $ReceiverId) {
@@ -1067,6 +1248,88 @@ export function useUserLogoutMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UserLogoutMutationHookResult = ReturnType<typeof useUserLogoutMutation>;
 export type UserLogoutMutationResult = Apollo.MutationResult<UserLogoutMutation>;
 export type UserLogoutMutationOptions = Apollo.BaseMutationOptions<UserLogoutMutation, UserLogoutMutationVariables>;
+export const GetInquiriesDocument = gql`
+    query GetInquiries($orgId: String!) {
+  getInquiries(orgId: $orgId) {
+    inquiries {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${InquiryPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetInquiriesQuery__
+ *
+ * To run a query within a React component, call `useGetInquiriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInquiriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInquiriesQuery({
+ *   variables: {
+ *      orgId: // value for 'orgId'
+ *   },
+ * });
+ */
+export function useGetInquiriesQuery(baseOptions: Apollo.QueryHookOptions<GetInquiriesQuery, GetInquiriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInquiriesQuery, GetInquiriesQueryVariables>(GetInquiriesDocument, options);
+      }
+export function useGetInquiriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInquiriesQuery, GetInquiriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInquiriesQuery, GetInquiriesQueryVariables>(GetInquiriesDocument, options);
+        }
+export type GetInquiriesQueryHookResult = ReturnType<typeof useGetInquiriesQuery>;
+export type GetInquiriesLazyQueryHookResult = ReturnType<typeof useGetInquiriesLazyQuery>;
+export type GetInquiriesQueryResult = Apollo.QueryResult<GetInquiriesQuery, GetInquiriesQueryVariables>;
+export const GetInquiryDocument = gql`
+    query GetInquiry($inquiryId: String!) {
+  getInquiry(inquiryId: $inquiryId) {
+    inquiry {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${InquiryPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetInquiryQuery__
+ *
+ * To run a query within a React component, call `useGetInquiryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInquiryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInquiryQuery({
+ *   variables: {
+ *      inquiryId: // value for 'inquiryId'
+ *   },
+ * });
+ */
+export function useGetInquiryQuery(baseOptions: Apollo.QueryHookOptions<GetInquiryQuery, GetInquiryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInquiryQuery, GetInquiryQueryVariables>(GetInquiryDocument, options);
+      }
+export function useGetInquiryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInquiryQuery, GetInquiryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInquiryQuery, GetInquiryQueryVariables>(GetInquiryDocument, options);
+        }
+export type GetInquiryQueryHookResult = ReturnType<typeof useGetInquiryQuery>;
+export type GetInquiryLazyQueryHookResult = ReturnType<typeof useGetInquiryLazyQuery>;
+export type GetInquiryQueryResult = Apollo.QueryResult<GetInquiryQuery, GetInquiryQueryVariables>;
 export const GetMessagesDocument = gql`
     query GetMessages {
   getMessages {

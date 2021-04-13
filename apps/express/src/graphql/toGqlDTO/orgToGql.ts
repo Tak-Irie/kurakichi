@@ -7,7 +7,7 @@ type MemberDTO = {
   userName: string;
 };
 
-export const orgToPresentation = (org: Org): NexusGenFieldTypes['Org'] => {
+export const orgToGql = (org: Org): NexusGenFieldTypes['Org'] => {
   // console.log('mapperOrg:', org);
   let members: MemberDTO[];
 

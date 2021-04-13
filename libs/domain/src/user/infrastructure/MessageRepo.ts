@@ -17,9 +17,21 @@ export class MessageRepo implements IMessageRepo {
     // console.log('domainMessages:', domainMessages);
     return domainMessages;
   }
+
   async sendMessage(message: Message): Promise<Message | false> {
-    const rawData = await MessageMapper.toStore(message);
-    const result = await this.prisma.message.create({ data: rawData });
+    // console.log('repoMess:', message);
+    const { id, receiverId, send_flag, senderId, text } = await MessageMapper.toStore(message);
+
+    const result = await this.prisma.message.create({
+      data: {
+        id,
+        text,
+        send_flag,
+        receiver: { connect: { id: receiverId } },
+        sender: { connect: { id: senderId } },
+      },
+    });
+
     if (result == undefined) return false;
     return message;
   }

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Form, Input } from '../presentational/atoms';
-import { MiddleButton } from '../presentational/atoms/Button';
+import { ButtonBig } from '../presentational/atoms/Buttons';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useLoginUserMutation } from '../../graphql/generated/graphql';
@@ -33,7 +33,7 @@ const UserLogin: FC = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input<UserLoginInput> type="email" label="email" required register={register} />
         <Input<UserLoginInput> type="password" label="password" required register={register} />
-        <MiddleButton type="submit">ログイン</MiddleButton>
+        <ButtonBig type="submit">ログイン</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}

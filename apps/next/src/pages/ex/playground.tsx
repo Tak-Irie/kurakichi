@@ -1,12 +1,14 @@
 import { NextPage } from 'next';
-import { ActivityTable, IconsCaution, PopOnIcon, MiddleButton } from '@next/ui';
+import { ActivityTable, IconsCaution, PopOnIcon, ButtonBig, MessageForm } from '@next/ui';
+import { SendMessage } from '@next/container';
 
 const PlayGround: NextPage = () => {
   return (
     <div>
+      <SendMessage receiverId="hoge" />
       <div className="h-20">
         <PopOnIcon icon={<IconsCaution />}>
-          <MiddleButton type="button">a</MiddleButton>
+          <ButtonBig type="button">a</ButtonBig>
         </PopOnIcon>
       </div>
       <div className="h-screen flex overflow-hidden bg-gray-100">

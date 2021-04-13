@@ -1,12 +1,10 @@
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
-import { MiddleButton } from '../../components/presentational/atoms/Button';
 import {
   usePostDialogMutation,
   useSubscriptDialogSubscription,
 } from '../../graphql/generated/graphql';
-import { Form } from '../../components/presentational/molecules/Form';
-import { Input } from '../../components/presentational/atoms/Input';
+import { Form, Input, ButtonBig } from '@next/ui';
 
 type PostDialogInput = {
   id: string;
@@ -16,7 +14,7 @@ type PostDialogInput = {
 const Dialog: NextPage = () => {
   const { data, error } = useSubscriptDialogSubscription();
   const [postDialog] = usePostDialogMutation();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<PostDialogInput>();
 
   const handleMutation = async (input: PostDialogInput) => {
     try {
@@ -34,9 +32,9 @@ const Dialog: NextPage = () => {
     <>
       <p>{data?.dialogPosted.dialogContent || null}</p>
       <Form onSubmit={handleSubmit(handleMutation)}>
-        <Input name="id" type="text" labeled={true} register={register} />
-        <Input name="content" type="text" labeled={true} register={register} />
-        <MiddleButton type="submit">Post Dialog</MiddleButton>
+        <Input<PostDialogInput> label="id" type="text" required register={register} />
+        <Input<PostDialogInput> label="content" type="text" required register={register} />
+        <ButtonBig type="submit">Post Dialog</ButtonBig>
       </Form>
     </>
   );

@@ -2,6 +2,7 @@ import { list, objectType } from 'nexus';
 
 export const Message = objectType({
   name: 'Message',
+  description: 'Message from User to User',
   definition(t) {
     t.implements('Node');
     t.string('content');

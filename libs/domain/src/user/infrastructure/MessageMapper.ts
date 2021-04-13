@@ -17,13 +17,13 @@ export class MessageMapper {
     domainMessage: Message,
   ): Promise<Omit<StoredMessage, 'createdAt' | 'read_flag'>> {
     const props = domainMessage.getProps();
-    const rawData = {
+    return {
       id: props.id.getId(),
       text: props.content.getText(),
+      // TODO:implements temp save
+      send_flag: true,
       senderId: props.sender.getId(),
       receiverId: props.receiver.getId(),
     };
-
-    return rawData;
   }
 }

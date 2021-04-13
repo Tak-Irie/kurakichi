@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useUserLogoutMutation } from '../../graphql/generated/graphql';
-import { MiddleButton } from '../presentational/atoms/Button';
+import { ButtonBig } from '../presentational/atoms/Buttons';
 
 const LogoutButton: FC = () => {
   const [logout, { client }] = useUserLogoutMutation();
   const router = useRouter();
 
   return (
-    <MiddleButton
+    <ButtonBig
       type="button"
       onClick={async (e) => {
         e.preventDefault();
@@ -19,7 +19,7 @@ const LogoutButton: FC = () => {
       }}
     >
       Logout
-    </MiddleButton>
+    </ButtonBig>
   );
 };
 

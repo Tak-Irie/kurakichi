@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
-import { MiddleButton } from '../components/presentational/atoms/Button';
+import { ButtonBig } from '../components/presentational/atoms/Buttons';
 import { Card, SmallCard } from '@next/ui';
 import { useRequestJoinOrgMutation, useGetOrgsQuery } from '../graphql/generated/graphql';
 import Link from 'next/link';
@@ -36,14 +36,14 @@ const Orgs: NextPage = () => {
           <div className="m-3" key={org.id}>
             <ul>
               <SmallCard title={org.orgName} content={org.location}>
-                <MiddleButton type="button">
+                <ButtonBig type="button">
                   <Link href="/org/[id]" as={`/org/${org.id}`}>
                     <a href="/org/[id]">組織詳細</a>
                   </Link>
-                </MiddleButton>
-                <MiddleButton type="button" onClick={(e) => handleCardClick(org.id, e)}>
+                </ButtonBig>
+                <ButtonBig type="button" onClick={(e) => handleCardClick(org.id, e)}>
                   登録申請
-                </MiddleButton>
+                </ButtonBig>
               </SmallCard>
             </ul>
           </div>
@@ -51,9 +51,9 @@ const Orgs: NextPage = () => {
       {joinData?.requestJoinOrg.org && (
         <p>{joinData.requestJoinOrg.org.orgName}への申請が完了しました。申請許可をお待ち下さい</p>
       )}
-      <MiddleButton type="button" onClick={handleClick}>
+      <ButtonBig type="button" onClick={handleClick}>
         再読み込み
-      </MiddleButton>
+      </ButtonBig>
     </>
   );
 };

@@ -2,7 +2,8 @@ import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import { useGetMessagesUseCase, useSendMessageUseCase } from '@kurakichi/domain';
-import { messageToPresentation } from '../toPresentationDTO/messageToPresentation';
+import { messageToGql } from '../toGqlDTO/messageToGql';
+import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const MessageQuery = extendType({
   type: 'Query',
@@ -20,7 +21,7 @@ export const MessageQuery = extendType({
           return { error: { message: domainResponse.value.getErrorValue() } };
 
         const messages = domainResponse.value.getValue();
-        const gqlField = messages.map((message) => messageToPresentation(message));
+        const gqlField = messages.map((message) => messageToGql(message));
 
         return { messages: gqlField };
       },
@@ -38,19 +39,19 @@ export const MessageMutation = extendType({
         receiverId: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        // console.log('arg:', args);
+        console.log('arg:', args);
         const idOrErr = getUserIdByCookie(context);
         if (typeof idOrErr === 'object') return idOrErr;
+
         const domainResponse = await useSendMessageUseCase.execute({
           senderId: idOrErr,
           receiverId: args.receiverId,
           textInput: args.textInput,
         });
 
-        if (domainResponse.isLeft())
-          return { error: { message: domainResponse.value.getErrorValue() } };
+        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
-        const gqlField = messageToPresentation(domainResponse.value.getValue());
+        const gqlField = messageToGql(domainResponse.value.getValue());
         return { message: gqlField };
       },
     });

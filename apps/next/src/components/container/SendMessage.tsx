@@ -1,37 +1,50 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../graphql/generated/graphql';
-import { MiddleButton, Form, Input } from '@next/ui';
+import { ButtonBig, Form, InputTextarea } from '@next/ui';
 
-type sendMessageInput = {
-  textInput: string;
+type SendMessageProps = {
   receiverId: string;
 };
 
-export const SendMessage: FC = () => {
-  const { register, handleSubmit } = useForm<sendMessageInput>();
-  const [sendMessage, { data, loading, error }] = useSendMessageMutation();
+type SendMessageInput = {
+  textInput: string;
+};
+export const SendMessage: FC<SendMessageProps> = (props) => {
+  const { register, handleSubmit } = useForm<SendMessageInput>();
+  const [sendMessage, { data, error, loading }] = useSendMessageMutation();
 
-  const onSubmit = async (value: sendMessageInput) => {
+  const onSubmit = async (values: SendMessageInput) => {
+    console.log('sendMessageValues:', values);
     try {
       await sendMessage({
-        variables: { TextInput: value.textInput, ReceiverId: value.receiverId },
+        variables: {
+          TextInput: values.textInput,
+          ReceiverId: props.receiverId,
+        },
       });
+      console.log(':', data);
     } catch (err) {
       console.log('err:', err);
     }
   };
 
   return (
-    <>
+    <div>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input<sendMessageInput> type="text" label="textInput" required register={register} />
-        <Input<sendMessageInput> type="text" label="receiverId" required register={register} />
-        <MiddleButton type="submit">ログイン</MiddleButton>
+        <InputTextarea<SendMessageInput>
+          rows={3}
+          cols={30}
+          fieldLabel="メッセージ内容"
+          label="textInput"
+          required
+          register={register}
+        />
+        <ButtonBig type="submit">メッセージ送信</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
       {data && <p> done</p>}
-    </>
+    </div>
   );
 };

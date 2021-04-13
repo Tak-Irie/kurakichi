@@ -1,7 +1,7 @@
 import { Entity } from '../../shared';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
-import { MessageContent } from './MessageContent';
+import { MessageContent } from './';
 
 interface MessageProps {
   id: UniqueEntityId;
@@ -20,6 +20,13 @@ export class Message extends Entity<MessageProps> {
 
   public getContent(): string {
     return this.getProps().content.getText();
+  }
+
+  public getSender(): string {
+    return this.getProps().sender.getId();
+  }
+  public getReceiver(): string {
+    return this.getProps().receiver.getId();
   }
 
   public static create(props: MessageProps): Result<Message> {

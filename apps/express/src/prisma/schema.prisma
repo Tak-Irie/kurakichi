@@ -15,32 +15,34 @@ model User {
   ssoSub           String         @default("IT_IS_KURAKICHI_ORIGINAL_USER")
   picture          String         @default("UNKNOWN")
   name             String
-  role             Role           @default(USER)
+  role             USER_ROLE      @default(USER)
   receivedMessages Message[]      @relation("receive")
   sentMessages     Message[]      @relation("sent")
   manageOrg        Organization[] @relation("orgAdmin")
   manageRoom       SecureBase[]   @relation("baseAdmin")
+  belongRooms      SecureBase[]   @relation("baseMember")
   belongOrgs       Organization[] @relation("orgMember")
   requestJoinOrgs  Organization[] @relation("requestedMember")
-  belongRooms      SecureBase[]   @relation("baseMember")
+  sentInquiry      Inquiry[]      @relation("inquiry")
 }
 
 model Organization {
-  id               String   @id
-  name             String   @unique
-  phone            String   @default("UNKNOWN")
-  email            String   @default("UNKNOWN")
-  location         String   @default("UNKNOWN")
-  description      String   @default("UNKNOWN")
-  homePage         String   @default("UNKNOWN")
-  image            String   @default("UNKNOWN")
-  icon             String   @default("UNKNOWN")
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id               String    @id
+  name             String    @unique
   adminId          String
-  admin            User     @relation("orgAdmin", fields: [adminId], references: [id])
-  members          User[]   @relation("orgMember")
-  requestedMembers User[]   @relation("requestedMember")
+  location         String    @default("UNKNOWN")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  phone            String    @default("UNKNOWN")
+  email            String    @default("UNKNOWN")
+  description      String    @default("UNKNOWN")
+  homePage         String    @default("UNKNOWN")
+  image            String    @default("UNKNOWN")
+  icon             String    @default("UNKNOWN")
+  admin            User      @relation("orgAdmin", fields: [adminId], references: [id])
+  members          User[]    @relation("orgMember")
+  requestedMembers User[]    @relation("requestedMember")
+  inquiries        Inquiry[] @relation("gotInquiry")
 }
 
 model Message {
@@ -49,10 +51,23 @@ model Message {
   senderId   String
   receiverId String
   read_flag  Boolean  @default(false)
-  send_flag  Boolean  @default(false)
   createdAt  DateTime @default(now())
+  send_flag  Boolean  @default(false)
   receiver   User     @relation("receive", fields: [receiverId], references: [id])
   sender     User     @relation("sent", fields: [senderId], references: [id])
+}
+
+model Inquiry {
+  id         String           @id
+  text       String
+  senderId   String
+  receiverId String
+  createdAt  DateTime         @default(now())
+  category   INQUIRY_CATEGORY @default(COUNSEL)
+  status     INQUIRY_STATUS   @default(UNREAD)
+  send_flag  Boolean          @default(false)
+  sender     User             @relation("inquiry", fields: [senderId], references: [id])
+  receiver   Organization     @relation("gotInquiry", fields: [receiverId], references: [id])
 }
 
 model Dialog {
@@ -70,12 +85,26 @@ model SecureBase {
 
 model Karte {
   id     String     @id
-  baseId String     @unique
   record String
+  baseId String
   base   SecureBase @relation(fields: [baseId], references: [id])
 }
 
-enum Role {
+enum USER_ROLE {
   USER
   PRO
+}
+
+enum INQUIRY_CATEGORY {
+  COUNSEL
+  INQUIRY
+  CONTACT
+  APPLICATION
+  OTHERS
+}
+
+enum INQUIRY_STATUS {
+  UNREAD
+  WORKING
+  DONE
 }

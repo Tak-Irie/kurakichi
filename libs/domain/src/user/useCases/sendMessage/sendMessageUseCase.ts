@@ -11,7 +11,11 @@ import {
 import { IMessageRepo, Message, MessageContent } from '../../domain';
 import { ContentInvalidError, ReceiverNotFoundError } from './sendMessageError';
 
-type Arg = { textInput: string; senderId: string; receiverId: string };
+type Arg = {
+  textInput: string;
+  senderId: string;
+  receiverId: string;
+};
 
 type SendMessageResponse = Either<
   ContentInvalidError | ReceiverNotFoundError | UnexpectedError | StoreConnectionError,
@@ -25,14 +29,14 @@ export class SendMessageUseCase implements IUseCase<Arg, Promise<SendMessageResp
   public async execute(arg: Arg): Promise<SendMessageResponse> {
     try {
       const contentOrError = MessageContent.create({ text: arg.textInput });
+      const content = Result.verifyResults<MessageContent>([contentOrError]);
 
-      const content = Result.verifyResult<MessageContent>(contentOrError);
-
+      // FIXME:なんかいい解決法つくる
       if (content.isFailure) return left(new ContentInvalidError(arg.textInput));
 
       const messageOrError = Message.create({
         id: UniqueEntityId.create(),
-        content: content.getValue(),
+        content: contentOrError.getValue(),
         sender: new UniqueEntityId(arg.senderId),
         receiver: new UniqueEntityId(arg.receiverId),
       });

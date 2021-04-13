@@ -1,12 +1,21 @@
-import { FC, ReactElement, useState } from 'react';
-import { SideParts, IconButton, GridTemplate, GridItem, GridItemWithPic } from '@next/ui';
+import { FC, useState } from 'react';
+import {
+  IconButton,
+  GridTemplate,
+  GridItem,
+  GridItemWithPic,
+  FeedbackCaution,
+  IconsCaution,
+  PopOnIcon,
+} from '@next/ui';
 import { Transition } from '@headlessui/react';
-import { MailIcon, ExclamationIcon } from '@heroicons/react/outline';
+import { MailIcon } from '@heroicons/react/outline';
 import { Org, useMeQuery } from '../../../graphql/generated/graphql';
-import { IconsCaution } from '../atoms';
+import { SendInquiry } from '@next/container';
 
 const OrgProfile: FC<Org> = (props) => {
   const {
+    id,
     orgName,
     image,
     icon,
@@ -17,6 +26,7 @@ const OrgProfile: FC<Org> = (props) => {
     description,
     members,
   } = props;
+  const orgId = id;
 
   const [isOpen, setIsOpen] = useState(false);
   const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
@@ -28,7 +38,7 @@ const OrgProfile: FC<Org> = (props) => {
           className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last"
           tabIndex={0}
         >
-          <article className="bg-gray-100">
+          <article className="bg-gray-100 relative">
             <div>
               <img
                 className="h-32 w-full object-cover lg:h-56"
@@ -36,7 +46,7 @@ const OrgProfile: FC<Org> = (props) => {
                 alt="団体イメージ"
               />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+                <div className="-mt-12 sm:-mt-16 lg:grid lg:grid-cols-3 sm:flex sm:items-end sm:space-x-5">
                   <div className="flex">
                     <img
                       className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
@@ -44,29 +54,36 @@ const OrgProfile: FC<Org> = (props) => {
                       alt="団体アイコン"
                     />
                   </div>
-                  <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-                    <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+                  <div className="lg:col-span-2 relative">
+                    <div className="flex flex-row-reverse mt-6 sm:min-w-0 sm:flex sm:space-x-6 sm:pb-1">
                       {data?.me.user ? (
-                        <IconButton
-                          onClick={() => setIsOpen(!isOpen)}
-                          label="メッセージを送る"
-                          svgIcon={<MailIcon />}
-                        >
-                          <Transition
-                            show={isOpen}
-                            enter="transition-opacity duration-150"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="transition-opacity duration-150"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            I will fade in and out
-                          </Transition>
-                        </IconButton>
+                        <>
+                          <div className="">
+                            <IconButton
+                              onClick={() => setIsOpen(!isOpen)}
+                              label="お問い合わせ"
+                              svgIcon={<MailIcon />}
+                            />
+                          </div>
+                          <div className="mt-12 absolute w-full">
+                            <Transition
+                              show={isOpen}
+                              enter="transition-opacity duration-150"
+                              enterFrom="opacity-0"
+                              enterTo="opacity-100"
+                              leave="transition-opacity duration-150"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <SendInquiry orgId={id} />
+                            </Transition>
+                          </div>
+                        </>
                       ) : (
                         <div className="flex items-center space-x-3">
-                          <IconsCaution />
+                          <PopOnIcon icon={<IconsCaution />}>
+                            <FeedbackCaution>ログインが必要です</FeedbackCaution>
+                          </PopOnIcon>
                           <IconButton
                             onClick={() => setIsOpen(!isOpen)}
                             label="メッセージを送る"

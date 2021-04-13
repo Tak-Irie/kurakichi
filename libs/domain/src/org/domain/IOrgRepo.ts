@@ -4,7 +4,7 @@ import { OrgName } from './OrgName';
 
 export interface IOrgRepo {
   // getOrgByUserId(userId: UniqueEntityId): Promise<Org | undefined>;
-  confirmExistence(orgName: OrgName): Promise<boolean>;
+  getOrgByName(orgName: OrgName): Promise<boolean>;
   registerOrg(org: Org): Promise<Org | undefined>;
   requestJoinOrg(reqId: UniqueEntityId, orgId: UniqueEntityId): Promise<Org | false>;
   acceptJoinOrg(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<boolean>;

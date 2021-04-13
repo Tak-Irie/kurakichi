@@ -1,11 +1,10 @@
 import { FC } from 'react';
+import Link from 'next/link';
 
 import { useMeQuery } from '../../../graphql/generated/graphql';
 import { isServer } from '../../../util/isServer';
-import { MiddleButton } from '../atoms/Button';
-import { LoadingStylishSpinner } from '../atoms/LoadingSpinner';
-import Link from 'next/link';
-import { LogoutButton } from '../../container/LogoutButton';
+import { LoadingStylishSpinner } from '@next/ui';
+import { LogoutButton } from '@next/container';
 
 const NavAuthSection: FC = () => {
   const { data, loading } = useMeQuery({

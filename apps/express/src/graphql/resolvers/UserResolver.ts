@@ -11,7 +11,7 @@ import {
 } from '@kurakichi/domain';
 import { COOKIE_NAME } from '@kurakichi/node-util';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
-import { userToPresentation } from '../toPresentationDTO/userToPresentation';
+import { userToGql } from '../toGqlDTO/userToGql';
 
 export const userQuery = extendType({
   type: 'Query',
@@ -23,7 +23,7 @@ export const userQuery = extendType({
         if (users.isLeft()) return { error: { message: users.value.getErrorValue() } };
         const domainData = users.value.getValue();
         // console.log('domainData:', domainData);
-        const gqlField = domainData.map((user) => userToPresentation(user));
+        const gqlField = domainData.map((user) => userToGql(user));
 
         return { users: gqlField };
       },
@@ -41,7 +41,7 @@ export const userQuery = extendType({
         if (useCaseResult.isLeft()) return { message: useCaseResult.value.getErrorValue() };
 
         // console.log('me/useCaseResult:', useCaseResult.value.getValue());
-        const gqlField = userToPresentation(useCaseResult.value.getValue());
+        const gqlField = userToGql(useCaseResult.value.getValue());
         // console.log('domainUser:', domainUser);
         return {
           user: gqlField,
@@ -83,7 +83,7 @@ export const userMutation = extendType({
         const useCaseResult = await useLoginUserUseCase.execute({ ...args });
         if (useCaseResult.isLeft())
           return { error: { message: useCaseResult.value.getErrorValue() } };
-        const gqlUser = userToPresentation(useCaseResult.value.getValue());
+        const gqlUser = userToGql(useCaseResult.value.getValue());
         // console.log('gqluser:', gqlUser);
         context.req.session.userId = gqlUser.id;
         return { user: gqlUser };

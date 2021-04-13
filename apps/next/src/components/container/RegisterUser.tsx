@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { MiddleButton, Input, Form } from '../presentational/atoms';
+import { ButtonBig, Input, Form } from '../presentational/atoms';
 import { useForm } from 'react-hook-form';
 import { useRegisterUserMutation, useMeLazyQuery } from '../../graphql/generated/graphql';
 
@@ -37,7 +37,7 @@ export const RegisterUser: FC = () => {
         <Input<UserRegisterInput> type="text" label="userName" register={register} required />
         <Input<UserRegisterInput> type="email" label="email" register={register} required />
         <Input<UserRegisterInput> type="password" label="password" register={register} required />
-        <MiddleButton type="submit">ユーザー登録</MiddleButton>
+        <ButtonBig type="submit">ユーザー登録</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
