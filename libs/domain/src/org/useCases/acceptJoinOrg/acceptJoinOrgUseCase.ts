@@ -40,7 +40,9 @@ export class AcceptJoinOrgUseCase
   }
   public async execute(req: AcceptJoinOrgInput): Promise<AcceptJoinOrgResponse> {
     try {
-      const requestedOrg = await this.OrgRepo.getOrgById(new UniqueEntityId(req.requestedOrgId));
+      const requestedOrg = await this.OrgRepo.getOrgById(
+        UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
+      );
       if (requestedOrg == undefined) return left(new NotFoundOrgError());
 
       // console.log(
@@ -57,8 +59,8 @@ export class AcceptJoinOrgUseCase
       if (alreadyBelongTo) return left(new AlreadyUserIsMemberError());
 
       const registeredResult = await this.OrgRepo.acceptJoinOrg(
-        new UniqueEntityId(req.requestedOrgId),
-        new UniqueEntityId(req.requestUserId),
+        UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
+        UniqueEntityId.reconstruct(req.requestUserId).getValue(),
       );
 
       if (registeredResult == false) return left(new StoreConnectionError());

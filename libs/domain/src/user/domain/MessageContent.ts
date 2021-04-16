@@ -4,7 +4,7 @@ import { ValueObject } from '../../shared/domain/ValueObject';
 type MessageContentProps = { text: string };
 
 export class MessageContent extends ValueObject<MessageContentProps> {
-  constructor(readonly props: MessageContentProps) {
+  private constructor(readonly props: MessageContentProps) {
     super(props);
   }
   public getText(): string {
@@ -17,5 +17,9 @@ export class MessageContent extends ValueObject<MessageContentProps> {
       ...props,
     });
     return Result.success<MessageContent>(_MessageContent);
+  }
+
+  public static restoreFromRepo(text: string): MessageContent {
+    return new MessageContent({ text });
   }
 }

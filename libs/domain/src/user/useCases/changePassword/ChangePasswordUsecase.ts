@@ -33,9 +33,9 @@ export class ChangePasswordUseCase
       // FIXME:need fix error message handling
       if (newPass.isFailure) return left(new InvalidNewPasswordError());
 
-      const id = new UniqueEntityId(req.userId);
+      const id = UniqueEntityId.reconstruct(req.userId);
 
-      const foundUser = await this.userRepository.getUserByUserId(id);
+      const foundUser = await this.userRepository.getUserByUserId(id.getValue());
 
       if (foundUser === undefined) return left(new StoreConnectionError());
 
@@ -49,7 +49,10 @@ export class ChangePasswordUseCase
 
       if (passVerified === false) return left(new InvalidPasswordError());
 
-      const passChanged = await this.userRepository.changeUserPassword(id, newPass.getValue());
+      const passChanged = await this.userRepository.changeUserPassword(
+        id.getValue(),
+        newPass.getValue(),
+      );
       if (passChanged == false) return left(new StoreConnectionError());
 
       return right(Result.success<boolean>(true));

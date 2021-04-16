@@ -25,6 +25,7 @@ export const startApolloServer = async () => {
       pubsub,
       redis,
     }),
+    uploads: false,
   });
 
   await server.start();

@@ -22,7 +22,7 @@ export class OrgMapper {
     if (props.members) {
       members = props.members.map((member) => {
         return new Member({
-          id: new UniqueEntityId(member.id),
+          id: UniqueEntityId.reconstruct(member.id).getValue(),
           memberName: UserName.create({ userName: member.name }).getValue(),
           email: UserEmail.create({ email: member.email }).getValue(),
         });
@@ -30,10 +30,10 @@ export class OrgMapper {
     }
 
     const OrgResult = new Org({
-      id: new UniqueEntityId(props.id),
+      id: UniqueEntityId.reconstruct(props.id).getValue(),
       name: orgName.getValue(),
       location: orgLocation.getValue(),
-      adminId: new UniqueEntityId(props.adminId),
+      adminId: UniqueEntityId.reconstruct(props.adminId).getValue(),
       members,
       email: orgEmail.getValue(),
       phoneNumber: orgPhone.getValue(),

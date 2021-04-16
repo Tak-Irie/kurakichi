@@ -1,8 +1,9 @@
 import { Either, IUseCase, left, Result, right, UnexpectedError } from '../../../shared';
-import { IUserRepository, User } from '../../domain';
+import { IUserRepository } from '../../domain';
+import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 import { UsersNotFoundError } from './GetUsersErrors';
 
-type GetUsersResponse = Either<UsersNotFoundError | UnexpectedError, Result<User[]>>;
+type GetUsersResponse = Either<UsersNotFoundError | UnexpectedError, Result<DTOUser[]>>;
 
 export class GetUsersUseCase implements IUseCase<string, Promise<GetUsersResponse>> {
   constructor(private userRepository: IUserRepository) {
@@ -10,19 +11,16 @@ export class GetUsersUseCase implements IUseCase<string, Promise<GetUsersRespons
   }
 
   public async execute(): Promise<GetUsersResponse> {
-    const FoundResult = await this.userRepository.getUsers();
+    try {
+      const dbUsers = await this.userRepository.getUsers();
 
-    switch (typeof FoundResult) {
-      case 'undefined':
-        return left(new UsersNotFoundError());
-      case 'object':
-        if (FoundResult === null) {
-          return left(new UnexpectedError());
-        }
+      if (dbUsers == false) return left(new UsersNotFoundError());
 
-        return right(Result.success<User[]>(FoundResult));
-      default:
-        return left(new UnexpectedError());
+      const dtoUsers = dbUsers.map((user) => createDTOUserFromDomain(user));
+
+      return right(Result.success<DTOUser[]>(dtoUsers));
+    } catch (err) {
+      return left(new UnexpectedError(err));
     }
   }
 }

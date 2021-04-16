@@ -1,7 +1,7 @@
 import { Entity } from '../../shared';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
-import { MessageContent } from './';
+import { MessageContent } from './MessageContent';
 
 interface MessageProps {
   id: UniqueEntityId;
@@ -10,8 +10,15 @@ interface MessageProps {
   receiver: UniqueEntityId;
 }
 
+export type MessageDTO = {
+  id: string;
+  content: string;
+  sender: string;
+  receiver: string;
+};
+
 export class Message extends Entity<MessageProps> {
-  constructor(readonly props: MessageProps) {
+  private constructor(readonly props: MessageProps) {
     super(props);
   }
   public getId(): string {
@@ -35,5 +42,17 @@ export class Message extends Entity<MessageProps> {
     });
     // Message.addDomainEvent(new _EntityCreated(Message));
     return Result.success<Message>(_Message);
+  }
+
+  public static restoreFromRepo(storedMessage: MessageDTO[]): Message[] {
+    return storedMessage.map(
+      (message) =>
+        new Message({
+          id: UniqueEntityId.restoreFromRepo(message.id),
+          content: MessageContent.restoreFromRepo(message.content),
+          receiver: UniqueEntityId.restoreFromRepo(message.receiver),
+          sender: UniqueEntityId.restoreFromRepo(message.sender),
+        }),
+    );
   }
 }

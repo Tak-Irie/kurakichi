@@ -6,7 +6,7 @@ import {
   Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidIdFormatError,
+  InvalidInputValueError,
   UniqueEntityId,
 } from '../../../shared';
 import { IInquiryRepo, Inquiry } from '../../domain';
@@ -25,7 +25,7 @@ type InquiryArg = {
 
 type RegisterInquiryResponse = Either<
   | ReceiverNotExistError
-  | InvalidIdFormatError
+  | InvalidInputValueError
   | UnexpectedError
   | StoreConnectionError
   | Result<InquiryTypes>,
@@ -59,8 +59,8 @@ export class RegisterInquiryUseCase
         category: categoryOrError.getValue(),
         status: statusOrError.getValue(),
         content: contentOrError.getValue(),
-        receiver: new UniqueEntityId(receiverId),
-        sender: new UniqueEntityId(senderId),
+        receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
+        sender: UniqueEntityId.reconstruct(senderId).getValue(),
       });
       const dbResult = await this.InquiryRepo.registerInquiry(inquiryOrError.getValue());
       if (dbResult == false) return left(new StoreConnectionError());

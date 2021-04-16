@@ -25,10 +25,13 @@ export class RequestJoinOrgUseCase
   }
   public async execute(arg: JoinOrgArg): Promise<RequestJoinOrgResponse> {
     try {
-      const requestUserId = new UniqueEntityId(arg.requestUserId);
-      const requestedOrgId = new UniqueEntityId(arg.requestedOrgId);
+      const requestUserId = UniqueEntityId.reconstruct(arg.requestUserId);
+      const requestedOrgId = UniqueEntityId.reconstruct(arg.requestedOrgId);
 
-      const dbResult = await this.OrgRepo.requestJoinOrg(requestUserId, requestedOrgId);
+      const dbResult = await this.OrgRepo.requestJoinOrg(
+        requestUserId.getValue(),
+        requestedOrgId.getValue(),
+      );
 
       if (dbResult == false) return left(new StoreConnectionError());
 

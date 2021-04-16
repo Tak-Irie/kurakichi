@@ -5,10 +5,10 @@ import { Message, MessageContent } from '../domain';
 export class MessageMapper {
   public static ToDomain(storedMessage: StoredMessage): Message {
     const MessageResult = new Message({
-      id: new UniqueEntityId(storedMessage.id),
+      id: UniqueEntityId.reconstruct(storedMessage.id).getValue(),
       content: new MessageContent({ text: storedMessage.text }),
-      sender: new UniqueEntityId(storedMessage.senderId),
-      receiver: new UniqueEntityId(storedMessage.receiverId),
+      sender: UniqueEntityId.reconstruct(storedMessage.senderId).getValue(),
+      receiver: UniqueEntityId.reconstruct(storedMessage.receiverId).getValue(),
     });
 
     return MessageResult;

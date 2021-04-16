@@ -24,10 +24,10 @@ export class GetOrgUseCase implements IUseCase<GetOrgInput, Promise<GetOrgRespon
   }
   public async execute(req: GetOrgInput): Promise<GetOrgResponse> {
     try {
-      const idOrError = new UniqueEntityId(req.orgId);
+      const idOrError = UniqueEntityId.reconstruct(req.orgId);
       if (idOrError == undefined) return left(new NotFoundOrgError());
 
-      const result = await this.OrgRepo.getOrgById(idOrError);
+      const result = await this.OrgRepo.getOrgById(idOrError.getValue());
       if (result == undefined) return left(new NotFoundOrgError());
 
       return right(Result.success<Org>(result));

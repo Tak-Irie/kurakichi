@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id               String         @id
-  email            String         @unique
-  password         String         @default("IT_IS_SSO_USER")
-  createdAt        DateTime       @default(now())
-  ssoSub           String         @default("IT_IS_KURAKICHI_ORIGINAL_USER")
-  picture          String         @default("UNKNOWN")
-  name             String
-  role             USER_ROLE      @default(USER)
-  receivedMessages Message[]      @relation("receive")
-  sentMessages     Message[]      @relation("sent")
-  manageOrg        Organization[] @relation("orgAdmin")
-  manageRoom       SecureBase[]   @relation("baseAdmin")
-  belongRooms      SecureBase[]   @relation("baseMember")
-  belongOrgs       Organization[] @relation("orgMember")
-  requestJoinOrgs  Organization[] @relation("requestedMember")
-  sentInquiry      Inquiry[]      @relation("inquiry")
+  id                String         @id
+  email             String         @unique
+  name              String
+  password          String
+  ssoSub            String
+  avatar            String
+  image             String
+  description       String
+  role              USER_ROLE
+  receivedMessages  Message[]      @relation("receive")
+  sentMessages      Message[]      @relation("sent")
+  manageOrgs        Organization[] @relation("orgAdmin")
+  belongOrgs        Organization[] @relation("orgMember")
+  requestJoinOrgs   Organization[] @relation("requestedMember")
+  manageSecureBases SecureBase[]   @relation("baseAdmin")
+  belongSecureBases SecureBase[]   @relation("baseMember")
+  sentInquiries     Inquiry[]      @relation("inquiry")
 }
 
 model Organization {

@@ -24,9 +24,9 @@ export class GetInquiryUseCase implements IUseCase<InquiryArg, Promise<GetInquir
   }
   public async execute(arg: InquiryArg): Promise<GetInquiryResponse> {
     try {
-      const inquiryId = new UniqueEntityId(arg.inquiryId);
+      const inquiryId = UniqueEntityId.reconstruct(arg.inquiryId);
 
-      const repoResult = await this.InquiryRepo.getInquiry(inquiryId);
+      const repoResult = await this.InquiryRepo.getInquiry(inquiryId.getValue());
       if (repoResult == false) return left(new StoreConnectionError());
 
       return right(Result.success<Inquiry>(repoResult));

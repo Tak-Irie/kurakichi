@@ -37,8 +37,8 @@ export class SendMessageUseCase implements IUseCase<Arg, Promise<SendMessageResp
       const messageOrError = Message.create({
         id: UniqueEntityId.create(),
         content: contentOrError.getValue(),
-        sender: new UniqueEntityId(arg.senderId),
-        receiver: new UniqueEntityId(arg.receiverId),
+        sender: UniqueEntityId.reconstruct(arg.senderId).getValue(),
+        receiver: UniqueEntityId.reconstruct(arg.receiverId).getValue(),
       });
       // TODO:need create error?
       if (messageOrError.isFailure) return left(new UnexpectedError());

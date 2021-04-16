@@ -9,9 +9,9 @@ type SecureBaseRelations = StoredSecureBase & {
 export class SecureBaseMapper {
   public static ToDomain(storedRoom: SecureBaseRelations): SecureBase {
     const domainRoom = SecureBase.create({
-      id: new UniqueEntityId(storedRoom.id),
-      baseOwner: new UniqueEntityId(storedRoom.adminId),
-      members: storedRoom.members.map((member) => new UniqueEntityId(member.id)),
+      id: UniqueEntityId.reconstruct(storedRoom.id).getValue(),
+      baseOwner: UniqueEntityId.reconstruct(storedRoom.adminId).getValue(),
+      members: storedRoom.members.map((member) => UniqueEntityId.reconstruct(member.id).getValue()),
     });
 
     return domainRoom.getValue();

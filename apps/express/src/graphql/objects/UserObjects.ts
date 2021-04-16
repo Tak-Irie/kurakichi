@@ -6,7 +6,9 @@ export const User = objectType({
     t.implements('Node');
     t.string('email');
     t.string('userName');
-    t.string('picture', { description: "user's image" });
+    t.string('avatar', { description: 'avatar used for icon' });
+    t.string('image', { description: 'hero image used for individual page' });
+    t.string('description', { description: 'self description' });
     t.field('belongOrgs', { type: list('Org') });
     t.field('belongSecureBases', { type: list('SecureBase') });
     t.field('messages', { type: list('Message') });

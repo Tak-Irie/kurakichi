@@ -16,7 +16,7 @@ export abstract class Entity<T> {
   private identifier: Identifier;
 
   constructor(readonly props: T, id?: UniqueEntityId) {
-    this._id = id || new UniqueEntityId();
+    this._id = id;
     this.props = props;
   }
 

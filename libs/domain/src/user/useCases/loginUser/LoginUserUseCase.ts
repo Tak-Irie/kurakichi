@@ -1,10 +1,11 @@
 import { Either, IUseCase, left, Result, right, UnexpectedError } from '../../../shared';
-import { IUserRepository, User, UserEmail, UserPassword, UserReadModel } from '../../domain';
-import * as Error from './LoginUserError';
+import { IUserRepository, UserEmail, UserPassword } from '../../domain';
+import { DTOUser, createDTOUserFromDomain } from '../DTOUser';
+import { IncorrectPasswordOrUserNotExist, InvalidEmail, SsoUser } from './LoginUserError';
 
 type LoginUserResponse = Either<
-  Error.IncorrectPassword | Error.InvalidEmail | Error.SsoUser | UnexpectedError,
-  Result<User>
+  IncorrectPasswordOrUserNotExist | InvalidEmail | SsoUser | UnexpectedError,
+  Result<DTOUser>
 >;
 
 type LoginUserArg = {
@@ -20,22 +21,20 @@ export class LoginUserUseCase implements IUseCase<LoginUserArg, Promise<LoginUse
   public async execute(arg: LoginUserArg): Promise<LoginUserResponse> {
     try {
       const email = UserEmail.create({ email: arg.email });
+      if (email.isFailure) return left(new InvalidEmail());
 
-      if (email.isFailure) return left(new Error.InvalidEmail());
+      const dbUser = await this.userRepository.getUserByEmail(email.getValue());
+      if (dbUser === undefined) return left(new IncorrectPasswordOrUserNotExist());
 
-      const foundUser = await this.userRepository.getUserByEmail(email.getValue());
-
-      if (foundUser === undefined) return left(new Error.InvalidEmail());
-
-      const storedPass = foundUser.getPassword();
-
-      if (storedPass === undefined) return left(new Error.SsoUser());
+      const storedPass = dbUser.getPassword();
+      if (storedPass === undefined) return left(new SsoUser());
 
       const passwordVerified = await UserPassword.verifyPassword(arg.password, storedPass);
+      if (!passwordVerified) return left(new IncorrectPasswordOrUserNotExist());
 
-      if (!passwordVerified) return left(new Error.IncorrectPassword());
+      const dtoUser = createDTOUserFromDomain(dbUser);
 
-      return right(Result.success<User>(foundUser));
+      return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
       return left(new UnexpectedError());
     }

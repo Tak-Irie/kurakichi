@@ -27,7 +27,9 @@ export class LogoutUserUseCase implements IUseCase<LogoutArg, Promise<LogoutUser
     const { userId } = request;
 
     try {
-      const user = await this.userRepo.getUserByUserId(new UniqueEntityId(userId));
+      const user = await this.userRepo.getUserByUserId(
+        UniqueEntityId.reconstruct(userId).getValue(),
+      );
 
       if (user === undefined) {
         return left(new UserNotFoundOrDeletedError());

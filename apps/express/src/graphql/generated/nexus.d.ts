@@ -58,7 +58,18 @@ export interface NexusGenObjects {
     messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
   }
   Mutation: {};
-  Org: types.Org;
+  Org: { // root type
+    description?: string | null; // String
+    email?: string | null; // String
+    homePage?: string | null; // String
+    icon?: string | null; // String
+    id: string; // ID!
+    image?: string | null; // String
+    location?: string | null; // String
+    members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+    orgName?: string | null; // String
+    phoneNumber?: string | null; // String
+  }
   OrgPayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
     org?: NexusGenRootTypes['Org'] | null; // Org
@@ -84,12 +95,14 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
+    avatar?: string | null; // String
     belongOrgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
     belongSecureBases?: Array<NexusGenRootTypes['SecureBase'] | null> | null; // [SecureBase]
+    description?: string | null; // String
     email?: string | null; // String
     id: string; // ID!
+    image?: string | null; // String
     messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
-    picture?: string | null; // String
     role?: NexusGenEnums['UserRole'] | null; // UserRole
     userName?: string | null; // String
   }
@@ -153,6 +166,7 @@ export interface NexusGenFieldTypes {
     requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
+    updateUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
@@ -203,12 +217,14 @@ export interface NexusGenFieldTypes {
     dialogPosted: NexusGenRootTypes['Dialog'] | null; // Dialog
   }
   User: { // field return type
+    avatar: string | null; // String
     belongOrgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
     belongSecureBases: Array<NexusGenRootTypes['SecureBase'] | null> | null; // [SecureBase]
+    description: string | null; // String
     email: string | null; // String
     id: string; // ID!
+    image: string | null; // String
     messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
-    picture: string | null; // String
     role: NexusGenEnums['UserRole'] | null; // UserRole
     userName: string | null; // String
   }
@@ -264,6 +280,7 @@ export interface NexusGenFieldTypeNames {
     requestJoinOrg: 'OrgPayload'
     sendInquiry: 'InquiryPayload'
     sendMessage: 'MessagePayload'
+    updateUser: 'UserPayload'
     userRegister: 'UserPayload'
   }
   Org: { // field return type name
@@ -314,12 +331,14 @@ export interface NexusGenFieldTypeNames {
     dialogPosted: 'Dialog'
   }
   User: { // field return type name
+    avatar: 'String'
     belongOrgs: 'Org'
     belongSecureBases: 'SecureBase'
+    description: 'String'
     email: 'String'
     id: 'ID'
+    image: 'String'
     messages: 'Message'
-    picture: 'String'
     role: 'UserRole'
     userName: 'String'
   }
@@ -372,6 +391,12 @@ export interface NexusGenArgTypes {
     sendMessage: { // args
       receiverId: string; // String!
       textInput: string; // String!
+    }
+    updateUser: { // args
+      avatar?: string | null; // String
+      description?: string | null; // String
+      email?: string | null; // String
+      image?: string | null; // String
     }
     userRegister: { // args
       email: string; // String!

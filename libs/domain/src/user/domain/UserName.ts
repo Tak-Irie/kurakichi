@@ -39,4 +39,8 @@ export class UserName extends ValueObject<UserNameProps> {
 
     return Result.success<UserName>(new UserName(props));
   }
+
+  public static restoreFromRepo(userName: string): UserName {
+    return new UserName({ userName });
+  }
 }

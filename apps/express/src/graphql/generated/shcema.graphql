@@ -71,6 +71,7 @@ type Mutation {
   requestJoinOrg(orgId: String!): OrgPayload
   sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  updateUser(avatar: String, description: String, email: String, image: String): UserPayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
@@ -146,16 +147,21 @@ type Subscription {
 }
 
 type User implements Node {
+  """avatar used for icon"""
+  avatar: String
   belongOrgs: [Org]
   belongSecureBases: [SecureBase]
+
+  """self description"""
+  description: String
   email: String
 
   """GUID for a resource"""
   id: ID!
-  messages: [Message]
 
-  """user's image"""
-  picture: String
+  """hero image used for individual page"""
+  image: String
+  messages: [Message]
   role: UserRole
   userName: String
 }

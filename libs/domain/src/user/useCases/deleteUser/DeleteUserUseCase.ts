@@ -27,8 +27,8 @@ export class DeleteUserUseCase implements IUseCase<DeleteUserArg, Promise<Delete
 
   public async execute(request: DeleteUserArg): Promise<DeleteUserResponse> {
     try {
-      const userId = new UniqueEntityId(request.userId);
-      const result = await this.userRepository.deleteUser(userId);
+      const userId = UniqueEntityId.reconstruct(request.userId);
+      const result = await this.userRepository.deleteUser(userId.getValue());
 
       if (result === undefined) {
         return left(new StoreConnectionError());

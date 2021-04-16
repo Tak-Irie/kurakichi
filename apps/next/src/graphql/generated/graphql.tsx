@@ -82,6 +82,7 @@ export type Mutation = {
   deleteUser?: Maybe<RegularPayload>;
   forgetPassword?: Maybe<RegularPayload>;
   changePassword?: Maybe<RegularPayload>;
+  updateUser?: Maybe<UserPayload>;
   postDialog?: Maybe<DialogPayload>;
   registerOrg?: Maybe<OrgPayload>;
   requestJoinOrg?: Maybe<OrgPayload>;
@@ -112,6 +113,14 @@ export type MutationForgetPasswordArgs = {
 export type MutationChangePasswordArgs = {
   currentPass: Scalars['String'];
   newPass: Scalars['String'];
+};
+
+
+export type MutationUpdateUserArgs = {
+  email?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']>;
 };
 
 
@@ -255,8 +264,12 @@ export type User = Node & {
   id: Scalars['ID'];
   email?: Maybe<Scalars['String']>;
   userName?: Maybe<Scalars['String']>;
-  /** user's image */
-  picture?: Maybe<Scalars['String']>;
+  /** avatar used for icon */
+  avatar?: Maybe<Scalars['String']>;
+  /** hero image used for individual page */
+  image?: Maybe<Scalars['String']>;
+  /** self description */
+  description?: Maybe<Scalars['String']>;
   belongOrgs?: Maybe<Array<Maybe<Org>>>;
   belongSecureBases?: Maybe<Array<Maybe<SecureBase>>>;
   messages?: Maybe<Array<Maybe<Message>>>;
@@ -320,9 +333,24 @@ export type SecureBasePayloadFragment = (
   )>>> }
 );
 
+export type UserDetailPayloadFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'email' | 'userName' | 'description' | 'avatar' | 'image' | 'role'>
+  & { belongOrgs?: Maybe<Array<Maybe<(
+    { __typename?: 'Org' }
+    & OrgPayloadFragment
+  )>>>, belongSecureBases?: Maybe<Array<Maybe<(
+    { __typename?: 'SecureBase' }
+    & SecureBasePayloadFragment
+  )>>>, messages?: Maybe<Array<Maybe<(
+    { __typename?: 'Message' }
+    & MessagePayloadFragment
+  )>>> }
+);
+
 export type UserPayloadFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'email' | 'userName' | 'picture' | 'role'>
+  & Pick<User, 'id' | 'email' | 'userName' | 'description' | 'avatar' | 'image' | 'role'>
   & { belongOrgs?: Maybe<Array<Maybe<(
     { __typename?: 'Org' }
     & Pick<Org, 'id'>
@@ -496,6 +524,28 @@ export type SendMessageMutation = (
   )> }
 );
 
+export type UpdateUserMutationVariables = Exact<{
+  email?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser?: Maybe<(
+    { __typename?: 'UserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
 export type UserChangePasswordMutationVariables = Exact<{
   CurrentPass: Scalars['String'];
   NewPass: Scalars['String'];
@@ -609,17 +659,7 @@ export type GetMyInfoDetailQuery = (
     { __typename?: 'UserPayload' }
     & { user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'email' | 'userName' | 'picture' | 'role'>
-      & { belongOrgs?: Maybe<Array<Maybe<(
-        { __typename?: 'Org' }
-        & OrgPayloadFragment
-      )>>>, belongSecureBases?: Maybe<Array<Maybe<(
-        { __typename?: 'SecureBase' }
-        & SecureBasePayloadFragment
-      )>>>, messages?: Maybe<Array<Maybe<(
-        { __typename?: 'Message' }
-        & MessagePayloadFragment
-      )>>> }
+      & UserDetailPayloadFragment
     )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
@@ -725,10 +765,10 @@ export const InquiryPayloadFragmentDoc = gql`
   status
 }
     `;
-export const MessagePayloadFragmentDoc = gql`
-    fragment MessagePayload on Message {
-  id
-  content
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on RegularError {
+  message
+  invalidField
 }
     `;
 export const OrgPayloadFragmentDoc = gql`
@@ -748,12 +788,6 @@ export const OrgPayloadFragmentDoc = gql`
   }
 }
     `;
-export const RegularErrorFragmentDoc = gql`
-    fragment RegularError on RegularError {
-  message
-  invalidField
-}
-    `;
 export const SecureBasePayloadFragmentDoc = gql`
     fragment SecureBasePayload on SecureBase {
   id
@@ -765,12 +799,42 @@ export const SecureBasePayloadFragmentDoc = gql`
   }
 }
     `;
+export const MessagePayloadFragmentDoc = gql`
+    fragment MessagePayload on Message {
+  id
+  content
+}
+    `;
+export const UserDetailPayloadFragmentDoc = gql`
+    fragment UserDetailPayload on User {
+  id
+  email
+  userName
+  description
+  avatar
+  image
+  role
+  belongOrgs {
+    ...OrgPayload
+  }
+  belongSecureBases {
+    ...SecureBasePayload
+  }
+  messages {
+    ...MessagePayload
+  }
+}
+    ${OrgPayloadFragmentDoc}
+${SecureBasePayloadFragmentDoc}
+${MessagePayloadFragmentDoc}`;
 export const UserPayloadFragmentDoc = gql`
     fragment UserPayload on User {
   id
   email
   userName
-  picture
+  description
+  avatar
+  image
   role
   belongOrgs {
     id
@@ -1113,6 +1177,53 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($email: String, $description: String, $avatar: String, $image: String) {
+  updateUser(
+    email: $email
+    description: $description
+    avatar: $avatar
+    image: $image
+  ) {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      description: // value for 'description'
+ *      avatar: // value for 'avatar'
+ *      image: // value for 'image'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UserChangePasswordDocument = gql`
     mutation UserChangePassword($CurrentPass: String!, $NewPass: String!) {
   changePassword(currentPass: $CurrentPass, newPass: $NewPass) {
@@ -1374,29 +1485,14 @@ export const GetMyInfoDetailDocument = gql`
     query GetMyInfoDetail {
   me {
     user {
-      id
-      email
-      userName
-      picture
-      role
-      belongOrgs {
-        ...OrgPayload
-      }
-      belongSecureBases {
-        ...SecureBasePayload
-      }
-      messages {
-        ...MessagePayload
-      }
+      ...UserDetailPayload
     }
     error {
       ...RegularError
     }
   }
 }
-    ${OrgPayloadFragmentDoc}
-${SecureBasePayloadFragmentDoc}
-${MessagePayloadFragmentDoc}
+    ${UserDetailPayloadFragmentDoc}
 ${RegularErrorFragmentDoc}`;
 
 /**

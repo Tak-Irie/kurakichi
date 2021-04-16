@@ -1,6 +1,8 @@
 import { FC } from 'react';
-import { IconButton, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
+
 import { MailIcon, CogIcon } from '@heroicons/react/outline';
+import { IconButton, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
+
 import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
 
 type UserProfileProps = {
@@ -35,7 +37,7 @@ export const UserProfile: FC<UserProfileProps> = ({
             <div>
               <img
                 className="h-32 w-full object-cover lg:h-56"
-                src={image || '/hands_mid-reso.jpg'}
+                src={image === 'UNKNOWN' ? '/hands_mid-reso.jpg' : image}
                 alt="ユーザーイメージ"
               />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,13 +45,13 @@ export const UserProfile: FC<UserProfileProps> = ({
                   <div className="flex">
                     <img
                       className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
-                      src={icon || '/asian_man1.jpg'}
+                      src={icon === 'UNKNOWN' ? '/asian_man1.jpg' : icon}
                       alt="ユーザーアイコン"
                     />
                   </div>
                   <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                     <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                      <IconButton label="メッセージ" svgIcon={<MailIcon />} />
+                      <IconButton label="メッセージボックス" svgIcon={<MailIcon />} />
                       <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
                     </div>
                   </div>
@@ -62,7 +64,11 @@ export const UserProfile: FC<UserProfileProps> = ({
 
             <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <GridTemplate>
-                <GridItem label="自己紹介" content={description} colSpan="col-span-1" />
+                <GridItem
+                  label="自己紹介"
+                  content={description === 'UNKNOWN' ? '自己紹介記入欄です' : description}
+                  colSpan="col-span-1"
+                />
                 <GridItem label="メールアドレス" content={email} colSpan="col-span-1" />
               </GridTemplate>
             </div>
@@ -87,7 +93,7 @@ export const UserProfile: FC<UserProfileProps> = ({
             <div className="mt-8 max-w-5xl mx-auto px-4  sm:px-6 lg:px-8">
               <h2 className="text-sm font-medium text-gray-500">セキュアベース</h2>
               <GridTemplate>
-                {secureBases ? (
+                {secureBases[0] ? (
                   secureBases.map((base) => {
                     return (
                       <div key={base.id}>
@@ -108,19 +114,21 @@ export const UserProfile: FC<UserProfileProps> = ({
             <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
               <h2 className="text-sm font-medium text-gray-500">所属団体</h2>
               <GridTemplate>
-                {orgs
-                  ? orgs.map((org) => {
-                      return (
-                        <div key={org.id}>
-                          <GridItemWithPic
-                            name={org.orgName}
-                            description={org.description}
-                            url={`/org/${org.id}`}
-                          />
-                        </div>
-                      );
-                    })
-                  : null}
+                {orgs[0] ? (
+                  orgs.map((org) => {
+                    return (
+                      <div key={org.id}>
+                        <GridItemWithPic
+                          name={org.orgName}
+                          description={org.description}
+                          url={`/org/${org.id}`}
+                        />
+                      </div>
+                    );
+                  })
+                ) : (
+                  <SmallText>所属団体はありません</SmallText>
+                )}
               </GridTemplate>
             </div>
           </article>

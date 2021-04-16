@@ -12,6 +12,7 @@ import { Transition } from '@headlessui/react';
 import { MailIcon } from '@heroicons/react/outline';
 import { Org, useMeQuery } from '../../../graphql/generated/graphql';
 import { SendInquiry } from '@next/container';
+import { AvatarOrg } from '../atoms';
 
 const OrgProfile: FC<Org> = (props) => {
   const {
@@ -47,13 +48,7 @@ const OrgProfile: FC<Org> = (props) => {
               />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="-mt-12 sm:-mt-16 lg:grid lg:grid-cols-3 sm:flex sm:items-end sm:space-x-5">
-                  <div className="flex">
-                    <img
-                      className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
-                      src={icon === 'UNKNOWN' ? '/logo_temp.png' : icon}
-                      alt="団体アイコン"
-                    />
-                  </div>
+                  <AvatarOrg />
                   <div className="lg:col-span-2 relative">
                     <div className="flex flex-row-reverse mt-6 sm:min-w-0 sm:flex sm:space-x-6 sm:pb-1">
                       {data?.me.user ? (

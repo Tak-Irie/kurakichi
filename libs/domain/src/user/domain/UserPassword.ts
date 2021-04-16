@@ -18,6 +18,11 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     return this.props.password;
   }
 
+  // TODO:need to separate User and SSOUser?
+  public static createForSSO(): UserPassword {
+    return new UserPassword({ password: 'IT_IS_SSO_USER', isHashed: false });
+  }
+
   public static async create(props: UserPasswordProps): Promise<Result<UserPassword>> {
     let password = props.password;
     const propsResult = Guard.falsyCheck({
@@ -85,5 +90,9 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     if (!this.props.isHashed) return false;
 
     return this.props.isHashed;
+  }
+
+  public static restoreFromRepo(password: string): UserPassword {
+    return new UserPassword({ isHashed: true, password });
   }
 }

@@ -20,3 +20,4 @@ export * from './Form';
 export * from './Icons';
 export * from './Feedbacks';
 export * from './Select';
+export * from './Avatars';

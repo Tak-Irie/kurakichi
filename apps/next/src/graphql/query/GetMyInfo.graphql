@@ -1,20 +1,7 @@
 query GetMyInfoDetail {
   me {
     user {
-      id
-      email
-      userName
-      picture
-      role
-      belongOrgs {
-        ...OrgPayload
-      }
-      belongSecureBases {
-        ...SecureBasePayload
-      }
-      messages {
-        ...MessagePayload
-      }
+      ...UserDetailPayload
     }
     error {
       ...RegularError

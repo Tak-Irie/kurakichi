@@ -10,12 +10,12 @@ export class InquiryMapper {
     const { category, id, receiverId, send_flag, senderId, text, status } = storedInquiry;
 
     const InquiryResult = new Inquiry({
-      id: new UniqueEntityId(id),
+      id: UniqueEntityId.reconstruct(id).getValue(),
       category: InquiryCategory.create({ type: category }).getValue(),
       status: InquiryStatus.create({ status: status }).getValue(),
       content: InquiryContent.create({ text: text }).getValue(),
-      receiver: new UniqueEntityId(receiverId),
-      sender: new UniqueEntityId(senderId),
+      receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
+      sender: UniqueEntityId.reconstruct(senderId).getValue(),
     });
 
     return InquiryResult;

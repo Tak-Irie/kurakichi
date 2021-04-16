@@ -1,80 +1,107 @@
-import {
-  User as StoredUser,
-  Message as StoredMessage,
-  Organization,
-  SecureBase as StoredSecureBase,
-} from '@prisma/client';
-import { Org } from '../../org/domain';
-import { OrgMapper } from '../../org/infra';
-import { UniqueEntityId } from '../../shared';
-import { Message, User, UserEmail, UserName, UserPassword, SecureBase } from '../domain';
-import { SecureBaseMapper } from './SecureBaseMapper';
-import { MessageMapper } from './MessageMapper';
+import { User as StoredUser } from '@prisma/client';
+import { User } from '../domain';
+import { getIdFromObjectInArray } from '@kurakichi/node-util';
 
-type StoredUserRelation = StoredUser & {
-  receivedMessages?: StoredMessage[];
-  belongOrgs?: Organization[];
-  belongSecureBases?: StoredSecureBase[];
+export type StoredUserRelation = StoredUser & {
+  receivedMessages: {
+    id: string;
+  }[];
+  belongOrgs: {
+    id: string;
+  }[];
+  belongSecureBases: {
+    id: string;
+  }[];
 };
 
-// FIXME: re-architect whole persistence layer. below mapper is seriously ugly
-// this distortion is made by coexistence of simple CRUD and DDD. need to implement CQRS
 export class UserMapper {
-  public static async ToDomain(storedUser: StoredUserRelation): Promise<User> {
+  public static ToDomain(storedUser: StoredUserRelation): User {
     // console.log('storedUser:', storedUser);
-    let password: UserPassword | undefined;
-    let messages: Message[];
-    let belongOrgs: Org[];
-    let belongSecureBases: SecureBase[];
-
-    const userNameResult = UserName.create({ userName: storedUser.name });
-
-    if (storedUser.password) {
-      const result = await UserPassword.create({
-        password: storedUser.password,
-        isHashed: true,
-      });
-      password = result.getValue();
-    }
-
-    if (storedUser.receivedMessages) {
-      messages = storedUser.receivedMessages.map((message) => MessageMapper.ToDomain(message));
-    }
-
-    if (storedUser.belongOrgs) {
-      belongOrgs = storedUser.belongOrgs.map((org) => OrgMapper.ToDomain(org));
-    }
-    if (storedUser.belongSecureBases) {
-      belongSecureBases = storedUser.belongSecureBases.map((secureBase) =>
-        SecureBaseMapper.ToDomain(secureBase),
-      );
-    }
-    // console.log('belongBases:', belongSecureBases);
-    const userEmailResult = UserEmail.create({ email: storedUser.email });
-
-    const userResult = new User({
-      id: new UniqueEntityId(storedUser.id),
-      userName: userNameResult.getValue(),
-      password,
-      email: userEmailResult.getValue(),
-      messages,
-      belongOrgs,
-      belongSecureBases,
-      role: storedUser.role,
+    const { name, receivedMessages, belongOrgs, belongSecureBases, ...props } = storedUser;
+    const userResult = User.restoreFromRepo({
+      ...props,
+      userName: name,
+      belongOrgs: getIdFromObjectInArray(belongOrgs),
+      belongSecureBases: getIdFromObjectInArray(belongSecureBases),
+      messages: getIdFromObjectInArray(receivedMessages),
     });
 
     return userResult;
   }
+  // FIXME: re-architect whole persistence layer. below mapper is seriously ugly
+  // this distortion is made by coexistence of simple CRUD and DDD. need to implement CQRS
+
+  // public static async ToDomain(storedUser: StoredUserRelation): Promise<User> {
+  //   // console.log('storedUser:', storedUser);
+  //   let password: UserPassword | undefined;
+  //   let messages: Message[];
+  //   let belongOrgs: Org[];
+  //   let belongSecureBases: SecureBase[];
+
+  //   const userNameResult = UserName.create({ userName: storedUser.name });
+
+  //   if (storedUser.password) {
+  //     const result = await UserPassword.create({
+  //       password: storedUser.password,
+  //       isHashed: true,
+  //     });
+  //     password = result.getValue();
+  //   }
+
+  //   if (storedUser.receivedMessages) {
+  //     messages = storedUser.receivedMessages.map((message) => MessageMapper.ToDomain(message));
+  //   }
+
+  //   if (storedUser.belongOrgs) {
+  //     belongOrgs = storedUser.belongOrgs.map((org) => OrgMapper.ToDomain(org));
+  //   }
+  //   if (storedUser.belongSecureBases) {
+  //     belongSecureBases = storedUser.belongSecureBases.map((secureBase) =>
+  //       SecureBaseMapper.ToDomain(secureBase),
+  //     );
+  //   }
+  //   // console.log('belongBases:', belongSecureBases);
+  //   const userEmailResult = UserEmail.create({ email: storedUser.email });
+
+  //   const userResult = User.restoreFromRepo({
+  //     id: UniqueEntityId.reconstruct(storedUser.id).getValue(),
+  //     userName: userNameResult.getValue(),
+  //     password,
+  //     email: userEmailResult.getValue(),
+  //     avatar: storedUser.avatar,
+  //     description: storedUser.description,
+  //     image: storedUser.image,
+  //     messages,
+  //     belongOrgs,
+  //     belongSecureBases,
+  //     role: storedUser.role,
+  //   });
+
+  //   return userResult;
+  // }
 
   public static async toStore(user: User): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
+    const {
+      avatar,
+      description,
+      email,
+      id,
+      image,
+      password,
+      role,
+      ssoSub,
+      userName,
+    } = user.getProps();
     return {
-      id: user.getId(),
-      name: user.getUsername(),
-      email: user.getEmail(),
-      password: user.getPassword() || 'IT_IS_SSO_USER',
-      ssoSub: user.props.ssoSub || 'IT_IS_KURAKICHI_ORIGINAL_USER',
-      picture: user.props.picture || 'UNKNOWN',
-      role: 'USER',
+      id: id.getId(),
+      name: userName.getValue(),
+      email: email.getValue(),
+      password: password.getValue(),
+      ssoSub,
+      avatar,
+      image,
+      description,
+      role,
     };
   }
 }

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { UserMapper } from './UserMapper';
+import { StoredUserRelation, UserMapper } from './UserMapper';
 import { IUserRepository, User, UserEmail, UserPassword } from '../domain';
 import { UniqueEntityId } from '../../shared';
 
@@ -15,15 +15,20 @@ export class UserRepository implements IUserRepository {
     return !!result;
   }
 
+  // FIXME:separate getUser and getUserDetail that include infos
   async getUserByUserId(userId: UniqueEntityId): Promise<User | undefined> {
     const result = await this.prisma.user.findUnique({
       where: { id: userId.getId() },
-      include: { receivedMessages: true, belongOrgs: true, belongRooms: true },
+      include: {
+        receivedMessages: { select: { id: true } },
+        belongOrgs: { select: { id: true } },
+        belongSecureBases: { select: { id: true } },
+      },
     });
     if (!result) return undefined;
 
-    // console.log('getUserByUserId:', result);
-    return UserMapper.ToDomain(result);
+    console.log('getUserByUserId:', result);
+    return UserMapper.ToDomain(result as StoredUserRelation);
   }
 
   async registerUser(user: User): Promise<User | undefined> {
@@ -38,24 +43,34 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async getUsers(): Promise<User[] | undefined> {
+  async getUsers(): Promise<User[] | false> {
     const users = await this.prisma.user.findMany({
-      include: { belongOrgs: true, belongRooms: true, receivedMessages: true },
+      include: {
+        receivedMessages: { select: { id: true } },
+        belongOrgs: { select: { id: true } },
+        belongSecureBases: { select: { id: true } },
+      },
     });
 
-    const data = await Promise.all(users.map(async (user) => await UserMapper.ToDomain(user)));
+    if (users == undefined) return false;
 
-    return data || null;
+    const data = users.map((user) => UserMapper.ToDomain(user as StoredUserRelation));
+
+    return data;
   }
 
   async getUserByEmail(userEmail: UserEmail): Promise<User | undefined> {
     const prismaUser = await this.prisma.user.findUnique({
       where: { email: userEmail.getValue() },
-      include: { belongOrgs: true, belongRooms: true, receivedMessages: true },
+      include: {
+        receivedMessages: { select: { id: true } },
+        belongOrgs: { select: { id: true } },
+        belongSecureBases: { select: { id: true } },
+      },
     });
     if (prismaUser === null) return undefined;
 
-    const domainUser = await UserMapper.ToDomain(prismaUser);
+    const domainUser = UserMapper.ToDomain(prismaUser as StoredUserRelation);
     return domainUser;
   }
 
@@ -76,5 +91,15 @@ export class UserRepository implements IUserRepository {
     });
     if (result == undefined) return false;
     return true;
+  }
+
+  async updateUser(user: User): Promise<User | false> {
+    const rawData = await UserMapper.toStore(user);
+    const dbResult = await this.prisma.user.update({
+      where: { id: rawData.id },
+      data: rawData,
+    });
+    if (dbResult == undefined) return false;
+    return user;
   }
 }

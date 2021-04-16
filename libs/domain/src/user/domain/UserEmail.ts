@@ -31,4 +31,7 @@ export class UserEmail extends ValueObject<UserEmailProps> {
 
     return Result.success<UserEmail>(new UserEmail({ email: this.formatEmail(email.email) }));
   }
+  public static restoreFromRepo(email: string): UserEmail {
+    return new UserEmail({ email: email });
+  }
 }

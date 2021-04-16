@@ -63,7 +63,7 @@ export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOr
       const orgOrError = Org.create({
         id: UniqueEntityId.create(),
         // FIXME:forget to write, what should I fix.
-        adminId: new UniqueEntityId(req.adminId),
+        adminId: UniqueEntityId.reconstruct(req.adminId).getValue(),
         name: orgName,
         email: emailOrError.getValue(),
         location: locationOrError.getValue(),

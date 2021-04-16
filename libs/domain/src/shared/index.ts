@@ -7,4 +7,4 @@ export * from './UnexpectedError';
 export * from './domain';
 export * from './events';
 export * from './useCase';
-export * from './InvalidIdFormatError';
+export * from './InvalidInputValueError';

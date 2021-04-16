@@ -24,7 +24,9 @@ export class GetMessagesUseCase implements IUseCase<MessagesArg, Promise<GetMess
   }
   public async execute(arg: MessagesArg): Promise<GetMessagesResponse> {
     try {
-      const result = await this.MessagesRepo.getMessages(new UniqueEntityId(arg.userId));
+      const result = await this.MessagesRepo.getMessages(
+        UniqueEntityId.reconstruct(arg.userId).getValue(),
+      );
       if (result == false) return left(new NotFoundMessagesError());
       return right(Result.success<Message[]>(result));
     } catch (err) {

@@ -9,93 +9,78 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IUserRepository, User, UserEmail, UserName, UserPassword } from '../../domain';
+import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 import { EmailAlreadyExistsError } from './RegisterUserError';
 
-type RegisterUserInput = {
+type RegisterUserArg = {
   userName: string;
   email: string;
   password: string;
 };
 
-type RegisterUserDTO = {
-  id: string;
-  userName: string;
-  email: string;
-};
-
 type UserTypes = UserEmail | UserName | UserPassword;
 
 type RegisterUserResponse = Either<
-  | EmailAlreadyExistsError
-  | UnexpectedError
-  | StoreConnectionError
-  | Result<UserTypes>
-  | Result<User>,
-  Result<RegisterUserDTO>
+  EmailAlreadyExistsError | UnexpectedError | StoreConnectionError | Result<UserTypes>,
+  Result<DTOUser>
 >;
 
 export class RegisterUserUseCase
-  implements IUseCase<RegisterUserInput, Promise<RegisterUserResponse>> {
+  implements IUseCase<RegisterUserArg, Promise<RegisterUserResponse>> {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
-  public async execute(request: RegisterUserInput): Promise<RegisterUserResponse> {
-    const usernameOrError = UserName.create({
-      userName: request.userName,
-    });
-
-    const emailOrError = UserEmail.create({
-      email: request.email,
-    });
-
-    const passwordOrError = await UserPassword.create({
-      password: request.password,
-      isHashed: false,
-    });
-
-    const verifiedResult = Result.verifyResults<UserTypes>([
-      emailOrError,
-      passwordOrError,
-      usernameOrError,
-    ]);
-
-    if (verifiedResult.isFailure) {
-      return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
-    }
-
-    const email = emailOrError.getValue();
-    const password = passwordOrError.getValue();
-    const userName = usernameOrError.getValue();
-
+  public async execute(request: RegisterUserArg): Promise<RegisterUserResponse> {
     try {
+      const usernameOrError = UserName.create({
+        userName: request.userName,
+      });
+
+      const emailOrError = UserEmail.create({
+        email: request.email,
+      });
+
+      const passwordOrError = await UserPassword.create({
+        password: request.password,
+        isHashed: false,
+      });
+
+      const verifiedResult = Result.verifyResults<UserTypes>([
+        emailOrError,
+        passwordOrError,
+        usernameOrError,
+      ]);
+
+      if (verifiedResult.isFailure) {
+        return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
+      }
+
+      const email = emailOrError.getValue();
+      const password = passwordOrError.getValue();
+      const userName = usernameOrError.getValue();
+
       const userEmailAlreadyRegistered = await this.userRepository.confirmExistence(email);
 
       if (userEmailAlreadyRegistered) {
         return left(new EmailAlreadyExistsError(email.props.email));
       }
-      const userOrError = User.create({
+      const user = User.create({
         id: UniqueEntityId.create(),
         email,
         password,
         userName,
       });
 
-      if (userOrError.isFailure) return left(Result.fail<User>(userOrError.getErrorValue()));
-
-      const result = await this.userRepository.registerUser(userOrError.getValue());
+      const result = await this.userRepository.registerUser(user);
 
       if (result === undefined) {
         return left(new StoreConnectionError());
       }
 
-      return right(
-        Result.success<RegisterUserDTO>({
-          id: result.getId(),
-          userName: result.getUsername(),
-          email: result.getEmail(),
-        }),
-      );
+      const userDTO = createDTOUserFromDomain(result);
+
+      return right(Result.success<DTOUser>(userDTO));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

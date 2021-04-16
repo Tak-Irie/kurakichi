@@ -2,7 +2,9 @@ fragment UserPayload on User {
   id
   email
   userName
-  picture
+  description
+  avatar
+  image
   role
   belongOrgs {
     id
