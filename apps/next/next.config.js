@@ -3,6 +3,7 @@ const withNx = require('@nrwl/next/plugins/with-nx');
 // const path = require('path');
 
 module.exports = withNx({
+  nx: { svgr: false },
   // webpack: (config) => {
   //   config.module.rules.push({
   //     test: /\.css$/,
