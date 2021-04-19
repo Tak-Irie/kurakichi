@@ -123,6 +123,8 @@ type Query {
   getMessages: MessagePayload
   getOrg(orgId: String!): OrgPayload
   getOrgs: OrgPayload
+  getOrgsByMemberId: OrgPayload
+  getUser(userId: String!): UserPayload
   getUsers: UserPayload!
   me: UserPayload
   node(id: ID): Node

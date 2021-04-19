@@ -6,7 +6,7 @@ import {
   useGetInquiryUseCase,
   useRegisterInquiryUseCase,
 } from '@kurakichi/domain';
-import { inquiryToGql, inquiriesToGql } from '../DTOtoGql';
+import { dtoInquiryToGql, dtoInquiriesToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const InquiryQuery = extendType({
@@ -23,7 +23,7 @@ export const InquiryQuery = extendType({
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
         const inquiries = domainResponse.value.getValue();
-        const gqlField = inquiriesToGql(inquiries);
+        const gqlField = dtoInquiriesToGql(inquiries);
 
         return { inquiries: gqlField };
       },
@@ -38,7 +38,7 @@ export const InquiryQuery = extendType({
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
         const inquiry = domainResponse.value.getValue();
-        const gqlField = inquiryToGql(inquiry);
+        const gqlField = dtoInquiryToGql(inquiry);
         return { inquiry: gqlField };
       },
     });
@@ -57,11 +57,11 @@ export const InquiryMutation = extendType({
         status: 'InquiryStatus',
       },
       resolve: async (_, args, context) => {
-        console.log('arg:', args);
+        // console.log('arg:', args);
         const idOrErr = getUserIdByCookie(context);
         if (typeof idOrErr === 'object') return idOrErr;
 
-        const domainResponse = await useRegisterInquiryUseCase.execute({
+        const useCaseResult = await useRegisterInquiryUseCase.execute({
           senderId: idOrErr,
           receiverId: args.receiverId,
           content: args.textInput,
@@ -69,9 +69,9 @@ export const InquiryMutation = extendType({
           status: args.status,
         });
 
-        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
-        const gqlField = inquiryToGql(domainResponse.value.getValue());
+        const gqlField = dtoInquiryToGql(useCaseResult.value.getValue());
         return { inquiry: gqlField };
       },
     });

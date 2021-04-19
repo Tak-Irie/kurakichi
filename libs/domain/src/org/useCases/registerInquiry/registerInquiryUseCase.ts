@@ -13,6 +13,7 @@ import { IInquiryRepo, Inquiry } from '../../domain';
 import { InquiryCategory, InquiryCategoryUnion } from '../../domain/InquiryCategory';
 import { InquiryContent } from '../../domain/InquiryContent';
 import { InquiryStatusUnion, InquiryStatus } from '../../domain/InquiryStatus';
+import { createDTOInquiryFromDomain, DTOInquiry } from '../DTOInquiry';
 import { ReceiverNotExistError } from './registerInquiryError';
 
 type InquiryArg = {
@@ -29,7 +30,7 @@ type RegisterInquiryResponse = Either<
   | UnexpectedError
   | StoreConnectionError
   | Result<InquiryTypes>,
-  Result<Inquiry>
+  Result<DTOInquiry>
 >;
 
 type InquiryTypes = InquiryCategory | InquiryContent | InquiryStatus;
@@ -41,6 +42,7 @@ export class RegisterInquiryUseCase
   }
   public async execute(arg: InquiryArg): Promise<RegisterInquiryResponse> {
     try {
+      console.log('registerInquiryArg:', arg);
       const { category, content, receiverId, senderId, status } = arg;
       const categoryOrError = InquiryCategory.create({ type: category });
       const contentOrError = InquiryContent.create({ text: content });
@@ -62,9 +64,12 @@ export class RegisterInquiryUseCase
         receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
         sender: UniqueEntityId.reconstruct(senderId).getValue(),
       });
+
       const dbResult = await this.InquiryRepo.registerInquiry(inquiryOrError.getValue());
       if (dbResult == false) return left(new StoreConnectionError());
-      return right(Result.success<Inquiry>(dbResult));
+
+      const dtoInquiry = createDTOInquiryFromDomain(dbResult);
+      return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

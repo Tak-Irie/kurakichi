@@ -13,8 +13,8 @@ type SendInquiryProps = {
 
 type SendInquiryInput = {
   textInput: string;
-  category: keyof typeof InquiryCategory;
-  status: keyof typeof InquiryStatus;
+  category: InquiryCategory;
+  status: InquiryStatus;
 };
 
 export const SendInquiry: FC<SendInquiryProps> = (props) => {
@@ -22,17 +22,18 @@ export const SendInquiry: FC<SendInquiryProps> = (props) => {
   const [sendInquiry, { data, error, loading }] = useSendInquiryMutation();
 
   const onSubmit = async (values: SendInquiryInput) => {
-    console.log('submitValue:', values);
+    // console.log('submitValue:', values);
+    // console.log('submitValue:', values.category);
     try {
       await sendInquiry({
         variables: {
           receiverId: props.orgId,
           textInput: values.textInput,
-          category: InquiryCategory[values.category],
+          category: values.category,
           status: InquiryStatus['Unread'],
         },
       });
-      console.log(':', data);
+      console.log('data:', data);
     } catch (err) {
       console.log('err:', err);
     }

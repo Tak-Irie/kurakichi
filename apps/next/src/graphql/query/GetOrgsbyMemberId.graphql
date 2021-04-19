@@ -1,0 +1,10 @@
+query GetOrgsByMemberId {
+  getOrgsByMemberId {
+    orgs {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

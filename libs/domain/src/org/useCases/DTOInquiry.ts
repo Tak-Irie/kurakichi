@@ -20,3 +20,7 @@ export const createDTOInquiryFromDomain = (inquiry: Inquiry): DTOInquiry => {
     status: status.getValue(),
   };
 };
+
+export const createDTOInquiriesFromDomain = (inquiries: Inquiry[]): DTOInquiry[] => {
+  return inquiries.map((inquiry) => createDTOInquiryFromDomain(inquiry));
+};

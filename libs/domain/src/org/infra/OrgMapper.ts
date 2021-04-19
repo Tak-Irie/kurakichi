@@ -12,8 +12,8 @@ export class OrgMapper {
     const { members, inquiries, ...props } = storedOrg;
     const domainOrg = Org.restoreFromRepo({
       ...props,
-      members: getIdFromObjectInArray(members),
-      inquiries: getIdFromObjectInArray(inquiries),
+      members: members ? getIdFromObjectInArray(members) : [],
+      inquiries: inquiries ? getIdFromObjectInArray(inquiries) : [],
     });
 
     return domainOrg;

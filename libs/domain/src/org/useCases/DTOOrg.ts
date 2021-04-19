@@ -15,6 +15,11 @@ export type DTOOrg = {
   phoneNumber: string;
 };
 
+// export type DAOOrg = Omit<DTOOrg, 'inquiries' | 'members'> & {
+//   members: DTOUser[];
+//   inquiries: DTOInquiry[];
+// };
+
 export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
   const {
     id,

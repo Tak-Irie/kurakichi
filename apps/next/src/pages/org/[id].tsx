@@ -38,7 +38,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }) => {
-  const data: { getOrg: { org: OrgPayload['org'] } } = await fetchGraphqlApi({
+  const data: { getOrg: OrgPayload } = await fetchGraphqlApi({
     query: `query GetOrg($OrgId: String!) {
               getOrg(orgId: $OrgId) {
                 org {
@@ -48,20 +48,27 @@ export const getStaticProps = async ({ params }) => {
                   email
                   phoneNumber
                   image
-                  icon
+                  avatar
                   description
                   homePage
                   members {
                     id
-                    email
                     userName
                   }
+                  inquiries {
+                    id
+                    content
+                  }
                 }
+                error {
+                    message
+                  }
               }
             }`,
     variables: { OrgId: params.id },
   });
 
+  // console.log('SSG data:', data.getOrg.org.members);
   return { props: { data } };
 };
 

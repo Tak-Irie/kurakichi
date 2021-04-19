@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 type AvatarsProps = {
-  src?: string;
-  alt?: string;
-  notification: boolean;
+  src: string;
+  alt: string;
+  notification?: boolean;
 };
 
 export const Avatar: FC<AvatarsProps> = ({
@@ -36,7 +36,11 @@ export const AvatarSmall: FC<AvatarsProps> = ({
   );
 };
 
-export const AvatarOrg: FC<AvatarsProps> = ({ src = '/logo_temp.png', alt = 'defaultImage' }) => {
+export const AvatarBig: FC<AvatarsProps> = ({
+  src = '/logo_temp.png',
+  alt = 'defaultImage',
+  notification = false,
+}) => {
   return (
     <div className="flex">
       <img

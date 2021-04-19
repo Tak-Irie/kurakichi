@@ -31,6 +31,22 @@ export const userQuery = extendType({
       },
     });
 
+    t.nullable.field('getUser', {
+      type: 'UserPayload',
+      args: {
+        userId: nonNull(stringArg()),
+      },
+      resolve: async (_, arg) => {
+        const useCaseResult = await useGetUserById.execute(arg.userId);
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+
+        const gqlField = dtoUserToGql(useCaseResult.value.getValue());
+        return {
+          user: gqlField,
+        };
+      },
+    });
+
     t.nullable.field('me', {
       type: 'UserPayload',
       resolve: async (_, __, context) => {
@@ -40,7 +56,7 @@ export const userQuery = extendType({
         if (typeof idOrErr === 'object') return idOrErr;
 
         const useCaseResult = await useGetUserById.execute(idOrErr);
-        console.log('me/useCaseResult:', useCaseResult);
+        // console.log('me/useCaseResult:', useCaseResult);
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
         const gqlField = dtoUserToGql(useCaseResult.value.getValue());

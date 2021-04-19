@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { UserProfile } from '@next/ui';
+import { UserMyPage } from '@next/ui';
 
 import { useGetMyInfoDetailQuery } from '../../graphql/generated/graphql';
 
@@ -23,10 +23,10 @@ const MyPage: NextPage = () => {
     } = data.me.user;
     return (
       <div>
-        <UserProfile
+        <UserMyPage
           userName={userName}
           description={description}
-          icon={avatar}
+          avatar={avatar}
           image={image}
           orgs={belongOrgs}
           messages={messages}

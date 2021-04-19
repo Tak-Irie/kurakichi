@@ -5,11 +5,13 @@ fragment OrgPayload on Org {
   email
   phoneNumber
   image
-  icon
+  avatar
   description
   homePage
   members {
     id
-    userName
+  }
+  inquiries {
+    id
   }
 }

@@ -39,3 +39,7 @@ export const createDTOUserFromDomain = (user: User): DTOUser => {
     belongSecureBases: belongSecureBases.map((base) => base.getId()),
   };
 };
+
+export const createDTOUserArrayFromDomain = (users: User[]): DTOUser[] => {
+  return users.map((user) => createDTOUserFromDomain(user));
+};

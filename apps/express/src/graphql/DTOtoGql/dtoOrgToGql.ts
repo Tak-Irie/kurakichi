@@ -32,3 +32,6 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): NexusGenFieldTypes['Org'] => {
     inquiries: idsMapper(inquiries),
   };
 };
+export const dtoOrgsToGql = (dtoOrgs: DTOOrg[]): NexusGenFieldTypes['Org'][] => {
+  return dtoOrgs.map((org) => dtoOrgToGql(org));
+};

@@ -39,7 +39,7 @@ export const MessageMutation = extendType({
         messageStatus: 'MessageStatus',
       },
       resolve: async (_, args, context) => {
-        console.log('arg:', args);
+        // console.log('arg:', args);
         const idOrErr = getUserIdByCookie(context);
         if (typeof idOrErr === 'object') return idOrErr;
 

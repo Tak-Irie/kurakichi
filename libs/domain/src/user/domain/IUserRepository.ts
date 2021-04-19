@@ -9,6 +9,7 @@ export interface IUserRepository {
   registerUser(user: User): Promise<User | undefined>;
   getUsers(): Promise<User[] | false>;
   getUserByEmail(userEmail: UserEmail): Promise<User | undefined>;
+  getUsersByOrgId(orgId: UniqueEntityId): Promise<User[] | false>;
   deleteUser(userId: UniqueEntityId): Promise<boolean>;
   changeUserPassword(userId: UniqueEntityId, password: UserPassword): Promise<boolean>;
   updateUser(user: User): Promise<User | false>;

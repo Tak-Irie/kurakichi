@@ -1,17 +1,20 @@
-import { Inquiry } from '@kurakichi/domain';
+import { DTOInquiry } from '@kurakichi/domain';
+import { idMapper } from '../../util/idMapper';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
-export const inquiryToGql = (inquiry: Inquiry): NexusGenFieldTypes['Inquiry'] => {
+export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): NexusGenFieldTypes['Inquiry'] => {
+  const { category, content, id, receiver, sender, status } = dtoInquiry;
+
   return {
-    id: inquiry.getId(),
-    content: inquiry.getContent(),
-    category: inquiry.getCategory(),
-    inquiryStatus: inquiry.getStatus(),
-    sender: { id: inquiry.getSender() },
+    id,
+    content,
+    category,
+    inquiryStatus: status,
+    sender: idMapper(sender),
   };
 };
 
-export const inquiriesToGql = (inquiries: Inquiry[]): NexusGenFieldTypes['Inquiry'][] => {
-  const gqlFields = inquiries.map((inquiry) => inquiryToGql(inquiry));
+export const dtoInquiriesToGql = (dtoInquiries: DTOInquiry[]): NexusGenFieldTypes['Inquiry'][] => {
+  const gqlFields = dtoInquiries.map((inquiry) => dtoInquiryToGql(inquiry));
   return gqlFields;
 };

@@ -35,7 +35,8 @@ export type Inquiry = Node & {
   id: Scalars['ID'];
   content?: Maybe<Scalars['String']>;
   category?: Maybe<InquiryCategory>;
-  status?: Maybe<InquiryStatus>;
+  inquiryStatus?: Maybe<InquiryStatus>;
+  sender?: Maybe<User>;
 };
 
 export enum InquiryCategory {
@@ -56,7 +57,8 @@ export type InquiryPayload = {
 export enum InquiryStatus {
   Unread = 'UNREAD',
   Done = 'DONE',
-  Working = 'WORKING'
+  Working = 'WORKING',
+  Draft = 'DRAFT'
 }
 
 /** Message from User to User */
@@ -65,6 +67,9 @@ export type Message = Node & {
   /** GUID for a resource */
   id: Scalars['ID'];
   content?: Maybe<Scalars['String']>;
+  messageStatus?: Maybe<MessageStatus>;
+  sender?: Maybe<User>;
+  receiver?: Maybe<User>;
 };
 
 export type MessagePayload = {
@@ -73,6 +78,12 @@ export type MessagePayload = {
   messages?: Maybe<Array<Maybe<Message>>>;
   error?: Maybe<RegularError>;
 };
+
+export enum MessageStatus {
+  Unread = 'UNREAD',
+  Read = 'READ',
+  Draft = 'DRAFT'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -152,6 +163,7 @@ export type MutationAcceptJoinOrgArgs = {
 export type MutationSendMessageArgs = {
   textInput: Scalars['String'];
   receiverId: Scalars['String'];
+  messageStatus?: Maybe<MessageStatus>;
 };
 
 
@@ -177,10 +189,11 @@ export type Org = Node & {
   email?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
-  icon?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   homePage?: Maybe<Scalars['String']>;
   members?: Maybe<Array<Maybe<User>>>;
+  inquiries?: Maybe<Array<Maybe<Inquiry>>>;
 };
 
 export type OrgPayload = {
@@ -194,9 +207,11 @@ export type Query = {
   __typename?: 'Query';
   node?: Maybe<Node>;
   getUsers: UserPayload;
+  getUser?: Maybe<UserPayload>;
   me?: Maybe<UserPayload>;
   getOrgs?: Maybe<OrgPayload>;
   getOrg?: Maybe<OrgPayload>;
+  getOrgsByMemberId?: Maybe<OrgPayload>;
   /** get User's id, then show their own messages */
   getMessages?: Maybe<MessagePayload>;
   /** get inquiries of one Org */
@@ -207,6 +222,11 @@ export type Query = {
 
 export type QueryNodeArgs = {
   id?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryGetUserArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -299,20 +319,34 @@ export type DialogPayloadFragment = (
 
 export type InquiryPayloadFragment = (
   { __typename?: 'Inquiry' }
-  & Pick<Inquiry, 'id' | 'content' | 'category' | 'status'>
+  & Pick<Inquiry, 'id' | 'content' | 'category' | 'inquiryStatus'>
+  & { sender?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )> }
 );
 
 export type MessagePayloadFragment = (
   { __typename?: 'Message' }
-  & Pick<Message, 'id' | 'content'>
+  & Pick<Message, 'id' | 'content' | 'messageStatus'>
+  & { receiver?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>, sender?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )> }
 );
 
 export type OrgPayloadFragment = (
   { __typename?: 'Org' }
-  & Pick<Org, 'id' | 'orgName' | 'location' | 'email' | 'phoneNumber' | 'image' | 'icon' | 'description' | 'homePage'>
+  & Pick<Org, 'id' | 'orgName' | 'location' | 'email' | 'phoneNumber' | 'image' | 'avatar' | 'description' | 'homePage'>
   & { members?: Maybe<Array<Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'userName'>
+    & Pick<User, 'id'>
+  )>>>, inquiries?: Maybe<Array<Maybe<(
+    { __typename?: 'Inquiry' }
+    & Pick<Inquiry, 'id'>
   )>>> }
 );
 
@@ -703,6 +737,42 @@ export type GetOrgsQuery = (
   )> }
 );
 
+export type GetOrgsByMemberIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOrgsByMemberIdQuery = (
+  { __typename?: 'Query' }
+  & { getOrgsByMemberId?: Maybe<(
+    { __typename?: 'OrgPayload' }
+    & { orgs?: Maybe<Array<Maybe<(
+      { __typename?: 'Org' }
+      & OrgPayloadFragment
+    )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type GetUserQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { getUser?: Maybe<(
+    { __typename?: 'UserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -762,7 +832,10 @@ export const InquiryPayloadFragmentDoc = gql`
   id
   content
   category
-  status
+  inquiryStatus
+  sender {
+    id
+  }
 }
     `;
 export const RegularErrorFragmentDoc = gql`
@@ -779,12 +852,14 @@ export const OrgPayloadFragmentDoc = gql`
   email
   phoneNumber
   image
-  icon
+  avatar
   description
   homePage
   members {
     id
-    userName
+  }
+  inquiries {
+    id
   }
 }
     `;
@@ -803,6 +878,13 @@ export const MessagePayloadFragmentDoc = gql`
     fragment MessagePayload on Message {
   id
   content
+  messageStatus
+  receiver {
+    id
+  }
+  sender {
+    id
+  }
 }
     `;
 export const UserDetailPayloadFragmentDoc = gql`
@@ -1603,6 +1685,87 @@ export function useGetOrgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetOrgsQueryHookResult = ReturnType<typeof useGetOrgsQuery>;
 export type GetOrgsLazyQueryHookResult = ReturnType<typeof useGetOrgsLazyQuery>;
 export type GetOrgsQueryResult = Apollo.QueryResult<GetOrgsQuery, GetOrgsQueryVariables>;
+export const GetOrgsByMemberIdDocument = gql`
+    query GetOrgsByMemberId {
+  getOrgsByMemberId {
+    orgs {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetOrgsByMemberIdQuery__
+ *
+ * To run a query within a React component, call `useGetOrgsByMemberIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrgsByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrgsByMemberIdQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrgsByMemberIdQuery(baseOptions?: Apollo.QueryHookOptions<GetOrgsByMemberIdQuery, GetOrgsByMemberIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrgsByMemberIdQuery, GetOrgsByMemberIdQueryVariables>(GetOrgsByMemberIdDocument, options);
+      }
+export function useGetOrgsByMemberIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrgsByMemberIdQuery, GetOrgsByMemberIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrgsByMemberIdQuery, GetOrgsByMemberIdQueryVariables>(GetOrgsByMemberIdDocument, options);
+        }
+export type GetOrgsByMemberIdQueryHookResult = ReturnType<typeof useGetOrgsByMemberIdQuery>;
+export type GetOrgsByMemberIdLazyQueryHookResult = ReturnType<typeof useGetOrgsByMemberIdLazyQuery>;
+export type GetOrgsByMemberIdQueryResult = Apollo.QueryResult<GetOrgsByMemberIdQuery, GetOrgsByMemberIdQueryVariables>;
+export const GetUserDocument = gql`
+    query GetUser($userId: String!) {
+  getUser(userId: $userId) {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   getUsers {

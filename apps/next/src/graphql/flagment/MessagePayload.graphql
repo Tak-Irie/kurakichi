@@ -1,4 +1,11 @@
 fragment MessagePayload on Message {
   id
   content
+  messageStatus
+  receiver {
+    id
+  }
+  sender {
+    id
+  }
 }

@@ -203,6 +203,8 @@ export interface NexusGenFieldTypes {
     getMessages: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     getOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgs: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    getOrgsByMemberId: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    getUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     getUsers: NexusGenRootTypes['UserPayload']; // UserPayload!
     me: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     node: NexusGenRootTypes['Node'] | null; // Node
@@ -322,6 +324,8 @@ export interface NexusGenFieldTypeNames {
     getMessages: 'MessagePayload'
     getOrg: 'OrgPayload'
     getOrgs: 'OrgPayload'
+    getOrgsByMemberId: 'OrgPayload'
+    getUser: 'UserPayload'
     getUsers: 'UserPayload'
     me: 'UserPayload'
     node: 'Node'
@@ -430,6 +434,9 @@ export interface NexusGenArgTypes {
     }
     getOrg: { // args
       orgId: string; // String!
+    }
+    getUser: { // args
+      userId: string; // String!
     }
     node: { // args
       id?: string | null; // ID

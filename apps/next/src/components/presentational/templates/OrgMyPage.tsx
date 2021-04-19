@@ -1,20 +1,18 @@
 import { FC, useState } from 'react';
+import { Transition } from '@headlessui/react';
+
 import {
   IconButton,
   GridTemplate,
   GridItem,
   GridItemWithPic,
-  FeedbackCaution,
-  IconsCaution,
-  PopOnIcon,
   ProfileHeader,
+  IconsMail,
 } from '@next/ui';
-import { Transition } from '@headlessui/react';
-import { MailIcon } from '@heroicons/react/outline';
-import { Org, useMeQuery } from '../../../graphql/generated/graphql';
-import { SendInquiry } from '@next/container';
 
-export const OrgProfile: FC<Org> = (props) => {
+import { Org, useMeQuery } from '../../../graphql/generated/graphql';
+
+export const OrgMyPage: FC<Org> = (props) => {
   const {
     id,
     orgName,
@@ -31,7 +29,6 @@ export const OrgProfile: FC<Org> = (props) => {
   const orgId = id;
   // console.log('OrgProfileProps:', props);
 
-  const [isOpen, setIsOpen] = useState(false);
   const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
   return (
     <div className="bg-white">
@@ -41,43 +38,8 @@ export const OrgProfile: FC<Org> = (props) => {
           tabIndex={0}
         >
           <article className="bg-gray-100 relative">
-            <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={orgName}>
-              {data?.me.user ? (
-                <>
-                  <div className="">
-                    <IconButton
-                      onClick={() => setIsOpen(!isOpen)}
-                      label="お問い合わせ"
-                      svgIcon={<MailIcon />}
-                    />
-                  </div>
-                  <div className="mt-12 absolute w-full">
-                    <Transition
-                      show={isOpen}
-                      enter="transition-opacity duration-150"
-                      enterFrom="opacity-0"
-                      enterTo="opacity-100"
-                      leave="transition-opacity duration-150"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <SendInquiry orgId={id} />
-                    </Transition>
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center space-x-3">
-                  <PopOnIcon icon={<IconsCaution />}>
-                    <FeedbackCaution>ログインが必要です</FeedbackCaution>
-                  </PopOnIcon>
-                  <IconButton
-                    onClick={() => setIsOpen(!isOpen)}
-                    label="メッセージを送る"
-                    disabled
-                    svgIcon={<MailIcon />}
-                  ></IconButton>
-                </div>
-              )}
+            <ProfileHeader avatarSrc={avatar} imageSrc={image} profileName={orgName}>
+              <IconButton label="メッセージボックス" svgIcon={<IconsMail />} />
             </ProfileHeader>
 
             <div className="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,10 +68,10 @@ export const OrgProfile: FC<Org> = (props) => {
                         <div key={member.id}>
                           <GridItemWithPic
                             name={member.userName}
-                            description={member.description}
-                            imgSrc={member.avatar}
-                            imgAlt={'メンバーアバター'}
-                            url={`/user/${member.id}`}
+                            description=""
+                            imgAlt=""
+                            imgSrc=""
+                            url=""
                           />
                         </div>
                       );

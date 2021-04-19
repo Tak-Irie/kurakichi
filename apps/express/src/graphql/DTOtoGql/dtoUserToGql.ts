@@ -28,3 +28,7 @@ export const dtoUserToGql = (user: DTOUser): NexusGenFieldTypes['User'] => {
     userName,
   };
 };
+
+export const dtoUsersToGql = (users: DTOUser[]): NexusGenFieldTypes['User'][] => {
+  return users.map((user) => dtoUserToGql(user));
+};

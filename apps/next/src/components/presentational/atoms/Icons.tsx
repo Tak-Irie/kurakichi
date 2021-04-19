@@ -6,6 +6,8 @@ import {
   DotsVerticalIcon,
   HomeIcon,
   UserIcon,
+  MailIcon,
+  CogIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -34,4 +36,10 @@ export const IconsHome: FC = () => {
 };
 export const IconsUser: FC = () => {
   return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<UserIcon />} />;
+};
+export const IconsMail: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<MailIcon />} />;
+};
+export const IconsCog: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<CogIcon />} />;
 };

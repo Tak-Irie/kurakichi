@@ -2,8 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { HeaderList, HeaderDropDown, NavAuthSection } from '@next/ui';
 
-// FIXME:rename to NavBar
-const Header: FC = () => {
+export const NavBar: FC = () => {
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
       <div className="relative flex items-center justify-between">
@@ -27,5 +26,3 @@ const Header: FC = () => {
     </div>
   );
 };
-
-export { Header };

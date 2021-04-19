@@ -27,8 +27,20 @@ export class UserRepository implements IUserRepository {
     });
     if (!result) return undefined;
 
-    console.log('getUserByUserId:', result);
+    // console.log('getUserByUserId:', result);
     return UserMapper.ToDomain(result as StoredUserRelation);
+  }
+
+  async getUsersByOrgId(orgId: UniqueEntityId): Promise<User[] | false> {
+    const dbResult = await this.prisma.user.findMany({
+      where: { belongOrgs: { some: { id: orgId.getId() } } },
+    });
+    // console.log('dbResult:', dbResult);
+    if (dbResult == undefined) return false;
+
+    const domainUsers = UserMapper.arrayToDomain(dbResult);
+    // console.log('domainUsers:', domainUsers);
+    return domainUsers;
   }
 
   async registerUser(user: User): Promise<User | undefined> {
@@ -36,7 +48,7 @@ export class UserRepository implements IUserRepository {
 
     if (registeredEmail === true) return undefined;
 
-    const data = await UserMapper.toStore(user);
+    const data = UserMapper.toStore(user);
 
     await this.prisma.user.create({ data });
 
@@ -94,7 +106,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async updateUser(user: User): Promise<User | false> {
-    const rawData = await UserMapper.toStore(user);
+    const rawData = UserMapper.toStore(user);
     const dbResult = await this.prisma.user.update({
       where: { id: rawData.id },
       data: rawData,

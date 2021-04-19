@@ -3,13 +3,13 @@ import { User } from '../domain';
 import { getIdFromObjectInArray } from '@kurakichi/node-util';
 
 export type StoredUserRelation = StoredUser & {
-  receivedMessages: {
+  receivedMessages?: {
     id: string;
   }[];
-  belongOrgs: {
+  belongOrgs?: {
     id: string;
   }[];
-  belongSecureBases: {
+  belongSecureBases?: {
     id: string;
   }[];
 };
@@ -21,13 +21,18 @@ export class UserMapper {
     const domainUser = User.restoreFromRepo({
       ...props,
       userName: name,
-      belongOrgs: getIdFromObjectInArray(belongOrgs),
-      belongSecureBases: getIdFromObjectInArray(belongSecureBases),
-      messages: getIdFromObjectInArray(receivedMessages),
+      belongOrgs: belongOrgs ? getIdFromObjectInArray(belongOrgs) : [],
+      belongSecureBases: belongSecureBases ? getIdFromObjectInArray(belongSecureBases) : [],
+      messages: receivedMessages ? getIdFromObjectInArray(receivedMessages) : [],
     });
 
     return domainUser;
   }
+
+  public static arrayToDomain(storedUser: StoredUserRelation[]): User[] {
+    return storedUser.map((user) => UserMapper.ToDomain(user));
+  }
+
   public static toStore(user: User): StoredUser {
     const {
       avatar,
