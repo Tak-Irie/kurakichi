@@ -1,0 +1,6 @@
+fragment InquiryPayload on Inquiry {
+  id
+  content
+  category
+  status
+}

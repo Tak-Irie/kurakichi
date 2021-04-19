@@ -1,0 +1,9 @@
+fragment SecureBasePayload on SecureBase {
+  id
+  baseOwner {
+    id
+  }
+  members {
+    id
+  }
+}

@@ -7,62 +7,73 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
+  Email,
+  PhoneNumber,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
 import { OrgLocation } from '../../domain/OrgLocation';
 import { OrgName } from '../../domain/OrgName';
-import { SomeError } from './registerOrgError';
+import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
+import { AlreadyRegisteredNameError } from './registerOrgError';
 
-type OrgInput = {
+type OrgArg = {
   adminId: string;
   orgName: string;
   location: string;
-};
-type RegisterOrgDTO = {
-  some: unknown;
+  phoneNumber: string;
+  email: string;
 };
 
-type OrgTypes = OrgName | OrgLocation;
+type OrgTypes = OrgName | OrgLocation | Email | PhoneNumber | UniqueEntityId;
 
 type RegisterOrgResponse = Either<
-  SomeError | UnexpectedError | StoreConnectionError | Result<OrgTypes> | Result<Org>,
-  Result<RegisterOrgDTO>
+  AlreadyRegisteredNameError | UnexpectedError | StoreConnectionError | Result<OrgTypes>,
+  Result<DTOOrg>
 >;
 
-export class RegisterOrgUseCase implements IUseCase<OrgInput, Promise<RegisterOrgResponse>> {
+export class RegisterOrgUseCase implements IUseCase<OrgArg, Promise<RegisterOrgResponse>> {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
-  public async execute(req: OrgInput): Promise<RegisterOrgResponse> {
+  public async execute(arg: OrgArg): Promise<RegisterOrgResponse> {
     try {
-      const orgNameOrError = OrgName.create({ name: req.orgName });
-      const orgLocationOrError = OrgLocation.create({ location: req.location });
+      const orgNameOrError = OrgName.create({ name: arg.orgName });
+      const locationOrError = OrgLocation.create({ location: arg.location });
+      const emailOrError = Email.create({ email: arg.email });
+      const phoneOrError = PhoneNumber.create({ phoneNumber: arg.phoneNumber });
+      const adminIdOrError = UniqueEntityId.reconstruct(arg.adminId);
 
-      const verifiedResult = Result.verifyResults<OrgTypes>([orgNameOrError, orgLocationOrError]);
+      const verifiedResult = Result.verifyResults<OrgTypes>([
+        orgNameOrError,
+        locationOrError,
+        emailOrError,
+        phoneOrError,
+        adminIdOrError,
+      ]);
 
       if (verifiedResult.isFailure) {
         return left(Result.fail<OrgTypes>(verifiedResult.getErrorValue()));
       }
 
-      const name = orgNameOrError.getValue();
-      const location = orgLocationOrError.getValue();
+      const verifiedOrgName = orgNameOrError.getValue();
+      const duplicateCheck = await this.OrgRepo.confirmOrgByName(verifiedOrgName);
+      if (duplicateCheck) return left(new AlreadyRegisteredNameError());
 
       const orgOrError = Org.create({
         id: UniqueEntityId.create(),
-        // FIXME:
-        adminId: new UniqueEntityId(req.adminId),
-        name,
-        location,
-        members: [],
+        adminId: adminIdOrError.getValue(),
+        name: verifiedOrgName,
+        email: emailOrError.getValue(),
+        location: locationOrError.getValue(),
+        phoneNumber: phoneOrError.getValue(),
       });
+      if (orgOrError.isFailure) return left(new UnexpectedError());
 
-      if (orgOrError.isFailure) return left(Result.fail<Org>(orgOrError.getErrorValue()));
+      const dbResult = await this.OrgRepo.registerOrg(orgOrError.getValue());
+      if (dbResult == false) return left(new StoreConnectionError());
 
-      const result = await this.OrgRepo.registerOrg(orgOrError.getValue());
-
-      if (result == undefined) return left(new StoreConnectionError());
-
-      return right(Result.success<RegisterOrgDTO>());
+      const dtoOrg = createDTOOrgFromDomain(dbResult);
+      return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

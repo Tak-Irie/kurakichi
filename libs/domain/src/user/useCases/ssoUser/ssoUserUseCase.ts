@@ -9,23 +9,19 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from '../../../shared';
+import { DTOUser, createDTOUserFromDomain } from '../DTOUser';
 
 type SsoUserArgs = {
   email: string;
   ssoSub: string;
-  picture?: string;
-};
-
-type SsoUserDTO = {
-  id: string;
-  userName: string;
+  avatar?: string;
 };
 
 type UserTypes = UserEmail | UserName;
 
 type RegisterUserResponse = Either<
-  UnexpectedError | StoreConnectionError | Result<User> | Result<UserTypes>,
-  Result<SsoUserDTO>
+  UnexpectedError | StoreConnectionError | Result<UserTypes>,
+  Result<DTOUser>
 >;
 
 export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUserResponse>> {
@@ -34,57 +30,47 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
   }
 
   public async execute(request: SsoUserArgs): Promise<RegisterUserResponse> {
-    const emailOrError = UserEmail.create({
-      email: request.email,
-    });
-
-    const usernameOrError = UserName.create({
-      userName: request.email.split('@')[0],
-    });
-
-    const verifiedResult = Result.verifyResults<UserTypes>([emailOrError, usernameOrError]);
-
-    if (verifiedResult.isFailure) {
-      return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
-    }
-
-    const email = emailOrError.getValue();
-    const userName = usernameOrError.getValue();
-
     try {
+      const emailOrError = UserEmail.create({
+        email: request.email,
+      });
+
+      const usernameOrError = UserName.create({
+        userName: request.email.split('@')[0],
+      });
+
+      const verifiedResult = Result.verifyResults<UserTypes>([emailOrError, usernameOrError]);
+
+      if (verifiedResult.isFailure) {
+        return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
+      }
+
+      const email = emailOrError.getValue();
+      const userName = usernameOrError.getValue();
+
       const existed = await this.userRepository.getUserByEmail(email);
 
       if (existed) {
-        return right(
-          Result.success<SsoUserDTO>({
-            id: existed.getId(),
-            userName: existed.getUsername(),
-          }),
-        );
+        const dtoUser = createDTOUserFromDomain(existed);
+        return right(Result.success<DTOUser>(dtoUser));
       }
 
-      const userOrError = User.create({
+      const ssoUser = User.createSsoUser({
         id: UniqueEntityId.create(),
         email,
         userName,
         ssoSub: request.ssoSub,
-        picture: request.picture,
+        avatar: request.avatar,
       });
 
-      if (userOrError.isFailure) return left(Result.fail<User>(userOrError.getErrorValue()));
+      const dbResult = await this.userRepository.registerUser(ssoUser);
 
-      const result = await this.userRepository.registerUser(userOrError.getValue());
-
-      if (result === undefined) {
+      if (dbResult === undefined) {
         return left(new StoreConnectionError());
       }
+      const dtoUser = createDTOUserFromDomain(dbResult);
 
-      return right(
-        Result.success<SsoUserDTO>({
-          id: result.getId(),
-          userName: result.getUsername(),
-        }),
-      );
+      return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

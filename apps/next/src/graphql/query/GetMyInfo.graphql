@@ -1,0 +1,10 @@
+query GetMyInfoDetail {
+  me {
+    user {
+      ...UserDetailPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

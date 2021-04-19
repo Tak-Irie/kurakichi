@@ -1,7 +1,7 @@
 import { Result } from '../../../shared';
 import { IUseCaseError } from '../../../shared/useCase';
 
-export class IncorrectPassword extends Result<IUseCaseError> {
+export class IncorrectPasswordOrUserNotExist extends Result<IUseCaseError> {
   constructor() {
     super(false, 'アカウントが存在しないか、パスワードが正しくありません');
   }

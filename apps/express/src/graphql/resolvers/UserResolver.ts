@@ -8,10 +8,12 @@ import {
   useDeleteUserUseCase,
   useForgotPasswordUseCase,
   useChangePasswordUseCase,
+  useUpdateUserUseCase,
 } from '@kurakichi/domain';
 import { COOKIE_NAME } from '@kurakichi/node-util';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
-import { userToPresentation } from '../toPresentationDTO/userToPresentation';
+import { dtoUserToGql } from '../DTOtoGql';
+import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const userQuery = extendType({
   type: 'Query',
@@ -19,12 +21,13 @@ export const userQuery = extendType({
     t.nonNull.field('getUsers', {
       type: 'UserPayload',
       resolve: async () => {
-        const users = await useGetUsersUseCase.execute();
-        if (users.isLeft()) return { error: { message: users.value.getErrorValue() } };
-        const domainData = users.value.getValue();
-        const gqlField = domainData.map((user) => userToPresentation(user));
+        const useCaseResult = await useGetUsersUseCase.execute();
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+        const dtoUsers = useCaseResult.value.getValue();
+        // console.log('domainData:', domainData);
+        const gqlUsers = dtoUsers.map((user) => dtoUserToGql(user));
 
-        return { users: gqlField };
+        return { users: gqlUsers };
       },
     });
 
@@ -32,19 +35,18 @@ export const userQuery = extendType({
       type: 'UserPayload',
       resolve: async (_, __, context) => {
         // console.log('me query called');
+        const idOrErr = getUserIdByCookie(context);
+        // console.log('idOrErr:', idOrErr);
+        if (typeof idOrErr === 'object') return idOrErr;
 
-        const idRes = getUserIdByCookie(context);
-        // console.log('idRes:', idRes);
-        if (idRes.result === false) return { message: idRes.errMessage };
+        const useCaseResult = await useGetUserById.execute(idOrErr);
+        console.log('me/useCaseResult:', useCaseResult);
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
-        const result = await useGetUserById.execute(idRes.id);
-        // console.log('res:', result);
-        if (result.isLeft()) return { message: result.value.getErrorValue() };
-
-        const domainUser = result.value.getValue();
-        // console.log('domainUser:', domainUser);
+        const gqlField = dtoUserToGql(useCaseResult.value.getValue());
+        // console.log('domainUser:', gqlField);
         return {
-          user: domainUser,
+          user: gqlField,
         };
       },
     });
@@ -62,14 +64,16 @@ export const userMutation = extendType({
         userName: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        console.log('getConn');
-        const result = await useRegisterUserUseCase.execute({ ...args });
-        if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
-        const user = result.value.getValue();
+        // console.log('getConn');
+        const useCaseResult = await useRegisterUserUseCase.execute({ ...args });
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+        const dtoUser = useCaseResult.value.getValue();
         // console.log('user:', user);
-        context.req.session.userId = user.id;
+        context.req.session.userId = dtoUser.id;
         // console.log('session:', context.req.session.userId);
-        return { user };
+        const gqlUser = dtoUserToGql(dtoUser);
+
+        return { user: gqlUser };
       },
     });
     t.field('login', {
@@ -80,26 +84,26 @@ export const userMutation = extendType({
       },
       resolve: async (_, args, context) => {
         // console.log('arg:', args);
-        const user = await useLoginUserUseCase.execute({ ...args });
-        if (user.isLeft()) return { error: { message: user.value.getErrorValue() } };
-        const data = user.value.getValue();
-        // console.log('data:', data);
-        context.req.session.userId = data.id;
-        return { user: data };
+        const useCaseResult = await useLoginUserUseCase.execute({ ...args });
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+        const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
+        // console.log('gqluser:', gqlUser);
+        context.req.session.userId = gqlUser.id;
+        return { user: gqlUser };
       },
     });
     // TODO::check below
     t.field('logout', {
       type: 'RegularPayload',
       resolve: async (_, __, context) => {
-        const req = context.req;
-        const userId = req.session.userId;
-        // TODO:set up logger sentry or winston
-        if (userId === undefined) return { result: false, message: '不正検出' };
-        const result = await useLogoutUserUseCase.execute({ userId });
-        if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
+        const idOrErr = getUserIdByCookie(context);
+        // console.log('idOrErr:', idOrErr);
+        if (typeof idOrErr === 'object') return { result: false, message: 'ログインしていません' };
+        const useCaseResult = await useLogoutUserUseCase.execute({ userId: idOrErr });
+        if (useCaseResult.isLeft())
+          return { result: false, message: useCaseResult.value.getErrorValue() };
         // TODO::transplant this process to auth service
-        req.session.destroy((err) => {
+        context.req.session.destroy((err) => {
           console.log('err:', err);
         });
         context.res.clearCookie(COOKIE_NAME);
@@ -147,6 +151,35 @@ export const userMutation = extendType({
         });
         if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
         return { result: true, message: '変更に成功しました' };
+      },
+    });
+    t.field('updateUser', {
+      type: 'UserPayload',
+      args: {
+        email: stringArg(),
+        description: stringArg(),
+        avatar: stringArg(),
+        image: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const idOrErr = getUserIdByCookie(ctx);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const { email, description, avatar, image } = args;
+        const useCaseResult = await useUpdateUserUseCase.execute({
+          userId: idOrErr,
+          avatar,
+          description,
+          email,
+          image,
+        });
+
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+
+        const dtoUser = useCaseResult.value.getValue();
+        const gqlUser = dtoUserToGql(dtoUser);
+
+        return { user: gqlUser };
       },
     });
   },

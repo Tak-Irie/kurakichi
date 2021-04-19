@@ -1,4 +1,18 @@
 fragment UserPayload on User {
   id
+  email
   userName
+  description
+  avatar
+  image
+  role
+  belongOrgs {
+    id
+  }
+  belongSecureBases {
+    id
+  }
+  messages {
+    id
+  }
 }

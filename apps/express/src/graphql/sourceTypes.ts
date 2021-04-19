@@ -3,8 +3,6 @@ export type Dialog = {
   dialogContent: string;
 };
 
-// export type Org = {};
-
 export type Event<T> = {
   data: T;
 };

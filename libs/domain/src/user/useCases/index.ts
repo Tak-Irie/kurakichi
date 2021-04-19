@@ -10,6 +10,8 @@ import { DeleteUserUseCase } from './deleteUser/DeleteUserUseCase';
 import { SsoUserUseCase } from './ssoUser/ssoUserUseCase';
 import { ForgotPasswordUseCase } from './forgotPassword/ForgotPasswordUseCase';
 import { ChangePasswordUseCase } from './changePassword/ChangePasswordUseCase';
+import { UpdateUserUseCase } from './updateUser/updateUserUseCase';
+
 import { SendMessageUseCase } from './sendMessage/sendMessageUseCase';
 import { GetMessagesUseCase } from './getMessages/getMessagesUseCase';
 
@@ -25,6 +27,11 @@ export const useDeleteUserUseCase = new DeleteUserUseCase(userRepo);
 export const useSsoUserUseCase = new SsoUserUseCase(userRepo);
 export const useForgotPasswordUseCase = new ForgotPasswordUseCase(userRepo);
 export const useChangePasswordUseCase = new ChangePasswordUseCase(userRepo);
+export const useUpdateUserUseCase = new UpdateUserUseCase(userRepo);
 
 export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
 export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);
+
+export * from './DTOUser';
+export * from './DTOMessage';
+export * from './DTOSecureBase';

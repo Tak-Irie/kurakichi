@@ -4,9 +4,10 @@ import { OrgName } from './OrgName';
 
 export interface IOrgRepo {
   // getOrgByUserId(userId: UniqueEntityId): Promise<Org | undefined>;
-  confirmExistence(orgName: OrgName): Promise<boolean>;
-  registerOrg(org: Org): Promise<Org | undefined>;
-  registerMember(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<boolean>;
+  confirmOrgByName(orgName: OrgName): Promise<boolean>;
+  registerOrg(org: Org): Promise<Org | false>;
+  requestJoinOrg(reqId: UniqueEntityId, orgId: UniqueEntityId): Promise<Org | false>;
+  acceptJoinOrg(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<Org | false>;
   getOrgs(): Promise<Org[]>;
-  getOrgById(orgId: UniqueEntityId): Promise<Org | undefined>;
+  getOrgById(orgId: UniqueEntityId): Promise<Org | false>;
 }

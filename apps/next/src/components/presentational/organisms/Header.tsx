@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
-import { HeaderList } from '../atoms/HeaderList';
-import { HeaderDropDown } from '../molecules/HeaderDropDown';
-import { NavAuthSection } from '../molecules/NavAuthSection';
+import { HeaderList, HeaderDropDown, NavAuthSection } from '@next/ui';
 
 // FIXME:rename to NavBar
 const Header: FC = () => {
@@ -21,6 +19,7 @@ const Header: FC = () => {
           <HeaderList href="/product" title="our product" label="Product" />
           <HeaderList href="/users" title="users" label="users" />
           <HeaderList href="/orgs" title="orgs" label="orgs" />
+          <HeaderList href="/user/mypage" title="mypage" label="MyPage" />
           <HeaderDropDown />
         </ul>
         <NavAuthSection />

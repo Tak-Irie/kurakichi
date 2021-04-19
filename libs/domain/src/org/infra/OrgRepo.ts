@@ -10,58 +10,85 @@ export class OrgRepo implements IOrgRepo {
     this.prisma = new PrismaClient();
   }
 
-  async confirmExistence(orgName: OrgName): Promise<boolean> {
+  async confirmOrgByName(orgName: OrgName): Promise<boolean> {
     const name = orgName.getValue();
     const result = await this.prisma.organization.findUnique({ where: { name } });
     return !!result;
   }
 
-  async registerOrg(org: Org): Promise<Org | undefined> {
-    const existed = await this.confirmExistence(org.props.name);
-    if (existed === true) return undefined;
+  async registerOrg(org: Org): Promise<Org | false> {
+    const data = OrgMapper.toStore(org);
+    const result = await this.prisma.$transaction([
+      this.prisma.organization.create({
+        data,
+      }),
+      this.prisma.user.update({
+        where: { id: data.adminId },
+        data: { belongOrgs: { connect: { id: data.id } }, role: 'PRO' },
+      }),
+    ]);
 
-    const data = await OrgMapper.toStore(org);
-    const result = await this.prisma.organization.create({ data });
-    if (result == undefined) return undefined;
+    if (result == undefined) return false;
     return org;
   }
 
   async getOrgs(): Promise<Org[]> {
-    const orgs = await this.prisma.organization.findMany({ include: { members: true } });
+    const dbOrgs = await this.prisma.organization.findMany({
+      include: { members: { select: { id: true } }, inquiries: { select: { id: true } } },
+    });
     // console.log('repoOrgs:', orgs);
 
-    const toDomainOrgs = await Promise.all(
-      orgs.map(async (org) => await OrgMapper.ToDomain({ org })),
-    );
+    const domainOrgs = dbOrgs.map((org) => OrgMapper.ToDomain(org));
     // console.log('toDomOrgs:', toDomainOrgs);
 
-    return toDomainOrgs;
+    return domainOrgs;
   }
 
-  async getOrgById(orgId: UniqueEntityId): Promise<Org | undefined> {
+  async getOrgById(orgId: UniqueEntityId): Promise<Org | false> {
     const orgResult = await this.prisma.organization.findUnique({
       where: { id: orgId.getId() },
-      include: { members: true },
+      include: { members: { select: { id: true } }, inquiries: { select: { id: true } } },
     });
-    if (orgResult == undefined) return undefined;
+    if (orgResult == undefined) return false;
 
-    const data = await OrgMapper.ToDomain({ org: orgResult });
-    return data;
+    const domainOrg = OrgMapper.ToDomain(orgResult);
+    return domainOrg;
   }
 
-  async registerMember(orgId: UniqueEntityId, MemberId: UniqueEntityId): Promise<boolean> {
+  async acceptJoinOrg(orgId: UniqueEntityId, MemberId: UniqueEntityId): Promise<Org | false> {
     const userId = MemberId.getId();
+    const _orgId = orgId.getId();
+
+    // TODO: does any better solution?
+    const result = await this.prisma.$transaction([
+      this.prisma.organization.update({
+        where: { id: _orgId },
+        data: {
+          members: {
+            connect: { id: userId },
+            update: { where: { id: userId }, data: { role: 'PRO' } },
+          },
+        },
+      }),
+      this.prisma.organization.delete({
+        where: { id: _orgId },
+        select: { requestedMembers: { where: { id: userId } } },
+      }),
+    ]);
+    if (result == undefined) return false;
+
+    const domainOrg = OrgMapper.ToDomain(result[0]);
+    return domainOrg;
+  }
+
+  async requestJoinOrg(reqId: UniqueEntityId, orgId: UniqueEntityId): Promise<Org | false> {
     const result = await this.prisma.organization.update({
       where: { id: orgId.getId() },
-      data: {
-        members: {
-          connect: { id: userId },
-          update: { where: { id: userId }, data: { role: 'PRO' } },
-        },
-      },
+      data: { requestedMembers: { connect: { id: reqId.getId() } } },
     });
-
     if (result == undefined) return false;
-    return true;
+
+    const data = OrgMapper.ToDomain(result);
+    return data;
   }
 }

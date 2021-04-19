@@ -8,66 +8,119 @@ datasource db {
 }
 
 model User {
-  id               String         @id
-  email            String         @unique
-  password         String         @default("IT_IS_SSO_USER")
-  createdAt        DateTime       @default(now())
-  ssoSub           String         @default("IT_IS_KURAKICHI_ORIGINAL_USER")
-  picture          String         @default("UNKNOWN")
-  name             String
-  role             Role           @default(USER)
-  receivedMessages Message[]      @relation("receive")
-  sentMessages     Message[]      @relation("sent")
-  manageOrg        Organization[] @relation("orgAdmin")
-  manageRoom       Room[]         @relation("roomAdmin")
-  belongOrg        Organization[] @relation("orgMember")
-  belongRoom       Room[]         @relation("roomMember")
+  id                String         @id
+  email             String         @unique
+  name              String
+  password          String
+  ssoSub            String
+  avatar            String
+  image             String
+  description       String
+  role              USER_ROLE
+  receivedMessages  Message[]      @relation("receive")
+  sentMessages      Message[]      @relation("sent")
+  manageOrgs        Organization[] @relation("orgAdmin")
+  belongOrgs        Organization[] @relation("orgMember")
+  requestJoinOrgs   Organization[] @relation("requestedMember")
+  manageSecureBases SecureBase[]   @relation("baseAdmin")
+  belongSecureBases SecureBase[]   @relation("baseMember")
+  sentInquiries     Inquiry[]      @relation("inquiry")
 }
 
 model Organization {
-  id        String   @id
-  name      String   @unique
-  adminId   String
-  location  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  admin     User     @relation("orgAdmin", fields: [adminId], references: [id])
-  members   User[]   @relation("orgMember")
+  id               String    @id
+  name             String    @unique
+  email            String
+  description      String
+  phoneNumber      String
+  location         String
+  avatar           String
+  image            String
+  homePage         String
+  adminId          String
+  admin            User      @relation("orgAdmin", fields: [adminId], references: [id])
+  members          User[]    @relation("orgMember")
+  requestedMembers User[]    @relation("requestedMember")
+  inquiries        Inquiry[] @relation("gotInquiry")
+  articles         Article[] @relation("orgArticle")
 }
 
 model Message {
-  id         String   @id
+  id         String         @id
   text       String
   senderId   String
   receiverId String
-  read_flag  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  receiver   User     @relation("receive", fields: [receiverId], references: [id])
-  sender     User     @relation("sent", fields: [senderId], references: [id])
+  createdAt  DateTime       @default(now())
+  status     MESSAGE_STATUS
+  receiver   User           @relation("receive", fields: [receiverId], references: [id])
+  sender     User           @relation("sent", fields: [senderId], references: [id])
+}
+
+model Inquiry {
+  id         String           @id
+  text       String
+  senderId   String
+  receiverId String
+  createdAt  DateTime         @default(now())
+  category   INQUIRY_CATEGORY
+  status     INQUIRY_STATUS
+  sender     User             @relation("inquiry", fields: [senderId], references: [id])
+  receiver   Organization     @relation("gotInquiry", fields: [receiverId], references: [id])
+}
+
+model SecureBase {
+  id      String  @id
+  adminId String
+  admin   User    @relation("baseAdmin", fields: [adminId], references: [id])
+  members User[]  @relation("baseMember")
+  karte   Karte?
+  dialog  Dialog?
 }
 
 model Dialog {
-  id   String @id
-  text String
-}
-
-model Room {
-  id      String @id
-  adminId String
-  admin   User   @relation("roomAdmin", fields: [adminId], references: [id])
-  karte   Karte?
-  member  User[] @relation("roomMember")
+  id     String     @id
+  text   String
+  baseId String
+  base   SecureBase @relation(fields: [baseId], references: [id])
 }
 
 model Karte {
-  id     String @id
-  roomId String @unique
+  id     String     @id
   record String
-  room   Room   @relation(fields: [roomId], references: [id])
+  baseId String
+  base   SecureBase @relation(fields: [baseId], references: [id])
 }
 
-enum Role {
+model Article {
+  id        String       @id
+  image     String
+  text      String
+  orgId     String
+  writerOrg Organization @relation("orgArticle", fields: [orgId], references: [id])
+}
+
+enum USER_ROLE {
   USER
   PRO
-  SYSADMIN
+}
+
+enum INQUIRY_CATEGORY {
+  COUNSEL
+  INQUIRY
+  CONTACT
+  APPLICATION
+  OTHERS
+}
+
+enum INQUIRY_STATUS {
+  UNREAD
+  WORKING
+  DONE
+  DRAFT
+}
+
+enum MESSAGE_STATUS {
+  READ
+  UNREAD
+  DRAFT
 }

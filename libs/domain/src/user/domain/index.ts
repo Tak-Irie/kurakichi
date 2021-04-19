@@ -9,3 +9,7 @@ export * from './events/UserCreated';
 export * from './IMessageRepo';
 export * from './Message';
 export * from './MessageContent';
+
+export * from './SecureBase';
+export * from './ISecureBaseRepo';
+export * from './Karte';

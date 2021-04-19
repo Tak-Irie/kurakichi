@@ -1,46 +1,40 @@
 import { Either, IUseCase, left, Result, right, UnexpectedError } from '../../../shared';
-import { IUserRepository, UserEmail, UserPassword, UserReadModel } from '../../domain';
-import * as Error from './LoginUserError';
+import { IUserRepository, UserEmail, UserPassword } from '../../domain';
+import { DTOUser, createDTOUserFromDomain } from '../DTOUser';
+import { IncorrectPasswordOrUserNotExist, InvalidEmail, SsoUser } from './LoginUserError';
 
 type LoginUserResponse = Either<
-  Error.IncorrectPassword | Error.InvalidEmail | Error.SsoUser | UnexpectedError,
-  Result<UserReadModel>
+  IncorrectPasswordOrUserNotExist | InvalidEmail | SsoUser | UnexpectedError,
+  Result<DTOUser>
 >;
 
-type LoginUserDTO = {
+type LoginUserArg = {
   email: string;
   password: string;
 };
 
-export class LoginUserUseCase implements IUseCase<LoginUserDTO, Promise<LoginUserResponse>> {
+export class LoginUserUseCase implements IUseCase<LoginUserArg, Promise<LoginUserResponse>> {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
-  public async execute(req: LoginUserDTO): Promise<LoginUserResponse> {
+  public async execute(arg: LoginUserArg): Promise<LoginUserResponse> {
     try {
-      const email = UserEmail.create({ email: req.email });
+      const email = UserEmail.create({ email: arg.email });
+      if (email.isFailure) return left(new InvalidEmail());
 
-      if (email.isFailure) return left(new Error.InvalidEmail());
+      const dbUser = await this.userRepository.getUserByEmail(email.getValue());
+      if (dbUser === undefined) return left(new IncorrectPasswordOrUserNotExist());
 
-      const foundUser = await this.userRepository.getUserByEmail(email.getValue());
+      const storedPass = dbUser.getPassword();
+      if (storedPass === undefined) return left(new SsoUser());
 
-      if (foundUser === undefined) return left(new Error.InvalidEmail());
+      const passwordVerified = await UserPassword.verifyPassword(arg.password, storedPass);
+      if (!passwordVerified) return left(new IncorrectPasswordOrUserNotExist());
 
-      const storedPass = foundUser.getPassword();
+      const dtoUser = createDTOUserFromDomain(dbUser);
 
-      if (storedPass === undefined) return left(new Error.SsoUser());
-
-      const passwordVerified = await UserPassword.verifyPassword(req.password, storedPass);
-
-      if (!passwordVerified) return left(new Error.IncorrectPassword());
-
-      return right(
-        Result.success<UserReadModel>({
-          id: foundUser.getId(),
-          email: foundUser.getEmail(),
-        }),
-      );
+      return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
       return left(new UnexpectedError());
     }

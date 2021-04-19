@@ -1,0 +1,10 @@
+query GetInquiries($orgId: String!) {
+  getInquiries(orgId: $orgId) {
+    inquiries {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

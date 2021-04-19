@@ -1,0 +1,10 @@
+query Me {
+  me {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

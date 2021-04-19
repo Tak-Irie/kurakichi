@@ -1,41 +1,55 @@
 import { User as StoredUser } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
-import { User, UserEmail, UserName, UserPassword } from '../domain';
+import { User } from '../domain';
+import { getIdFromObjectInArray } from '@kurakichi/node-util';
+
+export type StoredUserRelation = StoredUser & {
+  receivedMessages: {
+    id: string;
+  }[];
+  belongOrgs: {
+    id: string;
+  }[];
+  belongSecureBases: {
+    id: string;
+  }[];
+};
 
 export class UserMapper {
-  public static async ToDomain(storedUser: StoredUser): Promise<User> {
-    let password: UserPassword | undefined;
-    const userNameResult = UserName.create({ userName: storedUser.name });
-
-    if (storedUser.password) {
-      const result = await UserPassword.create({
-        password: storedUser.password,
-        isHashed: true,
-      });
-      password = result.getValue();
-    }
-
-    const userEmailResult = UserEmail.create({ email: storedUser.email });
-
-    const userResult = new User({
-      id: new UniqueEntityId(storedUser.id),
-      userName: userNameResult.getValue(),
-      password,
-      email: userEmailResult.getValue(),
+  public static ToDomain(storedUser: StoredUserRelation): User {
+    // console.log('storedUser:', storedUser);
+    const { name, receivedMessages, belongOrgs, belongSecureBases, ...props } = storedUser;
+    const domainUser = User.restoreFromRepo({
+      ...props,
+      userName: name,
+      belongOrgs: getIdFromObjectInArray(belongOrgs),
+      belongSecureBases: getIdFromObjectInArray(belongSecureBases),
+      messages: getIdFromObjectInArray(receivedMessages),
     });
 
-    return userResult;
+    return domainUser;
   }
-
-  public static async toStore(user: User): Promise<Omit<StoredUser, 'createdAt' | 'updatedAt'>> {
+  public static toStore(user: User): StoredUser {
+    const {
+      avatar,
+      description,
+      email,
+      id,
+      image,
+      password,
+      role,
+      ssoSub,
+      userName,
+    } = user.getProps();
     return {
-      id: user.getId(),
-      name: user.getUsername(),
-      email: user.getEmail(),
-      password: user.getPassword() || 'IT_IS_SSO_USER',
-      ssoSub: user.props.ssoSub || 'IT_IS_KURAKICHI_ORIGINAL_USER',
-      picture: user.props.picture || 'UNKNOWN',
-      role: 'USER',
+      id: id.getId(),
+      name: userName.getValue(),
+      email: email.getValue(),
+      password: password.getValue(),
+      ssoSub,
+      avatar,
+      image,
+      description,
+      role,
     };
   }
 }

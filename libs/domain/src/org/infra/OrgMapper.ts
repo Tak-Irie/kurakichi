@@ -1,49 +1,55 @@
-import { Organization as StoredOrg, User as StoredUser } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
-import { UserEmail, UserName } from '../../user';
-import { Member, Org } from '../domain';
-import { OrgLocation } from '../domain/OrgLocation';
-import { OrgName } from '../domain/OrgName';
+import { getIdFromObjectInArray } from '@kurakichi/node-util';
+import { Organization as StoredOrg } from '@prisma/client';
+import { Org } from '../domain';
 
-type ToDomainProps = {
-  org: StoredOrg & {
-    members?: StoredUser[];
-  };
+type StoredOrgRelation = StoredOrg & {
+  members?: { id: string }[];
+  inquiries?: { id: string }[];
 };
+
 export class OrgMapper {
-  public static async ToDomain(props: ToDomainProps): Promise<Org> {
-    const orgName = OrgName.create({ name: props.org.name });
-    const orgLocation = OrgLocation.create({ location: props.org.location });
-
-    let members: Member[];
-
-    if (props.org.members) {
-      members = props.org.members.map((member) => {
-        return new Member({
-          id: new UniqueEntityId(member.id),
-          memberName: UserName.create({ userName: member.name }).getValue(),
-          email: UserEmail.create({ email: member.email }).getValue(),
-        });
-      });
-    }
-
-    const OrgResult = new Org({
-      id: new UniqueEntityId(props.org.id),
-      name: orgName.getValue(),
-      location: orgLocation.getValue(),
-      adminId: new UniqueEntityId(props.org.adminId),
-      members,
+  public static ToDomain(storedOrg: StoredOrgRelation): Org {
+    const { members, inquiries, ...props } = storedOrg;
+    const domainOrg = Org.restoreFromRepo({
+      ...props,
+      members: getIdFromObjectInArray(members),
+      inquiries: getIdFromObjectInArray(inquiries),
     });
 
-    return OrgResult;
+    return domainOrg;
   }
 
-  public static async toStore(org: Org): Promise<Omit<StoredOrg, 'createdAt' | 'updatedAt'>> {
+  public static ArrayToDomain(storedOrgs: StoredOrgRelation[]): Org[] {
+    const domainOrgArray = storedOrgs.map((org) => OrgMapper.ToDomain(org));
+    return domainOrgArray;
+  }
+
+  public static toStore(Org: Org): StoredOrg {
+    const {
+      id,
+      adminId,
+      avatar,
+      description,
+      email,
+      homePage,
+      image,
+      location,
+      name,
+      phoneNumber,
+      inquiries,
+      members,
+    } = Org.getProps();
     return {
-      id: org.getId(),
-      name: org.getOrgName(),
-      location: org.getOrgLocation(),
-      adminId: org.getAdminId(),
+      id: id.getId(),
+      adminId: adminId.getId(),
+      avatar: avatar as string,
+      description,
+      email: email.getValue(),
+      homePage: homePage,
+      image: image as string,
+      location: location.getValue(),
+      name: name.getValue(),
+      phoneNumber: phoneNumber.getValue(),
     };
   }
 }

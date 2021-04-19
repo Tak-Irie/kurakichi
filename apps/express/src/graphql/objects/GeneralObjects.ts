@@ -1,10 +1,10 @@
-import { interfaceType, objectType } from 'nexus';
+import { extendType, interfaceType, objectType } from 'nexus';
 
 export const Node = interfaceType({
   name: 'Node',
   description: 'Identifier',
   resolveType: (data) => {
-    return 'content' in data
+    return 'messageStatus' in data
       ? 'Message'
       : 'orgName' in data
       ? 'Org'
@@ -12,10 +12,27 @@ export const Node = interfaceType({
       ? 'User'
       : 'dialogName' in data
       ? 'Dialog'
+      : 'baseOwner' in data
+      ? 'SecureBase'
+      : 'inquiryStatus' in data
+      ? 'Inquiry'
       : undefined;
   },
   definition(t) {
     t.nonNull.id('id', { description: 'GUID for a resource' });
+  },
+});
+
+export const NodeQuery = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('node', {
+      type: 'Node',
+      args: { id: 'ID' },
+      resolve: (_, args) => {
+        return { id: args.id };
+      },
+    });
   },
 });
 
@@ -59,4 +76,33 @@ export const GeneralResponse = objectType({
 //     },
 //   });
 //   return { Connection, Edge, PageInfo };
+// }
+
+// type PageInfo {
+//   hasNextPage: Boolean!
+//   hasPreviousPage: Boolean!
+//   startCursor: String
+//   endCursor: String
+// }
+// type User implements Node {
+//   id: ID!
+// }
+// type UserEdge {
+//   node: User!
+//   cursor: String!
+// }
+// type UserConnection {
+//   edges: [UserEdge!]!
+//   pageInfo: PageInfo!
+// }
+// type Query {
+//   users(first: Int, after: String, last: Int, before: String): UserConnection!
+// }
+
+// type Viewer {
+//   name: String!
+// }
+
+// type Query {
+//   viewer: Viewer
 // }

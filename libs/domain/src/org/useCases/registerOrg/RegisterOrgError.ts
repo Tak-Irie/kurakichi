@@ -1,8 +1,8 @@
 import { Result } from '../../../shared';
 import { IUseCaseError } from '../../../shared';
 
-export class SomeError extends Result<IUseCaseError> {
-  constructor(some: unknown, error?: Error) {
-    super(false, `some message`, error);
+export class AlreadyRegisteredNameError extends Result<IUseCaseError> {
+  constructor(error?: Error) {
+    super(false, `こちらの団体名は既に登録されております`, error);
   }
 }

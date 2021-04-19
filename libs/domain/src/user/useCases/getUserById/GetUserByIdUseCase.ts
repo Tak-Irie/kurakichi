@@ -1,5 +1,6 @@
 import {
   Either,
+  InvalidInputValueError,
   IUseCase,
   left,
   Result,
@@ -7,12 +8,13 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from '../../../shared';
-import { IUserRepository, UserReadModel } from '../../domain';
+import { IUserRepository } from '../../domain';
+import { DTOUser, createDTOUserFromDomain } from '../DTOUser';
 import * as GetUserByIdErrors from './GetUserByIdErrors';
 
 type GetUserByIdResponse = Either<
-  GetUserByIdErrors.UserNotFoundError | UnexpectedError,
-  Result<UserReadModel>
+  GetUserByIdErrors.UserNotFoundError | UnexpectedError | InvalidInputValueError,
+  Result<DTOUser>
 >;
 
 export class GetUserByIdUseCase implements IUseCase<string, Promise<GetUserByIdResponse>> {
@@ -22,18 +24,17 @@ export class GetUserByIdUseCase implements IUseCase<string, Promise<GetUserByIdR
 
   public async execute(userId: string): Promise<GetUserByIdResponse> {
     try {
-      const result = await this.userRepository.getUserByUserId(new UniqueEntityId(userId));
+      const idOrErr = UniqueEntityId.reconstruct(userId);
+      if (idOrErr.isFailure) return left(new InvalidInputValueError(idOrErr.getErrorValue()));
 
-      if (result === undefined) return left(new GetUserByIdErrors.UserNotFoundError(userId));
-
-      // FIXME:delete UserModel, its not UseCase business
-      return right(
-        Result.success<UserReadModel>({
-          id: result.getId(),
-          email: result.getEmail(),
-          userName: result.getUsername(),
-        }),
+      const dbResult = await this.userRepository.getUserByUserId(
+        UniqueEntityId.reconstruct(userId).getValue(),
       );
+
+      if (dbResult === undefined) return left(new GetUserByIdErrors.UserNotFoundError(userId));
+
+      const dtoUser = createDTOUserFromDomain(dbResult);
+      return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
       return left(new UnexpectedError());
     }

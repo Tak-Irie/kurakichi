@@ -1,50 +1,50 @@
-import { FC, InputHTMLAttributes } from 'react';
-import { UseFormMethods, RegisterOptions } from 'react-hook-form';
+import { Path, UseFormRegister } from 'react-hook-form';
 
-type Register = Pick<UseFormMethods, 'register'>;
-
-interface InputProps extends InputHTMLAttributes<HTMLInputElement>, Partial<Register> {
-  name: string;
-  labeled: boolean;
+type InputProps<T> = {
+  label: Path<T>;
+  register: UseFormRegister<T>;
+  required: boolean;
+  fieldLabel: string;
   type: string;
-  label?: string;
-  placeholder?: string;
-  required?: boolean;
-  error?: string;
-  rules?: RegisterOptions;
-}
-
-const Input: FC<InputProps> = ({
-  name,
-  label,
-  labeled,
-  type,
-  placeholder,
-  required,
-  error,
-  rules = {},
-  register,
-  ...additionalInputProps
-}) => {
-  return (
-    <>
-      {labeled ? (
-        <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto" htmlFor={name}>
-          {label || name}
-        </label>
-      ) : null}
-      <input
-        id={name}
-        name={name}
-        placeholder={placeholder}
-        required={required}
-        type={type}
-        ref={register && register(rules)}
-        {...additionalInputProps}
-        className="flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline"
-      />
-    </>
-  );
 };
 
-export { Input };
+type TextareaProps<T> = Omit<InputProps<T>, 'type'> & {
+  rows: number;
+  cols: number;
+};
+
+export const Input = <T extends any>({
+  label,
+  type,
+  fieldLabel,
+  register,
+  required,
+}: InputProps<T>) => (
+  <>
+    <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
+    <input
+      className="flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline"
+      type={type}
+      {...register(label, { required })}
+    />
+  </>
+);
+
+export const InputTextarea = <T extends any>({
+  cols,
+  rows,
+  fieldLabel,
+  label,
+  register,
+  required,
+}: TextareaProps<T>) => (
+  <>
+    <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
+    <textarea
+      cols={cols}
+      rows={rows}
+      className="flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline"
+      {...register(label, { required })}
+    />
+  </>
+);

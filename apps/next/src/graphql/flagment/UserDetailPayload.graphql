@@ -1,0 +1,18 @@
+fragment UserDetailPayload on User {
+  id
+  email
+  userName
+  description
+  avatar
+  image
+  role
+  belongOrgs {
+    ...OrgPayload
+  }
+  belongSecureBases {
+    ...SecureBasePayload
+  }
+  messages {
+    ...MessagePayload
+  }
+}

@@ -3,7 +3,8 @@
 
 
 type Dialog implements Node {
-  dialogContent: String!
+  base: SecureBase
+  dialogContent: String
 
   """GUID for a resource"""
   id: ID!
@@ -14,11 +15,47 @@ type DialogPayload {
   error: RegularError
 }
 
-type Message implements Node {
-  content: String!
+"""Inquiry from User to Org"""
+type Inquiry implements Node {
+  category: InquiryCategory
+  content: String
 
   """GUID for a resource"""
   id: ID!
+  inquiryStatus: InquiryStatus
+  sender: User
+}
+
+enum InquiryCategory {
+  APPLICATION
+  CONTACT
+  COUNSEL
+  INQUIRY
+  OTHERS
+}
+
+type InquiryPayload {
+  error: RegularError
+  inquiries: [Inquiry]
+  inquiry: Inquiry
+}
+
+enum InquiryStatus {
+  DONE
+  DRAFT
+  UNREAD
+  WORKING
+}
+
+"""Message from User to User"""
+type Message implements Node {
+  content: String
+
+  """GUID for a resource"""
+  id: ID!
+  messageStatus: MessageStatus
+  receiver: User
+  sender: User
 }
 
 type MessagePayload {
@@ -27,16 +64,25 @@ type MessagePayload {
   messages: [Message]
 }
 
+enum MessageStatus {
+  DRAFT
+  READ
+  UNREAD
+}
+
 type Mutation {
+  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
   changePassword(currentPass: String!, newPass: String!): RegularPayload
   deleteUser: RegularPayload
   forgetPassword(email: String!): RegularPayload
-  joinOrg(orgId: String!): RegularPayload
   login(email: String!, password: String!): UserPayload
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
-  registerOrg(location: String!, name: String!): RegularPayload
-  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
+  requestJoinOrg(orgId: String!): OrgPayload
+  sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
+  sendMessage(messageStatus: MessageStatus, receiverId: String!, textInput: String!): MessagePayload
+  updateUser(avatar: String, description: String, email: String, image: String): UserPayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
@@ -47,11 +93,19 @@ interface Node {
 }
 
 type Org implements Node {
+  avatar: String
+  description: String
+  email: String
+  homePage: String
+
   """GUID for a resource"""
   id: ID!
-  location: String!
+  image: String
+  inquiries: [Inquiry]
+  location: String
   members: [User]
-  orgName: String!
+  orgName: String
+  phoneNumber: String
 }
 
 type OrgPayload {
@@ -61,12 +115,17 @@ type OrgPayload {
 }
 
 type Query {
+  """get inquiries of one Org"""
+  getInquiries(orgId: String!): InquiryPayload
+  getInquiry(inquiryId: String!): InquiryPayload
+
   """get User's id, then show their own messages"""
   getMessages: MessagePayload
   getOrg(orgId: String!): OrgPayload
   getOrgs: OrgPayload
   getUsers: UserPayload!
   me: UserPayload
+  node(id: ID): Node
 }
 
 """Generally Used as Error at business logic"""
@@ -80,15 +139,42 @@ type RegularPayload {
   result: Boolean
 }
 
+"""Place to dialog used by Professionals and Clients"""
+type SecureBase implements Node {
+  """it indicate Client/Patient"""
+  baseOwner: User
+
+  """GUID for a resource"""
+  id: ID!
+  members: [User]
+}
+
+type SecureBasePayload {
+  error: RegularError
+  secureBase: SecureBase
+}
+
 type Subscription {
   dialogPosted: Dialog
 }
 
 type User implements Node {
-  email: String!
+  """avatar used for icon"""
+  avatar: String
+  belongOrgs: [Org]
+  belongSecureBases: [SecureBase]
+
+  """self description"""
+  description: String
+  email: String
 
   """GUID for a resource"""
   id: ID!
+
+  """hero image used for individual page"""
+  image: String
+  messages: [Message]
+  role: UserRole
   userName: String
 }
 
@@ -96,4 +182,9 @@ type UserPayload {
   error: RegularError
   user: User
   users: [User]
+}
+
+enum UserRole {
+  PRO
+  USER
 }

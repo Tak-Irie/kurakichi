@@ -1,0 +1,31 @@
+import { FC, ForwardedRef, forwardRef, SyntheticEvent } from 'react';
+
+type ButtonProps = {
+  onClick?: (e: SyntheticEvent) => void | Promise<void>;
+  value?: string;
+  type: 'button' | 'submit';
+};
+
+export const ButtonSmall: FC<ButtonProps> = (props) => {
+  return (
+    <button
+      className="bg-green-400 text-white active:bg-green-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type={props.type}
+      onClick={props.onClick}
+    >
+      {props.children}
+    </button>
+  );
+};
+
+export const ButtonBig: FC<ButtonProps> = (props) => {
+  return (
+    <button
+      className="bg-green-400 text-white active:bg-green-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none m-2 ease-linear transition-all duration-150"
+      type={props.type}
+      onClick={props.onClick}
+    >
+      {props.children}
+    </button>
+  );
+};

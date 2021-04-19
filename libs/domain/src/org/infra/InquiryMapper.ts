@@ -1,0 +1,36 @@
+import { Inquiry as StoredInquiry } from '@prisma/client';
+import { Inquiry } from '../domain';
+
+export class InquiryMapper {
+  public static ToDomain(storedInquiry: StoredInquiry): Inquiry {
+    const { category, id, receiverId, senderId, text, status } = storedInquiry;
+
+    const InquiryResult = Inquiry.restoreFromRepo({
+      id,
+      category,
+      status,
+      content: text,
+      receiver: receiverId,
+      sender: senderId,
+    });
+
+    return InquiryResult;
+  }
+
+  public static ArrayToDomain(storedInquiries: StoredInquiry[]): Inquiry[] {
+    const arrayResult = storedInquiries.map((inquiry) => InquiryMapper.ToDomain(inquiry));
+    return arrayResult;
+  }
+
+  public static toStore(Inquiry: Inquiry): Omit<StoredInquiry, 'createdAt'> {
+    const { category, content, id, sender, receiver, status } = Inquiry.getProps();
+    return {
+      id: id.getId(),
+      category: category.getValue(),
+      status: status.getValue(),
+      senderId: sender.getId(),
+      text: content.getText(),
+      receiverId: receiver.getId(),
+    };
+  }
+}

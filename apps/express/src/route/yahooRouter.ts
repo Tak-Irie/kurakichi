@@ -37,7 +37,7 @@ yahooRouter.get('/callback', async (req, res) => {
     const result = await useSsoUserUseCase.execute({
       ssoSub: userInfo.sub,
       email: userInfo.email as string,
-      picture: userInfo.picture,
+      avatar: userInfo.picture,
     });
 
     if (result.isLeft()) return res.send(result.value.getErrorValue());

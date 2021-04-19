@@ -4,7 +4,8 @@ export const Dialog = objectType({
   name: 'Dialog',
   definition(t) {
     t.implements('Node');
-    t.nonNull.string('dialogContent');
+    t.string('dialogContent');
+    t.field('base', { type: 'SecureBase' });
   },
 });
 

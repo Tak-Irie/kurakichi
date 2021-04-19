@@ -7,43 +7,56 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
+  InvalidInputValueError,
 } from '../../../shared';
 import { IMessageRepo, Message, MessageContent } from '../../domain';
-import { ContentInvalidError, ReceiverNotFoundError } from './sendMessageError';
+import { MessageStatus, MessageStatusUnion } from '../../domain/MessageStatus';
+import { createDTOMessageFromDomain, DTOMessage } from '../DTOMessage';
+import { ReceiverNotFoundError } from './sendMessageError';
 
-type Arg = { textInput: string; senderId: string; receiverId: string };
+type SendMessageArg = {
+  textInput: string;
+  status: MessageStatusUnion;
+  senderId: string;
+  receiverId: string;
+};
+
+type MessageTypes = MessageContent | MessageStatus;
 
 type SendMessageResponse = Either<
-  ContentInvalidError | ReceiverNotFoundError | UnexpectedError | StoreConnectionError,
-  Result<Message>
+  InvalidInputValueError | ReceiverNotFoundError | UnexpectedError | StoreConnectionError,
+  Result<DTOMessage>
 >;
 
-export class SendMessageUseCase implements IUseCase<Arg, Promise<SendMessageResponse>> {
+export class SendMessageUseCase implements IUseCase<SendMessageArg, Promise<SendMessageResponse>> {
   constructor(private Repo: IMessageRepo) {
     this.Repo = Repo;
   }
-  public async execute(arg: Arg): Promise<SendMessageResponse> {
+  public async execute(arg: SendMessageArg): Promise<SendMessageResponse> {
     try {
       const contentOrError = MessageContent.create({ text: arg.textInput });
+      const statusOrError = MessageStatus.create({ status: arg.status });
+      const verifiedResults = Result.verifyResults<MessageTypes>([contentOrError, statusOrError]);
 
-      const content = Result.verifyResult<MessageContent>(contentOrError);
-
-      if (content.isFailure) return left(new ContentInvalidError(arg.textInput));
+      if (verifiedResults.isFailure)
+        return left(new InvalidInputValueError(verifiedResults.getErrorValue()));
 
       const messageOrError = Message.create({
         id: UniqueEntityId.create(),
-        content: content.getValue(),
-        sender: new UniqueEntityId(arg.senderId),
-        receiver: new UniqueEntityId(arg.receiverId),
+        content: contentOrError.getValue(),
+        status: statusOrError.getValue(),
+        sender: UniqueEntityId.reconstruct(arg.senderId).getValue(),
+        receiver: UniqueEntityId.reconstruct(arg.receiverId).getValue(),
       });
       // TODO:need create error?
       if (messageOrError.isFailure) return left(new UnexpectedError());
 
-      const result = await this.Repo.sendMessage(messageOrError.getValue());
+      const domainMessage = await this.Repo.sendMessage(messageOrError.getValue());
+      if (domainMessage == false) return left(new StoreConnectionError());
 
-      if (result == false) return left(new StoreConnectionError());
+      const dtoMessage = createDTOMessageFromDomain(domainMessage);
 
-      return right(Result.success<Message>(result));
+      return right(Result.success<DTOMessage>(dtoMessage));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

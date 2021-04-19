@@ -2,7 +2,8 @@ import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import { useGetMessagesUseCase, useSendMessageUseCase } from '@kurakichi/domain';
-import { messageToPresentation } from '../toPresentationDTO/messageToPresentation';
+import { messagesToGql, messageToGql } from '../DTOtoGql';
+import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const MessageQuery = extendType({
   type: 'Query',
@@ -12,15 +13,14 @@ export const MessageQuery = extendType({
       description: "get User's id, then show their own messages",
       resolve: async (_, __, context) => {
         // console.log('queryConfirm:');
-        const idResponse = getUserIdByCookie(context);
-        if (idResponse.result == false) return { error: { message: idResponse.errMessage } };
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
 
-        const domainResponse = await useGetMessagesUseCase.execute({ userId: idResponse.id });
-        if (domainResponse.isLeft())
-          return { error: { message: domainResponse.value.getErrorValue() } };
+        const domainResponse = await useGetMessagesUseCase.execute({ userId: idOrErr });
+        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
-        const messages = domainResponse.value.getValue();
-        const gqlField = messages.map((message) => messageToPresentation(message));
+        const domainMessages = domainResponse.value.getValue();
+        const gqlField = messagesToGql(domainMessages);
 
         return { messages: gqlField };
       },
@@ -36,21 +36,23 @@ export const MessageMutation = extendType({
       args: {
         textInput: nonNull(stringArg()),
         receiverId: nonNull(stringArg()),
+        messageStatus: 'MessageStatus',
       },
       resolve: async (_, args, context) => {
-        // console.log('arg:', args);
-        const idResponse = getUserIdByCookie(context);
-        if (idResponse.result == false) return { error: { message: idResponse.errMessage } };
+        console.log('arg:', args);
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
         const domainResponse = await useSendMessageUseCase.execute({
-          senderId: idResponse.id,
+          senderId: idOrErr,
           receiverId: args.receiverId,
           textInput: args.textInput,
+          status: args.messageStatus,
         });
 
-        if (domainResponse.isLeft())
-          return { error: { message: domainResponse.value.getErrorValue() } };
+        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
-        const gqlField = messageToPresentation(domainResponse.value.getValue());
+        const gqlField = messageToGql(domainResponse.value.getValue());
         return { message: gqlField };
       },
     });
