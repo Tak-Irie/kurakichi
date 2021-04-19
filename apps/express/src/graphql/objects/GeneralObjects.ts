@@ -4,7 +4,7 @@ export const Node = interfaceType({
   name: 'Node',
   description: 'Identifier',
   resolveType: (data) => {
-    return 'content' in data
+    return 'messageStatus' in data
       ? 'Message'
       : 'orgName' in data
       ? 'Org'
@@ -12,9 +12,9 @@ export const Node = interfaceType({
       ? 'User'
       : 'dialogName' in data
       ? 'Dialog'
-      : 'secureBaseName' in data
+      : 'baseOwner' in data
       ? 'SecureBase'
-      : 'status' in data
+      : 'inquiryStatus' in data
       ? 'Inquiry'
       : undefined;
   },
@@ -30,7 +30,7 @@ export const NodeQuery = extendType({
       type: 'Node',
       args: { id: 'ID' },
       resolve: (_, args) => {
-        return args.id;
+        return { id: args.id };
       },
     });
   },

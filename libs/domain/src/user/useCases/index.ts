@@ -33,3 +33,5 @@ export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
 export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);
 
 export * from './DTOUser';
+export * from './DTOMessage';
+export * from './DTOSecureBase';

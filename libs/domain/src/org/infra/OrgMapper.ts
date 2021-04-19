@@ -1,63 +1,55 @@
-import { Organization as StoredOrg, User as StoredUser } from '@prisma/client';
-import { Email, PhoneNumber, UniqueEntityId } from '../../shared';
-import { UserEmail, UserName } from '../../user/domain';
-import { Member, Org } from '../domain';
-import { OrgLocation } from '../domain/OrgLocation';
-import { OrgName } from '../domain/OrgName';
+import { getIdFromObjectInArray } from '@kurakichi/node-util';
+import { Organization as StoredOrg } from '@prisma/client';
+import { Org } from '../domain';
 
 type StoredOrgRelation = StoredOrg & {
-  members?: StoredUser[];
+  members?: { id: string }[];
+  inquiries?: { id: string }[];
 };
 
 export class OrgMapper {
-  public static ToDomain(props: StoredOrgRelation): Org {
-    const orgName = OrgName.create({ name: props.name });
-
-    const orgLocation = OrgLocation.create({ location: props.location });
-    const orgEmail = Email.create({ email: props.email });
-    const orgPhone = PhoneNumber.create({ phoneNumber: props.phone });
-
-    let members: Member[];
-
-    if (props.members) {
-      members = props.members.map((member) => {
-        return new Member({
-          id: UniqueEntityId.reconstruct(member.id).getValue(),
-          memberName: UserName.create({ userName: member.name }).getValue(),
-          email: UserEmail.create({ email: member.email }).getValue(),
-        });
-      });
-    }
-
-    const OrgResult = new Org({
-      id: UniqueEntityId.reconstruct(props.id).getValue(),
-      name: orgName.getValue(),
-      location: orgLocation.getValue(),
-      adminId: UniqueEntityId.reconstruct(props.adminId).getValue(),
-      members,
-      email: orgEmail.getValue(),
-      phoneNumber: orgPhone.getValue(),
-      homePage: 'UNKNOWN',
-      img: 'UNKNOWN',
-      icon: 'UNKNOWN',
+  public static ToDomain(storedOrg: StoredOrgRelation): Org {
+    const { members, inquiries, ...props } = storedOrg;
+    const domainOrg = Org.restoreFromRepo({
+      ...props,
+      members: getIdFromObjectInArray(members),
+      inquiries: getIdFromObjectInArray(inquiries),
     });
 
-    return OrgResult;
+    return domainOrg;
   }
 
-  public static async toStore(org: Org): Promise<Omit<StoredOrg, 'createdAt' | 'updatedAt'>> {
-    const { phoneNumber, email } = org.getProps();
+  public static ArrayToDomain(storedOrgs: StoredOrgRelation[]): Org[] {
+    const domainOrgArray = storedOrgs.map((org) => OrgMapper.ToDomain(org));
+    return domainOrgArray;
+  }
+
+  public static toStore(Org: Org): StoredOrg {
+    const {
+      id,
+      adminId,
+      avatar,
+      description,
+      email,
+      homePage,
+      image,
+      location,
+      name,
+      phoneNumber,
+      inquiries,
+      members,
+    } = Org.getProps();
     return {
-      id: org.getId(),
-      name: org.getOrgName(),
-      location: org.getOrgLocation(),
-      adminId: org.getAdminId(),
+      id: id.getId(),
+      adminId: adminId.getId(),
+      avatar: avatar as string,
+      description,
       email: email.getValue(),
-      phone: phoneNumber.getValue(),
-      description: 'UNKNOWN',
-      homePage: 'UNKNOWN',
-      image: 'UNKNOWN',
-      icon: 'UNKNOWN',
+      homePage: homePage,
+      image: image as string,
+      location: location.getValue(),
+      name: name.getValue(),
+      phoneNumber: phoneNumber.getValue(),
     };
   }
 }

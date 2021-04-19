@@ -4,7 +4,7 @@ import { ValueObject } from '../../shared/domain/ValueObject';
 type InquiryContentProps = { text: string };
 
 export class InquiryContent extends ValueObject<InquiryContentProps> {
-  constructor(readonly props: InquiryContentProps) {
+  private constructor(readonly props: InquiryContentProps) {
     super(props);
   }
   public getText(): string {
@@ -17,5 +17,8 @@ export class InquiryContent extends ValueObject<InquiryContentProps> {
       ...props,
     });
     return Result.success<InquiryContent>(inquiry);
+  }
+  public static restoreFromRepo(text: string): InquiryContent {
+    return new InquiryContent({ text });
   }
 }

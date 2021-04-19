@@ -1,18 +1,20 @@
 import { Message as StoredMessage } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
-import { Message, MessageContent } from '../domain';
+import { Message } from '../domain';
 
 export class MessageMapper {
   public static ToDomain(storedMessage: StoredMessage): Message {
-    const MessageResult = new Message({
-      id: UniqueEntityId.reconstruct(storedMessage.id).getValue(),
-      content: new MessageContent({ text: storedMessage.text }),
-      sender: UniqueEntityId.reconstruct(storedMessage.senderId).getValue(),
-      receiver: UniqueEntityId.reconstruct(storedMessage.receiverId).getValue(),
+    const { createdAt, id, receiverId, senderId, status, text } = storedMessage;
+    const MessageResult = Message.restoreFromRepo({
+      id,
+      content: text,
+      status: status,
+      sender: senderId,
+      receiver: receiverId,
     });
 
     return MessageResult;
   }
+
   public static async toStore(
     domainMessage: Message,
   ): Promise<Omit<StoredMessage, 'createdAt' | 'read_flag'>> {
@@ -20,8 +22,7 @@ export class MessageMapper {
     return {
       id: props.id.getId(),
       text: props.content.getText(),
-      // TODO:implements temp save
-      send_flag: true,
+      status: props.status.getValue(),
       senderId: props.sender.getId(),
       receiverId: props.receiver.getId(),
     };

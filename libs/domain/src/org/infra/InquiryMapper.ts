@@ -1,21 +1,17 @@
 import { Inquiry as StoredInquiry } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
 import { Inquiry } from '../domain';
-import { InquiryCategory } from '../domain/InquiryCategory';
-import { InquiryContent } from '../domain/InquiryContent';
-import { InquiryStatus } from '../domain/InquiryStatus';
 
 export class InquiryMapper {
   public static ToDomain(storedInquiry: StoredInquiry): Inquiry {
-    const { category, id, receiverId, send_flag, senderId, text, status } = storedInquiry;
+    const { category, id, receiverId, senderId, text, status } = storedInquiry;
 
-    const InquiryResult = new Inquiry({
-      id: UniqueEntityId.reconstruct(id).getValue(),
-      category: InquiryCategory.create({ type: category }).getValue(),
-      status: InquiryStatus.create({ status: status }).getValue(),
-      content: InquiryContent.create({ text: text }).getValue(),
-      receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
-      sender: UniqueEntityId.reconstruct(senderId).getValue(),
+    const InquiryResult = Inquiry.restoreFromRepo({
+      id,
+      category,
+      status,
+      content: text,
+      receiver: receiverId,
+      sender: senderId,
     });
 
     return InquiryResult;
@@ -34,7 +30,6 @@ export class InquiryMapper {
       status: status.getValue(),
       senderId: sender.getId(),
       text: content.getText(),
-      send_flag: true,
       receiverId: receiver.getId(),
     };
   }

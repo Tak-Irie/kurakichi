@@ -2,17 +2,20 @@ import { Entity } from '../../shared';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
 import { MessageContent } from './MessageContent';
+import { MessageStatus, MessageStatusUnion } from './MessageStatus';
 
 interface MessageProps {
   id: UniqueEntityId;
   content: MessageContent;
+  status: MessageStatus;
   sender: UniqueEntityId;
   receiver: UniqueEntityId;
 }
 
-export type MessageDTO = {
+export type MessagePrimitive = {
   id: string;
   content: string;
+  status: MessageStatusUnion;
   sender: string;
   receiver: string;
 };
@@ -37,22 +40,24 @@ export class Message extends Entity<MessageProps> {
   }
 
   public static create(props: MessageProps): Result<Message> {
-    const _Message = new Message({
+    const message = new Message({
       ...props,
     });
     // Message.addDomainEvent(new _EntityCreated(Message));
-    return Result.success<Message>(_Message);
+    return Result.success<Message>(message);
   }
 
-  public static restoreFromRepo(storedMessage: MessageDTO[]): Message[] {
-    return storedMessage.map(
-      (message) =>
-        new Message({
-          id: UniqueEntityId.restoreFromRepo(message.id),
-          content: MessageContent.restoreFromRepo(message.content),
-          receiver: UniqueEntityId.restoreFromRepo(message.receiver),
-          sender: UniqueEntityId.restoreFromRepo(message.sender),
-        }),
-    );
+  public static restoreFromRepo(storedMessage: MessagePrimitive): Message {
+    return new Message({
+      id: UniqueEntityId.restoreFromRepo(storedMessage.id),
+      content: MessageContent.restoreFromRepo(storedMessage.content),
+      status: MessageStatus.restoreFromRepo(storedMessage.status),
+      receiver: UniqueEntityId.restoreFromRepo(storedMessage.receiver),
+      sender: UniqueEntityId.restoreFromRepo(storedMessage.sender),
+    });
+  }
+
+  public static restoreArrayFromRepo(storedMessages: MessagePrimitive[]): Message[] {
+    return storedMessages.map((message) => this.restoreFromRepo(message));
   }
 }

@@ -30,32 +30,30 @@ model User {
 model Organization {
   id               String    @id
   name             String    @unique
+  email            String
+  description      String
+  phoneNumber      String
+  location         String
+  avatar           String
+  image            String
+  homePage         String
   adminId          String
-  location         String    @default("UNKNOWN")
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  phone            String    @default("UNKNOWN")
-  email            String    @default("UNKNOWN")
-  description      String    @default("UNKNOWN")
-  homePage         String    @default("UNKNOWN")
-  image            String    @default("UNKNOWN")
-  icon             String    @default("UNKNOWN")
   admin            User      @relation("orgAdmin", fields: [adminId], references: [id])
   members          User[]    @relation("orgMember")
   requestedMembers User[]    @relation("requestedMember")
   inquiries        Inquiry[] @relation("gotInquiry")
+  articles         Article[] @relation("orgArticle")
 }
 
 model Message {
-  id         String   @id
+  id         String         @id
   text       String
   senderId   String
   receiverId String
-  read_flag  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  send_flag  Boolean  @default(false)
-  receiver   User     @relation("receive", fields: [receiverId], references: [id])
-  sender     User     @relation("sent", fields: [senderId], references: [id])
+  createdAt  DateTime       @default(now())
+  status     MESSAGE_STATUS
+  receiver   User           @relation("receive", fields: [receiverId], references: [id])
+  sender     User           @relation("sent", fields: [senderId], references: [id])
 }
 
 model Inquiry {
@@ -64,24 +62,26 @@ model Inquiry {
   senderId   String
   receiverId String
   createdAt  DateTime         @default(now())
-  category   INQUIRY_CATEGORY @default(COUNSEL)
-  status     INQUIRY_STATUS   @default(UNREAD)
-  send_flag  Boolean          @default(false)
+  category   INQUIRY_CATEGORY
+  status     INQUIRY_STATUS
   sender     User             @relation("inquiry", fields: [senderId], references: [id])
   receiver   Organization     @relation("gotInquiry", fields: [receiverId], references: [id])
 }
 
-model Dialog {
-  id   String @id
-  text String
+model SecureBase {
+  id      String  @id
+  adminId String
+  admin   User    @relation("baseAdmin", fields: [adminId], references: [id])
+  members User[]  @relation("baseMember")
+  karte   Karte?
+  dialog  Dialog?
 }
 
-model SecureBase {
-  id      String @id
-  adminId String
-  admin   User   @relation("baseAdmin", fields: [adminId], references: [id])
-  karte   Karte?
-  members User[] @relation("baseMember")
+model Dialog {
+  id     String     @id
+  text   String
+  baseId String
+  base   SecureBase @relation(fields: [baseId], references: [id])
 }
 
 model Karte {
@@ -89,6 +89,14 @@ model Karte {
   record String
   baseId String
   base   SecureBase @relation(fields: [baseId], references: [id])
+}
+
+model Article {
+  id        String       @id
+  image     String
+  text      String
+  orgId     String
+  writerOrg Organization @relation("orgArticle", fields: [orgId], references: [id])
 }
 
 enum USER_ROLE {
@@ -108,4 +116,11 @@ enum INQUIRY_STATUS {
   UNREAD
   WORKING
   DONE
+  DRAFT
+}
+
+enum MESSAGE_STATUS {
+  READ
+  UNREAD
+  DRAFT
 }

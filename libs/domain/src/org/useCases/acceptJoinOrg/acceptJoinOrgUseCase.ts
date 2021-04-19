@@ -9,6 +9,7 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
+import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
 import {
   NotAuthorizedError,
   NotFoundUserError,
@@ -16,7 +17,7 @@ import {
   AlreadyUserIsMemberError,
 } from './acceptJoinOrgError';
 
-type AcceptJoinOrgInput = {
+type AcceptJoinOrgArg = {
   requestedOrgId: string;
   requestUserId: string;
   // acceptorMemberId: string;
@@ -29,21 +30,21 @@ type AcceptJoinOrgResponse = Either<
   | NotFoundUserError
   | UnexpectedError
   | StoreConnectionError,
-  Result<Org>
+  Result<DTOOrg>
 >;
 
 // FIXME: add auth to accept feature
 export class AcceptJoinOrgUseCase
-  implements IUseCase<AcceptJoinOrgInput, Promise<AcceptJoinOrgResponse>> {
+  implements IUseCase<AcceptJoinOrgArg, Promise<AcceptJoinOrgResponse>> {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
-  public async execute(req: AcceptJoinOrgInput): Promise<AcceptJoinOrgResponse> {
+  public async execute(req: AcceptJoinOrgArg): Promise<AcceptJoinOrgResponse> {
     try {
       const requestedOrg = await this.OrgRepo.getOrgById(
         UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
       );
-      if (requestedOrg == undefined) return left(new NotFoundOrgError());
+      if (requestedOrg == false) return left(new NotFoundOrgError());
 
       // console.log(
       //   'requestedOrg:',
@@ -51,7 +52,7 @@ export class AcceptJoinOrgUseCase
       // );
       // console.log('joinId:', req.requestUserId);
       const alreadyBelongTo = requestedOrg.getMembers().some((member) => {
-        member.getId() === req.requestUserId;
+        member === req.requestUserId;
         // console.log(typeof member.getId());
         // console.log(typeof req.joinUserId);
       });
@@ -62,10 +63,11 @@ export class AcceptJoinOrgUseCase
         UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
         UniqueEntityId.reconstruct(req.requestUserId).getValue(),
       );
-
       if (registeredResult == false) return left(new StoreConnectionError());
 
-      return right(Result.success<Org>(requestedOrg));
+      const dtoOrg = createDTOOrgFromDomain(registeredResult);
+
+      return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

@@ -6,7 +6,7 @@ import {
   useGetInquiryUseCase,
   useRegisterInquiryUseCase,
 } from '@kurakichi/domain';
-import { inquiryToGql, inquiriesToGql } from '../toGqlDTO/inquiryToGql';
+import { inquiryToGql, inquiriesToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const InquiryQuery = extendType({

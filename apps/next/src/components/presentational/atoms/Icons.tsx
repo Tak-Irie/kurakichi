@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactElement, VFC } from 'react';
 import {
   ExclamationIcon,
   MenuIcon,
@@ -10,53 +10,28 @@ import {
 
 type IconsProps = {
   overwriteCSS?: string;
+  icon: ReactElement;
 };
 
-export const IconsCaution: FC<IconsProps> = ({
-  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-yellow-500',
-}) => {
-  return (
-    <div className={overwriteCSS}>
-      <ExclamationIcon />
-    </div>
-  );
+const Icons: FC<IconsProps> = ({ icon, overwriteCSS }) => {
+  return <div className={overwriteCSS}>{icon}</div>;
 };
 
-export const IconsMenu: FC<IconsProps> = ({ overwriteCSS = 'flex-shrink-0 h-6 w-6' }) => {
-  return (
-    <div className={overwriteCSS}>
-      <MenuIcon />
-    </div>
-  );
+export const IconsCaution: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-yellow-500" icon={<ExclamationIcon />} />;
 };
-
-export const IconsDown: FC<IconsProps> = ({ overwriteCSS = 'flex-shrink-0 h-6 w-6' }) => {
-  return (
-    <div className={overwriteCSS}>
-      <ChevronDownIcon />
-    </div>
-  );
+export const IconsMenu: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6" icon={<MenuIcon />} />;
 };
-
-export const IconsDots: FC<IconsProps> = ({ overwriteCSS = 'flex-shrink-0 h-6 w-6' }) => {
-  return (
-    <div className={overwriteCSS}>
-      <DotsVerticalIcon />
-    </div>
-  );
+export const IconsDownChevron: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<ChevronDownIcon />} />;
 };
-
-export const IconsHome: FC<IconsProps> = ({ overwriteCSS = 'flex-shrink-0 h-6 w-6' }) => {
-  return (
-    <div className={overwriteCSS}>
-      <HomeIcon />
-    </div>
-  );
+export const IconsVerticalDots: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<DotsVerticalIcon />} />;
 };
-export const IconsUser: FC<IconsProps> = ({ overwriteCSS = 'flex-shrink-0 h-6 w-6' }) => {
-  return (
-    <div className={overwriteCSS}>
-      <UserIcon />
-    </div>
-  );
+export const IconsHome: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<HomeIcon />} />;
+};
+export const IconsUser: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<UserIcon />} />;
 };

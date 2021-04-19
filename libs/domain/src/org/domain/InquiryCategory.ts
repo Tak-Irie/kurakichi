@@ -8,7 +8,7 @@ type InquiryCategoryProps = {
 };
 
 export class InquiryCategory extends ValueObject<InquiryCategoryProps> {
-  constructor(readonly props: InquiryCategoryProps) {
+  private constructor(readonly props: InquiryCategoryProps) {
     super(props);
   }
   // FIXME:
@@ -20,5 +20,8 @@ export class InquiryCategory extends ValueObject<InquiryCategoryProps> {
       ...props,
     });
     return Result.success<InquiryCategory>(inquiryCategory);
+  }
+  public static restoreFromRepo(category: InquiryCategoryUnion): InquiryCategory {
+    return new InquiryCategory({ type: category });
   }
 }

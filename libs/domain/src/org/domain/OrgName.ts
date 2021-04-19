@@ -39,4 +39,7 @@ export class OrgName extends ValueObject<OrgNameProps> {
 
     return Result.success<OrgName>(new OrgName(props));
   }
+  public static restoreFromRepo(name: string): OrgName {
+    return new OrgName({ name });
+  }
 }

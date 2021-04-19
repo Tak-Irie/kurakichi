@@ -8,8 +8,14 @@ interface SecureBaseProps {
   members: UniqueEntityId[];
 }
 
+type SecureBaseRaw = {
+  id: string;
+  baseOwner: string;
+  members: string[];
+};
+
 export class SecureBase extends AggregateRoot<SecureBaseProps> {
-  constructor(readonly props: SecureBaseProps) {
+  private constructor(readonly props: SecureBaseProps) {
     super(props);
   }
 
@@ -33,5 +39,13 @@ export class SecureBase extends AggregateRoot<SecureBaseProps> {
     // SecureBase.addDomainEvent(new RoomCreated(SecureBase));
 
     return Result.success<SecureBase>(base);
+  }
+
+  public static restoreFromRepo(secureBase: SecureBaseRaw): SecureBase {
+    return new SecureBase({
+      id: UniqueEntityId.restoreFromRepo(secureBase.id),
+      baseOwner: UniqueEntityId.restoreFromRepo(secureBase.baseOwner),
+      members: UniqueEntityId.restoreArrayFromRepo(secureBase.members),
+    });
   }
 }

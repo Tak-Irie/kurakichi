@@ -28,4 +28,8 @@ export class PhoneNumber extends ValueObject<PhoneNumberProps> {
 
     return Result.success<PhoneNumber>(new PhoneNumber({ phoneNumber: props.phoneNumber }));
   }
+
+  public static restoreFromRepo(phoneNumber: string): PhoneNumber {
+    return new PhoneNumber({ phoneNumber });
+  }
 }

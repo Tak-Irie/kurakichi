@@ -2,7 +2,7 @@ import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import { useGetMessagesUseCase, useSendMessageUseCase } from '@kurakichi/domain';
-import { messageToGql } from '../toGqlDTO/messageToGql';
+import { messagesToGql, messageToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const MessageQuery = extendType({
@@ -17,11 +17,10 @@ export const MessageQuery = extendType({
         if (typeof idOrErr === 'object') return idOrErr;
 
         const domainResponse = await useGetMessagesUseCase.execute({ userId: idOrErr });
-        if (domainResponse.isLeft())
-          return { error: { message: domainResponse.value.getErrorValue() } };
+        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
-        const messages = domainResponse.value.getValue();
-        const gqlField = messages.map((message) => messageToGql(message));
+        const domainMessages = domainResponse.value.getValue();
+        const gqlField = messagesToGql(domainMessages);
 
         return { messages: gqlField };
       },
@@ -37,6 +36,7 @@ export const MessageMutation = extendType({
       args: {
         textInput: nonNull(stringArg()),
         receiverId: nonNull(stringArg()),
+        messageStatus: 'MessageStatus',
       },
       resolve: async (_, args, context) => {
         console.log('arg:', args);
@@ -47,6 +47,7 @@ export const MessageMutation = extendType({
           senderId: idOrErr,
           receiverId: args.receiverId,
           textInput: args.textInput,
+          status: args.messageStatus,
         });
 
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);

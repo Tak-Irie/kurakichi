@@ -31,4 +31,8 @@ export class Email extends ValueObject<EmailProps> {
 
     return Result.success<Email>(new Email({ email: this.formatEmail(email.email) }));
   }
+
+  public static restoreFromRepo(email: string): Email {
+    return new Email({ email });
+  }
 }

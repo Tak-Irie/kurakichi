@@ -7,7 +7,7 @@ import {
   LoadingStylishSpinner,
   ButtonSmall,
   AvatarSmall,
-  IconsDots,
+  IconsVerticalDots,
   IconsUser,
   DropDownMenu,
   DropDownMenuItem,
@@ -40,7 +40,7 @@ const NavAuthSection: FC = () => {
     <div className="z-10">
       <DropDownMenu
         menuElement={<AvatarSmall notification={false} />}
-        menuIcon={<IconsDots overwriteCSS="text-gray-600 h-6 w-6" />}
+        menuIcon={<IconsVerticalDots />}
       >
         <DropDownMenuItem linkUrl="/user/mypage" label="マイページ" icon={<IconsUser />} />
       </DropDownMenu>

@@ -22,7 +22,8 @@ type Inquiry implements Node {
 
   """GUID for a resource"""
   id: ID!
-  status: InquiryStatus
+  inquiryStatus: InquiryStatus
+  sender: User
 }
 
 enum InquiryCategory {
@@ -41,6 +42,7 @@ type InquiryPayload {
 
 enum InquiryStatus {
   DONE
+  DRAFT
   UNREAD
   WORKING
 }
@@ -51,12 +53,21 @@ type Message implements Node {
 
   """GUID for a resource"""
   id: ID!
+  messageStatus: MessageStatus
+  receiver: User
+  sender: User
 }
 
 type MessagePayload {
   error: RegularError
   message: Message
   messages: [Message]
+}
+
+enum MessageStatus {
+  DRAFT
+  READ
+  UNREAD
 }
 
 type Mutation {
@@ -70,7 +81,7 @@ type Mutation {
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
   requestJoinOrg(orgId: String!): OrgPayload
   sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
-  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  sendMessage(messageStatus: MessageStatus, receiverId: String!, textInput: String!): MessagePayload
   updateUser(avatar: String, description: String, email: String, image: String): UserPayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
@@ -82,14 +93,15 @@ interface Node {
 }
 
 type Org implements Node {
+  avatar: String
   description: String
   email: String
   homePage: String
-  icon: String
 
   """GUID for a resource"""
   id: ID!
   image: String
+  inquiries: [Inquiry]
   location: String
   members: [User]
   orgName: String

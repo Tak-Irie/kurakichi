@@ -2,14 +2,13 @@ import { Inquiry } from '@kurakichi/domain';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
 export const inquiryToGql = (inquiry: Inquiry): NexusGenFieldTypes['Inquiry'] => {
-  const gqlField = {
+  return {
     id: inquiry.getId(),
     content: inquiry.getContent(),
     category: inquiry.getCategory(),
-    status: inquiry.getStatus(),
+    inquiryStatus: inquiry.getStatus(),
+    sender: { id: inquiry.getSender() },
   };
-
-  return gqlField;
 };
 
 export const inquiriesToGql = (inquiries: Inquiry[]): NexusGenFieldTypes['Inquiry'][] => {

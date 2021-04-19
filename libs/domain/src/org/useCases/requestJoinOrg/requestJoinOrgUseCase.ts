@@ -9,13 +9,14 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
+import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
 import { NotAcceptJoinError, NotFoundOrgError } from './requestJoinOrgError';
 
 type JoinOrgArg = { requestUserId: string; requestedOrgId: string };
 
 type RequestJoinOrgResponse = Either<
   NotAcceptJoinError | NotFoundOrgError | UnexpectedError | StoreConnectionError,
-  Result<Org>
+  Result<DTOOrg>
 >;
 
 export class RequestJoinOrgUseCase
@@ -32,10 +33,11 @@ export class RequestJoinOrgUseCase
         requestUserId.getValue(),
         requestedOrgId.getValue(),
       );
-
       if (dbResult == false) return left(new StoreConnectionError());
 
-      return right(Result.success<Org>(dbResult));
+      const dtoOrg = createDTOOrgFromDomain(dbResult);
+
+      return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

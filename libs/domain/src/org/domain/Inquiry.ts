@@ -14,8 +14,17 @@ interface InquiryProps {
   receiver: UniqueEntityId;
 }
 
+export type InquiryPrimitive = {
+  id: string;
+  category: InquiryCategoryUnion;
+  status: InquiryStatusUnion;
+  content: string;
+  sender: string;
+  receiver: string;
+};
+
 export class Inquiry extends Entity<InquiryProps> {
-  constructor(readonly props: InquiryProps) {
+  private constructor(readonly props: InquiryProps) {
     super(props);
   }
   public getId(): string {
@@ -45,5 +54,17 @@ export class Inquiry extends Entity<InquiryProps> {
     });
     // Inquiry.addDomainEvent(new _EntityCreated(Inquiry));
     return Result.success<Inquiry>(inquiry);
+  }
+
+  public static restoreFromRepo(props: InquiryPrimitive): Inquiry {
+    const { category, content, id, receiver, sender, status } = props;
+    return new Inquiry({
+      id: UniqueEntityId.restoreFromRepo(id),
+      category: InquiryCategory.restoreFromRepo(category),
+      content: InquiryContent.restoreFromRepo(content),
+      status: InquiryStatus.restoreFromRepo(status),
+      receiver: UniqueEntityId.restoreFromRepo(receiver),
+      sender: UniqueEntityId.restoreFromRepo(sender),
+    });
   }
 }

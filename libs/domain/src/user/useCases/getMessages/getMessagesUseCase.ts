@@ -8,14 +8,15 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from '../../../shared';
-import { IMessageRepo, Message } from '../../domain';
+import { IMessageRepo } from '../../domain';
+import { createDTOMessagesFromDomain, DTOMessage } from '../DTOMessage';
 import { NotFoundMessagesError } from './getMessagesError';
 
 type MessagesArg = { userId: string };
 
 type GetMessagesResponse = Either<
   NotFoundMessagesError | UnexpectedError | StoreConnectionError,
-  Result<Message[]>
+  Result<DTOMessage[]>
 >;
 
 export class GetMessagesUseCase implements IUseCase<MessagesArg, Promise<GetMessagesResponse>> {
@@ -24,11 +25,14 @@ export class GetMessagesUseCase implements IUseCase<MessagesArg, Promise<GetMess
   }
   public async execute(arg: MessagesArg): Promise<GetMessagesResponse> {
     try {
-      const result = await this.MessagesRepo.getMessages(
+      const domainMessages = await this.MessagesRepo.getMessages(
         UniqueEntityId.reconstruct(arg.userId).getValue(),
       );
-      if (result == false) return left(new NotFoundMessagesError());
-      return right(Result.success<Message[]>(result));
+      if (domainMessages == false) return left(new NotFoundMessagesError());
+
+      const dtoMessages = createDTOMessagesFromDomain(domainMessages);
+
+      return right(Result.success<DTOMessage[]>(dtoMessages));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

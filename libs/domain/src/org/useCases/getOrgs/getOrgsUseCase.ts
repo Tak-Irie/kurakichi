@@ -7,10 +7,11 @@ import {
   StoreConnectionError,
   UnexpectedError,
 } from '../../../shared';
-import { IOrgRepo, Org } from '../../domain';
+import { IOrgRepo } from '../../domain';
+import { createDTOOrgsFromDomain, DTOOrg } from '../DTOOrg';
 // import { SomeError } from './getOrgError';
 
-type GetOrgsResponse = Either<UnexpectedError | StoreConnectionError, Result<Org[]>>;
+type GetOrgsResponse = Either<UnexpectedError | StoreConnectionError, Result<DTOOrg[]>>;
 
 export class GetOrgsUseCase implements IUseCase<unknown, Promise<GetOrgsResponse>> {
   constructor(private OrgsRepo: IOrgRepo) {
@@ -18,9 +19,12 @@ export class GetOrgsUseCase implements IUseCase<unknown, Promise<GetOrgsResponse
   }
   public async execute(): Promise<GetOrgsResponse> {
     try {
-      const result = await this.OrgsRepo.getOrgs();
+      const dbOrgs = await this.OrgsRepo.getOrgs();
       // console.log('ucRes:', result);
-      return right(Result.success<Org[]>(result));
+
+      const dtoOrgs = createDTOOrgsFromDomain(dbOrgs);
+
+      return right(Result.success<DTOOrg[]>(dtoOrgs));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

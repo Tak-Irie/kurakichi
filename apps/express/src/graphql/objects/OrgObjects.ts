@@ -9,10 +9,11 @@ export const Org = objectType({
     t.string('email');
     t.string('phoneNumber');
     t.string('image');
-    t.string('icon');
+    t.string('avatar');
     t.string('description');
     t.string('homePage');
     t.field('members', { type: list('User') });
+    t.field('inquiries', { type: list('Inquiry') });
   },
 });
 

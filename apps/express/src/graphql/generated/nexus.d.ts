@@ -19,7 +19,8 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   InquiryCategory: "APPLICATION" | "CONTACT" | "COUNSEL" | "INQUIRY" | "OTHERS"
-  InquiryStatus: "DONE" | "UNREAD" | "WORKING"
+  InquiryStatus: "DONE" | "DRAFT" | "UNREAD" | "WORKING"
+  MessageStatus: "DRAFT" | "READ" | "UNREAD"
   UserRole: "PRO" | "USER"
 }
 
@@ -41,7 +42,8 @@ export interface NexusGenObjects {
     category?: NexusGenEnums['InquiryCategory'] | null; // InquiryCategory
     content?: string | null; // String
     id: string; // ID!
-    status?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+    inquiryStatus?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+    sender?: NexusGenRootTypes['User'] | null; // User
   }
   InquiryPayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -51,6 +53,9 @@ export interface NexusGenObjects {
   Message: { // root type
     content?: string | null; // String
     id: string; // ID!
+    messageStatus?: NexusGenEnums['MessageStatus'] | null; // MessageStatus
+    receiver?: NexusGenRootTypes['User'] | null; // User
+    sender?: NexusGenRootTypes['User'] | null; // User
   }
   MessagePayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -59,12 +64,13 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Org: { // root type
+    avatar?: string | null; // String
     description?: string | null; // String
     email?: string | null; // String
     homePage?: string | null; // String
-    icon?: string | null; // String
     id: string; // ID!
     image?: string | null; // String
+    inquiries?: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
     location?: string | null; // String
     members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     orgName?: string | null; // String
@@ -138,7 +144,8 @@ export interface NexusGenFieldTypes {
     category: NexusGenEnums['InquiryCategory'] | null; // InquiryCategory
     content: string | null; // String
     id: string; // ID!
-    status: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+    inquiryStatus: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+    sender: NexusGenRootTypes['User'] | null; // User
   }
   InquiryPayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -148,6 +155,9 @@ export interface NexusGenFieldTypes {
   Message: { // field return type
     content: string | null; // String
     id: string; // ID!
+    messageStatus: NexusGenEnums['MessageStatus'] | null; // MessageStatus
+    receiver: NexusGenRootTypes['User'] | null; // User
+    sender: NexusGenRootTypes['User'] | null; // User
   }
   MessagePayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -170,12 +180,13 @@ export interface NexusGenFieldTypes {
     userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
+    avatar: string | null; // String
     description: string | null; // String
     email: string | null; // String
     homePage: string | null; // String
-    icon: string | null; // String
     id: string; // ID!
     image: string | null; // String
+    inquiries: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
     location: string | null; // String
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     orgName: string | null; // String
@@ -252,7 +263,8 @@ export interface NexusGenFieldTypeNames {
     category: 'InquiryCategory'
     content: 'String'
     id: 'ID'
-    status: 'InquiryStatus'
+    inquiryStatus: 'InquiryStatus'
+    sender: 'User'
   }
   InquiryPayload: { // field return type name
     error: 'RegularError'
@@ -262,6 +274,9 @@ export interface NexusGenFieldTypeNames {
   Message: { // field return type name
     content: 'String'
     id: 'ID'
+    messageStatus: 'MessageStatus'
+    receiver: 'User'
+    sender: 'User'
   }
   MessagePayload: { // field return type name
     error: 'RegularError'
@@ -284,12 +299,13 @@ export interface NexusGenFieldTypeNames {
     userRegister: 'UserPayload'
   }
   Org: { // field return type name
+    avatar: 'String'
     description: 'String'
     email: 'String'
     homePage: 'String'
-    icon: 'String'
     id: 'ID'
     image: 'String'
+    inquiries: 'Inquiry'
     location: 'String'
     members: 'User'
     orgName: 'String'
@@ -389,6 +405,7 @@ export interface NexusGenArgTypes {
       textInput: string; // String!
     }
     sendMessage: { // args
+      messageStatus?: NexusGenEnums['MessageStatus'] | null; // MessageStatus
       receiverId: string; // String!
       textInput: string; // String!
     }

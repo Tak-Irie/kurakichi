@@ -1,39 +1,34 @@
-import { Org } from '@kurakichi/domain';
+import { DTOOrg } from '@kurakichi/domain';
+import { idsMapper } from '../../util/idMapper';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
-type MemberDTO = {
-  id: string;
-  email: string;
-  userName: string;
-};
+export const dtoOrgToGql = (dtoOrg: DTOOrg): NexusGenFieldTypes['Org'] => {
+  const {
+    adminId,
+    avatar,
+    description,
+    email,
+    homePage,
+    id,
+    image,
+    inquiries,
+    location,
+    members,
+    name,
+    phoneNumber,
+  } = dtoOrg;
 
-export const orgToGql = (org: Org): NexusGenFieldTypes['Org'] => {
-  // console.log('mapperOrg:', org);
-  let members: MemberDTO[];
-
-  if (org.getMembers()) {
-    members = org.getMembers().map((member) => {
-      return {
-        id: member.getId(),
-        email: member.getEmail(),
-        userName: member.getMemberName(),
-      };
-    });
-  }
-  const props = org.getProps();
-
-  const data = {
-    id: org.getId(),
-    orgName: org.getOrgName(),
-    location: org.getOrgLocation(),
-    email: org.getEmail(),
-    phoneNumber: props.phoneNumber.getValue(),
-    description: 'UNKNOWN',
-    homePage: props.homePage,
-    icon: props.icon,
-    image: 'UNKNOWN',
-    members: members || null,
+  return {
+    id,
+    orgName: name,
+    location,
+    email,
+    phoneNumber,
+    description,
+    homePage,
+    avatar,
+    image,
+    members: idsMapper(members),
+    inquiries: idsMapper(inquiries),
   };
-
-  return data;
 };

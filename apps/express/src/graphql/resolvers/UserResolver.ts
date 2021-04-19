@@ -34,9 +34,9 @@ export const userQuery = extendType({
     t.nullable.field('me', {
       type: 'UserPayload',
       resolve: async (_, __, context) => {
-        console.log('me query called');
+        // console.log('me query called');
         const idOrErr = getUserIdByCookie(context);
-        console.log('idOrErr:', idOrErr);
+        // console.log('idOrErr:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
 
         const useCaseResult = await useGetUserById.execute(idOrErr);
@@ -44,7 +44,7 @@ export const userQuery = extendType({
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
         const gqlField = dtoUserToGql(useCaseResult.value.getValue());
-        console.log('domainUser:', gqlField);
+        // console.log('domainUser:', gqlField);
         return {
           user: gqlField,
         };

@@ -1,9 +1,11 @@
 import { FC } from 'react';
+import Link from 'next/link';
 
 import { MailIcon, CogIcon } from '@heroicons/react/outline';
 import { IconButton, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
 
 import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
+import { ImageHero } from '../atoms';
 
 type UserProfileProps = {
   userName: string;
@@ -35,11 +37,7 @@ export const UserProfile: FC<UserProfileProps> = ({
         >
           <article className="bg-gray-100">
             <div>
-              <img
-                className="h-32 w-full object-cover lg:h-56"
-                src={image === 'UNKNOWN' ? '/hands_mid-reso.jpg' : image}
-                alt="ユーザーイメージ"
-              />
+              <ImageHero src={image} alt="ユーザーイメージ" />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                   <div className="flex">
@@ -52,7 +50,11 @@ export const UserProfile: FC<UserProfileProps> = ({
                   <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                     <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                       <IconButton label="メッセージボックス" svgIcon={<MailIcon />} />
-                      <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
+                      <Link href="/user/mysetting">
+                        <a href="/user/mysetting">
+                          <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
+                        </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

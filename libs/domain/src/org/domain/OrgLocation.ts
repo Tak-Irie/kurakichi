@@ -5,6 +5,7 @@ type OrgLocationProps = {
   location: string;
 };
 
+// TODO:move to Shared Object as Location
 // FIXME:add verifier Address line 1/Administrative/Postal/Language
 // https://developers.google.com/my-business/content/japan-address-format-spec?hl=ja#example-1
 export class OrgLocation extends ValueObject<OrgLocationProps> {
@@ -19,5 +20,8 @@ export class OrgLocation extends ValueObject<OrgLocationProps> {
       ...props,
     });
     return Result.success<OrgLocation>(_OrgLocation);
+  }
+  public static restoreFromRepo(location: string): OrgLocation {
+    return new OrgLocation({ location });
   }
 }

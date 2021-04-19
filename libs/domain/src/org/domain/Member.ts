@@ -3,14 +3,21 @@ import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
 import { UserEmail, UserName } from '../../user';
 
+// FIXME:Don't use User VO
 interface MemberProps {
   id: UniqueEntityId;
   memberName: UserName;
   email: UserEmail;
 }
 
+export type MemberPrimitive = {
+  id: string;
+  memberName: string;
+  email: string;
+};
+
 export class Member extends Entity<MemberProps> {
-  constructor(readonly props: MemberProps) {
+  private constructor(readonly props: MemberProps) {
     super(props);
   }
   public getId(): string {
@@ -30,5 +37,13 @@ export class Member extends Entity<MemberProps> {
     });
     // Member.addDomainEvent(new _EntityCreated(Member));
     return Result.success<Member>(_Member);
+  }
+  public static restoreFromRepo(member: MemberPrimitive): Member {
+    const { email, id, memberName } = member;
+    return new Member({
+      id: UniqueEntityId.restoreFromRepo(id),
+      email: UserEmail.restoreFromRepo(email),
+      memberName: UserName.restoreFromRepo(memberName),
+    });
   }
 }

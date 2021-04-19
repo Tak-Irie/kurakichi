@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { Fragment } from 'react';
 import {
   Avatar,
   AvatarSmall,
@@ -11,476 +12,235 @@ import {
   TableData,
 } from '@next/ui';
 import { SendMessage } from '@next/container';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { tailwindJoin } from '@kurakichi/node-util';
+import {
+  BellIcon,
+  CogIcon,
+  CreditCardIcon,
+  KeyIcon,
+  MenuIcon,
+  UserCircleIcon,
+  ViewGridAddIcon,
+  XIcon,
+} from '@heroicons/react/outline';
+import { SearchIcon } from '@heroicons/react/solid';
 
 const PlayGround: NextPage = () => {
+  const navigation = [
+    { name: 'Dashboard', href: '#', current: true },
+    { name: 'Jobs', href: '#', current: false },
+    { name: 'Applicants', href: '#', current: false },
+    { name: 'Company', href: '#', current: false },
+  ];
+  const user = {
+    name: 'Debbie Lewis',
+    handle: 'deblewis',
+    email: 'debbielewis@example.com',
+    imageUrl:
+      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=320&h=320&q=80',
+  };
+  const userNavigation = [
+    { name: 'Your Profile', href: '#' },
+    { name: 'Settings', href: '#' },
+    { name: 'Sign out', href: '#' },
+  ];
   return (
-    /*
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ]
-  }
-  ```
-*/
-    <form className="space-y-8 divide-y divide-gray-200">
-      <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-        <div>
-          <div>
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Profile</h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              This information will be displayed publicly so be careful what you share.
-            </p>
-          </div>
-
-          <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Username
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <div className="max-w-lg flex rounded-md shadow-sm">
-                  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm">
-                    workcation.com/
-                  </span>
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="about"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                About
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
-                  defaultValue={''}
-                />
-                <p className="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5">
-              <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
-                Photo
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <div className="flex items-center">
-                  <span className="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                    <svg
-                      className="h-full w-full text-gray-300"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                  </span>
-                  <button
-                    type="button"
-                    className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Change
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="cover_photo"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Cover photo
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                  <div className="space-y-1 text-center">
-                    <svg
-                      className="mx-auto h-12 w-12 text-gray-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+    <div>
+      <Disclosure as="div" className="relative bg-green-400 pb-32 overflow-hidden">
+        {({ open }) => (
+          <>
+            <nav
+              className={tailwindJoin(
+                open ? 'bg-light-blue-900' : 'bg-transparent',
+                'relative z-10 border-b border-teal-500 border-opacity-25 lg:bg-transparent lg:border-none',
+              )}
+            >
+              <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+                <div className="relative h-16 flex items-center justify-between lg:border-b lg:border-light-blue-800">
+                  <div className="px-2 flex items-center lg:px-0">
+                    <div className="flex-shrink-0">
+                      <img
+                        className="block h-8 w-auto"
+                        src="https://tailwindui.com/img/logos/workflow-mark-teal-400.svg"
+                        alt="Workflow"
                       />
-                    </svg>
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                        />
+                    </div>
+                    <div className="hidden lg:block lg:ml-6 lg:space-x-4">
+                      <div className="flex">
+                        {navigation.map((item) => (
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={tailwindJoin(
+                              item.current ? 'bg-black bg-opacity-25' : 'hover:bg-light-blue-800',
+                              'rounded-md py-2 px-3 text-sm font-medium text-white',
+                            )}
+                          >
+                            {item.name}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 px-2 flex justify-center lg:ml-6 lg:justify-end">
+                    <div className="max-w-lg w-full lg:max-w-xs">
+                      <label htmlFor="search" className="sr-only">
+                        Search
                       </label>
-                      <p className="pl-1">or drag and drop</p>
+                      <div className="relative text-light-blue-100 focus-within:text-gray-400">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                          <SearchIcon className="flex-shrink-0 h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <input
+                          id="search"
+                          name="search"
+                          className="block w-full bg-light-blue-700 bg-opacity-50 py-2 pl-10 pr-3 border border-transparent rounded-md leading-5 placeholder-light-blue-100 focus:outline-none focus:bg-white focus:ring-white focus:border-white focus:placeholder-gray-500 focus:text-gray-900 sm:text-sm"
+                          placeholder="Search"
+                          type="search"
+                        />
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  </div>
+                  <div className="flex lg:hidden">
+                    {/* Mobile menu button */}
+                    <Disclosure.Button className="p-2 rounded-md inline-flex items-center justify-center text-light-blue-200 hover:text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                      <span className="sr-only">Open main menu</span>
+                      {open ? (
+                        <XIcon className="block flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                      ) : (
+                        <MenuIcon className="block flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                      )}
+                    </Disclosure.Button>
+                  </div>
+                  <div className="hidden lg:block lg:ml-4">
+                    <div className="flex items-center">
+                      <button className="flex-shrink-0 rounded-full p-1 text-light-blue-200 hover:bg-light-blue-800 hover:text-white focus:outline-none focus:bg-light-blue-900 focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-blue-900 focus:ring-white">
+                        <span className="sr-only">View notifications</span>
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+
+                      {/* Profile dropdown */}
+                      <Menu as="div" className="relative flex-shrink-0 ml-4">
+                        {({ open }) => (
+                          <>
+                            <div>
+                              <Menu.Button className="rounded-full flex text-sm text-white focus:outline-none focus:bg-light-blue-900 focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-blue-900 focus:ring-white">
+                                <span className="sr-only">Open user menu</span>
+                                <img className="rounded-full h-8 w-8" src={user.imageUrl} alt="" />
+                              </Menu.Button>
+                            </div>
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                            >
+                              <Menu.Items
+                                static
+                                className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                              >
+                                {userNavigation.map((item) => (
+                                  <Menu.Item key={item.name}>
+                                    {({ active }) => (
+                                      <a
+                                        href={item.href}
+                                        className={tailwindJoin(
+                                          active ? 'bg-gray-100' : '',
+                                          'block py-2 px-4 text-sm text-gray-700',
+                                        )}
+                                      >
+                                        {item.name}
+                                      </a>
+                                    )}
+                                  </Menu.Item>
+                                ))}
+                              </Menu.Items>
+                            </Transition>
+                          </>
+                        )}
+                      </Menu>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-          <div>
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Personal Information</h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Use a permanent address where you can receive mail.
-            </p>
-          </div>
-          <div className="space-y-6 sm:space-y-5">
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="first_name"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                First name
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="first_name"
-                  id="first_name"
-                  autoComplete="given-name"
-                  className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="last_name"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Last name
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="last_name"
-                  id="last_name"
-                  autoComplete="family-name"
-                  className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Email address
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Country / Region
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <select
-                  id="country"
-                  name="country"
-                  autoComplete="country"
-                  className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                >
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>Mexico</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="street_address"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                Street address
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="street_address"
-                  id="street_address"
-                  autoComplete="street-address"
-                  className="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                City
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="city"
-                  id="city"
-                  className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="state"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                State / Province
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="state"
-                  id="state"
-                  className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="zip"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                ZIP / Postal
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <input
-                  type="text"
-                  name="zip"
-                  id="zip"
-                  autoComplete="postal-code"
-                  className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-          <div>
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Notifications</h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              We'll always let you know about important changes, but you pick what else you want to
-              hear about.
-            </p>
-          </div>
-          <div className="space-y-6 sm:space-y-5 divide-y divide-gray-200">
-            <div className="pt-6 sm:pt-5">
-              <div role="group" aria-labelledby="label-email">
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
-                  <div>
-                    <div
-                      className="text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
-                      id="label-email"
+              <Disclosure.Panel className="bg-light-blue-900 lg:hidden">
+                <div className="pt-2 pb-3 px-2 space-y-1">
+                  {navigation.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className={tailwindJoin(
+                        item.current ? 'bg-black bg-opacity-25' : 'hover:bg-light-blue-800',
+                        'block rounded-md py-2 px-3 text-base font-medium text-white',
+                      )}
                     >
-                      By Email
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+                <div className="pt-4 pb-3 border-t border-light-blue-800">
+                  <div className="flex items-center px-4">
+                    <div className="flex-shrink-0">
+                      <img className="rounded-full h-10 w-10" src={user.imageUrl} alt="" />
                     </div>
+                    <div className="ml-3">
+                      <div className="text-base font-medium text-white">{user.name}</div>
+                      <div className="text-sm font-medium text-light-blue-200">{user.email}</div>
+                    </div>
+                    <button className="ml-auto flex-shrink-0 rounded-full p-1 text-light-blue-200 hover:bg-light-blue-800 hover:text-white focus:outline-none focus:bg-light-blue-900 focus:ring-2 focus:ring-offset-2 focus:ring-offset-light-blue-900 focus:ring-white">
+                      <span className="sr-only">View notifications</span>
+                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
                   </div>
-                  <div className="mt-4 sm:mt-0 sm:col-span-2">
-                    <div className="max-w-lg space-y-4">
-                      <div className="relative flex items-start">
-                        <div className="flex items-center h-5">
-                          <input
-                            id="comments"
-                            name="comments"
-                            type="checkbox"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                          />
-                        </div>
-                        <div className="ml-3 text-sm">
-                          <label htmlFor="comments" className="font-medium text-gray-700">
-                            Comments
-                          </label>
-                          <p className="text-gray-500">
-                            Get notified when someones posts a comment on a posting.
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="relative flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              id="candidates"
-                              name="candidates"
-                              type="checkbox"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label htmlFor="candidates" className="font-medium text-gray-700">
-                              Candidates
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when a candidate applies for a job.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="relative flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              id="offers"
-                              name="offers"
-                              type="checkbox"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label htmlFor="offers" className="font-medium text-gray-700">
-                              Offers
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when a candidate accepts or rejects an offer.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="mt-3 px-2">
+                    {userNavigation.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className="block rounded-md py-2 px-3 text-base font-medium text-light-blue-200 hover:text-white hover:bg-light-blue-800"
+                      >
+                        {item.name}
+                      </a>
+                    ))}
                   </div>
                 </div>
-              </div>
+              </Disclosure.Panel>
+            </nav>
+            <div
+              className={tailwindJoin(
+                open ? 'bottom-0' : 'inset-y-0',
+                'absolute flex justify-center inset-x-0 left-1/2 transform -translate-x-1/2 w-full overflow-hidden lg:inset-y-0',
+              )}
+              aria-hidden="true"
+            >
+              <div className="flex-grow bg-light-blue-900 bg-opacity-75" />
+              <svg
+                className="flex-shrink-0"
+                width={1750}
+                height={308}
+                viewBox="0 0 1750 308"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path opacity=".75" d="M1465.84 308L16.816 0H1750v308h-284.16z" fill="#075985" />
+                <path opacity=".75" d="M1733.19 0L284.161 308H0V0h1733.19z" fill="#0c4a6e" />
+              </svg>
+              <div className="flex-grow bg-light-blue-800 bg-opacity-75" />
             </div>
-            <div className="pt-6 sm:pt-5">
-              <div role="group" aria-labelledby="label-notifications">
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
-                  <div>
-                    <div
-                      className="text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
-                      id="label-notifications"
-                    >
-                      Push Notifications
-                    </div>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <div className="max-w-lg">
-                      <p className="text-sm text-gray-500">
-                        These are delivered via SMS to your mobile phone.
-                      </p>
-                      <div className="mt-4 space-y-4">
-                        <div className="flex items-center">
-                          <input
-                            id="push_everything"
-                            name="push_notifications"
-                            type="radio"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                          />
-                          <label
-                            htmlFor="push_everything"
-                            className="ml-3 block text-sm font-medium text-gray-700"
-                          >
-                            Everything
-                          </label>
-                        </div>
-                        <div className="flex items-center">
-                          <input
-                            id="push_email"
-                            name="push_notifications"
-                            type="radio"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                          />
-                          <label
-                            htmlFor="push_email"
-                            className="ml-3 block text-sm font-medium text-gray-700"
-                          >
-                            Same as email
-                          </label>
-                        </div>
-                        <div className="flex items-center">
-                          <input
-                            id="push_nothing"
-                            name="push_notifications"
-                            type="radio"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                          />
-                          <label
-                            htmlFor="push_nothing"
-                            className="ml-3 block text-sm font-medium text-gray-700"
-                          >
-                            No push notifications
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <header className="relative py-10">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 className="text-3xl font-bold text-white">Settings</h1>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-5">
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </form>
+            </header>
+          </>
+        )}
+      </Disclosure>
+    </div>
   );
 };
 

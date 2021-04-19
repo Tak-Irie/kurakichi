@@ -7,15 +7,17 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
+  InvalidInputValueError,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
+import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
 import { NotFoundOrgError } from './getOrgError';
 
 type GetOrgInput = { orgId: string };
 
 type GetOrgResponse = Either<
-  NotFoundOrgError | UnexpectedError | StoreConnectionError,
-  Result<Org>
+  NotFoundOrgError | InvalidInputValueError | UnexpectedError | StoreConnectionError,
+  Result<DTOOrg>
 >;
 
 export class GetOrgUseCase implements IUseCase<GetOrgInput, Promise<GetOrgResponse>> {
@@ -25,12 +27,14 @@ export class GetOrgUseCase implements IUseCase<GetOrgInput, Promise<GetOrgRespon
   public async execute(req: GetOrgInput): Promise<GetOrgResponse> {
     try {
       const idOrError = UniqueEntityId.reconstruct(req.orgId);
-      if (idOrError == undefined) return left(new NotFoundOrgError());
+      if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));
 
-      const result = await this.OrgRepo.getOrgById(idOrError.getValue());
-      if (result == undefined) return left(new NotFoundOrgError());
+      const dbResult = await this.OrgRepo.getOrgById(idOrError.getValue());
+      if (dbResult == false) return left(new NotFoundOrgError());
 
-      return right(Result.success<Org>(result));
+      const dtoOrg = createDTOOrgFromDomain(dbResult);
+
+      return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

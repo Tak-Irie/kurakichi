@@ -21,3 +21,4 @@ export * from './Icons';
 export * from './Feedbacks';
 export * from './Select';
 export * from './Avatars';
+export * from './Images';

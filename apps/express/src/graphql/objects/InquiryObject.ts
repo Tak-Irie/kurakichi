@@ -7,7 +7,8 @@ export const Inquiry = objectType({
     t.implements('Node');
     t.string('content');
     t.field('category', { type: 'InquiryCategory' });
-    t.field('status', { type: 'InquiryStatus' });
+    t.field('inquiryStatus', { type: 'InquiryStatus' });
+    t.field('sender', { type: 'User' });
   },
 });
 
@@ -27,5 +28,5 @@ export const InquiryCategory = enumType({
 
 export const InquiryStatus = enumType({
   name: 'InquiryStatus',
-  members: ['UNREAD', 'DONE', 'WORKING'],
+  members: ['UNREAD', 'DONE', 'WORKING', 'DRAFT'],
 });

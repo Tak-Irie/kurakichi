@@ -8,7 +8,7 @@ import {
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
-import { orgToGql } from '../toGqlDTO/orgToGql';
+import { dtoOrgToGql } from '../DTOtoGql';
 
 export const orgMutation = extendType({
   type: 'Mutation',
@@ -36,7 +36,7 @@ export const orgMutation = extendType({
         // console.log('res:', result);
         if (useCaseResult.isLeft())
           return { error: { message: useCaseResult.value.getErrorValue() } };
-        const gqlField = orgToGql(useCaseResult.value.getValue());
+        const gqlField = dtoOrgToGql(useCaseResult.value.getValue());
         return { org: gqlField };
       },
     });
@@ -58,7 +58,7 @@ export const orgMutation = extendType({
         // console.log('result:', result);
         if (result.isLeft()) return returnErrorToGQL(result);
 
-        const gqlOrg = orgToGql(result.value.getValue());
+        const gqlOrg = dtoOrgToGql(result.value.getValue());
         return { org: gqlOrg };
       },
     });
@@ -77,7 +77,8 @@ export const orgMutation = extendType({
           requestedOrgId: args.requestedOrgId,
         });
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
-        const gqlOrg = orgToGql(useCaseResult.value.getValue());
+
+        const gqlOrg = dtoOrgToGql(useCaseResult.value.getValue());
         return { org: gqlOrg };
       },
     });
@@ -96,7 +97,7 @@ export const orgQuery = extendType({
 
         const domainOrgs = result.value.getValue();
 
-        const gqlOrgs = domainOrgs.map((domainOrg) => orgToGql(domainOrg));
+        const gqlOrgs = domainOrgs.map((domainOrg) => dtoOrgToGql(domainOrg));
 
         return { orgs: gqlOrgs };
       },
@@ -108,7 +109,7 @@ export const orgQuery = extendType({
         const result = await useGetOrgUseCase.execute({ orgId: args.orgId });
         if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
         const domainOrg = result.value.getValue();
-        const gqlOrg = orgToGql(domainOrg);
+        const gqlOrg = dtoOrgToGql(domainOrg);
 
         return { org: gqlOrg };
       },

@@ -23,3 +23,6 @@ export const useRequestJoinOrgUseCase = new RequestJoinOrgUseCase(orgRepo);
 export const useGetInquiryUseCase = new GetInquiryUseCase(inquiryRepo);
 export const useGetInquiriesUseCase = new GetInquiriesUseCase(inquiryRepo);
 export const useRegisterInquiryUseCase = new RegisterInquiryUseCase(inquiryRepo);
+
+export * from './DTOInquiry';
+export * from './DTOOrg';

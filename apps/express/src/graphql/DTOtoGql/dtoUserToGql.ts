@@ -1,5 +1,5 @@
 import { DTOUser } from '@kurakichi/domain';
-import { idMapper } from '../../util/idMapper';
+import { idsMapper } from '../../util/idMapper';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
 export const dtoUserToGql = (user: DTOUser): NexusGenFieldTypes['User'] => {
@@ -17,13 +17,13 @@ export const dtoUserToGql = (user: DTOUser): NexusGenFieldTypes['User'] => {
   } = user;
   return {
     avatar,
-    belongOrgs: idMapper(belongOrgs),
-    belongSecureBases: idMapper(belongSecureBases),
+    belongOrgs: idsMapper(belongOrgs),
+    belongSecureBases: idsMapper(belongSecureBases),
     description,
     email,
     id,
     image,
-    messages: idMapper(messages),
+    messages: idsMapper(messages),
     role,
     userName,
   };
