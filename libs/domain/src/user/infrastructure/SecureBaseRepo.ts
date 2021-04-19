@@ -28,7 +28,7 @@ export class SecureBaseRepo implements ISecureBaseRepo {
       }),
       this.prisma.user.update({
         where: { id: adminId },
-        data: { belongRooms: { connect: { id: baseId } } },
+        data: { belongSecureBases: { connect: { id: baseId } } },
       }),
     ]);
 
