@@ -35,4 +35,14 @@ export class MessageRepo implements IMessageRepo {
 
     return message;
   }
+
+  async getMessagesByReceiverId(receiverId: UniqueEntityId): Promise<Message[] | false> {
+    const messages = await this.prisma.message.findMany({
+      where: { receiverId: receiverId.getId() },
+    });
+    if (messages == undefined) return false;
+
+    const domainMessages = MessageMapper.arrayToDomain(messages);
+    return domainMessages;
+  }
 }

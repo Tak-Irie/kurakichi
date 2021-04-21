@@ -15,6 +15,7 @@ import { GetUsersByOrgIdUseCase } from './getUsersByOrgId/getUsersByOrgIdUseCase
 
 import { SendMessageUseCase } from './sendMessage/sendMessageUseCase';
 import { GetMessagesUseCase } from './getMessages/getMessagesUseCase';
+import { GetMessagesByReceiverIdUseCase } from './getMessagesByReceiverId/GetMessagesByReceiverIdUseCase';
 
 const userRepo = new UserRepository();
 const messageRepo = new MessageRepo();
@@ -33,6 +34,7 @@ export const useGetUsersByOrgIdUseCase = new GetUsersByOrgIdUseCase(userRepo);
 
 export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
 export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);
+export const useGetMessagesByReceiverIdUseCase = new GetMessagesByReceiverIdUseCase(messageRepo);
 
 export * from './DTOUser';
 export * from './DTOMessage';

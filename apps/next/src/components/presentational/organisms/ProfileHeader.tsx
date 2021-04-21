@@ -15,7 +15,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = (props) => {
       <ImageHero src={imageSrc} alt="イメージ画像" />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="-mt-12 sm:-mt-16 lg:grid lg:grid-cols-3 sm:flex sm:items-end sm:space-x-5">
-          <AvatarBig src={imageSrc} alt="プロフィールアバター" />
+          <AvatarBig src={avatarSrc} alt="プロフィールアバター" />
           <div className="lg:col-span-2 relative">
             <div className="flex flex-row-reverse mt-6 sm:min-w-0 sm:flex sm:space-x-6 sm:pb-1">
               {children}

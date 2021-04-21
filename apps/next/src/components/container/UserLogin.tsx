@@ -31,8 +31,20 @@ const UserLogin: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input<UserLoginInput> type="email" label="email" required register={register} />
-        <Input<UserLoginInput> type="password" label="password" required register={register} />
+        <Input<UserLoginInput>
+          type="email"
+          fieldLabel="メールアドレス"
+          label="email"
+          required
+          register={register}
+        />
+        <Input<UserLoginInput>
+          type="password"
+          fieldLabel="パスワード"
+          label="password"
+          required
+          register={register}
+        />
         <ButtonBig type="submit">ログイン</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}

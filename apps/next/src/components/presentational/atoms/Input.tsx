@@ -6,6 +6,7 @@ type InputProps<T> = {
   required: boolean;
   fieldLabel: string;
   type: string;
+  overWriteCSS?: string;
 };
 
 type TextareaProps<T> = Omit<InputProps<T>, 'type'> & {
@@ -19,14 +20,11 @@ export const Input = <T extends any>({
   fieldLabel,
   register,
   required,
+  overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline',
 }: InputProps<T>) => (
   <>
     <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
-    <input
-      className="flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline"
-      type={type}
-      {...register(label, { required })}
-    />
+    <input className={overWriteCSS} type={type} {...register(label, { required })} />
   </>
 );
 
@@ -37,14 +35,10 @@ export const InputTextarea = <T extends any>({
   label,
   register,
   required,
+  overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline',
 }: TextareaProps<T>) => (
   <>
     <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
-    <textarea
-      cols={cols}
-      rows={rows}
-      className="flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline"
-      {...register(label, { required })}
-    />
+    <textarea cols={cols} rows={rows} className={overWriteCSS} {...register(label, { required })} />
   </>
 );

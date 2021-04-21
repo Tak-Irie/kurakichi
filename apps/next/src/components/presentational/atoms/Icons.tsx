@@ -8,6 +8,7 @@ import {
   UserIcon,
   MailIcon,
   CogIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -42,4 +43,7 @@ export const IconsMail: FC = () => {
 };
 export const IconsCog: FC = () => {
   return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<CogIcon />} />;
+};
+export const IconsCheckCircle: FC = () => {
+  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<IconsCheckCircle />} />;
 };

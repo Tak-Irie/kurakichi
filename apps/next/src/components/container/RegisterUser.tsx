@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { ButtonBig, Input, Form } from '../presentational/atoms';
 import { useForm } from 'react-hook-form';
-import { useRegisterUserMutation, useMeLazyQuery } from '../../graphql/generated/graphql';
+import {
+  useRegisterUserMutation,
+  useGetUserByCookieLazyQuery,
+} from '../../graphql/generated/graphql';
 
 type UserRegisterInput = {
   email: string;
@@ -11,7 +14,7 @@ type UserRegisterInput = {
 
 export const RegisterUser: FC = () => {
   const [userRegister, { data, loading, error }] = useRegisterUserMutation();
-  const [meQuery] = useMeLazyQuery();
+  const [meQuery] = useGetUserByCookieLazyQuery();
   const {
     register,
     handleSubmit,
@@ -34,9 +37,27 @@ export const RegisterUser: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input<UserRegisterInput> type="text" label="userName" register={register} required />
-        <Input<UserRegisterInput> type="email" label="email" register={register} required />
-        <Input<UserRegisterInput> type="password" label="password" register={register} required />
+        <Input<UserRegisterInput>
+          type="text"
+          fieldLabel="ユーザーネーム"
+          label="userName"
+          register={register}
+          required
+        />
+        <Input<UserRegisterInput>
+          type="email"
+          fieldLabel="メールアドレス"
+          label="email"
+          register={register}
+          required
+        />
+        <Input<UserRegisterInput>
+          type="password"
+          fieldLabel="パスワード"
+          label="password"
+          register={register}
+          required
+        />
         <ButtonBig type="submit">ユーザー登録</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}

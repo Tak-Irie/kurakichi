@@ -44,8 +44,8 @@ export const UserMyPage: FC<UserProfileProps> = ({
           <article className="bg-gray-100">
             <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={userName}>
               <IconButton label="メッセージボックス" svgIcon={<MailIcon />} />
-              <Link href="/user/mysetting">
-                <a href="/user/mysetting">
+              <Link href="/user/setting">
+                <a href="/user/setting">
                   <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
                 </a>
               </Link>
@@ -106,13 +106,13 @@ export const UserMyPage: FC<UserProfileProps> = ({
               <h2 className="text-sm font-medium text-gray-500">所属団体</h2>
               <GridTemplate>
                 {orgs[0] ? (
-                  orgs.map((org) => {
+                  orgs.map((org, index) => {
                     return (
                       <div key={org.id}>
                         <GridItemWithPic
                           name={org.orgName}
                           description={org.description}
-                          url={`/org/${org.id}`}
+                          url={`/org/myorg?org=${index}`}
                           imgAlt=""
                           imgSrc=""
                         />

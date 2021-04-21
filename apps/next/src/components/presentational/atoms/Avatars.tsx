@@ -15,22 +15,26 @@ export const Avatar: FC<AvatarsProps> = ({
     <span className="inline-block relative">
       <img className="inline-block h-12 w-12 rounded-full" src={src} alt={alt} />
       {notification ? (
-        <span className="animate-ping absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-400"></span>
+        <span className="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-400"></span>
       ) : null}
     </span>
   );
 };
 
 export const AvatarSmall: FC<AvatarsProps> = ({
-  src = '/asian_man1.jpg',
+  src,
   alt = 'sampleImage',
   notification = false,
 }) => {
   return (
     <span className="inline-block relative">
-      <img className="inline-block h-8 w-8 rounded-full" src={src} alt={alt} />
+      <img
+        className="inline-block h-8 w-8 rounded-full"
+        src={src === 'UNKNOWN' ? '/asian_man1.jpg' : null}
+        alt={alt}
+      />
       {notification ? (
-        <span className="animate-ping absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-400"></span>
+        <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-400"></span>
       ) : null}
     </span>
   );

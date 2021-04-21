@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
+import { FileUploader } from '@next/container';
 
 const Product: NextPage = () => {
-  return <p>WIP</p>;
+  return <FileUploader />;
 };
 
 export default Product;

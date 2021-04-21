@@ -9,10 +9,12 @@ import {
   useForgotPasswordUseCase,
   useChangePasswordUseCase,
   useUpdateUserUseCase,
+  useGetOrgByMemberIdUseCase,
+  useGetMessagesByReceiverIdUseCase,
 } from '@kurakichi/domain';
 import { COOKIE_NAME } from '@kurakichi/node-util';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
-import { dtoUserToGql } from '../DTOtoGql';
+import { dtoMessagesToGql, dtoOrgsToGql, dtoUserToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const userQuery = extendType({
@@ -31,7 +33,7 @@ export const userQuery = extendType({
       },
     });
 
-    t.nullable.field('getUser', {
+    t.nullable.field('getUserById', {
       type: 'UserPayload',
       args: {
         userId: nonNull(stringArg()),
@@ -47,7 +49,7 @@ export const userQuery = extendType({
       },
     });
 
-    t.nullable.field('me', {
+    t.nullable.field('getUserByCookie', {
       type: 'UserPayload',
       resolve: async (_, __, context) => {
         // console.log('me query called');
@@ -59,10 +61,20 @@ export const userQuery = extendType({
         // console.log('me/useCaseResult:', useCaseResult);
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
-        const gqlField = dtoUserToGql(useCaseResult.value.getValue());
+        const domainOrgOrErr = await useGetOrgByMemberIdUseCase.execute({ memberId: idOrErr });
+        if (domainOrgOrErr.isLeft()) return returnErrorToGQL(domainOrgOrErr);
+
+        const domainMessageOrErr = await useGetMessagesByReceiverIdUseCase.execute({
+          receiverId: idOrErr,
+        });
+        if (domainMessageOrErr.isLeft()) return returnErrorToGQL(domainMessageOrErr);
+
+        const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
+        const gqlOrgs = dtoOrgsToGql(domainOrgOrErr.value.getValue());
+        const gqlMessages = dtoMessagesToGql(domainMessageOrErr.value.getValue());
         // console.log('domainUser:', gqlField);
         return {
-          user: gqlField,
+          user: { ...gqlUser, belongOrgs: gqlOrgs, messages: gqlMessages },
         };
       },
     });

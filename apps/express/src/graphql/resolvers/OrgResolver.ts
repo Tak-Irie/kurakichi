@@ -36,7 +36,7 @@ export const orgMutation = extendType({
           email: args.email,
           phoneNumber: args.phoneNumber,
         });
-        console.log('res:', orgResult);
+        // console.log('res:', orgResult);
         if (orgResult.isLeft()) return { error: { message: orgResult.value.getErrorValue() } };
         const gqlField = dtoOrgToGql(orgResult.value.getValue());
         return { org: gqlField };

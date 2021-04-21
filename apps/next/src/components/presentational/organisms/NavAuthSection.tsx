@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Link from 'next/link';
 
-import { useMeQuery } from '../../../graphql/generated/graphql';
+import { useGetUserByCookieQuery } from '../../../graphql/generated/graphql';
 import { isServer } from '../../../util/isServer';
 import {
   LoadingStylishSpinner,
@@ -14,7 +14,7 @@ import {
 } from '@next/ui';
 
 const NavAuthSection: FC = () => {
-  const { data, loading } = useMeQuery({
+  const { data, loading } = useGetUserByCookieQuery({
     skip: isServer(),
   });
 
@@ -25,7 +25,7 @@ const NavAuthSection: FC = () => {
       </div>
     );
 
-  if (!data?.me.user)
+  if (!data?.getUserByCookie.user)
     return (
       <div>
         <Link href="/login">
@@ -39,7 +39,13 @@ const NavAuthSection: FC = () => {
   return (
     <div className="z-10">
       <DropDownMenu
-        menuElement={<AvatarSmall notification={false} />}
+        menuElement={
+          <AvatarSmall
+            src={data.getUserByCookie.user.avatar}
+            alt="ユーザーアバター"
+            notification={true}
+          />
+        }
         menuIcon={<IconsVerticalDots />}
       >
         <DropDownMenuItem linkUrl="/user/mypage" label="マイページ" icon={<IconsUser />} />

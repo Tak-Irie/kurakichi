@@ -124,9 +124,9 @@ type Query {
   getOrg(orgId: String!): OrgPayload
   getOrgs: OrgPayload
   getOrgsByMemberId: OrgPayload
-  getUser(userId: String!): UserPayload
+  getUserByCookie: UserPayload
+  getUserById(userId: String!): UserPayload
   getUsers: UserPayload!
-  me: UserPayload
   node(id: ID): Node
 }
 

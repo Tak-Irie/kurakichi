@@ -204,9 +204,9 @@ export interface NexusGenFieldTypes {
     getOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgs: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgsByMemberId: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
-    getUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
+    getUserByCookie: NexusGenRootTypes['UserPayload'] | null; // UserPayload
+    getUserById: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     getUsers: NexusGenRootTypes['UserPayload']; // UserPayload!
-    me: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     node: NexusGenRootTypes['Node'] | null; // Node
   }
   RegularError: { // field return type
@@ -325,9 +325,9 @@ export interface NexusGenFieldTypeNames {
     getOrg: 'OrgPayload'
     getOrgs: 'OrgPayload'
     getOrgsByMemberId: 'OrgPayload'
-    getUser: 'UserPayload'
+    getUserByCookie: 'UserPayload'
+    getUserById: 'UserPayload'
     getUsers: 'UserPayload'
-    me: 'UserPayload'
     node: 'Node'
   }
   RegularError: { // field return type name
@@ -435,7 +435,7 @@ export interface NexusGenArgTypes {
     getOrg: { // args
       orgId: string; // String!
     }
-    getUser: { // args
+    getUserById: { // args
       userId: string; // String!
     }
     node: { // args

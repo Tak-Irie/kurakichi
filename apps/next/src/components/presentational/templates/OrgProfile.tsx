@@ -11,7 +11,7 @@ import {
 } from '@next/ui';
 import { Transition } from '@headlessui/react';
 import { MailIcon } from '@heroicons/react/outline';
-import { Org, useMeQuery } from '../../../graphql/generated/graphql';
+import { Org, useGetUserByCookieQuery } from '../../../graphql/generated/graphql';
 import { SendInquiry } from '@next/container';
 
 export const OrgProfile: FC<Org> = (props) => {
@@ -32,7 +32,7 @@ export const OrgProfile: FC<Org> = (props) => {
   // console.log('OrgProfileProps:', props);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   return (
     <div className="bg-white">
       <div className="flex-1 relative z-0 flex overflow-hidden">
@@ -42,7 +42,7 @@ export const OrgProfile: FC<Org> = (props) => {
         >
           <article className="bg-gray-100 relative">
             <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={orgName}>
-              {data?.me.user ? (
+              {data?.getUserByCookie.user ? (
                 <>
                   <div className="">
                     <IconButton

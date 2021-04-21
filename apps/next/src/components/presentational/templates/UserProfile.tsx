@@ -14,7 +14,7 @@ import {
 } from '@next/ui';
 import { SendMessage } from '@next/container';
 
-import { Org, useMeQuery } from '../../../graphql/generated/graphql';
+import { Org, useGetUserByCookieQuery } from '../../../graphql/generated/graphql';
 import { Transition } from '@headlessui/react';
 
 type UserProfileProps = {
@@ -30,7 +30,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
   const { avatar, description, image, orgs, userId, userName } = props;
 
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
 
   return (
     <div className="bg-white min-h-screen">
@@ -53,7 +53,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
                   </div>
                   <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                     <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                      {data?.me.user ? (
+                      {data?.getUserByCookie.user ? (
                         <>
                           <div className="">
                             <IconButton

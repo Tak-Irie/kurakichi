@@ -1,16 +1,16 @@
 import { NextPage } from 'next';
 import { UserMyPage } from '@next/ui';
 
-import { useGetMyInfoDetailQuery } from '../../graphql/generated/graphql';
+import { useGetUserDetailByCookieQuery } from '../../graphql/generated/graphql';
 
 const MyPage: NextPage = () => {
-  const { data, loading, error } = useGetMyInfoDetailQuery();
+  const { data, loading, error } = useGetUserDetailByCookieQuery();
 
   if (loading) return <p>loading</p>;
   if (error) return <p>{error.message}</p>;
 
   if (data) {
-    console.log('MyPageData:', data.me.user);
+    // console.log('MyPageData:', data.me.user);
     const {
       image,
       userName,
@@ -20,7 +20,7 @@ const MyPage: NextPage = () => {
       messages,
       email,
       belongSecureBases,
-    } = data.me.user;
+    } = data.getUserByCookie.user;
     return (
       <div>
         <UserMyPage

@@ -207,8 +207,8 @@ export type Query = {
   __typename?: 'Query';
   node?: Maybe<Node>;
   getUsers: UserPayload;
-  getUser?: Maybe<UserPayload>;
-  me?: Maybe<UserPayload>;
+  getUserById?: Maybe<UserPayload>;
+  getUserByCookie?: Maybe<UserPayload>;
   getOrgs?: Maybe<OrgPayload>;
   getOrg?: Maybe<OrgPayload>;
   getOrgsByMemberId?: Maybe<OrgPayload>;
@@ -225,7 +225,7 @@ export type QueryNodeArgs = {
 };
 
 
-export type QueryGetUserArgs = {
+export type QueryGetUserByIdArgs = {
   userId: Scalars['String'];
 };
 
@@ -684,12 +684,12 @@ export type GetMessagesQuery = (
   )> }
 );
 
-export type GetMyInfoDetailQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserDetailByCookieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyInfoDetailQuery = (
+export type GetUserDetailByCookieQuery = (
   { __typename?: 'Query' }
-  & { me?: Maybe<(
+  & { getUserByCookie?: Maybe<(
     { __typename?: 'UserPayload' }
     & { user?: Maybe<(
       { __typename?: 'User' }
@@ -754,14 +754,31 @@ export type GetOrgsByMemberIdQuery = (
   )> }
 );
 
-export type GetUserQueryVariables = Exact<{
+export type GetUserByIdQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = (
+export type GetUserByIdQuery = (
   { __typename?: 'Query' }
-  & { getUser?: Maybe<(
+  & { getUserById?: Maybe<(
+    { __typename?: 'UserPayload' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & UserPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type GetUserByCookieQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserByCookieQuery = (
+  { __typename?: 'Query' }
+  & { getUserByCookie?: Maybe<(
     { __typename?: 'UserPayload' }
     & { user?: Maybe<(
       { __typename?: 'User' }
@@ -788,23 +805,6 @@ export type GetUsersQuery = (
       & RegularErrorFragment
     )> }
   ) }
-);
-
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MeQuery = (
-  { __typename?: 'Query' }
-  & { me?: Maybe<(
-    { __typename?: 'UserPayload' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & UserPayloadFragment
-    )>, error?: Maybe<(
-      { __typename?: 'RegularError' }
-      & RegularErrorFragment
-    )> }
-  )> }
 );
 
 export type SubscriptDialogSubscriptionVariables = Exact<{ [key: string]: never; }>;
@@ -1563,9 +1563,9 @@ export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
 export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
 export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
-export const GetMyInfoDetailDocument = gql`
-    query GetMyInfoDetail {
-  me {
+export const GetUserDetailByCookieDocument = gql`
+    query GetUserDetailByCookie {
+  getUserByCookie {
     user {
       ...UserDetailPayload
     }
@@ -1578,31 +1578,31 @@ export const GetMyInfoDetailDocument = gql`
 ${RegularErrorFragmentDoc}`;
 
 /**
- * __useGetMyInfoDetailQuery__
+ * __useGetUserDetailByCookieQuery__
  *
- * To run a query within a React component, call `useGetMyInfoDetailQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyInfoDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserDetailByCookieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserDetailByCookieQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetMyInfoDetailQuery({
+ * const { data, loading, error } = useGetUserDetailByCookieQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetMyInfoDetailQuery(baseOptions?: Apollo.QueryHookOptions<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>) {
+export function useGetUserDetailByCookieQuery(baseOptions?: Apollo.QueryHookOptions<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>(GetMyInfoDetailDocument, options);
+        return Apollo.useQuery<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>(GetUserDetailByCookieDocument, options);
       }
-export function useGetMyInfoDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>) {
+export function useGetUserDetailByCookieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>(GetMyInfoDetailDocument, options);
+          return Apollo.useLazyQuery<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>(GetUserDetailByCookieDocument, options);
         }
-export type GetMyInfoDetailQueryHookResult = ReturnType<typeof useGetMyInfoDetailQuery>;
-export type GetMyInfoDetailLazyQueryHookResult = ReturnType<typeof useGetMyInfoDetailLazyQuery>;
-export type GetMyInfoDetailQueryResult = Apollo.QueryResult<GetMyInfoDetailQuery, GetMyInfoDetailQueryVariables>;
+export type GetUserDetailByCookieQueryHookResult = ReturnType<typeof useGetUserDetailByCookieQuery>;
+export type GetUserDetailByCookieLazyQueryHookResult = ReturnType<typeof useGetUserDetailByCookieLazyQuery>;
+export type GetUserDetailByCookieQueryResult = Apollo.QueryResult<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>;
 export const GetOrgDocument = gql`
     query GetOrg($OrgId: String!) {
   getOrg(orgId: $OrgId) {
@@ -1725,9 +1725,9 @@ export function useGetOrgsByMemberIdLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetOrgsByMemberIdQueryHookResult = ReturnType<typeof useGetOrgsByMemberIdQuery>;
 export type GetOrgsByMemberIdLazyQueryHookResult = ReturnType<typeof useGetOrgsByMemberIdLazyQuery>;
 export type GetOrgsByMemberIdQueryResult = Apollo.QueryResult<GetOrgsByMemberIdQuery, GetOrgsByMemberIdQueryVariables>;
-export const GetUserDocument = gql`
-    query GetUser($userId: String!) {
-  getUser(userId: $userId) {
+export const GetUserByIdDocument = gql`
+    query GetUserById($userId: String!) {
+  getUserById(userId: $userId) {
     user {
       ...UserPayload
     }
@@ -1740,32 +1740,72 @@ export const GetUserDocument = gql`
 ${RegularErrorFragmentDoc}`;
 
 /**
- * __useGetUserQuery__
+ * __useGetUserByIdQuery__
  *
- * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUserQuery({
+ * const { data, loading, error } = useGetUserByIdQuery({
  *   variables: {
  *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+export function useGetUserByIdQuery(baseOptions: Apollo.QueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        return Apollo.useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
       }
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+export function useGetUserByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+          return Apollo.useLazyQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
         }
-export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
-export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export type GetUserByIdQueryHookResult = ReturnType<typeof useGetUserByIdQuery>;
+export type GetUserByIdLazyQueryHookResult = ReturnType<typeof useGetUserByIdLazyQuery>;
+export type GetUserByIdQueryResult = Apollo.QueryResult<GetUserByIdQuery, GetUserByIdQueryVariables>;
+export const GetUserByCookieDocument = gql`
+    query GetUserByCookie {
+  getUserByCookie {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetUserByCookieQuery__
+ *
+ * To run a query within a React component, call `useGetUserByCookieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserByCookieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserByCookieQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserByCookieQuery(baseOptions?: Apollo.QueryHookOptions<GetUserByCookieQuery, GetUserByCookieQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserByCookieQuery, GetUserByCookieQueryVariables>(GetUserByCookieDocument, options);
+      }
+export function useGetUserByCookieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByCookieQuery, GetUserByCookieQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserByCookieQuery, GetUserByCookieQueryVariables>(GetUserByCookieDocument, options);
+        }
+export type GetUserByCookieQueryHookResult = ReturnType<typeof useGetUserByCookieQuery>;
+export type GetUserByCookieLazyQueryHookResult = ReturnType<typeof useGetUserByCookieLazyQuery>;
+export type GetUserByCookieQueryResult = Apollo.QueryResult<GetUserByCookieQuery, GetUserByCookieQueryVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   getUsers {
@@ -1806,46 +1846,6 @@ export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
 export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
 export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
-export const MeDocument = gql`
-    query Me {
-  me {
-    user {
-      ...UserPayload
-    }
-    error {
-      ...RegularError
-    }
-  }
-}
-    ${UserPayloadFragmentDoc}
-${RegularErrorFragmentDoc}`;
-
-/**
- * __useMeQuery__
- *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-      }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SubscriptDialogDocument = gql`
     subscription SubscriptDialog {
   dialogPosted {

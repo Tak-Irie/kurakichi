@@ -2,7 +2,7 @@ import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import { useGetMessagesUseCase, useSendMessageUseCase } from '@kurakichi/domain';
-import { messagesToGql, messageToGql } from '../DTOtoGql';
+import { dtoMessagesToGql, dtoMessageToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const MessageQuery = extendType({
@@ -20,7 +20,7 @@ export const MessageQuery = extendType({
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
         const domainMessages = domainResponse.value.getValue();
-        const gqlField = messagesToGql(domainMessages);
+        const gqlField = dtoMessagesToGql(domainMessages);
 
         return { messages: gqlField };
       },
@@ -52,7 +52,7 @@ export const MessageMutation = extendType({
 
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
-        const gqlField = messageToGql(domainResponse.value.getValue());
+        const gqlField = dtoMessageToGql(domainResponse.value.getValue());
         return { message: gqlField };
       },
     });

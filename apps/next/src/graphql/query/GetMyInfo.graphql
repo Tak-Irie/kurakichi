@@ -1,5 +1,5 @@
-query GetMyInfoDetail {
-  me {
+query GetUserDetailByCookie {
+  getUserByCookie {
     user {
       ...UserDetailPayload
     }

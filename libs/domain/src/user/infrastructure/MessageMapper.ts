@@ -14,6 +14,9 @@ export class MessageMapper {
 
     return MessageResult;
   }
+  public static arrayToDomain(storedMessage: StoredMessage[]): Message[] {
+    return storedMessage.map((message) => MessageMapper.ToDomain(message));
+  }
 
   public static async toStore(
     domainMessage: Message,

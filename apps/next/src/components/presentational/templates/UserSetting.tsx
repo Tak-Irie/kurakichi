@@ -1,6 +1,5 @@
 import { FC, useState, Fragment } from 'react';
 import { Disclosure, Menu, Switch, Transition } from '@headlessui/react';
-import { SearchIcon } from '@heroicons/react/solid';
 import {
   BellIcon,
   CogIcon,
@@ -12,13 +11,15 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { tailwindJoin } from '@kurakichi/node-util';
-import { ImageHero } from '@next/ui';
+import { ProfileHeader, IconsCheckCircle, IconButton } from '@next/ui';
 
 type UserSettingProps = {
-  some?: string;
+  avatar: string;
+  image: string;
+  userName: string;
 };
 
-export const UserSetting: FC<UserSettingProps> = () => {
+export const UserSetting: FC<UserSettingProps> = ({ avatar, image, userName }) => {
   const user = {
     name: 'Debbie Lewis',
     handle: 'deblewis',
@@ -51,41 +52,18 @@ export const UserSetting: FC<UserSettingProps> = () => {
   const [allowMentions, setAllowMentions] = useState(true);
 
   return (
-    <div>
-      <ImageHero src="UNKNOWN" alt="ユーザーヒーロー" />
-      <main className="relative">
-        <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8">
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
-              <aside className="py-6 lg:col-span-3">
-                <nav className="space-y-1">
-                  {subNavigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className={tailwindJoin(
-                        item.current
-                          ? 'bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700'
-                          : 'border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900',
-                        'group border-l-4 px-3 py-2 flex items-center text-sm font-medium',
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      <item.icon
-                        className={tailwindJoin(
-                          item.current
-                            ? 'text-teal-500 group-hover:text-teal-500'
-                            : 'text-gray-400 group-hover:text-gray-500',
-                          'flex-shrink-0 -ml-1 mr-3 h-6 w-6',
-                        )}
-                        aria-hidden="true"
-                      />
-                      <span className="truncate">{item.name}</span>
-                    </a>
-                  ))}
-                </nav>
-              </aside>
+    <div className="bg-white min-h-screen">
+      <div className="flex-1 relative z-0 flex overflow-hidden">
+        <main
+          className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last"
+          tabIndex={0}
+        >
+          <div className="bg-gray-100">
+            <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={userName}>
+              <IconButton label="設定を変更する" svgIcon={<IconsCheckCircle />} />
+            </ProfileHeader>
 
+            <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
               <form className="divide-y divide-gray-200 lg:col-span-9" action="#" method="POST">
                 {/* Profile section */}
                 <div className="py-6 px-4 sm:p-6 lg:pb-8">
@@ -412,8 +390,8 @@ export const UserSetting: FC<UserSettingProps> = () => {
               </form>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

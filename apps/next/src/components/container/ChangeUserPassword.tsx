@@ -28,12 +28,14 @@ export const ChangeUserPassword: FC = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input<ChangeUserPasswordInput>
           type="password"
+          fieldLabel="現在のパスワード"
           label="currentPass"
           required
           register={register}
         />
         <Input<ChangeUserPasswordInput>
           type="password"
+          fieldLabel="新しいパスワード"
           label="newPass"
           required
           register={register}

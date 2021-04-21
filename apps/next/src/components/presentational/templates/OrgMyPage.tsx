@@ -10,9 +10,13 @@ import {
   IconsMail,
 } from '@next/ui';
 
-import { Org, useMeQuery } from '../../../graphql/generated/graphql';
+import { Org, useGetUserByCookieQuery } from '../../../graphql/generated/graphql';
 
-export const OrgMyPage: FC<Org> = (props) => {
+type OrgMyPageProps = {
+  org: Org;
+};
+
+export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
   const {
     id,
     orgName,
@@ -25,11 +29,11 @@ export const OrgMyPage: FC<Org> = (props) => {
     description,
     members,
     inquiries,
-  } = props;
+  } = props.org;
   const orgId = id;
   // console.log('OrgProfileProps:', props);
 
-  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   return (
     <div className="bg-white">
       <div className="flex-1 relative z-0 flex overflow-hidden">
@@ -68,7 +72,7 @@ export const OrgMyPage: FC<Org> = (props) => {
                         <div key={member.id}>
                           <GridItemWithPic
                             name={member.userName}
-                            description=""
+                            description={member.id}
                             imgAlt=""
                             imgSrc=""
                             url=""
