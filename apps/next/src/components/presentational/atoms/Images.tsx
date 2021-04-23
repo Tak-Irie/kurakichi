@@ -19,3 +19,13 @@ export const ImageHero: FC<Omit<ImagesProps, 'css'>> = ({ alt, src }) => {
     />
   );
 };
+
+export const ImageHeroTransition: FC<Omit<ImagesProps, 'css'>> = ({ alt, src }) => {
+  return (
+    <Images
+      css="h-32 w-full object-cover lg:h-56 transition duration-500 hover:bg-black"
+      src={src === 'UNKNOWN' ? '/hands_mid-reso.jpg' : src}
+      alt={alt}
+    />
+  );
+};

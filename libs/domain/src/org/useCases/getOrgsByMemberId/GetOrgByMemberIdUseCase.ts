@@ -31,7 +31,7 @@ export class GetOrgByMemberIdUseCase
       if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));
 
       const dbResult = await this.OrgRepo.getOrgsByMemberId(idOrError.getValue());
-      if (dbResult == false) return left(new NotFoundOrgError());
+      if (dbResult == false) return right(Result.success<DTOOrg[]>([]));
 
       const dtoOrgs = createDTOOrgsFromDomain(dbResult);
 

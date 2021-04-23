@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { UserDeleteButton } from '../components/container/UserDeleteButton';
-import { useMeQuery } from '../graphql/generated/graphql';
+import { useGetUserByCookieQuery } from '../graphql/generated/graphql';
 import { IsAuth } from '../util/isAuth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -9,14 +9,14 @@ import { GetMessages } from '../components/container/GetMessages';
 
 const MyPage: NextPage = () => {
   // IsAuth();
-  const { data, loading, error } = useMeQuery({
+  const { data, loading, error } = useGetUserByCookieQuery({
     fetchPolicy: 'network-only',
   });
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !data?.me.user) {
+    if (!loading && !data?.getUserByCookie.user) {
       router.replace('/login?next=' + router.pathname);
     }
   }, [loading, data, router]);
@@ -28,7 +28,7 @@ const MyPage: NextPage = () => {
   if (!loading && data)
     return (
       <>
-        {data.me.user && <p>こんにちは {data.me.user.userName} !</p>}
+        {data.getUserByCookie.user && <p>こんにちは {data.getUserByCookie.user.userName} !</p>}
         <GetMessages />
         <ChangeUserPassword />
         <UserDeleteButton />

@@ -40,6 +40,7 @@ export class MessageRepo implements IMessageRepo {
     const messages = await this.prisma.message.findMany({
       where: { receiverId: receiverId.getId() },
     });
+    // console.log('messages at repo:', messages);
     if (messages == undefined) return false;
 
     const domainMessages = MessageMapper.arrayToDomain(messages);

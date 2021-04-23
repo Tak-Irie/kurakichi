@@ -6,4 +6,4 @@ export * from './isAuth';
 export * from './isServer';
 export * from './ownTypes';
 export * from './useGetIdFromUrl';
-// export * from "./valueOfEnum"
+export * from './uploadImage';

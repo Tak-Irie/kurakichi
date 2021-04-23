@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { Transition } from '@headlessui/react';
 
 import {
-  IconButton,
+  ButtonWithIcon,
   GridTemplate,
   GridItem,
   GridItemWithPic,
@@ -43,7 +43,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
         >
           <article className="bg-gray-100 relative">
             <ProfileHeader avatarSrc={avatar} imageSrc={image} profileName={orgName}>
-              <IconButton label="メッセージボックス" svgIcon={<IconsMail />} />
+              <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
             </ProfileHeader>
 
             <div className="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

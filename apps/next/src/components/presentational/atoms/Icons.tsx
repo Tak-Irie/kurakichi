@@ -9,6 +9,8 @@ import {
   MailIcon,
   CogIcon,
   CheckCircleIcon,
+  CloudUploadIcon,
+  DocumentAddIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -20,30 +22,67 @@ const Icons: FC<IconsProps> = ({ icon, overwriteCSS }) => {
   return <div className={overwriteCSS}>{icon}</div>;
 };
 
-export const IconsCaution: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-yellow-500" icon={<ExclamationIcon />} />;
+export const IconsCaution: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-yellow-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<ExclamationIcon />} />;
 };
-export const IconsMenu: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6" icon={<MenuIcon />} />;
+
+export const IconsMenu: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<MenuIcon />} />;
 };
-export const IconsDownChevron: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<ChevronDownIcon />} />;
+
+export const IconsDownChevron: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<ChevronDownIcon />} />;
 };
-export const IconsVerticalDots: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<DotsVerticalIcon />} />;
+
+export const IconsVerticalDots: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<DotsVerticalIcon />} />;
 };
-export const IconsHome: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<HomeIcon />} />;
+
+export const IconsHome: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<HomeIcon />} />;
 };
-export const IconsUser: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<UserIcon />} />;
+
+export const IconsUser: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<UserIcon />} />;
 };
-export const IconsMail: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<MailIcon />} />;
+
+export const IconsMail: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<MailIcon />} />;
 };
-export const IconsCog: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<CogIcon />} />;
+
+export const IconsCog: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<CogIcon />} />;
 };
-export const IconsCheckCircle: FC = () => {
-  return <Icons overwriteCSS="flex-shrink-0 h-6 w-6 text-gray-500" icon={<IconsCheckCircle />} />;
+
+export const IconsCheckCircle: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<CheckCircleIcon />} />;
+};
+
+export const IconsCloudUpload: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<CloudUploadIcon />} />;
+};
+export const IconsDocumentAdd: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<DocumentAddIcon />} />;
 };

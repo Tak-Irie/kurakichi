@@ -11,3 +11,4 @@ export * from './UserLogin';
 export * from './YahooLoginButton';
 export * from './SendInquiry';
 export * from './FileUploader';
+export * from './UpdateUserProfile';

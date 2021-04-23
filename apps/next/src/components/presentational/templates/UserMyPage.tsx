@@ -4,14 +4,8 @@ import Link from 'next/link';
 import { MailIcon, CogIcon } from '@heroicons/react/outline';
 
 import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
-import {
-  ProfileHeader,
-  IconButton,
-  GridTemplate,
-  GridItem,
-  GridItemWithPic,
-  SmallText,
-} from '@next/ui';
+import { ProfileHeader, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
+import { ButtonWithIcon } from '../atoms';
 
 type UserProfileProps = {
   userName: string;
@@ -43,10 +37,10 @@ export const UserMyPage: FC<UserProfileProps> = ({
         >
           <article className="bg-gray-100">
             <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={userName}>
-              <IconButton label="メッセージボックス" svgIcon={<MailIcon />} />
+              <ButtonWithIcon type="button" label="メッセージボックス" icon={<MailIcon />} />
               <Link href="/user/setting">
                 <a href="/user/setting">
-                  <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
+                  <ButtonWithIcon type="button" label="アカウント設定" icon={<CogIcon />} />
                 </a>
               </Link>
             </ProfileHeader>

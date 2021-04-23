@@ -27,7 +27,13 @@ const ForgetPassword: FC = () => {
   return (
     <>
       <Form onSubmit={handleSubmit(handleMutation)}>
-        <Input<ForgetPasswordInput> label="email" type="email" required register={register} />
+        <Input<ForgetPasswordInput>
+          label="email"
+          fieldLabel="メールアドレス"
+          type="email"
+          required
+          register={register}
+        />
         <ButtonBig type="submit">パスワード再登録</ButtonBig>
       </Form>
       {loading && <p>loading!</p>}

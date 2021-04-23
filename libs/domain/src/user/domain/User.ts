@@ -129,15 +129,26 @@ export class User extends AggregateRoot<UserProps> {
     return user;
   }
 
-  public updateEmail(email: UserEmail): void {
-    this.props.email = email;
+  public updateEmail(email: string): void | string {
+    const result = UserEmail.create({ email });
+    if (result.isFailure) return result.getErrorValue();
+    this.props.email = result.value;
   }
+
+  public updateUserName(userName: string): void | string {
+    const result = UserName.create({ userName });
+    if (result.isFailure) return result.getErrorValue();
+    this.props.userName = result.value;
+  }
+
   public updateDescription(description: string): void {
     this.props.description = description;
   }
+
   public updateAvatar(avatar: string): void {
     this.props.avatar = avatar;
   }
+
   public updateImage(image: string): void {
     this.props.image = image;
   }

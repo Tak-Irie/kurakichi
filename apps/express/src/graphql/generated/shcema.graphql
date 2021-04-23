@@ -82,7 +82,7 @@ type Mutation {
   requestJoinOrg(orgId: String!): OrgPayload
   sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
   sendMessage(messageStatus: MessageStatus, receiverId: String!, textInput: String!): MessagePayload
-  updateUser(avatar: String, description: String, email: String, image: String): UserPayload
+  updateUser(avatar: String, description: String, email: String, image: String, userName: String): UserPayload
   userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 

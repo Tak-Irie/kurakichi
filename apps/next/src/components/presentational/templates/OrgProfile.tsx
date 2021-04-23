@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import {
-  IconButton,
+  ButtonWithIcon,
   GridTemplate,
   GridItem,
   GridItemWithPic,
@@ -45,10 +45,11 @@ export const OrgProfile: FC<Org> = (props) => {
               {data?.getUserByCookie.user ? (
                 <>
                   <div className="">
-                    <IconButton
+                    <ButtonWithIcon
+                      type="button"
                       onClick={() => setIsOpen(!isOpen)}
                       label="お問い合わせ"
-                      svgIcon={<MailIcon />}
+                      icon={<MailIcon />}
                     />
                   </div>
                   <div className="mt-12 absolute w-full">
@@ -70,12 +71,13 @@ export const OrgProfile: FC<Org> = (props) => {
                   <PopOnIcon icon={<IconsCaution />}>
                     <FeedbackCaution>ログインが必要です</FeedbackCaution>
                   </PopOnIcon>
-                  <IconButton
+                  <ButtonWithIcon
                     onClick={() => setIsOpen(!isOpen)}
+                    type="button"
                     label="メッセージを送る"
                     disabled
-                    svgIcon={<MailIcon />}
-                  ></IconButton>
+                    icon={<MailIcon />}
+                  ></ButtonWithIcon>
                 </div>
               )}
             </ProfileHeader>

@@ -4,13 +4,13 @@ import {
   PopOnIcon,
   FeedbackCaution,
   IconsCaution,
-  IconButton,
   GridTemplate,
   GridItem,
   GridItemWithPic,
   SmallText,
   ImageHero,
   IconsMail,
+  ButtonWithIcon,
 } from '@next/ui';
 import { SendMessage } from '@next/container';
 
@@ -56,10 +56,11 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
                       {data?.getUserByCookie.user ? (
                         <>
                           <div className="">
-                            <IconButton
+                            <ButtonWithIcon
+                              type="button"
                               onClick={() => setIsOpen(!isOpen)}
                               label="お問い合わせ"
-                              svgIcon={<IconsMail />}
+                              icon={<IconsMail />}
                             />
                           </div>
                           <div className="mt-12 absolute w-full">
@@ -81,12 +82,13 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
                           <PopOnIcon icon={<IconsCaution />}>
                             <FeedbackCaution>ログインが必要です</FeedbackCaution>
                           </PopOnIcon>
-                          <IconButton
+                          <ButtonWithIcon
+                            type="button"
                             onClick={() => setIsOpen(!isOpen)}
                             label="メッセージを送る"
                             disabled
-                            svgIcon={<IconsMail />}
-                          ></IconButton>
+                            icon={<IconsMail />}
+                          ></ButtonWithIcon>
                         </div>
                       )}
                     </div>

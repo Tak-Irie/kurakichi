@@ -11,7 +11,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { tailwindJoin } from '@kurakichi/node-util';
-import { ProfileHeader, IconsCheckCircle, IconButton } from '@next/ui';
+import { ProfileHeader, IconsCheckCircle, ButtonWithIcon } from '@next/ui';
 
 type UserSettingProps = {
   avatar: string;
@@ -60,7 +60,7 @@ export const UserSetting: FC<UserSettingProps> = ({ avatar, image, userName }) =
         >
           <div className="bg-gray-100">
             <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={userName}>
-              <IconButton label="設定を変更する" svgIcon={<IconsCheckCircle />} />
+              <ButtonWithIcon label="設定を変更する" type="button" icon={<IconsCheckCircle />} />
             </ProfileHeader>
 
             <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">

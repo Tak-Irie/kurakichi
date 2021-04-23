@@ -26,11 +26,14 @@ export class GetMessagesByReceiverIdUseCase
   }
   public async execute(arg: GetMessagesByReceiverIdArg): Promise<GetMessagesByReceiverIdResponse> {
     try {
+      // console.log('getMessagesByReceiverIdArg:', arg);
       const idOrError = UniqueEntityId.reconstruct(arg.receiverId);
-      if (idOrError) return left(new InvalidInputValueError(idOrError.getErrorValue()));
+      if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));
+      // console.log('idOrErr:', idOrError);
 
       const dbResultOrError = await this.MessageRepo.getMessagesByReceiverId(idOrError.getValue());
       if (dbResultOrError == false) return right(Result.success<DTOMessage[]>([]));
+      // console.log('dbResult:', dbResultOrError);
 
       const dtoMessages = createDTOMessagesFromDomain(dbResultOrError);
 

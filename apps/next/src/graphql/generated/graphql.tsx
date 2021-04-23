@@ -128,6 +128,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationUpdateUserArgs = {
+  userName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
@@ -559,6 +560,7 @@ export type SendMessageMutation = (
 );
 
 export type UpdateUserMutationVariables = Exact<{
+  userName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
@@ -1260,8 +1262,9 @@ export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMuta
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($email: String, $description: String, $avatar: String, $image: String) {
+    mutation UpdateUser($userName: String, $email: String, $description: String, $avatar: String, $image: String) {
   updateUser(
+    userName: $userName
     email: $email
     description: $description
     avatar: $avatar
@@ -1292,6 +1295,7 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  * @example
  * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
  *   variables: {
+ *      userName: // value for 'userName'
  *      email: // value for 'email'
  *      description: // value for 'description'
  *      avatar: // value for 'avatar'

@@ -1,15 +1,12 @@
-type UploadImageArg = {
-  type: 'avatar' | 'image';
-  data: File;
-};
+import { UploadFiles } from './ownTypes';
 
-export const uploadImage = async (arg: UploadImageArg): Promise<Response> => {
-  const { data, type } = arg;
+export const uploadImage = async (arg: UploadFiles): Promise<Response> => {
   const API_URL =
-    process.env.NEXT_PUBLIC_HTTP + `/upload/${type}` || `http://localhost:4000/upload/${type}`;
+    process.env.NEXT_PUBLIC_HTTP + `/upload/profile` || `http://localhost:4000/upload/profile`;
 
   const formData = new FormData();
-  formData.append(type, data);
+  formData.append('avatar', arg.avatar[0]);
+  formData.append('image', arg.image[0]);
 
   const res = await fetch(API_URL, {
     method: 'POST',

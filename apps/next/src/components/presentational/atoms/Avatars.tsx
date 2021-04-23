@@ -46,12 +46,10 @@ export const AvatarBig: FC<AvatarsProps> = ({
   notification = false,
 }) => {
   return (
-    <div className="flex">
-      <img
-        className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
-        src={src === 'UNKNOWN' ? '/logo_temp.png' : src}
-        alt={alt}
-      />
-    </div>
+    <img
+      className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
+      src={src === 'UNKNOWN' ? '/logo_temp.png' : src}
+      alt={alt}
+    />
   );
 };

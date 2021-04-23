@@ -64,6 +64,8 @@ export const userQuery = extendType({
         const domainOrgOrErr = await useGetOrgByMemberIdUseCase.execute({ memberId: idOrErr });
         if (domainOrgOrErr.isLeft()) return returnErrorToGQL(domainOrgOrErr);
 
+        // console.log('org[]:', domainOrgOrErr);
+
         const domainMessageOrErr = await useGetMessagesByReceiverIdUseCase.execute({
           receiverId: idOrErr,
         });
@@ -72,7 +74,7 @@ export const userQuery = extendType({
         const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
         const gqlOrgs = dtoOrgsToGql(domainOrgOrErr.value.getValue());
         const gqlMessages = dtoMessagesToGql(domainMessageOrErr.value.getValue());
-        // console.log('domainUser:', gqlField);
+        // console.log('domainUser:', { gqlUser, gqlOrgs, gqlMessages });
         return {
           user: { ...gqlUser, belongOrgs: gqlOrgs, messages: gqlMessages },
         };
@@ -184,6 +186,7 @@ export const userMutation = extendType({
     t.field('updateUser', {
       type: 'UserPayload',
       args: {
+        userName: stringArg(),
         email: stringArg(),
         description: stringArg(),
         avatar: stringArg(),
@@ -193,9 +196,10 @@ export const userMutation = extendType({
         const idOrErr = getUserIdByCookie(ctx);
         if (typeof idOrErr === 'object') return idOrErr;
 
-        const { email, description, avatar, image } = args;
+        const { email, description, avatar, image, userName } = args;
         const useCaseResult = await useUpdateUserUseCase.execute({
           userId: idOrErr,
+          userName,
           avatar,
           description,
           email,

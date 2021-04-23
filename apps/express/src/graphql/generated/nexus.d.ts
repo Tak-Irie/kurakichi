@@ -418,6 +418,7 @@ export interface NexusGenArgTypes {
       description?: string | null; // String
       email?: string | null; // String
       image?: string | null; // String
+      userName?: string | null; // String
     }
     userRegister: { // args
       email: string; // String!

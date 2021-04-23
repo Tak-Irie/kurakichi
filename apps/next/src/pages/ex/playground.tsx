@@ -18,7 +18,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import { ChevronLeftIcon } from '@heroicons/react/solid';
-import { IconButton, IconsCheckCircle, ProfileHeader } from '@next/ui';
+import { ButtonWithIcon, IconsCheckCircle, ProfileHeader } from '@next/ui';
 
 const PlayGround: NextPage = () => {
   return (
