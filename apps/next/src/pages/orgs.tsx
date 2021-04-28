@@ -36,14 +36,19 @@ const Orgs: NextPage = () => {
           <div className="m-3" key={org.id}>
             <ul>
               <SmallCard title={org.orgName} content={org.location}>
-                <ButtonBig type="button">
-                  <Link href="/org/[id]" as={`/org/${org.id}`}>
-                    <a href="/org/[id]">組織詳細</a>
-                  </Link>
-                </ButtonBig>
-                <ButtonBig type="button" onClick={(e) => handleCardClick(org.id, e)}>
-                  登録申請
-                </ButtonBig>
+                <ButtonBig
+                  type="button"
+                  label={
+                    <Link href="/org/[id]" as={`/org/${org.id}`}>
+                      <a href="/org/[id]">組織詳細</a>
+                    </Link>
+                  }
+                />
+                <ButtonBig
+                  type="button"
+                  onClick={(e) => handleCardClick(org.id, e)}
+                  label="登録申請"
+                />
               </SmallCard>
             </ul>
           </div>

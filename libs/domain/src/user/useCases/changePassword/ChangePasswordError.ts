@@ -6,8 +6,8 @@ export class InvalidPasswordError extends Result<IUseCaseError> {
   }
 }
 
-export class InvalidNewPasswordError extends Result<IUseCaseError> {
+export class SSOUserError extends Result<IUseCaseError> {
   constructor() {
-    super(false, '入力された新しいパスワードが不正な値です。');
+    super(false, `ソーシャルログインを利用されています。くらきち固有のパスワードは不要です。`);
   }
 }

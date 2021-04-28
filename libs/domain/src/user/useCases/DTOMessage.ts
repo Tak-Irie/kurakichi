@@ -6,16 +6,18 @@ export type DTOMessage = {
   status: 'DRAFT' | 'READ' | 'UNREAD';
   sender: string;
   receiver: string;
+  sentAt: string;
 };
 
 export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
-  const { id, content, receiver, sender, status } = message.getProps();
+  const { id, content, receiver, sender, status, sentAt } = message.getProps();
   return {
     id: id.getId(),
     content: content.getText(),
     status: status.getValue(),
     receiver: receiver.getId(),
     sender: sender.getId(),
+    sentAt: sentAt.getJpDate(),
   };
 };
 export const createDTOMessagesFromDomain = (messages: Message[]): DTOMessage[] => {

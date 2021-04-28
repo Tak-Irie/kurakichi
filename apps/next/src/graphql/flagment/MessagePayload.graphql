@@ -2,10 +2,11 @@ fragment MessagePayload on Message {
   id
   content
   messageStatus
+  sentAt
   receiver {
     id
   }
   sender {
-    id
+    ...UserPayload
   }
 }

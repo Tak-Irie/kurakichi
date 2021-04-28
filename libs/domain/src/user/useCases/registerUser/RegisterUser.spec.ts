@@ -52,59 +52,18 @@ describe('ユーザー登録テスト', () => {
     done();
   });
   test('メールアドレスの重複により登録失敗', async (done) => {
-    const invalidNameMock = {
+    const invalidEmailMock = {
       userName: 'validName',
-      email: 'dupulicate@test.com',
+      email: 'dupulicate@example.com',
       password: 'validPassword',
     };
-    const result = await registerUserUseCase.execute(invalidNameMock);
+    const result = await registerUserUseCase.execute(invalidEmailMock);
 
+    console.log(':', result.isLeft());
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe(
-      'こちらのEmail"dupulicate@test.com"は既に登録されています',
+      'こちらのEmail"dupulicate@example.com"は既に登録されています',
     );
     done();
   });
 });
-
-// describe('ユーザー検索テスト', () => {
-//   test('検索成功', async (done) => {
-//     const getUserByIdUseCase = new GetUserByIdUseCase(repo);
-//     const result = await getUserByIdUseCase.execute('1');
-
-//     expect(result.isRight()).toBeTruthy();
-//     expect(result.value.getValue()).toBe(dummyValidUser);
-//     done();
-//   });
-
-//   test('検索失敗', async (done) => {
-//     const getUserByIdUseCase = new GetUserByIdUseCase(repo);
-//     const result = await getUserByIdUseCase.execute('999');
-
-//     expect(result.isLeft()).toBeTruthy();
-//     expect(result.value.getErrorValue()).toBe(
-//       'こちらのユーザーID"999"を持つユーザーは見つかりませんでした',
-//     );
-//     done();
-//   });
-// });
-
-// describe('ユーザーズ取得テスト', () => {
-//   test('検索成功', async (done) => {
-//     const getUsersUseCase = new GetUsersUseCase(repo);
-//     const result = await getUsersUseCase.execute();
-
-//     expect(result.isRight()).toBeTruthy();
-//     expect(result.value.getValue()).toStrictEqual({ users: [dummyValidUser, dummyValidUser] });
-//     done();
-//   });
-// });
-
-// describe('ダミー', () => {
-//   test('ダミー', (done) => {
-//     const one = 1;
-
-//     expect(one).toBeTruthy();
-//     done();
-//   });
-// });

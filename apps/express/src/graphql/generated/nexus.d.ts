@@ -44,6 +44,7 @@ export interface NexusGenObjects {
     id: string; // ID!
     inquiryStatus?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
     sender?: NexusGenRootTypes['User'] | null; // User
+    sentAt?: string | null; // String
   }
   InquiryPayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -56,6 +57,7 @@ export interface NexusGenObjects {
     messageStatus?: NexusGenEnums['MessageStatus'] | null; // MessageStatus
     receiver?: NexusGenRootTypes['User'] | null; // User
     sender?: NexusGenRootTypes['User'] | null; // User
+    sentAt?: string | null; // String
   }
   MessagePayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -146,6 +148,7 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     inquiryStatus: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
     sender: NexusGenRootTypes['User'] | null; // User
+    sentAt: string | null; // String
   }
   InquiryPayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -158,6 +161,7 @@ export interface NexusGenFieldTypes {
     messageStatus: NexusGenEnums['MessageStatus'] | null; // MessageStatus
     receiver: NexusGenRootTypes['User'] | null; // User
     sender: NexusGenRootTypes['User'] | null; // User
+    sentAt: string | null; // String
   }
   MessagePayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
@@ -173,11 +177,11 @@ export interface NexusGenFieldTypes {
     logout: NexusGenRootTypes['RegularPayload'] | null; // RegularPayload
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
     registerOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    registerUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     updateUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
-    userRegister: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
     avatar: string | null; // String
@@ -206,6 +210,7 @@ export interface NexusGenFieldTypes {
     getOrgsByMemberId: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getUserByCookie: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     getUserById: NexusGenRootTypes['UserPayload'] | null; // UserPayload
+    getUserByIdWithOrg: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     getUsers: NexusGenRootTypes['UserPayload']; // UserPayload!
     node: NexusGenRootTypes['Node'] | null; // Node
   }
@@ -267,6 +272,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     inquiryStatus: 'InquiryStatus'
     sender: 'User'
+    sentAt: 'String'
   }
   InquiryPayload: { // field return type name
     error: 'RegularError'
@@ -279,6 +285,7 @@ export interface NexusGenFieldTypeNames {
     messageStatus: 'MessageStatus'
     receiver: 'User'
     sender: 'User'
+    sentAt: 'String'
   }
   MessagePayload: { // field return type name
     error: 'RegularError'
@@ -294,11 +301,11 @@ export interface NexusGenFieldTypeNames {
     logout: 'RegularPayload'
     postDialog: 'DialogPayload'
     registerOrg: 'OrgPayload'
+    registerUser: 'UserPayload'
     requestJoinOrg: 'OrgPayload'
     sendInquiry: 'InquiryPayload'
     sendMessage: 'MessagePayload'
     updateUser: 'UserPayload'
-    userRegister: 'UserPayload'
   }
   Org: { // field return type name
     avatar: 'String'
@@ -327,6 +334,7 @@ export interface NexusGenFieldTypeNames {
     getOrgsByMemberId: 'OrgPayload'
     getUserByCookie: 'UserPayload'
     getUserById: 'UserPayload'
+    getUserByIdWithOrg: 'UserPayload'
     getUsers: 'UserPayload'
     node: 'Node'
   }
@@ -399,6 +407,11 @@ export interface NexusGenArgTypes {
       name: string; // String!
       phoneNumber: string; // String!
     }
+    registerUser: { // args
+      email: string; // String!
+      password: string; // String!
+      userName: string; // String!
+    }
     requestJoinOrg: { // args
       orgId: string; // String!
     }
@@ -409,7 +422,6 @@ export interface NexusGenArgTypes {
       textInput: string; // String!
     }
     sendMessage: { // args
-      messageStatus?: NexusGenEnums['MessageStatus'] | null; // MessageStatus
       receiverId: string; // String!
       textInput: string; // String!
     }
@@ -419,11 +431,6 @@ export interface NexusGenArgTypes {
       email?: string | null; // String
       image?: string | null; // String
       userName?: string | null; // String
-    }
-    userRegister: { // args
-      email: string; // String!
-      password: string; // String!
-      userName: string; // String!
     }
   }
   Query: {
@@ -437,6 +444,9 @@ export interface NexusGenArgTypes {
       orgId: string; // String!
     }
     getUserById: { // args
+      userId: string; // String!
+    }
+    getUserByIdWithOrg: { // args
       userId: string; // String!
     }
     node: { // args

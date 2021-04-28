@@ -31,21 +31,22 @@ export const ImageHeroChangeable: FC<ImageHeroDroppableProps> = ({ files, setIma
   }, [files.image]);
 
   return (
-    <div className="relative flex flex-col items-center group">
-      <div
-        className="absolute min-h-full min-w-full flex flex-col justify-center items-center"
-        {...getRootProps()}
-      >
-        <input {...getInputProps()} />
-        <label className="z-10 absolute w-1/2 mr-auto h-32 flex-1 flex flex-col justify-center items-center border rounded-3xl cursor-pointer">
-          <IconsDocumentAdd overwriteCSS={'w-16 h-16 text-gray-400'} />
-        </label>
+    <div className="grid grid-cols-12 group relative">
+      <div className="col-span-full">
+        <div className="absolute bg-black h-32 w-full lg:h-56 opacity-50 transition duration-500 group-hover:opacity-75" />
+        <ImageHero
+          src={typeof files.image === 'object' ? files.image[0].preview : files.image}
+          alt="イメージ画像"
+        />
       </div>
-      <div className="absolute bg-black h-32 w-full lg:h-56 opacity-50 transition duration-500 group-hover:opacity-75" />
-      <ImageHero
-        src={typeof files.image === 'object' ? files.image[0].preview : files.image}
-        alt="イメージ画像"
-      />
+      <div className="col-start-5 col-end-9 absolute w-full h-full">
+        <div className="w-full h-full flex py-14 justify-center" {...getRootProps()}>
+          <input {...getInputProps()} />
+          <label className="w-full h-full flex flex-col justify-center items-center border rounded-3xl cursor-pointer">
+            <IconsDocumentAdd overwriteCSS={'w-16 h-16 text-gray-400'} />
+          </label>
+        </div>
+      </div>
     </div>
   );
 };

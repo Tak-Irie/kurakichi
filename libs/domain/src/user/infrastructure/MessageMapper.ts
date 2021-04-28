@@ -3,13 +3,14 @@ import { Message } from '../domain';
 
 export class MessageMapper {
   public static ToDomain(storedMessage: StoredMessage): Message {
-    const { createdAt, id, receiverId, senderId, status, text } = storedMessage;
+    const { sentAt, id, receiverId, senderId, status, text } = storedMessage;
     const MessageResult = Message.restoreFromRepo({
       id,
       content: text,
       status: status,
       sender: senderId,
       receiver: receiverId,
+      sentAt: Number(sentAt),
     });
 
     return MessageResult;
@@ -18,9 +19,7 @@ export class MessageMapper {
     return storedMessage.map((message) => MessageMapper.ToDomain(message));
   }
 
-  public static async toStore(
-    domainMessage: Message,
-  ): Promise<Omit<StoredMessage, 'createdAt' | 'read_flag'>> {
+  public static async toStore(domainMessage: Message): Promise<Omit<StoredMessage, 'read_flag'>> {
     const props = domainMessage.getProps();
     return {
       id: props.id.getId(),
@@ -28,6 +27,7 @@ export class MessageMapper {
       status: props.status.getValue(),
       senderId: props.sender.getId(),
       receiverId: props.receiver.getId(),
+      sentAt: BigInt(props.sentAt.getTime()),
     };
   }
 }

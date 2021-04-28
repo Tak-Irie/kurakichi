@@ -5,3 +5,5 @@ export * from './PopOnIcon';
 export * from './MessageForm';
 export * from './DropDownMenu';
 export * from './DropDownMenuItem';
+export * from './NotificationSet';
+export * from './ButtonOrLoading';

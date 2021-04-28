@@ -1,8 +1,12 @@
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
-import { useGetMessagesUseCase, useSendMessageUseCase } from '@kurakichi/domain';
-import { dtoMessagesToGql, dtoMessageToGql } from '../DTOtoGql';
+import {
+  useGetMessagesUseCase,
+  useGetUsersByIdsUseCase,
+  useSendMessageUseCase,
+} from '@kurakichi/domain';
+import { dtoMessagesWithSenderToGql, dtoMessageToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const MessageQuery = extendType({
@@ -18,11 +22,17 @@ export const MessageQuery = extendType({
 
         const domainResponse = await useGetMessagesUseCase.execute({ userId: idOrErr });
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
-
         const domainMessages = domainResponse.value.getValue();
-        const gqlField = dtoMessagesToGql(domainMessages);
 
-        return { messages: gqlField };
+        const domainResponse2 = await useGetUsersByIdsUseCase.execute({
+          ids: domainMessages.map((message) => message.sender),
+        });
+        if (domainResponse2.isLeft()) return returnErrorToGQL(domainResponse2);
+        const domainUsers = domainResponse2.value.getValue();
+
+        const gqlMessages = dtoMessagesWithSenderToGql(domainMessages, domainUsers);
+
+        return { messages: gqlMessages };
       },
     });
   },
@@ -36,7 +46,6 @@ export const MessageMutation = extendType({
       args: {
         textInput: nonNull(stringArg()),
         receiverId: nonNull(stringArg()),
-        messageStatus: 'MessageStatus',
       },
       resolve: async (_, args, context) => {
         // console.log('arg:', args);
@@ -47,7 +56,6 @@ export const MessageMutation = extendType({
           senderId: idOrErr,
           receiverId: args.receiverId,
           textInput: args.textInput,
-          status: args.messageStatus,
         });
 
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);

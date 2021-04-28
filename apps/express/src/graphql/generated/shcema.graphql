@@ -24,6 +24,7 @@ type Inquiry implements Node {
   id: ID!
   inquiryStatus: InquiryStatus
   sender: User
+  sentAt: String
 }
 
 enum InquiryCategory {
@@ -56,6 +57,7 @@ type Message implements Node {
   messageStatus: MessageStatus
   receiver: User
   sender: User
+  sentAt: String
 }
 
 type MessagePayload {
@@ -79,11 +81,11 @@ type Mutation {
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
+  registerUser(email: String!, password: String!, userName: String!): UserPayload
   requestJoinOrg(orgId: String!): OrgPayload
   sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
-  sendMessage(messageStatus: MessageStatus, receiverId: String!, textInput: String!): MessagePayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
   updateUser(avatar: String, description: String, email: String, image: String, userName: String): UserPayload
-  userRegister(email: String!, password: String!, userName: String!): UserPayload
 }
 
 """Identifier"""
@@ -126,6 +128,7 @@ type Query {
   getOrgsByMemberId: OrgPayload
   getUserByCookie: UserPayload
   getUserById(userId: String!): UserPayload
+  getUserByIdWithOrg(userId: String!): UserPayload
   getUsers: UserPayload!
   node(id: ID): Node
 }

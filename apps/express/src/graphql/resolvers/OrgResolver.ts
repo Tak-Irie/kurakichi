@@ -6,7 +6,7 @@ import {
   useRequestJoinOrgUseCase,
   useGetUsersByOrgIdUseCase,
   useGetInquiriesUseCase,
-  useGetOrgByMemberIdUseCase,
+  useGetOrgsByMemberIdUseCase,
 } from '@kurakichi/domain';
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
@@ -139,7 +139,7 @@ export const orgQuery = extendType({
         const idOrErr = getUserIdByCookie(context);
         if (typeof idOrErr === 'object') return idOrErr;
 
-        const useCaseResult = await useGetOrgByMemberIdUseCase.execute({ memberId: idOrErr });
+        const useCaseResult = await useGetOrgsByMemberIdUseCase.execute({ memberId: idOrErr });
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
         const gqlOrgs = dtoOrgsToGql(useCaseResult.value.getValue());

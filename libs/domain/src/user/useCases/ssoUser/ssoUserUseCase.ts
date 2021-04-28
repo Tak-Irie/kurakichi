@@ -1,6 +1,7 @@
 import { User, UserEmail, UserName, IUserRepository } from '../../domain';
 import {
   Either,
+  InvalidInputValueError,
   IUseCase,
   left,
   Result,
@@ -20,7 +21,7 @@ type SsoUserArgs = {
 type UserTypes = UserEmail | UserName;
 
 type RegisterUserResponse = Either<
-  UnexpectedError | StoreConnectionError | Result<UserTypes>,
+  InvalidInputValueError | UnexpectedError | StoreConnectionError | Result<UserTypes>,
   Result<DTOUser>
 >;
 
@@ -29,26 +30,26 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
     this.userRepository = userRepository;
   }
 
-  public async execute(request: SsoUserArgs): Promise<RegisterUserResponse> {
+  public async execute(arg: SsoUserArgs): Promise<RegisterUserResponse> {
     try {
       const emailOrError = UserEmail.create({
-        email: request.email,
+        email: arg.email,
       });
 
       const usernameOrError = UserName.create({
-        userName: request.email.split('@')[0],
+        userName: arg.email.split('@')[0],
       });
 
       const verifiedResult = Result.verifyResults<UserTypes>([emailOrError, usernameOrError]);
 
       if (verifiedResult.isFailure) {
-        return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
+        return left(new InvalidInputValueError(verifiedResult.getErrorValue()));
       }
 
       const email = emailOrError.getValue();
       const userName = usernameOrError.getValue();
 
-      const existed = await this.userRepository.getUserByEmail(email);
+      const existed = await this.userRepository.getUserBySSOSub(arg.ssoSub);
 
       if (existed) {
         const dtoUser = createDTOUserFromDomain(existed);
@@ -59,9 +60,10 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
         id: UniqueEntityId.create(),
         email,
         userName,
-        ssoSub: request.ssoSub,
-        avatar: request.avatar,
+        ssoSub: arg.ssoSub,
+        avatar: arg.avatar,
       });
+      // console.log('ssoUser:', ssoUser);
 
       const dbResult = await this.userRepository.registerUser(ssoUser);
 

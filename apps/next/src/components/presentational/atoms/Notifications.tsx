@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 import { XIcon, CheckCircleIcon, ExclamationIcon, BanIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
 
@@ -18,6 +18,12 @@ export const Notification: FC<NotificationProps> = ({
   onClick,
 }) => {
   const [isShowing, setIsShowing] = useState(true);
+
+  useEffect(() => {
+    setInterval(() => {
+      setIsShowing(false);
+    }, 1000 * 60);
+  }, [isShowing]);
 
   return (
     <Transition

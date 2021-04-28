@@ -7,7 +7,7 @@ type FormProps = {
 
 const Form: FC<FormProps> = ({
   onSubmit,
-  overWriteCSS = 'flex flex-col space-y-1 items-center w-full mb-4 md:px-16 border-4 rounded-md border-gray-400 bg-gray-200',
+  overWriteCSS = 'flex flex-col space-y-1 items-center px-5 border-2 rounded-md border-gray-400 bg-gray-100',
   children,
 }) => {
   return (

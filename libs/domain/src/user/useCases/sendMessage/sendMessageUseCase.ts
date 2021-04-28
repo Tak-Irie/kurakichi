@@ -10,13 +10,12 @@ import {
   InvalidInputValueError,
 } from '../../../shared';
 import { IMessageRepo, Message, MessageContent } from '../../domain';
-import { MessageStatus, MessageStatusUnion } from '../../domain/MessageStatus';
+import { MessageStatus } from '../../domain/MessageStatus';
 import { createDTOMessageFromDomain, DTOMessage } from '../DTOMessage';
 import { ReceiverNotFoundError } from './sendMessageError';
 
 type SendMessageArg = {
   textInput: string;
-  status: MessageStatusUnion;
   senderId: string;
   receiverId: string;
 };
@@ -35,8 +34,7 @@ export class SendMessageUseCase implements IUseCase<SendMessageArg, Promise<Send
   public async execute(arg: SendMessageArg): Promise<SendMessageResponse> {
     try {
       const contentOrError = MessageContent.create({ text: arg.textInput });
-      const statusOrError = MessageStatus.create({ status: arg.status });
-      const verifiedResults = Result.verifyResults<MessageTypes>([contentOrError, statusOrError]);
+      const verifiedResults = Result.verifyResults<MessageTypes>([contentOrError]);
 
       if (verifiedResults.isFailure)
         return left(new InvalidInputValueError(verifiedResults.getErrorValue()));
@@ -44,7 +42,6 @@ export class SendMessageUseCase implements IUseCase<SendMessageArg, Promise<Send
       const messageOrError = Message.create({
         id: UniqueEntityId.create(),
         content: contentOrError.getValue(),
-        status: statusOrError.getValue(),
         sender: UniqueEntityId.reconstruct(arg.senderId).getValue(),
         receiver: UniqueEntityId.reconstruct(arg.receiverId).getValue(),
       });

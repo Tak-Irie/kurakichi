@@ -22,3 +22,4 @@ export * from './Select';
 export * from './Avatars';
 export * from './Images';
 export * from './Tabs';
+export * from './Tables';

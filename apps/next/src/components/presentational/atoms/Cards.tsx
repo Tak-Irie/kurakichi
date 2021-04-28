@@ -1,18 +1,14 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, VFC } from 'react';
+import Link from 'next/link';
 
 type CardProps = {
   key?: string;
   title?: string;
   content?: string;
-  link?: ReactElement;
+  linkUrl?: string;
   image?: string;
+  imageAlt?: string;
 };
-
-const sampleLink = (
-  <a href="/" aria-label="" className="inline-flex items-center font-semibold transition-colors">
-    Link, insert ReactElement
-  </a>
-);
 
 export const Card: FC<CardProps> = (props) => {
   const { image, title, content, children } = props;
@@ -67,5 +63,27 @@ export const SmallCard: FC<CardProps> = ({
         </div>
       </div>
     </li>
+  );
+};
+
+export const CardWithPick: VFC<CardProps> = ({ content, image, key, imageAlt, linkUrl, title }) => {
+  return (
+    <div
+      key={key}
+      className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500"
+    >
+      <div className="flex-shrink-0">
+        <img className="h-10 w-10 rounded-full" src={image} alt={imageAlt} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <Link href={linkUrl}>
+          <a href={linkUrl} className="focus:outline-none">
+            <span className="absolute inset-0" aria-hidden="true"></span>
+            <p className="text-sm font-medium text-gray-900">{title}</p>
+            <p className="text-sm text-gray-500 truncate">{content}</p>
+          </a>
+        </Link>
+      </div>
+    </div>
   );
 };

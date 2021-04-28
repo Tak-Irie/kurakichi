@@ -9,7 +9,7 @@ import {
   useForgotPasswordUseCase,
   useChangePasswordUseCase,
   useUpdateUserUseCase,
-  useGetOrgByMemberIdUseCase,
+  useGetOrgsByMemberIdUseCase,
   useGetMessagesByReceiverIdUseCase,
 } from '@kurakichi/domain';
 import { COOKIE_NAME } from '@kurakichi/node-util';
@@ -49,6 +49,26 @@ export const userQuery = extendType({
       },
     });
 
+    t.nullable.field('getUserByIdWithOrg', {
+      type: 'UserPayload',
+      args: {
+        userId: nonNull(stringArg()),
+      },
+      resolve: async (_, arg) => {
+        const useCaseResult = await useGetUserById.execute(arg.userId);
+        if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
+
+        const orgResult = await useGetOrgsByMemberIdUseCase.execute({ memberId: arg.userId });
+        if (orgResult.isLeft()) return returnErrorToGQL(orgResult);
+
+        const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
+        const gqlOrgs = dtoOrgsToGql(orgResult.value.getValue());
+        return {
+          user: { ...gqlUser, belongOrgs: gqlOrgs },
+        };
+      },
+    });
+
     t.nullable.field('getUserByCookie', {
       type: 'UserPayload',
       resolve: async (_, __, context) => {
@@ -61,19 +81,19 @@ export const userQuery = extendType({
         // console.log('me/useCaseResult:', useCaseResult);
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
-        const domainOrgOrErr = await useGetOrgByMemberIdUseCase.execute({ memberId: idOrErr });
+        const domainOrgOrErr = await useGetOrgsByMemberIdUseCase.execute({ memberId: idOrErr });
         if (domainOrgOrErr.isLeft()) return returnErrorToGQL(domainOrgOrErr);
 
         // console.log('org[]:', domainOrgOrErr);
 
-        const domainMessageOrErr = await useGetMessagesByReceiverIdUseCase.execute({
+        const dtoMessageOrErr = await useGetMessagesByReceiverIdUseCase.execute({
           receiverId: idOrErr,
         });
-        if (domainMessageOrErr.isLeft()) return returnErrorToGQL(domainMessageOrErr);
+        if (dtoMessageOrErr.isLeft()) return returnErrorToGQL(dtoMessageOrErr);
 
         const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
         const gqlOrgs = dtoOrgsToGql(domainOrgOrErr.value.getValue());
-        const gqlMessages = dtoMessagesToGql(domainMessageOrErr.value.getValue());
+        const gqlMessages = dtoMessagesToGql(dtoMessageOrErr.value.getValue());
         // console.log('domainUser:', { gqlUser, gqlOrgs, gqlMessages });
         return {
           user: { ...gqlUser, belongOrgs: gqlOrgs, messages: gqlMessages },
@@ -86,7 +106,7 @@ export const userQuery = extendType({
 export const userMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('userRegister', {
+    t.field('registerUser', {
       type: 'UserPayload',
       args: {
         email: nonNull(stringArg()),
@@ -94,13 +114,13 @@ export const userMutation = extendType({
         userName: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        // console.log('getConn');
+        console.log('getConn, args', args);
         const useCaseResult = await useRegisterUserUseCase.execute({ ...args });
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
         const dtoUser = useCaseResult.value.getValue();
-        // console.log('user:', user);
+        console.log('stoUser:', dtoUser);
         context.req.session.userId = dtoUser.id;
-        // console.log('session:', context.req.session.userId);
+        console.log('session:', context.req.session.userId);
         const gqlUser = dtoUserToGql(dtoUser);
 
         return { user: gqlUser };

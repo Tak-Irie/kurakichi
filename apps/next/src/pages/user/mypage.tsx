@@ -36,6 +36,7 @@ const MyPage: NextPage = () => {
       </div>
     );
   }
+  return <p>loading</p>;
 };
 
 export default MyPage;

@@ -6,6 +6,7 @@ export const Inquiry = objectType({
   definition(t) {
     t.implements('Node');
     t.string('content');
+    t.string('sentAt');
     t.field('category', { type: 'InquiryCategory' });
     t.field('inquiryStatus', { type: 'InquiryStatus' });
     t.field('sender', { type: 'User' });

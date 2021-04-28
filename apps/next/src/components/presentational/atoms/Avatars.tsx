@@ -29,8 +29,8 @@ export const AvatarSmall: FC<AvatarsProps> = ({
   return (
     <span className="inline-block relative">
       <img
-        className="inline-block h-8 w-8 rounded-full"
-        src={src === 'UNKNOWN' ? '/asian_man1.jpg' : null}
+        className="inline-block flex-shrink-0 h-8 w-8 rounded-full"
+        src={src === 'UNKNOWN' ? '/asian_man1.jpg' : src}
         alt={alt}
       />
       {notification ? (
@@ -47,7 +47,7 @@ export const AvatarBig: FC<AvatarsProps> = ({
 }) => {
   return (
     <img
-      className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
+      className="absolute h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
       src={src === 'UNKNOWN' ? '/logo_temp.png' : src}
       alt={alt}
     />

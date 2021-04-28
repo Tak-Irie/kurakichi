@@ -1,10 +1,18 @@
 import { FC } from 'react';
 import Link from 'next/link';
 
-import { MailIcon, CogIcon } from '@heroicons/react/outline';
-
 import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
-import { ProfileHeader, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
+import {
+  ProfileHeader,
+  TextSmall,
+  IconsMail,
+  IconsCog,
+  Text2xl,
+  TextLabeled,
+  TextLabel,
+  CardWithPick,
+  TableNewMessages,
+} from '@next/ui';
 import { ButtonWithIcon } from '../atoms';
 
 type UserProfileProps = {
@@ -28,98 +36,68 @@ export const UserMyPage: FC<UserProfileProps> = ({
   email,
   secureBases,
 }) => {
+  console.log('messages:', messages);
   return (
-    <div className="bg-white min-h-screen">
-      <div className="flex-1 relative z-0 flex overflow-hidden">
-        <main
-          className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last"
-          tabIndex={0}
-        >
-          <article className="bg-gray-100">
-            <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={userName}>
-              <ButtonWithIcon type="button" label="メッセージボックス" icon={<MailIcon />} />
-              <Link href="/user/setting">
-                <a href="/user/setting">
-                  <ButtonWithIcon type="button" label="アカウント設定" icon={<CogIcon />} />
-                </a>
-              </Link>
-            </ProfileHeader>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <GridTemplate>
-                <GridItem
-                  label="自己紹介"
-                  content={description === 'UNKNOWN' ? '自己紹介記入欄です' : description}
-                  colSpan="col-span-1"
-                />
-                <GridItem label="メールアドレス" content={email} colSpan="col-span-1" />
-              </GridTemplate>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">新着メッセージ</h2>
-              <GridTemplate>
-                {messages[0] ? (
-                  messages.map((message) => {
-                    return (
-                      <div key={message.id}>
-                        <GridItem label={message.content} content={message.content} />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <SmallText>新着メッセージはありません</SmallText>
-                )}
-              </GridTemplate>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4  sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">セキュアベース</h2>
-              <GridTemplate>
-                {secureBases[0] ? (
-                  secureBases.map((base) => {
-                    return (
-                      <div key={base.id}>
-                        <GridItemWithPic
-                          name={base.baseOwner.userName}
-                          description={base.id}
-                          url={`/securebase/${base.id}`}
-                          imgSrc=""
-                          imgAlt=""
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <SmallText>所属ベースはありません</SmallText>
-                )}
-              </GridTemplate>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">所属団体</h2>
-              <GridTemplate>
-                {orgs[0] ? (
-                  orgs.map((org, index) => {
-                    return (
-                      <div key={org.id}>
-                        <GridItemWithPic
-                          name={org.orgName}
-                          description={org.description}
-                          url={`/org/myorg?org=${index}`}
-                          imgAlt=""
-                          imgSrc=""
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <SmallText>所属団体はありません</SmallText>
-                )}
-              </GridTemplate>
-            </div>
-          </article>
-        </main>
+    <div className="grid grid-cols-12 pb-10">
+      <div className="col-span-full">
+        <ProfileHeader avatarSrc={avatar} imageSrc={image} colSpan="3">
+          <Link href="/user/setting">
+            <a href="/user/setting">
+              <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
+            </a>
+          </Link>
+          <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+        </ProfileHeader>
+      </div>
+      <div className="col-start-3">
+        <Text2xl content={userName} />
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <TextLabel content="プロフィール" />
+        <div className="space-y-1 mt-2">
+          <TextLabeled
+            label="自己紹介"
+            content={description === 'UNKNOWN' ? '自己紹介文が記入されていません' : description}
+          />
+          <TextLabeled label="メールアドレス" content={email} />
+        </div>
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <TextLabel content={'新着メッセージ'} />
+        {messages[0] ? (
+          <TableNewMessages messages={messages} />
+        ) : (
+          <TextSmall content="新着メッセージはありません" />
+        )}
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <TextLabel content={'所属ベース'} />
+        {secureBases[0] ? (
+          secureBases.map((base) => {
+            return <p>{base.baseOwner}</p>;
+          })
+        ) : (
+          <TextSmall content="所属ベースはありません" />
+        )}
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <TextLabel content={'所属団体'} />
+        {orgs[0] ? (
+          orgs.map((org) => {
+            return (
+              <CardWithPick
+                key={org.id}
+                image={org.avatar === 'UNKNOWN' ? '/logo_temp.png' : org.avatar}
+                title={org.orgName}
+                content={org.description}
+                imageAlt="団体アバター"
+                linkUrl={org.id}
+              />
+            );
+          })
+        ) : (
+          <TextSmall content="所属団体はありません" />
+        )}
       </div>
     </div>
   );

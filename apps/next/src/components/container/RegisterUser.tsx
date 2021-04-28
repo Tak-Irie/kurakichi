@@ -13,7 +13,7 @@ type UserRegisterInput = {
 };
 
 export const RegisterUser: FC = () => {
-  const [userRegister, { data, loading, error }] = useRegisterUserMutation();
+  const [registerUser, { data, loading, error }] = useRegisterUserMutation();
   const [meQuery] = useGetUserByCookieLazyQuery();
   const {
     register,
@@ -24,7 +24,7 @@ export const RegisterUser: FC = () => {
   const onSubmit = async (value: UserRegisterInput) => {
     console.log('registerValue:', value);
     try {
-      await userRegister({
+      await registerUser({
         variables: { ...value },
         // fetchPolicy: 'no-cache',
       });
@@ -62,7 +62,8 @@ export const RegisterUser: FC = () => {
       </Form>
       {loading && <p>loading!</p>}
       {error && <p>{error.message} error</p>}
-      {data?.userRegister.user && <p>{data.userRegister.user.id} data</p>}
+      {data?.registerUser.user && <p>{data.registerUser.user.id} data</p>}
+      {data?.registerUser.error && <p>{data.registerUser.error.message} err</p>}
     </>
   );
 };

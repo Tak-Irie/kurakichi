@@ -1,16 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUpdateUserMutation } from '../../graphql/generated/graphql';
-import {
-  Form,
-  Input,
-  ButtonBig,
-  InputTextarea,
-  NotificationAlert,
-  NotificationSuccess,
-  NotificationCaution,
-  LoadingStylishSpinner,
-} from '@next/ui';
+import { Form, Input, InputTextarea, NotificationSet, ButtonOrLoading } from '@next/ui';
 
 type UpdateUserProfileProps = {
   exName: string;
@@ -46,14 +37,14 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
 
   return (
     <>
-      {error ? <NotificationAlert label="エラー！" content={error.message} /> : null}
-      {data?.updateUser.error ? (
-        <NotificationCaution label="エラー！" content={data.updateUser.error.message} />
-      ) : null}
-      {data?.updateUser.user ? (
-        <NotificationSuccess label="変更成功！" content={data.updateUser.user.id} />
-      ) : null}
-      <Form overWriteCSS="mx-24 px-24 flex flex-col space-y-2" onSubmit={handleSubmit(onSubmit)}>
+      <NotificationSet
+        sysErr={error}
+        errData={data?.updateUser.error}
+        data={data?.updateUser.user}
+        errDataContent={data?.updateUser.error?.message}
+        dataContent={data?.updateUser.user?.id}
+      />
+      <Form overWriteCSS="flex flex-col space-y-2" onSubmit={handleSubmit(onSubmit)}>
         <Input<UpdateUserProfileInput>
           type="text"
           fieldLabel="ニックネーム"
@@ -79,13 +70,13 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
           register={register}
           placeholder={exDescription === 'UNKNOWN' ? '記入されていません' : exDescription}
         />
-        {loading ? (
-          <ButtonBig disabled type="submit">
-            <LoadingStylishSpinner />
-          </ButtonBig>
-        ) : (
-          <ButtonBig type="submit">設定を変更する</ButtonBig>
-        )}
+        <div className="flex justify-end">
+          <ButtonOrLoading
+            loading={loading}
+            buttonLabel="プロフィール設定を変更する"
+            buttonType="submit"
+          />
+        </div>
       </Form>
     </>
   );

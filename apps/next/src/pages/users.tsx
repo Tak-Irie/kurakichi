@@ -16,7 +16,7 @@ const Users: NextPage = () => {
       {loading && <p>loading!</p>}
       {error && <p>{error.message}</p>}
       {data &&
-        data.getUsers.users.map((user) => (
+        data?.getUsers.users.map((user) => (
           <div className="m-3" key={user.id}>
             <ul>
               <li>{user.id}</li>

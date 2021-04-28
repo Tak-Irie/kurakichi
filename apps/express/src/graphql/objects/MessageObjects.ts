@@ -6,6 +6,7 @@ export const Message = objectType({
   definition(t) {
     t.implements('Node');
     t.string('content');
+    t.string('sentAt');
     t.field('messageStatus', { type: 'MessageStatus' });
     t.field('sender', { type: 'User' });
     t.field('receiver', { type: 'User' });

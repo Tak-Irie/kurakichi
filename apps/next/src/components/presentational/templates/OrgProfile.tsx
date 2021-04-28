@@ -41,7 +41,7 @@ export const OrgProfile: FC<Org> = (props) => {
           tabIndex={0}
         >
           <article className="bg-gray-100 relative">
-            <ProfileHeader imageSrc={image} avatarSrc={avatar} profileName={orgName}>
+            <ProfileHeader imageSrc={image} avatarSrc={avatar}>
               {data?.getUserByCookie.user ? (
                 <>
                   <div className="">
@@ -68,9 +68,10 @@ export const OrgProfile: FC<Org> = (props) => {
                 </>
               ) : (
                 <div className="flex items-center space-x-3">
-                  <PopOnIcon icon={<IconsCaution />}>
-                    <FeedbackCaution>ログインが必要です</FeedbackCaution>
-                  </PopOnIcon>
+                  <PopOnIcon
+                    icon={<IconsCaution />}
+                    content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
+                  />
                   <ButtonWithIcon
                     onClick={() => setIsOpen(!isOpen)}
                     type="button"

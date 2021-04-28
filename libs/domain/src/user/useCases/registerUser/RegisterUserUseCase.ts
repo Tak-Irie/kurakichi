@@ -51,6 +51,7 @@ export class RegisterUserUseCase
         passwordOrError,
         usernameOrError,
       ]);
+      // console.log('verified:', verifiedResult);
 
       if (verifiedResult.isFailure) {
         return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
@@ -71,14 +72,16 @@ export class RegisterUserUseCase
         password,
         userName,
       });
+      // console.log('user:', user);
 
       const result = await this.userRepository.registerUser(user);
-
       if (result === undefined) {
         return left(new StoreConnectionError());
       }
+      // console.log('registeredResult:', result);
 
       const userDTO = createDTOUserFromDomain(result);
+      // console.log('userDTO:', userDTO);
 
       return right(Result.success<DTOUser>(userDTO));
     } catch (err) {

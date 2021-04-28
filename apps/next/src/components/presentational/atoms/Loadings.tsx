@@ -19,13 +19,13 @@ export const LoadingCard: FC = () => {
 
 export const LoadingStylishSpinner: FC = () => {
   return (
-    <svg className="flex animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900" />
+    <svg className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900" />
   );
 };
 
 // FIXME:create simple version
 export const LoadingSimpleSpinner: FC = () => {
   return (
-    <svg className="flex animate-spin rounded-full w-10 h-10 border-t-2 border-b-2 border-pink-600" />
+    <svg className="animate-spin rounded-full w-10 h-10 border-t-2 border-b-2 border-pink-600" />
   );
 };

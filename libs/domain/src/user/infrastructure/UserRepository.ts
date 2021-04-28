@@ -31,6 +31,29 @@ export class UserRepository implements IUserRepository {
     return UserMapper.ToDomain(result as StoredUserRelation);
   }
 
+  async getUsersByIds(userIds: UniqueEntityId[]): Promise<User[] | false> {
+    const rawIds = userIds.map((id) => id.getId());
+    const result = await this.prisma.user.findMany({
+      where: { id: { in: rawIds } },
+    });
+    if (result == undefined) return false;
+    return UserMapper.arrayToDomain(result);
+  }
+
+  async getUserBySSOSub(userSSOSub: string): Promise<User | false> {
+    const result = await this.prisma.user.findFirst({
+      where: { ssoSub: userSSOSub },
+      include: {
+        receivedMessages: { select: { id: true } },
+        belongOrgs: { select: { id: true } },
+        belongSecureBases: { select: { id: true } },
+      },
+    });
+    if (!result) return false;
+
+    return UserMapper.ToDomain(result);
+  }
+
   async getUsersByOrgId(orgId: UniqueEntityId): Promise<User[] | false> {
     const dbResult = await this.prisma.user.findMany({
       where: { belongOrgs: { some: { id: orgId.getId() } } },

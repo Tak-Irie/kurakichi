@@ -20,13 +20,15 @@ export class MessageRepo implements IMessageRepo {
 
   async sendMessage(message: Message): Promise<Message | false> {
     // console.log('repoMess:', message);
-    const { id, receiverId, status, senderId, text } = await MessageMapper.toStore(message);
+    const { id, receiverId, status, senderId, text, sentAt } = await MessageMapper.toStore(message);
+    // console.log('sentAt:', sentAt);
 
     const result = await this.prisma.message.create({
       data: {
         id,
         text,
         status,
+        sentAt,
         receiver: { connect: { id: receiverId } },
         sender: { connect: { id: senderId } },
       },

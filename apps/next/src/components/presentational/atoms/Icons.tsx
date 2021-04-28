@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
   CloudUploadIcon,
   DocumentAddIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -81,8 +82,15 @@ export const IconsCloudUpload: FC<Omit<IconsProps, 'icon'>> = ({
 }) => {
   return <Icons overwriteCSS={overwriteCSS} icon={<CloudUploadIcon />} />;
 };
+
 export const IconsDocumentAdd: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
 }) => {
   return <Icons overwriteCSS={overwriteCSS} icon={<DocumentAddIcon />} />;
+};
+
+export const IconsQuestion: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<QuestionMarkCircleIcon />} />;
 };

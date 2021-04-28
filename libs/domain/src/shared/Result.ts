@@ -10,14 +10,10 @@ export class Result<T> {
 
   public constructor(isSuccess: boolean, error?: string, value?: T) {
     if (isSuccess && error) {
-      throw new Error(
-        '不正なオペレーションが検出されました、あり得ない値の組合わせです',
-      );
+      throw new Error('不正なオペレーションが検出されました、あり得ない値の組合わせです');
     }
     if (!isSuccess && !error) {
-      throw new Error(
-        '不正なオペレーションが検出されました、あり得ない値の組合わせです',
-      );
+      throw new Error('不正なオペレーションが検出されました、あり得ない値の組合わせです');
     }
     if (error) this.error = error;
     if (value) this.value = value;

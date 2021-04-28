@@ -5,3 +5,4 @@ export * from './lib/base64';
 export * from './lib/ownTypes';
 export * from './lib/getIdFromArrayObject';
 export * from './lib/tailwindJoin';
+export * from './lib/yupSchema';

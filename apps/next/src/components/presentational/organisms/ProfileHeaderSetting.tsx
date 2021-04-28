@@ -26,21 +26,21 @@ export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({ avatarSrc, imageS
   }, [files]);
 
   return (
-    <div>
-      <ImageHeroChangeable files={files} setImage={setFiles} />
-      <div className="grid grid-cols-2 sm:mx-28">
-        <div>
-          <AvatarChangeable files={files} setAvatar={setFiles} />
-        </div>
-        <div className={`flex md:pr-24 justify-end items-end`}>
-          <ButtonWithIcon
-            disabled={disable}
-            onClick={handleClick}
-            type="button"
-            label="画像をアップロードする"
-            icon={<IconsCloudUpload />}
-          />
-        </div>
+    <div className="grid grid-cols-12">
+      <div className="col-span-full">
+        <ImageHeroChangeable files={files} setImage={setFiles} />
+      </div>
+      <div className="col-start-3 -mt-20">
+        <AvatarChangeable files={files} setAvatar={setFiles} />
+      </div>
+      <div className="col-span-2 col-end-11 mt-4">
+        <ButtonWithIcon
+          disabled={disable}
+          onClick={handleClick}
+          type="button"
+          label="画像をアップロードする"
+          icon={<IconsCloudUpload />}
+        />
       </div>
     </div>
   );

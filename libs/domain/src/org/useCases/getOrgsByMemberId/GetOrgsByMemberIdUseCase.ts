@@ -10,22 +10,22 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IOrgRepo } from '../../domain';
-import { NotFoundOrgError } from './getOrgByMemberIdError';
+import { NotFoundOrgError } from './getOrgsByMemberIdError';
 import { DTOOrg, createDTOOrgsFromDomain } from '../DTOOrg';
 
 type GetOrgByMemberIdArg = { memberId: string };
 
-type GetOrgByMemberIdResponse = Either<
+type GetOrgsByMemberIdResponse = Either<
   NotFoundOrgError | InvalidInputValueError | UnexpectedError | StoreConnectionError,
   Result<DTOOrg[]>
 >;
 
-export class GetOrgByMemberIdUseCase
-  implements IUseCase<GetOrgByMemberIdArg, Promise<GetOrgByMemberIdResponse>> {
+export class GetOrgsByMemberIdUseCase
+  implements IUseCase<GetOrgByMemberIdArg, Promise<GetOrgsByMemberIdResponse>> {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
-  public async execute(arg: GetOrgByMemberIdArg): Promise<GetOrgByMemberIdResponse> {
+  public async execute(arg: GetOrgByMemberIdArg): Promise<GetOrgsByMemberIdResponse> {
     try {
       const idOrError = UniqueEntityId.reconstruct(arg.memberId);
       if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));

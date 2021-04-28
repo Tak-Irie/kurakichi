@@ -1,30 +1,32 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { Transition } from '@headlessui/react';
 
-import { ImageHero, AvatarBig } from '@next/ui';
+import { ImageHero, AvatarBig, PopOnIcon, IconsCaution, IconsMail, ButtonWithIcon } from '@next/ui';
+
+import { SendMessage } from '@next/container';
 
 type ProfileHeaderProps = {
   imageSrc: string;
   avatarSrc: string;
-  profileName: string;
+  colSpan?: string;
 };
 
-export const ProfileHeader: FC<ProfileHeaderProps> = (props) => {
-  const { avatarSrc, children, imageSrc, profileName } = props;
+export const ProfileHeader: FC<ProfileHeaderProps> = ({
+  avatarSrc,
+  imageSrc,
+  children,
+  colSpan = '2',
+}) => {
   return (
-    <div>
-      <ImageHero src={imageSrc} alt="イメージ画像" />
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="-mt-12 sm:-mt-16 lg:grid lg:grid-cols-3 sm:flex sm:items-end sm:space-x-5">
-          <AvatarBig src={avatarSrc} alt="プロフィールアバター" />
-          <div className="lg:col-span-2 relative">
-            <div className="flex flex-row-reverse mt-6 sm:min-w-0 sm:flex sm:space-x-6 sm:pb-1">
-              {children}
-            </div>
-          </div>
-        </div>
-        <div className="sm:block mt-6 min-w-0 flex-1">
-          <h1 className="text-2xl font-bold text-gray-900 truncate">{profileName}</h1>
-        </div>
+    <div className="grid grid-cols-12">
+      <div className="col-span-full">
+        <ImageHero src={imageSrc} alt="イメージ画像" />
+      </div>
+      <div className="col-start-3 -mt-20">
+        <AvatarBig src={avatarSrc} alt="プロフィールアバター" />
+      </div>
+      <div className={`col-end-11 col-span-${colSpan} mt-4`}>
+        <div className="flex w-auto items-center space-x-1">{children}</div>
       </div>
     </div>
   );
