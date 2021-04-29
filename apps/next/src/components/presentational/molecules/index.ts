@@ -4,6 +4,7 @@ export * from './SideBar';
 export * from './PopOnIcon';
 export * from './MessageForm';
 export * from './DropDownMenu';
-export * from './DropDownMenuItem';
+export * from './DropDownMenuItems';
 export * from './NotificationSet';
 export * from './ButtonOrLoading';
+export * from './Tables';

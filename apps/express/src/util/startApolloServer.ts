@@ -3,8 +3,6 @@ import * as session from 'express-session';
 import * as http from 'http';
 import cors from 'cors';
 
-import { PrismaClient } from '@prisma/client';
-
 import { ApolloServer } from 'apollo-server-express';
 import * as connectRedis from 'connect-redis';
 
@@ -31,7 +29,6 @@ export const startApolloServer = async () => {
 
   await server.start();
 
-  const prisma = new PrismaClient({ log: ['query', 'info', `warn`, `error`] });
   const app = express();
 
   app.set('trust proxy', 1);

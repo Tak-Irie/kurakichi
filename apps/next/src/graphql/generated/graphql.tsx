@@ -34,6 +34,7 @@ export type Inquiry = Node & {
   /** GUID for a resource */
   id: Scalars['ID'];
   content?: Maybe<Scalars['String']>;
+  sentAt?: Maybe<Scalars['String']>;
   category?: Maybe<InquiryCategory>;
   inquiryStatus?: Maybe<InquiryStatus>;
   sender?: Maybe<User>;
@@ -51,6 +52,7 @@ export type InquiryPayload = {
   __typename?: 'InquiryPayload';
   inquiry?: Maybe<Inquiry>;
   inquiries?: Maybe<Array<Maybe<Inquiry>>>;
+  inquiryTree?: Maybe<InquiryTree>;
   error?: Maybe<RegularError>;
 };
 
@@ -60,6 +62,14 @@ export enum InquiryStatus {
   Working = 'WORKING',
   Draft = 'DRAFT'
 }
+
+/** Inquiries Node, it connect original and response inquiry */
+export type InquiryTree = Node & {
+  __typename?: 'InquiryTree';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  inquiriesWithTree?: Maybe<Array<Maybe<Inquiry>>>;
+};
 
 /** Message from User to User */
 export type Message = Node & {
@@ -77,6 +87,7 @@ export type MessagePayload = {
   __typename?: 'MessagePayload';
   message?: Maybe<Message>;
   messages?: Maybe<Array<Maybe<Message>>>;
+  messageTree?: Maybe<MessageTree>;
   error?: Maybe<RegularError>;
 };
 
@@ -85,6 +96,14 @@ export enum MessageStatus {
   Read = 'READ',
   Draft = 'DRAFT'
 }
+
+/** Messages Node, it connect original and response Message */
+export type MessageTree = Node & {
+  __typename?: 'MessageTree';
+  /** GUID for a resource */
+  id: Scalars['ID'];
+  messagesWithTree?: Maybe<Array<Maybe<Message>>>;
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -100,6 +119,7 @@ export type Mutation = {
   requestJoinOrg?: Maybe<OrgPayload>;
   acceptJoinOrg?: Maybe<OrgPayload>;
   sendMessage?: Maybe<MessagePayload>;
+  responseMessage?: Maybe<MessagePayload>;
   sendInquiry?: Maybe<InquiryPayload>;
 };
 
@@ -168,6 +188,12 @@ export type MutationSendMessageArgs = {
 };
 
 
+export type MutationResponseMessageArgs = {
+  text: Scalars['String'];
+  originalMessageId: Scalars['String'];
+};
+
+
 export type MutationSendInquiryArgs = {
   textInput: Scalars['String'];
   receiverId: Scalars['String'];
@@ -216,6 +242,7 @@ export type Query = {
   getOrgsByMemberId?: Maybe<OrgPayload>;
   /** get User's id, then show their own messages */
   getMessages?: Maybe<MessagePayload>;
+  getMessageTreeByMessageId?: Maybe<MessagePayload>;
   /** get inquiries of one Org */
   getInquiries?: Maybe<InquiryPayload>;
   getInquiry?: Maybe<InquiryPayload>;
@@ -239,6 +266,11 @@ export type QueryGetUserByIdWithOrgArgs = {
 
 export type QueryGetOrgArgs = {
   orgId: Scalars['String'];
+};
+
+
+export type QueryGetMessageTreeByMessageIdArgs = {
+  messageId: Scalars['String'];
 };
 
 
@@ -345,6 +377,15 @@ export type MessagePayloadFragment = (
   )> }
 );
 
+export type MessageTreePayloadFragment = (
+  { __typename?: 'MessageTree' }
+  & Pick<MessageTree, 'id'>
+  & { messagesWithTree?: Maybe<Array<Maybe<(
+    { __typename?: 'Message' }
+    & MessagePayloadFragment
+  )>>> }
+);
+
 export type OrgPayloadFragment = (
   { __typename?: 'Org' }
   & Pick<Org, 'id' | 'orgName' | 'location' | 'email' | 'phoneNumber' | 'image' | 'avatar' | 'description' | 'homePage'>
@@ -398,9 +439,6 @@ export type UserPayloadFragment = (
   )>>>, belongSecureBases?: Maybe<Array<Maybe<(
     { __typename?: 'SecureBase' }
     & Pick<SecureBase, 'id'>
-  )>>>, messages?: Maybe<Array<Maybe<(
-    { __typename?: 'Message' }
-    & Pick<Message, 'id'>
   )>>> }
 );
 
@@ -516,6 +554,26 @@ export type RequestJoinOrgMutation = (
     & { org?: Maybe<(
       { __typename?: 'Org' }
       & OrgPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type ResponseMessageMutationVariables = Exact<{
+  text: Scalars['String'];
+  originalMessageId: Scalars['String'];
+}>;
+
+
+export type ResponseMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { responseMessage?: Maybe<(
+    { __typename?: 'MessagePayload' }
+    & { message?: Maybe<(
+      { __typename?: 'Message' }
+      & MessagePayloadFragment
     )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
@@ -675,6 +733,25 @@ export type GetInquiryQuery = (
   )> }
 );
 
+export type GetMessageTreeQueryVariables = Exact<{
+  messageId: Scalars['String'];
+}>;
+
+
+export type GetMessageTreeQuery = (
+  { __typename?: 'Query' }
+  & { getMessageTreeByMessageId?: Maybe<(
+    { __typename?: 'MessagePayload' }
+    & { messageTree?: Maybe<(
+      { __typename?: 'MessageTree' }
+      & MessageTreePayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
 export type GetMessagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -804,10 +881,10 @@ export type GetUserByIdWithOrgQuery = (
   )> }
 );
 
-export type GetUserDetailByCookieQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserPrivateInfoByCookieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserDetailByCookieQuery = (
+export type GetUserPrivateInfoByCookieQuery = (
   { __typename?: 'Query' }
   & { getUserByCookie?: Maybe<(
     { __typename?: 'UserPayload' }
@@ -869,6 +946,45 @@ export const InquiryPayloadFragmentDoc = gql`
   }
 }
     `;
+export const UserPayloadFragmentDoc = gql`
+    fragment UserPayload on User {
+  id
+  email
+  userName
+  description
+  avatar
+  image
+  role
+  belongOrgs {
+    id
+  }
+  belongSecureBases {
+    id
+  }
+}
+    `;
+export const MessagePayloadFragmentDoc = gql`
+    fragment MessagePayload on Message {
+  id
+  content
+  messageStatus
+  sentAt
+  receiver {
+    id
+  }
+  sender {
+    ...UserPayload
+  }
+}
+    ${UserPayloadFragmentDoc}`;
+export const MessageTreePayloadFragmentDoc = gql`
+    fragment MessageTreePayload on MessageTree {
+  id
+  messagesWithTree {
+    ...MessagePayload
+  }
+}
+    ${MessagePayloadFragmentDoc}`;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on RegularError {
   message
@@ -905,40 +1021,6 @@ export const SecureBasePayloadFragmentDoc = gql`
   }
 }
     `;
-export const UserPayloadFragmentDoc = gql`
-    fragment UserPayload on User {
-  id
-  email
-  userName
-  description
-  avatar
-  image
-  role
-  belongOrgs {
-    id
-  }
-  belongSecureBases {
-    id
-  }
-  messages {
-    id
-  }
-}
-    `;
-export const MessagePayloadFragmentDoc = gql`
-    fragment MessagePayload on Message {
-  id
-  content
-  messageStatus
-  sentAt
-  receiver {
-    id
-  }
-  sender {
-    ...UserPayload
-  }
-}
-    ${UserPayloadFragmentDoc}`;
 export const UserDetailPayloadFragmentDoc = gql`
     fragment UserDetailPayload on User {
   id
@@ -1204,6 +1286,46 @@ export function useRequestJoinOrgMutation(baseOptions?: Apollo.MutationHookOptio
 export type RequestJoinOrgMutationHookResult = ReturnType<typeof useRequestJoinOrgMutation>;
 export type RequestJoinOrgMutationResult = Apollo.MutationResult<RequestJoinOrgMutation>;
 export type RequestJoinOrgMutationOptions = Apollo.BaseMutationOptions<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>;
+export const ResponseMessageDocument = gql`
+    mutation ResponseMessage($text: String!, $originalMessageId: String!) {
+  responseMessage(text: $text, originalMessageId: $originalMessageId) {
+    message {
+      ...MessagePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${MessagePayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type ResponseMessageMutationFn = Apollo.MutationFunction<ResponseMessageMutation, ResponseMessageMutationVariables>;
+
+/**
+ * __useResponseMessageMutation__
+ *
+ * To run a mutation, you first call `useResponseMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResponseMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [responseMessageMutation, { data, loading, error }] = useResponseMessageMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      originalMessageId: // value for 'originalMessageId'
+ *   },
+ * });
+ */
+export function useResponseMessageMutation(baseOptions?: Apollo.MutationHookOptions<ResponseMessageMutation, ResponseMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResponseMessageMutation, ResponseMessageMutationVariables>(ResponseMessageDocument, options);
+      }
+export type ResponseMessageMutationHookResult = ReturnType<typeof useResponseMessageMutation>;
+export type ResponseMessageMutationResult = Apollo.MutationResult<ResponseMessageMutation>;
+export type ResponseMessageMutationOptions = Apollo.BaseMutationOptions<ResponseMessageMutation, ResponseMessageMutationVariables>;
 export const SendInquiryDocument = gql`
     mutation SendInquiry($textInput: String!, $receiverId: String!, $category: InquiryCategory, $status: InquiryStatus) {
   sendInquiry(
@@ -1557,6 +1679,47 @@ export function useGetInquiryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetInquiryQueryHookResult = ReturnType<typeof useGetInquiryQuery>;
 export type GetInquiryLazyQueryHookResult = ReturnType<typeof useGetInquiryLazyQuery>;
 export type GetInquiryQueryResult = Apollo.QueryResult<GetInquiryQuery, GetInquiryQueryVariables>;
+export const GetMessageTreeDocument = gql`
+    query GetMessageTree($messageId: String!) {
+  getMessageTreeByMessageId(messageId: $messageId) {
+    messageTree {
+      ...MessageTreePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${MessageTreePayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetMessageTreeQuery__
+ *
+ * To run a query within a React component, call `useGetMessageTreeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessageTreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessageTreeQuery({
+ *   variables: {
+ *      messageId: // value for 'messageId'
+ *   },
+ * });
+ */
+export function useGetMessageTreeQuery(baseOptions: Apollo.QueryHookOptions<GetMessageTreeQuery, GetMessageTreeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessageTreeQuery, GetMessageTreeQueryVariables>(GetMessageTreeDocument, options);
+      }
+export function useGetMessageTreeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessageTreeQuery, GetMessageTreeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessageTreeQuery, GetMessageTreeQueryVariables>(GetMessageTreeDocument, options);
+        }
+export type GetMessageTreeQueryHookResult = ReturnType<typeof useGetMessageTreeQuery>;
+export type GetMessageTreeLazyQueryHookResult = ReturnType<typeof useGetMessageTreeLazyQuery>;
+export type GetMessageTreeQueryResult = Apollo.QueryResult<GetMessageTreeQuery, GetMessageTreeQueryVariables>;
 export const GetMessagesDocument = gql`
     query GetMessages {
   getMessages {
@@ -1855,8 +2018,8 @@ export function useGetUserByIdWithOrgLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetUserByIdWithOrgQueryHookResult = ReturnType<typeof useGetUserByIdWithOrgQuery>;
 export type GetUserByIdWithOrgLazyQueryHookResult = ReturnType<typeof useGetUserByIdWithOrgLazyQuery>;
 export type GetUserByIdWithOrgQueryResult = Apollo.QueryResult<GetUserByIdWithOrgQuery, GetUserByIdWithOrgQueryVariables>;
-export const GetUserDetailByCookieDocument = gql`
-    query GetUserDetailByCookie {
+export const GetUserPrivateInfoByCookieDocument = gql`
+    query GetUserPrivateInfoByCookie {
   getUserByCookie {
     user {
       ...UserDetailPayload
@@ -1870,31 +2033,31 @@ export const GetUserDetailByCookieDocument = gql`
 ${RegularErrorFragmentDoc}`;
 
 /**
- * __useGetUserDetailByCookieQuery__
+ * __useGetUserPrivateInfoByCookieQuery__
  *
- * To run a query within a React component, call `useGetUserDetailByCookieQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserDetailByCookieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserPrivateInfoByCookieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserPrivateInfoByCookieQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUserDetailByCookieQuery({
+ * const { data, loading, error } = useGetUserPrivateInfoByCookieQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetUserDetailByCookieQuery(baseOptions?: Apollo.QueryHookOptions<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>) {
+export function useGetUserPrivateInfoByCookieQuery(baseOptions?: Apollo.QueryHookOptions<GetUserPrivateInfoByCookieQuery, GetUserPrivateInfoByCookieQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>(GetUserDetailByCookieDocument, options);
+        return Apollo.useQuery<GetUserPrivateInfoByCookieQuery, GetUserPrivateInfoByCookieQueryVariables>(GetUserPrivateInfoByCookieDocument, options);
       }
-export function useGetUserDetailByCookieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>) {
+export function useGetUserPrivateInfoByCookieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserPrivateInfoByCookieQuery, GetUserPrivateInfoByCookieQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>(GetUserDetailByCookieDocument, options);
+          return Apollo.useLazyQuery<GetUserPrivateInfoByCookieQuery, GetUserPrivateInfoByCookieQueryVariables>(GetUserPrivateInfoByCookieDocument, options);
         }
-export type GetUserDetailByCookieQueryHookResult = ReturnType<typeof useGetUserDetailByCookieQuery>;
-export type GetUserDetailByCookieLazyQueryHookResult = ReturnType<typeof useGetUserDetailByCookieLazyQuery>;
-export type GetUserDetailByCookieQueryResult = Apollo.QueryResult<GetUserDetailByCookieQuery, GetUserDetailByCookieQueryVariables>;
+export type GetUserPrivateInfoByCookieQueryHookResult = ReturnType<typeof useGetUserPrivateInfoByCookieQuery>;
+export type GetUserPrivateInfoByCookieLazyQueryHookResult = ReturnType<typeof useGetUserPrivateInfoByCookieLazyQuery>;
+export type GetUserPrivateInfoByCookieQueryResult = Apollo.QueryResult<GetUserPrivateInfoByCookieQuery, GetUserPrivateInfoByCookieQueryVariables>;
 export const GetUsersDocument = gql`
     query GetUsers {
   getUsers {

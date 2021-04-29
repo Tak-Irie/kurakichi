@@ -68,7 +68,7 @@ export class UpdateUserUseCase implements IUseCase<UpdateUserArg, Promise<Update
         storedUser.updateImage(image);
       }
 
-      console.log('afterChange:', storedUser);
+      // console.log('afterChange:', storedUser);
       const dbResult = await this.UserRepo.updateUser(storedUser);
       if (dbResult == false) return left(new StoreConnectionError());
 

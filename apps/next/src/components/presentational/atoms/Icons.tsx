@@ -12,6 +12,8 @@ import {
   CloudUploadIcon,
   DocumentAddIcon,
   QuestionMarkCircleIcon,
+  LogoutIcon,
+  LoginIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -93,4 +95,14 @@ export const IconsQuestion: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
 }) => {
   return <Icons overwriteCSS={overwriteCSS} icon={<QuestionMarkCircleIcon />} />;
+};
+export const IconsLogout: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<LogoutIcon />} />;
+};
+export const IconsLogin: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<LoginIcon />} />;
 };

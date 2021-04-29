@@ -11,6 +11,7 @@ interface MessageProps {
   sender: UniqueEntityId;
   receiver: UniqueEntityId;
   sentAt: UnixTime;
+  treeId: UniqueEntityId;
 }
 
 export type MessagePrimitive = {
@@ -20,6 +21,7 @@ export type MessagePrimitive = {
   sender: string;
   receiver: string;
   sentAt: number;
+  treeId: string;
 };
 
 export class Message extends Entity<MessageProps> {
@@ -41,24 +43,47 @@ export class Message extends Entity<MessageProps> {
     return this.getProps().receiver.getId();
   }
 
-  public static create(props: Omit<MessageProps, 'status' | 'sentAt'>): Result<Message> {
+  public static create(
+    props: Omit<MessageProps, 'id' | 'status' | 'treeId' | 'sentAt'>,
+  ): Result<Message> {
     const message = new Message({
       ...props,
+      id: UniqueEntityId.create(),
       status: MessageStatus.create().getValue(),
       sentAt: UnixTime.create().getValue(),
+      treeId: UniqueEntityId.create(),
+    });
+    // Message.addDomainEvent(new _EntityCreated(Message));
+    return Result.success<Message>(message);
+  }
+
+  public static createResponse(origin: Message, response: MessageContent): Result<Message> {
+    const { receiver, sender, treeId } = origin.getProps();
+
+    const message = new Message({
+      id: UniqueEntityId.create(),
+      content: response,
+      receiver: sender,
+      sender: receiver,
+      status: MessageStatus.create().getValue(),
+      sentAt: UnixTime.create().getValue(),
+      treeId,
     });
     // Message.addDomainEvent(new _EntityCreated(Message));
     return Result.success<Message>(message);
   }
 
   public static restoreFromRepo(storedMessage: MessagePrimitive): Message {
+    const { content, id, treeId, receiver, sender, sentAt, status } = storedMessage;
+
     return new Message({
-      id: UniqueEntityId.restoreFromRepo(storedMessage.id),
-      content: MessageContent.restoreFromRepo(storedMessage.content),
-      status: MessageStatus.restoreFromRepo(storedMessage.status),
-      receiver: UniqueEntityId.restoreFromRepo(storedMessage.receiver),
-      sender: UniqueEntityId.restoreFromRepo(storedMessage.sender),
-      sentAt: UnixTime.restoreFromRepo(storedMessage.sentAt),
+      id: UniqueEntityId.restoreFromRepo(id),
+      content: MessageContent.restoreFromRepo(content),
+      status: MessageStatus.restoreFromRepo(status),
+      receiver: UniqueEntityId.restoreFromRepo(receiver),
+      sender: UniqueEntityId.restoreFromRepo(sender),
+      sentAt: UnixTime.restoreFromRepo(sentAt),
+      treeId: UniqueEntityId.restoreFromRepo(treeId),
     });
   }
 

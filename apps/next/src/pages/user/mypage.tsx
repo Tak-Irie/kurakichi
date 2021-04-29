@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import { UserMyPage } from '@next/ui';
-
-import { useGetUserDetailByCookieQuery } from '../../graphql/generated/graphql';
+import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
 
 const MyPage: NextPage = () => {
-  const { data, loading, error } = useGetUserDetailByCookieQuery();
+  // TODO:CQRS
+  const { data, loading, error } = useGetUserPrivateInfoByCookieQuery();
 
-  if (loading) return <p>loading</p>;
+  if (loading) return <p>Loading</p>;
   if (error) return <p>{error.message}</p>;
 
   if (data.getUserByCookie.user) {
@@ -36,7 +36,7 @@ const MyPage: NextPage = () => {
       </div>
     );
   }
-  return <p>loading</p>;
+  return <p>{data.getUserByCookie.error.message}</p>;
 };
 
 export default MyPage;

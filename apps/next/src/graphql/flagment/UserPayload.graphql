@@ -12,7 +12,4 @@ fragment UserPayload on User {
   belongSecureBases {
     id
   }
-  messages {
-    id
-  }
 }

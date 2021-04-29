@@ -13,11 +13,21 @@ export const Message = objectType({
   },
 });
 
+export const MessageTree = objectType({
+  name: 'MessageTree',
+  description: 'Messages Node, it connect original and response Message',
+  definition(t) {
+    t.implements('Node');
+    t.field('messagesWithTree', { type: list('Message') });
+  },
+});
+
 export const MessagePayload = objectType({
   name: 'MessagePayload',
   definition(t) {
     t.field('message', { type: 'Message' });
     t.field('messages', { type: list('Message') });
+    t.field('messageTree', { type: 'MessageTree' });
     t.field('error', { type: 'RegularError' });
   },
 });

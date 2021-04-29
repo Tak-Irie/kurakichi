@@ -7,10 +7,11 @@ export type DTOMessage = {
   sender: string;
   receiver: string;
   sentAt: string;
+  treeId: string;
 };
 
 export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
-  const { id, content, receiver, sender, status, sentAt } = message.getProps();
+  const { id, content, receiver, sender, status, sentAt, treeId } = message.getProps();
   return {
     id: id.getId(),
     content: content.getText(),
@@ -18,6 +19,7 @@ export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
     receiver: receiver.getId(),
     sender: sender.getId(),
     sentAt: sentAt.getJpDate(),
+    treeId: treeId.getId(),
   };
 };
 export const createDTOMessagesFromDomain = (messages: Message[]): DTOMessage[] => {

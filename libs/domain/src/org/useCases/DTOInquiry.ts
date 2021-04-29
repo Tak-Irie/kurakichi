@@ -7,10 +7,11 @@ export type DTOInquiry = {
   content: string;
   sender: string;
   receiver: string;
+  sentAt: string;
 };
 
 export const createDTOInquiryFromDomain = (inquiry: Inquiry): DTOInquiry => {
-  const { id, category, content, receiver, sender, status } = inquiry.getProps();
+  const { id, category, content, receiver, sender, status, sentAt } = inquiry.getProps();
   return {
     id: id.getId(),
     category: category.getValue(),
@@ -18,6 +19,7 @@ export const createDTOInquiryFromDomain = (inquiry: Inquiry): DTOInquiry => {
     receiver: receiver.getId(),
     sender: sender.getId(),
     status: status.getValue(),
+    sentAt: sentAt.getJpDate(),
   };
 };
 

@@ -94,7 +94,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
             return (
               <CardWithPick
                 key={org.id}
-                image={org.avatar}
+                image={org.avatar === 'UNKNOWN' ? '/logo_temp.png' : org.avatar}
                 title={org.orgName}
                 content={org.description}
                 imageAlt="団体アバター"

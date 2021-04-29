@@ -42,7 +42,7 @@ export class RegisterInquiryUseCase
   }
   public async execute(arg: InquiryArg): Promise<RegisterInquiryResponse> {
     try {
-      console.log('registerInquiryArg:', arg);
+      // console.log('registerInquiryArg:', arg);
       const { category, content, receiverId, senderId, status } = arg;
       const categoryOrError = InquiryCategory.create({ type: category });
       const contentOrError = InquiryContent.create({ text: content });
@@ -57,7 +57,6 @@ export class RegisterInquiryUseCase
         return left(Result.fail<InquiryTypes>(verifiedResult.getErrorValue()));
 
       const inquiryOrError = Inquiry.create({
-        id: UniqueEntityId.create(),
         category: categoryOrError.getValue(),
         status: statusOrError.getValue(),
         content: contentOrError.getValue(),

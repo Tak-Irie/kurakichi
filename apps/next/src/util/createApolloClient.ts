@@ -6,5 +6,17 @@ export const apolloClient = new ApolloClient({
   ssrMode: typeof window === 'undefined',
   link: splitApolloLink,
   credentials: 'include',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      User: {
+        fields: {
+          messages: {
+            merge(existing = [], incoming: any[]) {
+              return [...existing, ...incoming];
+            },
+          },
+        },
+      },
+    },
+  }),
 });

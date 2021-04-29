@@ -13,11 +13,21 @@ export const Inquiry = objectType({
   },
 });
 
+export const InquiryTree = objectType({
+  name: 'InquiryTree',
+  description: 'Inquiries Node, it connect original and response inquiry',
+  definition(t) {
+    t.implements('Node');
+    t.field('inquiriesWithTree', { type: list('Inquiry') });
+  },
+});
+
 export const InquiryPayload = objectType({
   name: 'InquiryPayload',
   definition(t) {
     t.field('inquiry', { type: 'Inquiry' });
     t.field('inquiries', { type: list('Inquiry') });
+    t.field('inquiryTree', { type: 'InquiryTree' });
     t.field('error', { type: 'RegularError' });
   },
 });

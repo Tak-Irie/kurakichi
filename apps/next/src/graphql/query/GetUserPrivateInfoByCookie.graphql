@@ -1,4 +1,4 @@
-query GetUserDetailByCookie {
+query GetUserPrivateInfoByCookie {
   getUserByCookie {
     user {
       ...UserDetailPayload

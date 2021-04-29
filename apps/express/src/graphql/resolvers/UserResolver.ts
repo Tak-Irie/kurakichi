@@ -11,10 +11,16 @@ import {
   useUpdateUserUseCase,
   useGetOrgsByMemberIdUseCase,
   useGetMessagesByReceiverIdUseCase,
+  useGetUsersByIdsUseCase,
 } from '@kurakichi/domain';
 import { COOKIE_NAME } from '@kurakichi/node-util';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
-import { dtoMessagesToGql, dtoOrgsToGql, dtoUserToGql } from '../DTOtoGql';
+import {
+  dtoMessagesToGql,
+  dtoMessagesWithSenderToGql,
+  dtoOrgsToGql,
+  dtoUserToGql,
+} from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const userQuery = extendType({
@@ -93,10 +99,19 @@ export const userQuery = extendType({
 
         const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
         const gqlOrgs = dtoOrgsToGql(domainOrgOrErr.value.getValue());
-        const gqlMessages = dtoMessagesToGql(dtoMessageOrErr.value.getValue());
+
+        // TODO:temporary impl
+        // const gqlMessages = dtoMessagesToGql(dtoMessageOrErr.value.getValue());
+        const tempMess = dtoMessageOrErr.value.getValue();
+        const temp = await useGetUsersByIdsUseCase.execute({
+          ids: tempMess.map((message) => message.sender),
+        });
+        if (temp.isLeft()) return returnErrorToGQL(temp);
+        const _gqlMessages = dtoMessagesWithSenderToGql(tempMess, temp.value.getValue());
+
         // console.log('domainUser:', { gqlUser, gqlOrgs, gqlMessages });
         return {
-          user: { ...gqlUser, belongOrgs: gqlOrgs, messages: gqlMessages },
+          user: { ...gqlUser, belongOrgs: gqlOrgs, messages: _gqlMessages },
         };
       },
     });
@@ -114,13 +129,13 @@ export const userMutation = extendType({
         userName: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        console.log('getConn, args', args);
+        // console.log('getConn, args', args);
         const useCaseResult = await useRegisterUserUseCase.execute({ ...args });
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
         const dtoUser = useCaseResult.value.getValue();
-        console.log('stoUser:', dtoUser);
+        // console.log('stoUser:', dtoUser);
         context.req.session.userId = dtoUser.id;
-        console.log('session:', context.req.session.userId);
+        // console.log('session:', context.req.session.userId);
         const gqlUser = dtoUserToGql(dtoUser);
 
         return { user: gqlUser };

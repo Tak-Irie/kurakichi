@@ -33,8 +33,12 @@ export const AvatarChangeable: FC<AvatarChangeableProps> = ({ setAvatar, files }
 
   return (
     <div className="relative flex items-center justify-center h-32 w-32 ">
+      <AvatarBig
+        src={typeof files.avatar === 'object' ? files.avatar[0].preview : files.avatar}
+        alt="プロフィールアバター"
+      />
       <div
-        className="absolute bg-black rounded-full ring-4 ring-white opacity-50 transition duration-500 group hover:opacity-75 min-h-full min-w-full flex flex-col justify-center items-center"
+        className="bg-black rounded-full ring-4 ring-white opacity-50 transition duration-500 group hover:opacity-75 min-h-full min-w-full flex flex-col justify-center items-center"
         {...getRootProps()}
       >
         <input {...getInputProps()} />
@@ -42,10 +46,6 @@ export const AvatarChangeable: FC<AvatarChangeableProps> = ({ setAvatar, files }
           <IconsDocumentAdd overwriteCSS={'w-8 h-8 text-gray-400'} />
         </label>
       </div>
-      <AvatarBig
-        src={typeof files.avatar === 'object' ? files.avatar[0].preview : files.avatar}
-        alt="プロフィールアバター"
-      />
     </div>
   );
 };

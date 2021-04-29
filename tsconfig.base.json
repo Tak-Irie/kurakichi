@@ -30,6 +30,9 @@
       ],
       "@next/container": [
         "apps/next/src/components/container"
+      ],
+      "@next/graphql": [
+        "apps/next/src/graphql/generated/graphql.tsx"
       ]
     }
   },

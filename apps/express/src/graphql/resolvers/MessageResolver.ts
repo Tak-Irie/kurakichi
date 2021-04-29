@@ -3,7 +3,9 @@ import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import {
   useGetMessagesUseCase,
+  useGetMessageTreeUseCase,
   useGetUsersByIdsUseCase,
+  useResponseMessageUseCase,
   useSendMessageUseCase,
 } from '@kurakichi/domain';
 import { dtoMessagesWithSenderToGql, dtoMessageToGql } from '../DTOtoGql';
@@ -35,6 +37,34 @@ export const MessageQuery = extendType({
         return { messages: gqlMessages };
       },
     });
+    t.field('getMessageTreeByMessageId', {
+      type: 'MessagePayload',
+      args: {
+        messageId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        // console.log('queryConfirm:');
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const domainResponse = await useGetMessageTreeUseCase.execute({
+          messageId: args.messageId,
+          requestUserId: idOrErr,
+        });
+        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
+
+        const domainMessages = domainResponse.value.getValue();
+        const domainResponse2 = await useGetUsersByIdsUseCase.execute({
+          ids: domainMessages.map((message) => message.sender),
+        });
+        if (domainResponse2.isLeft()) return returnErrorToGQL(domainResponse2);
+        const domainUsers = domainResponse2.value.getValue();
+
+        const gqlMessages = dtoMessagesWithSenderToGql(domainMessages, domainUsers);
+
+        return { messageTree: { id: domainMessages[0].treeId, messagesWithTree: gqlMessages } };
+      },
+    });
   },
 });
 
@@ -56,6 +86,24 @@ export const MessageMutation = extendType({
           senderId: idOrErr,
           receiverId: args.receiverId,
           textInput: args.textInput,
+        });
+
+        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
+
+        const gqlField = dtoMessageToGql(domainResponse.value.getValue());
+        return { message: gqlField };
+      },
+    });
+    t.field('responseMessage', {
+      type: 'MessagePayload',
+      args: {
+        text: nonNull(stringArg()),
+        originalMessageId: nonNull(stringArg()),
+      },
+      resolve: async (_, args) => {
+        const domainResponse = await useResponseMessageUseCase.execute({
+          originalMessageId: args.originalMessageId,
+          text: args.text,
         });
 
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);

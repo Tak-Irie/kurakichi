@@ -3,7 +3,7 @@ import { idMapper } from '../../util/idMapper';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
 export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): NexusGenFieldTypes['Inquiry'] => {
-  const { category, content, id, receiver, sender, status } = dtoInquiry;
+  const { category, content, id, receiver, sender, status, sentAt } = dtoInquiry;
 
   return {
     id,
@@ -11,6 +11,7 @@ export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): NexusGenFieldTypes['Inq
     category,
     inquiryStatus: status,
     sender: idMapper(sender),
+    sentAt,
   };
 };
 

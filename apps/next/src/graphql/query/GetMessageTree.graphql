@@ -1,0 +1,10 @@
+query GetMessageTree($messageId: String!) {
+  getMessageTreeByMessageId(messageId: $messageId) {
+    messageTree {
+      ...MessageTreePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

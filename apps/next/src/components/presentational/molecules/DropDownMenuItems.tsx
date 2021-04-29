@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { Menu } from '@headlessui/react';
 
 type DropDownMenuItemProps = {
-  linkUrl: string;
   icon: ReactElement;
   label: string;
+  linkUrl?: string;
+  onClick?: () => void | Promise<void>;
   // isOpen?: boolean;
-  // onClick?: () => void;
 };
 
 export const DropDownMenuItem: FC<DropDownMenuItemProps> = ({ linkUrl, icon, label }) => {
@@ -24,6 +24,21 @@ export const DropDownMenuItem: FC<DropDownMenuItemProps> = ({ linkUrl, icon, lab
           <span>{label}</span>
         </a>
       </Link>
+    </Menu.Item>
+  );
+};
+
+export const DropDownMenuItemButton: FC<DropDownMenuItemProps> = ({ onClick, icon, label }) => {
+  return (
+    <Menu.Item>
+      <button
+        className="group flex items-center px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+        role="menuitem"
+        onClick={onClick}
+      >
+        <span className="mr-3 mb-1 h-5 w-5 text-gray-500 group-hover:text-gray-700">{icon}</span>
+        <span>{label}</span>
+      </button>
     </Menu.Item>
   );
 };

@@ -40,21 +40,22 @@ export class SendMessageUseCase implements IUseCase<SendMessageArg, Promise<Send
         return left(new InvalidInputValueError(verifiedResults.getErrorValue()));
 
       const messageOrError = Message.create({
-        id: UniqueEntityId.create(),
         content: contentOrError.getValue(),
         sender: UniqueEntityId.reconstruct(arg.senderId).getValue(),
         receiver: UniqueEntityId.reconstruct(arg.receiverId).getValue(),
       });
       // TODO:need create error?
       if (messageOrError.isFailure) return left(new UnexpectedError());
+      // console.log('messOrErr:', messageOrError);
 
-      const domainMessage = await this.Repo.sendMessage(messageOrError.getValue());
-      if (domainMessage == false) return left(new StoreConnectionError());
+      const domainMessage = await this.Repo.registerMessage(messageOrError.getValue());
+      // console.log('domMess:', domainMessage);
 
       const dtoMessage = createDTOMessageFromDomain(domainMessage);
 
       return right(Result.success<DTOMessage>(dtoMessage));
     } catch (err) {
+      if (err.message === 'データベースエラー') return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

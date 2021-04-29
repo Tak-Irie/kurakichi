@@ -1,9 +1,10 @@
-import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useUserLogoutMutation } from '../../graphql/generated/graphql';
-import { ButtonBig } from '../presentational/atoms/Buttons';
+import { useRouter } from 'next/router';
 
-const LogoutButton: FC = () => {
+import { ButtonBig, DropDownMenuItemButton, IconsLogout } from '@next/ui';
+import { useUserLogoutMutation } from '../../graphql/generated/graphql';
+
+export const LogoutButton: FC = () => {
   const [logout, { client }] = useUserLogoutMutation();
   const router = useRouter();
 
@@ -23,4 +24,20 @@ const LogoutButton: FC = () => {
   );
 };
 
-export { LogoutButton };
+export const LogoutMenuItem: FC = () => {
+  const [logout, { client }] = useUserLogoutMutation();
+  const router = useRouter();
+
+  return (
+    <DropDownMenuItemButton
+      label="ログアウト"
+      icon={<IconsLogout />}
+      onClick={async () => {
+        await logout();
+        router.replace('/');
+        // TODO: need to reset all cache ?
+        await client.resetStore();
+      }}
+    />
+  );
+};

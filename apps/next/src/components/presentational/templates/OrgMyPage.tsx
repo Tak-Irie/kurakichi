@@ -42,7 +42,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
           tabIndex={0}
         >
           <article className="bg-gray-100 relative">
-            <ProfileHeader avatarSrc={avatar} imageSrc={image} profileName={orgName}>
+            <ProfileHeader avatarSrc={avatar} imageSrc={image}>
               <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
             </ProfileHeader>
 

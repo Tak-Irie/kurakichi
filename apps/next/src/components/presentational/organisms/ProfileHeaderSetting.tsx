@@ -13,9 +13,9 @@ export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({ avatarSrc, imageS
   const [disable, setDisable] = useState(true);
 
   const handleClick = async () => {
-    console.log('clicked:', files);
+    // console.log('clicked:', files);
     const res = await uploadImage(files);
-    console.log('res:', res);
+    // console.log('res:', res);
   };
 
   useEffect(() => {

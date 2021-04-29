@@ -12,6 +12,7 @@ import {
   DropDownMenu,
   DropDownMenuItem,
 } from '@next/ui';
+import { LogoutMenuItem } from '@next/container';
 
 const NavAuthSection: FC = () => {
   const { data, loading } = useGetUserByCookieQuery({
@@ -49,6 +50,7 @@ const NavAuthSection: FC = () => {
         menuIcon={<IconsVerticalDots />}
       >
         <DropDownMenuItem linkUrl="/user/mypage" label="マイページ" icon={<IconsUser />} />
+        <LogoutMenuItem />
       </DropDownMenu>
     </div>
   );

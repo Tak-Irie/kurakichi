@@ -10,8 +10,28 @@ export class InquiryRepo implements IInquiryRepo {
   }
 
   async registerInquiry(inquiry: Inquiry): Promise<Inquiry | false> {
-    const data = InquiryMapper.toStore(inquiry);
-    const result = await this.prisma.inquiry.create({ data });
+    const {
+      category,
+      id,
+      inquiryTreeId,
+      receiverId,
+      senderId,
+      sentAt,
+      status,
+      text,
+    } = InquiryMapper.toStore(inquiry);
+    const result = await this.prisma.inquiry.create({
+      data: {
+        id,
+        category,
+        sentAt,
+        status,
+        text,
+        receiver: { connect: { id: receiverId } },
+        sender: { connect: { id: senderId } },
+        tree: { create: { id: inquiryTreeId } },
+      },
+    });
     if (result == undefined) return false;
     return inquiry;
   }

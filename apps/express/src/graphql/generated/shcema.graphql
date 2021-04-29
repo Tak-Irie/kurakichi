@@ -39,6 +39,7 @@ type InquiryPayload {
   error: RegularError
   inquiries: [Inquiry]
   inquiry: Inquiry
+  inquiryTree: InquiryTree
 }
 
 enum InquiryStatus {
@@ -46,6 +47,13 @@ enum InquiryStatus {
   DRAFT
   UNREAD
   WORKING
+}
+
+"""Inquiries Node, it connect original and response inquiry"""
+type InquiryTree implements Node {
+  """GUID for a resource"""
+  id: ID!
+  inquiriesWithTree: [Inquiry]
 }
 
 """Message from User to User"""
@@ -63,6 +71,7 @@ type Message implements Node {
 type MessagePayload {
   error: RegularError
   message: Message
+  messageTree: MessageTree
   messages: [Message]
 }
 
@@ -70,6 +79,13 @@ enum MessageStatus {
   DRAFT
   READ
   UNREAD
+}
+
+"""Messages Node, it connect original and response Message"""
+type MessageTree implements Node {
+  """GUID for a resource"""
+  id: ID!
+  messagesWithTree: [Message]
 }
 
 type Mutation {
@@ -83,6 +99,7 @@ type Mutation {
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
   registerUser(email: String!, password: String!, userName: String!): UserPayload
   requestJoinOrg(orgId: String!): OrgPayload
+  responseMessage(originalMessageId: String!, text: String!): MessagePayload
   sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
   updateUser(avatar: String, description: String, email: String, image: String, userName: String): UserPayload
@@ -120,6 +137,7 @@ type Query {
   """get inquiries of one Org"""
   getInquiries(orgId: String!): InquiryPayload
   getInquiry(inquiryId: String!): InquiryPayload
+  getMessageTreeByMessageId(messageId: String!): MessagePayload
 
   """get User's id, then show their own messages"""
   getMessages: MessagePayload

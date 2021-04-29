@@ -1,19 +1,19 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
 
 import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
 import {
   ProfileHeader,
-  TextSmall,
   IconsMail,
   IconsCog,
   Text2xl,
   TextLabeled,
   TextLabel,
-  CardWithPick,
   TableNewMessages,
+  ButtonWithIcon,
+  TableOrg,
+  TableSecureBase,
 } from '@next/ui';
-import { ButtonWithIcon } from '../atoms';
 
 type UserProfileProps = {
   userName: string;
@@ -36,7 +36,7 @@ export const UserMyPage: FC<UserProfileProps> = ({
   email,
   secureBases,
 }) => {
-  console.log('messages:', messages);
+  // console.log('messages:', messages);
   return (
     <div className="grid grid-cols-12 pb-10">
       <div className="col-span-full">
@@ -46,7 +46,11 @@ export const UserMyPage: FC<UserProfileProps> = ({
               <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
             </a>
           </Link>
-          <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+          <Link href="/user/messages">
+            <a href="/user/messages">
+              <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+            </a>
+          </Link>
         </ProfileHeader>
       </div>
       <div className="col-start-3">
@@ -63,41 +67,17 @@ export const UserMyPage: FC<UserProfileProps> = ({
         </div>
       </div>
       <div className="col-start-3 col-end-10 mt-5">
-        <TextLabel content={'新着メッセージ'} />
-        {messages[0] ? (
-          <TableNewMessages messages={messages} />
-        ) : (
-          <TextSmall content="新着メッセージはありません" />
-        )}
+        <TableNewMessages
+          tableLabel="新着メッセージ"
+          messages={messages}
+          textOfNotExist="新着メッセージはありません"
+        />
       </div>
       <div className="col-start-3 col-end-10 mt-5">
-        <TextLabel content={'所属ベース'} />
-        {secureBases[0] ? (
-          secureBases.map((base) => {
-            return <p>{base.baseOwner}</p>;
-          })
-        ) : (
-          <TextSmall content="所属ベースはありません" />
-        )}
+        <TableSecureBase secureBases={secureBases} />
       </div>
       <div className="col-start-3 col-end-10 mt-5">
-        <TextLabel content={'所属団体'} />
-        {orgs[0] ? (
-          orgs.map((org) => {
-            return (
-              <CardWithPick
-                key={org.id}
-                image={org.avatar === 'UNKNOWN' ? '/logo_temp.png' : org.avatar}
-                title={org.orgName}
-                content={org.description}
-                imageAlt="団体アバター"
-                linkUrl={org.id}
-              />
-            );
-          })
-        ) : (
-          <TextSmall content="所属団体はありません" />
-        )}
+        <TableOrg orgs={orgs} />
       </div>
     </div>
   );

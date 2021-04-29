@@ -1,0 +1,10 @@
+mutation ResponseMessage($text: String!, $originalMessageId: String!) {
+  responseMessage(text: $text, originalMessageId: $originalMessageId) {
+    message {
+      ...MessagePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
