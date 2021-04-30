@@ -1,6 +1,6 @@
 fragment MessageTreePayload on MessageTree {
   id
-  messagesWithTree {
-    ...MessagePayload
+  treedMessage {
+    id
   }
 }

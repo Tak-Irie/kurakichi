@@ -3,14 +3,15 @@ import { idMapper } from '../../util/idMapper';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
 export const dtoMessageToGql = (message: DTOMessage): NexusGenFieldTypes['Message'] => {
-  const { content, id, receiver, sender, status, sentAt } = message;
+  const { content, id, receiverId, senderId, status, sentAt, treeId } = message;
   return {
     id,
     content,
     messageStatus: status,
-    receiver: idMapper(receiver),
-    sender: idMapper(sender),
+    receiver: idMapper(receiverId),
+    sender: idMapper(senderId),
     sentAt,
+    tree: idMapper(treeId),
   };
 };
 
@@ -19,27 +20,32 @@ export const dtoMessagesToGql = (messages: DTOMessage[]): NexusGenFieldTypes['Me
 };
 
 export const dtoMessageWithSenderToGql = (
-  message: DTOMessage,
-  sender: DTOUser,
+  dtoMessage: DTOMessage,
+  dtoSender: DTOUser,
 ): NexusGenFieldTypes['Message'] => {
-  const { content, id, receiver, sender: senderId, status, sentAt } = message;
-  return {
+  const { content, id, receiverId, senderId, status, sentAt, treeId } = dtoMessage;
+  const gqlMessage = {
     id,
     content,
     messageStatus: status,
-    receiver: idMapper(receiver),
+    receiver: idMapper(receiverId),
     sentAt,
-    sender: { ...sender, belongOrgs: [], belongSecureBases: [], messages: [] },
+    sender: { ...dtoSender, belongOrgs: [], belongSecureBases: [], messages: [] },
+    tree: idMapper(treeId),
   };
+  console.log('gqlMessage:', gqlMessage);
+  return gqlMessage;
 };
 
 // TODO:I need implement CQRS!
 export const dtoMessagesWithSenderToGql = (
-  messages: DTOMessage[],
-  senders: DTOUser[],
+  dtoMessages: DTOMessage[],
+  dtoSenders: DTOUser[],
 ): NexusGenFieldTypes['Message'][] => {
-  return messages.map((message) => {
-    const sender = senders.find((sender) => sender.id === message.sender);
+  const gqlMessages = dtoMessages.map((message) => {
+    const sender = dtoSenders.find((sender) => sender.id === message.senderId);
     return dtoMessageWithSenderToGql(message, sender);
   });
+
+  return gqlMessages;
 };

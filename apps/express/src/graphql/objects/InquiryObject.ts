@@ -10,6 +10,7 @@ export const Inquiry = objectType({
     t.field('category', { type: 'InquiryCategory' });
     t.field('inquiryStatus', { type: 'InquiryStatus' });
     t.field('sender', { type: 'User' });
+    t.field('tree', { type: 'InquiryTree' });
   },
 });
 
@@ -18,7 +19,7 @@ export const InquiryTree = objectType({
   description: 'Inquiries Node, it connect original and response inquiry',
   definition(t) {
     t.implements('Node');
-    t.field('inquiriesWithTree', { type: list('Inquiry') });
+    t.field('treedInquiry', { type: list('Inquiry') });
   },
 });
 

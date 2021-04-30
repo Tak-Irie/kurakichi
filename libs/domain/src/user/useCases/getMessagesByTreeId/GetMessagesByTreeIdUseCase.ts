@@ -11,12 +11,12 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IMessageRepo } from '../../domain';
-import { NotAppropriateUserError } from './GetMessageTreeError';
+import { NotAppropriateUserError } from './GetMessagesByTreeIdError';
 import { DTOMessage, createDTOMessagesFromDomain } from '../DTOMessage';
 
-type GetMessageTreeArg = { messageId: string; requestUserId: string };
+type GetMessagesByTreeIdArg = { treeId: string; requestUserId: string };
 
-type GetMessageTreeResponse = Either<
+type GetMessagesByTreeIdResponse = Either<
   | NotAppropriateUserError
   | NotExistError
   | InvalidInputValueError
@@ -25,17 +25,17 @@ type GetMessageTreeResponse = Either<
   Result<DTOMessage[]>
 >;
 
-export class GetMessageTreeUseCase
-  implements IUseCase<GetMessageTreeArg, Promise<GetMessageTreeResponse>> {
+export class GetMessagesByTreeIdUseCase
+  implements IUseCase<GetMessagesByTreeIdArg, Promise<GetMessagesByTreeIdResponse>> {
   constructor(private MessageRepo: IMessageRepo) {
     this.MessageRepo = MessageRepo;
   }
-  public async execute(arg: GetMessageTreeArg): Promise<GetMessageTreeResponse> {
+  public async execute(arg: GetMessagesByTreeIdArg): Promise<GetMessagesByTreeIdResponse> {
     try {
-      const idOrError = UniqueEntityId.reconstruct(arg.messageId);
+      const idOrError = UniqueEntityId.reconstruct(arg.treeId);
       if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));
 
-      const dbResult = await this.MessageRepo.getMessageTreeByMessageId(idOrError.getValue());
+      const dbResult = await this.MessageRepo.getMessageTreeById(idOrError.getValue());
       const valid = dbResult.some((message) => message.getReceiver() === arg.requestUserId);
       if (valid == false) return left(new NotAppropriateUserError());
 

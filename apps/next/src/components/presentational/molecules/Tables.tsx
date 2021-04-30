@@ -93,7 +93,7 @@ export const TableNewMessages: VFC<TableNewMessagesProps> = ({
             </div>
             {messages.map((message) => (
               <div className="relative col-span-full grid grid-cols-6" key={message.id}>
-                <Link href="/user/message/[id]" as={`/user/message/${message.id}`}>
+                <Link href="/user/message/[id]" as={`/user/message/${message.tree.id}`}>
                   <a
                     href="/user/message/[id]"
                     className="h-full w-full absolute z-10 bg-black opacity-0 transition hover:opacity-30 "

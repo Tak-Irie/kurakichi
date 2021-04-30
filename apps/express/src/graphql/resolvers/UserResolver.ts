@@ -78,7 +78,7 @@ export const userQuery = extendType({
     t.nullable.field('getUserByCookie', {
       type: 'UserPayload',
       resolve: async (_, __, context) => {
-        // console.log('me query called');
+        // console.log('me query called, session:', context.req.session);
         const idOrErr = getUserIdByCookie(context);
         // console.log('idOrErr:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
@@ -92,26 +92,34 @@ export const userQuery = extendType({
 
         // console.log('org[]:', domainOrgOrErr);
 
-        const dtoMessageOrErr = await useGetMessagesByReceiverIdUseCase.execute({
+        const dtoMessagesOrErr = await useGetMessagesByReceiverIdUseCase.execute({
           receiverId: idOrErr,
         });
-        if (dtoMessageOrErr.isLeft()) return returnErrorToGQL(dtoMessageOrErr);
+        if (dtoMessagesOrErr.isLeft()) return returnErrorToGQL(dtoMessagesOrErr);
+        // console.log('dtoMessages::', dtoMessagesOrErr);
 
         const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
         const gqlOrgs = dtoOrgsToGql(domainOrgOrErr.value.getValue());
 
-        // TODO:temporary impl
+        // TODO:temporary impl, need CQRS(Read Model)
         // const gqlMessages = dtoMessagesToGql(dtoMessageOrErr.value.getValue());
-        const tempMess = dtoMessageOrErr.value.getValue();
-        const temp = await useGetUsersByIdsUseCase.execute({
-          ids: tempMess.map((message) => message.sender),
-        });
-        if (temp.isLeft()) return returnErrorToGQL(temp);
-        const _gqlMessages = dtoMessagesWithSenderToGql(tempMess, temp.value.getValue());
+        const tempMess = dtoMessagesOrErr.value.getValue();
+        if (tempMess[0]) {
+          const temp = await useGetUsersByIdsUseCase.execute({
+            ids: tempMess.map((message) => message.senderId),
+          });
+          if (temp.isLeft()) return returnErrorToGQL(temp);
+          const _gqlMessages = dtoMessagesWithSenderToGql(tempMess, temp.value.getValue());
+          return {
+            user: { ...gqlUser, belongOrgs: gqlOrgs, messages: _gqlMessages },
+          };
+        }
+        // TODO:temp end
 
-        // console.log('domainUser:', { gqlUser, gqlOrgs, gqlMessages });
+        const gqlMessages = dtoMessagesToGql(dtoMessagesOrErr.value.getValue());
+        // console.log('domainUser:', { gqlUser, gqlOrgs, _gqlMessages });
         return {
-          user: { ...gqlUser, belongOrgs: gqlOrgs, messages: _gqlMessages },
+          user: { ...gqlUser, belongOrgs: gqlOrgs, messages: gqlMessages },
         };
       },
     });

@@ -10,41 +10,41 @@ import {
   UniqueEntityId,
 } from '../../../shared';
 import { IMessageRepo, Message, MessageContent } from '../../domain';
-import { MessageNotExistError } from './ResponseMessageError';
+import { MessageNotExistError } from './ReplyMessageError';
 import { DTOMessage, createDTOMessageFromDomain } from '../DTOMessage';
 
-type ResponseMessageArg = {
-  originalMessageId: string;
-  text: string;
+type ReplyMessageArg = {
+  replyTargetId: string;
+  content: string;
 };
 
-type ResponseMessageResponse = Either<
+type ReplyMessageResponse = Either<
   MessageNotExistError | InvalidInputValueError | UnexpectedError | StoreConnectionError,
   Result<DTOMessage>
 >;
 
-export class ResponseMessageUseCase
-  implements IUseCase<ResponseMessageArg, Promise<ResponseMessageResponse>> {
+export class ReplyMessageUseCase
+  implements IUseCase<ReplyMessageArg, Promise<ReplyMessageResponse>> {
   constructor(private MessageRepo: IMessageRepo) {
     this.MessageRepo = MessageRepo;
   }
-  public async execute(arg: ResponseMessageArg): Promise<ResponseMessageResponse> {
+  public async execute(arg: ReplyMessageArg): Promise<ReplyMessageResponse> {
     try {
       // console.log('arg:', arg);
-      const originId = UniqueEntityId.reconstruct(arg.originalMessageId);
-      if (originId.isFailure) return left(new InvalidInputValueError(originId.getErrorValue()));
+      const replyTargetIdOrErr = UniqueEntityId.reconstruct(arg.replyTargetId);
+      if (replyTargetIdOrErr.isFailure)
+        return left(new InvalidInputValueError(replyTargetIdOrErr.getErrorValue()));
 
-      const originalMessage = await this.MessageRepo.getMessage(originId.getValue());
-      if (originalMessage == false) return left(new MessageNotExistError());
-      // console.log('origin:', originalMessage);
+      const replyTarget = await this.MessageRepo.getMessage(replyTargetIdOrErr.getValue());
+      if (replyTarget == false) return left(new MessageNotExistError());
 
-      const contentOrError = MessageContent.create({ text: arg.text });
+      const contentOrError = MessageContent.create({ text: arg.content });
       if (contentOrError.isFailure) return left(new InvalidInputValueError('不正な内容です'));
 
-      const newRes = Message.createResponse(originalMessage, contentOrError.getValue());
+      const reply = Message.createReply(replyTarget, contentOrError.getValue());
       // console.log('newRes:', newRes);
 
-      const dbResult = await this.MessageRepo.registerMessage(newRes.getValue());
+      const dbResult = await this.MessageRepo.registerMessage(reply.getValue());
 
       const dtoMessage = createDTOMessageFromDomain(dbResult);
       return right(Result.success<DTOMessage>(dtoMessage));

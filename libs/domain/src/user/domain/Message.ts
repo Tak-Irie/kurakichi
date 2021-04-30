@@ -57,12 +57,11 @@ export class Message extends Entity<MessageProps> {
     return Result.success<Message>(message);
   }
 
-  public static createResponse(origin: Message, response: MessageContent): Result<Message> {
-    const { receiver, sender, treeId } = origin.getProps();
-
+  public static createReply(replyTarget: Message, replyContent: MessageContent): Result<Message> {
+    const { receiver, sender, treeId } = replyTarget.getProps();
     const message = new Message({
       id: UniqueEntityId.create(),
-      content: response,
+      content: replyContent,
       receiver: sender,
       sender: receiver,
       status: MessageStatus.create().getValue(),

@@ -17,8 +17,8 @@ import { GetUsersByIdsUseCase } from './getUsersByIds/GetUsersByIdsUseCase';
 import { SendMessageUseCase } from './sendMessage/sendMessageUseCase';
 import { GetMessagesUseCase } from './getMessages/getMessagesUseCase';
 import { GetMessagesByReceiverIdUseCase } from './getMessagesByReceiverId/GetMessagesByReceiverIdUseCase';
-import { ResponseMessageUseCase } from './responseMessage/ResponseMessageUseCase';
-import { GetMessageTreeUseCase } from './getMessageTreeByMessage/GetMessageTreeUseCase';
+import { ReplyMessageUseCase } from './replyMessage/ReplyMessageUseCase';
+import { GetMessagesByTreeIdUseCase } from './getMessagesByTreeId/GetMessagesByTreeIdUseCase';
 
 const userRepo = new UserRepository();
 const messageRepo = new MessageRepo();
@@ -39,8 +39,8 @@ export const useGetUsersByIdsUseCase = new GetUsersByIdsUseCase(userRepo);
 export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
 export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);
 export const useGetMessagesByReceiverIdUseCase = new GetMessagesByReceiverIdUseCase(messageRepo);
-export const useResponseMessageUseCase = new ResponseMessageUseCase(messageRepo);
-export const useGetMessageTreeUseCase = new GetMessageTreeUseCase(messageRepo);
+export const useReplyMessageUseCase = new ReplyMessageUseCase(messageRepo);
+export const useGetMessagesByTreeIdUseCase = new GetMessagesByTreeIdUseCase(messageRepo);
 
 export * from './DTOUser';
 export * from './DTOMessage';

@@ -16,8 +16,10 @@ export const Node = interfaceType({
       ? 'SecureBase'
       : 'inquiryStatus' in data
       ? 'Inquiry'
-      : 'messageWithTree' in data
+      : 'treedMessage' in data
       ? 'MessageTree'
+      : 'treedInquiry' in data
+      ? 'InquiryTree'
       : undefined;
   },
   definition(t) {

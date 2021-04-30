@@ -4,8 +4,8 @@ export type DTOMessage = {
   id: string;
   content: string;
   status: 'DRAFT' | 'READ' | 'UNREAD';
-  sender: string;
-  receiver: string;
+  senderId: string;
+  receiverId: string;
   sentAt: string;
   treeId: string;
 };
@@ -16,8 +16,8 @@ export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
     id: id.getId(),
     content: content.getText(),
     status: status.getValue(),
-    receiver: receiver.getId(),
-    sender: sender.getId(),
+    receiverId: receiver.getId(),
+    senderId: sender.getId(),
     sentAt: sentAt.getJpDate(),
     treeId: treeId.getId(),
   };

@@ -64,12 +64,12 @@ export class MessageRepo implements IMessageRepo {
     }
   }
 
-  async getMessageTreeByMessageId(messageId: UniqueEntityId): Promise<Message[]> {
+  async getMessageTreeById(treeId: UniqueEntityId): Promise<Message[]> {
     try {
-      // console.log('messageId:', messageId);
-      const messages = await this.prisma.message.findFirst({
-        where: { id: messageId.getId() },
-        include: { tree: { include: { messages: true } } },
+      // console.log('terrId:', treeId);
+      const messages = await this.prisma.messageTree.findUnique({
+        where: { id: treeId.getId() },
+        include: { messages: true },
       });
       // console.log('messages:', messages);
 

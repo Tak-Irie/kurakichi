@@ -8,10 +8,11 @@ export type DTOInquiry = {
   sender: string;
   receiver: string;
   sentAt: string;
+  tree: string;
 };
 
 export const createDTOInquiryFromDomain = (inquiry: Inquiry): DTOInquiry => {
-  const { id, category, content, receiver, sender, status, sentAt } = inquiry.getProps();
+  const { id, category, content, receiver, sender, status, sentAt, treeId } = inquiry.getProps();
   return {
     id: id.getId(),
     category: category.getValue(),
@@ -20,6 +21,7 @@ export const createDTOInquiryFromDomain = (inquiry: Inquiry): DTOInquiry => {
     sender: sender.getId(),
     status: status.getValue(),
     sentAt: sentAt.getJpDate(),
+    tree: treeId.getId(),
   };
 };
 

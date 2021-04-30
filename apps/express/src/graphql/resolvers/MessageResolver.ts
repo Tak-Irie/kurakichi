@@ -3,9 +3,9 @@ import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import {
   useGetMessagesUseCase,
-  useGetMessageTreeUseCase,
+  useGetMessagesByTreeIdUseCase,
   useGetUsersByIdsUseCase,
-  useResponseMessageUseCase,
+  useReplyMessageUseCase,
   useSendMessageUseCase,
 } from '@kurakichi/domain';
 import { dtoMessagesWithSenderToGql, dtoMessageToGql } from '../DTOtoGql';
@@ -14,7 +14,7 @@ import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 export const MessageQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.field('getMessages', {
+    t.field('getMessagesByCookie', {
       type: 'MessagePayload',
       description: "get User's id, then show their own messages",
       resolve: async (_, __, context) => {
@@ -27,7 +27,7 @@ export const MessageQuery = extendType({
         const domainMessages = domainResponse.value.getValue();
 
         const domainResponse2 = await useGetUsersByIdsUseCase.execute({
-          ids: domainMessages.map((message) => message.sender),
+          ids: domainMessages.map((message) => message.senderId),
         });
         if (domainResponse2.isLeft()) return returnErrorToGQL(domainResponse2);
         const domainUsers = domainResponse2.value.getValue();
@@ -37,32 +37,32 @@ export const MessageQuery = extendType({
         return { messages: gqlMessages };
       },
     });
-    t.field('getMessageTreeByMessageId', {
+    t.field('getMessagesByTreeId', {
       type: 'MessagePayload',
       args: {
-        messageId: nonNull(stringArg()),
+        treeId: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
         // console.log('queryConfirm:');
         const idOrErr = getUserIdByCookie(context);
         if (typeof idOrErr === 'object') return idOrErr;
 
-        const domainResponse = await useGetMessageTreeUseCase.execute({
-          messageId: args.messageId,
+        const domainMessagesOrErr = await useGetMessagesByTreeIdUseCase.execute({
+          treeId: args.treeId,
           requestUserId: idOrErr,
         });
-        if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
+        if (domainMessagesOrErr.isLeft()) return returnErrorToGQL(domainMessagesOrErr);
 
-        const domainMessages = domainResponse.value.getValue();
-        const domainResponse2 = await useGetUsersByIdsUseCase.execute({
-          ids: domainMessages.map((message) => message.sender),
+        const dtoMessages = domainMessagesOrErr.value.getValue();
+        const domainUsersOrErr = await useGetUsersByIdsUseCase.execute({
+          ids: dtoMessages.map((message) => message.senderId),
         });
-        if (domainResponse2.isLeft()) return returnErrorToGQL(domainResponse2);
-        const domainUsers = domainResponse2.value.getValue();
+        if (domainUsersOrErr.isLeft()) return returnErrorToGQL(domainUsersOrErr);
 
-        const gqlMessages = dtoMessagesWithSenderToGql(domainMessages, domainUsers);
+        const dtoUsers = domainUsersOrErr.value.getValue();
+        const gqlMessages = dtoMessagesWithSenderToGql(dtoMessages, dtoUsers);
 
-        return { messageTree: { id: domainMessages[0].treeId, messagesWithTree: gqlMessages } };
+        return { messageTree: { id: gqlMessages[0].tree.id, treedMessage: gqlMessages } };
       },
     });
   },
@@ -94,16 +94,16 @@ export const MessageMutation = extendType({
         return { message: gqlField };
       },
     });
-    t.field('responseMessage', {
+    t.field('replyMessage', {
       type: 'MessagePayload',
       args: {
-        text: nonNull(stringArg()),
-        originalMessageId: nonNull(stringArg()),
+        content: nonNull(stringArg()),
+        replyTargetId: nonNull(stringArg()),
       },
       resolve: async (_, args) => {
-        const domainResponse = await useResponseMessageUseCase.execute({
-          originalMessageId: args.originalMessageId,
-          text: args.text,
+        const domainResponse = await useReplyMessageUseCase.execute({
+          replyTargetId: args.replyTargetId,
+          content: args.content,
         });
 
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);

@@ -7,16 +7,25 @@ export const apolloClient = new ApolloClient({
   link: splitApolloLink,
   credentials: 'include',
   cache: new InMemoryCache({
-    typePolicies: {
-      User: {
-        fields: {
-          messages: {
-            merge(existing = [], incoming: any[]) {
-              return [...existing, ...incoming];
-            },
-          },
-        },
-      },
-    },
+    // typePolicies: {
+    //   User: {
+    //     fields: {
+    //       messages: {
+    //         merge(existing = [], incoming: any[]) {
+    //           return [...existing, ...incoming];
+    //         },
+    //       },
+    //     },
+    //   },
+    //   MessageTree: {
+    //     fields: {
+    //       treedMessage: {
+    //         merge(existing = [], incoming: any[]) {
+    //           return [...existing, ...incoming];
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
   }),
 });

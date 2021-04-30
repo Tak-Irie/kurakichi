@@ -38,6 +38,7 @@ export type Inquiry = Node & {
   category?: Maybe<InquiryCategory>;
   inquiryStatus?: Maybe<InquiryStatus>;
   sender?: Maybe<User>;
+  tree?: Maybe<InquiryTree>;
 };
 
 export enum InquiryCategory {
@@ -68,7 +69,7 @@ export type InquiryTree = Node & {
   __typename?: 'InquiryTree';
   /** GUID for a resource */
   id: Scalars['ID'];
-  inquiriesWithTree?: Maybe<Array<Maybe<Inquiry>>>;
+  treedInquiry?: Maybe<Array<Maybe<Inquiry>>>;
 };
 
 /** Message from User to User */
@@ -81,6 +82,7 @@ export type Message = Node & {
   messageStatus?: Maybe<MessageStatus>;
   sender?: Maybe<User>;
   receiver?: Maybe<User>;
+  tree?: Maybe<MessageTree>;
 };
 
 export type MessagePayload = {
@@ -102,7 +104,7 @@ export type MessageTree = Node & {
   __typename?: 'MessageTree';
   /** GUID for a resource */
   id: Scalars['ID'];
-  messagesWithTree?: Maybe<Array<Maybe<Message>>>;
+  treedMessage?: Maybe<Array<Maybe<Message>>>;
 };
 
 export type Mutation = {
@@ -119,7 +121,7 @@ export type Mutation = {
   requestJoinOrg?: Maybe<OrgPayload>;
   acceptJoinOrg?: Maybe<OrgPayload>;
   sendMessage?: Maybe<MessagePayload>;
-  responseMessage?: Maybe<MessagePayload>;
+  replyMessage?: Maybe<MessagePayload>;
   sendInquiry?: Maybe<InquiryPayload>;
 };
 
@@ -188,9 +190,9 @@ export type MutationSendMessageArgs = {
 };
 
 
-export type MutationResponseMessageArgs = {
-  text: Scalars['String'];
-  originalMessageId: Scalars['String'];
+export type MutationReplyMessageArgs = {
+  content: Scalars['String'];
+  replyTargetId: Scalars['String'];
 };
 
 
@@ -241,8 +243,8 @@ export type Query = {
   getOrg?: Maybe<OrgPayload>;
   getOrgsByMemberId?: Maybe<OrgPayload>;
   /** get User's id, then show their own messages */
-  getMessages?: Maybe<MessagePayload>;
-  getMessageTreeByMessageId?: Maybe<MessagePayload>;
+  getMessagesByCookie?: Maybe<MessagePayload>;
+  getMessagesByTreeId?: Maybe<MessagePayload>;
   /** get inquiries of one Org */
   getInquiries?: Maybe<InquiryPayload>;
   getInquiry?: Maybe<InquiryPayload>;
@@ -269,8 +271,8 @@ export type QueryGetOrgArgs = {
 };
 
 
-export type QueryGetMessageTreeByMessageIdArgs = {
-  messageId: Scalars['String'];
+export type QueryGetMessagesByTreeIdArgs = {
+  treeId: Scalars['String'];
 };
 
 
@@ -374,15 +376,18 @@ export type MessagePayloadFragment = (
   )>, sender?: Maybe<(
     { __typename?: 'User' }
     & UserPayloadFragment
+  )>, tree?: Maybe<(
+    { __typename?: 'MessageTree' }
+    & MessageTreePayloadFragment
   )> }
 );
 
 export type MessageTreePayloadFragment = (
   { __typename?: 'MessageTree' }
   & Pick<MessageTree, 'id'>
-  & { messagesWithTree?: Maybe<Array<Maybe<(
+  & { treedMessage?: Maybe<Array<Maybe<(
     { __typename?: 'Message' }
-    & MessagePayloadFragment
+    & Pick<Message, 'id'>
   )>>> }
 );
 
@@ -561,26 +566,6 @@ export type RequestJoinOrgMutation = (
   )> }
 );
 
-export type ResponseMessageMutationVariables = Exact<{
-  text: Scalars['String'];
-  originalMessageId: Scalars['String'];
-}>;
-
-
-export type ResponseMessageMutation = (
-  { __typename?: 'Mutation' }
-  & { responseMessage?: Maybe<(
-    { __typename?: 'MessagePayload' }
-    & { message?: Maybe<(
-      { __typename?: 'Message' }
-      & MessagePayloadFragment
-    )>, error?: Maybe<(
-      { __typename?: 'RegularError' }
-      & RegularErrorFragment
-    )> }
-  )> }
-);
-
 export type SendInquiryMutationVariables = Exact<{
   textInput: Scalars['String'];
   receiverId: Scalars['String'];
@@ -695,6 +680,30 @@ export type UserLogoutMutation = (
   )> }
 );
 
+export type ReplyMessageMutationVariables = Exact<{
+  content: Scalars['String'];
+  replyTargetId: Scalars['String'];
+}>;
+
+
+export type ReplyMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { replyMessage?: Maybe<(
+    { __typename?: 'MessagePayload' }
+    & { message?: Maybe<(
+      { __typename?: 'Message' }
+      & Pick<Message, 'id' | 'content' | 'messageStatus' | 'sentAt'>
+      & { tree?: Maybe<(
+        { __typename?: 'MessageTree' }
+        & Pick<MessageTree, 'id'>
+      )> }
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
 export type GetInquiriesQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
@@ -733,18 +742,29 @@ export type GetInquiryQuery = (
   )> }
 );
 
-export type GetMessageTreeQueryVariables = Exact<{
-  messageId: Scalars['String'];
+export type GetMessagesByTreeIdQueryVariables = Exact<{
+  treeId: Scalars['String'];
 }>;
 
 
-export type GetMessageTreeQuery = (
+export type GetMessagesByTreeIdQuery = (
   { __typename?: 'Query' }
-  & { getMessageTreeByMessageId?: Maybe<(
+  & { getMessagesByTreeId?: Maybe<(
     { __typename?: 'MessagePayload' }
     & { messageTree?: Maybe<(
       { __typename?: 'MessageTree' }
-      & MessageTreePayloadFragment
+      & Pick<MessageTree, 'id'>
+      & { treedMessage?: Maybe<Array<Maybe<(
+        { __typename?: 'Message' }
+        & Pick<Message, 'id' | 'content' | 'sentAt' | 'messageStatus'>
+        & { sender?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'id' | 'userName' | 'avatar' | 'image' | 'description' | 'role'>
+        )>, receiver?: Maybe<(
+          { __typename?: 'User' }
+          & Pick<User, 'id'>
+        )> }
+      )>>> }
     )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
@@ -752,12 +772,12 @@ export type GetMessageTreeQuery = (
   )> }
 );
 
-export type GetMessagesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetMessagesByCookieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMessagesQuery = (
+export type GetMessagesByCookieQuery = (
   { __typename?: 'Query' }
-  & { getMessages?: Maybe<(
+  & { getMessagesByCookie?: Maybe<(
     { __typename?: 'MessagePayload' }
     & { messages?: Maybe<Array<Maybe<(
       { __typename?: 'Message' }
@@ -946,45 +966,6 @@ export const InquiryPayloadFragmentDoc = gql`
   }
 }
     `;
-export const UserPayloadFragmentDoc = gql`
-    fragment UserPayload on User {
-  id
-  email
-  userName
-  description
-  avatar
-  image
-  role
-  belongOrgs {
-    id
-  }
-  belongSecureBases {
-    id
-  }
-}
-    `;
-export const MessagePayloadFragmentDoc = gql`
-    fragment MessagePayload on Message {
-  id
-  content
-  messageStatus
-  sentAt
-  receiver {
-    id
-  }
-  sender {
-    ...UserPayload
-  }
-}
-    ${UserPayloadFragmentDoc}`;
-export const MessageTreePayloadFragmentDoc = gql`
-    fragment MessageTreePayload on MessageTree {
-  id
-  messagesWithTree {
-    ...MessagePayload
-  }
-}
-    ${MessagePayloadFragmentDoc}`;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on RegularError {
   message
@@ -1021,6 +1002,49 @@ export const SecureBasePayloadFragmentDoc = gql`
   }
 }
     `;
+export const UserPayloadFragmentDoc = gql`
+    fragment UserPayload on User {
+  id
+  email
+  userName
+  description
+  avatar
+  image
+  role
+  belongOrgs {
+    id
+  }
+  belongSecureBases {
+    id
+  }
+}
+    `;
+export const MessageTreePayloadFragmentDoc = gql`
+    fragment MessageTreePayload on MessageTree {
+  id
+  treedMessage {
+    id
+  }
+}
+    `;
+export const MessagePayloadFragmentDoc = gql`
+    fragment MessagePayload on Message {
+  id
+  content
+  messageStatus
+  sentAt
+  receiver {
+    id
+  }
+  sender {
+    ...UserPayload
+  }
+  tree {
+    ...MessageTreePayload
+  }
+}
+    ${UserPayloadFragmentDoc}
+${MessageTreePayloadFragmentDoc}`;
 export const UserDetailPayloadFragmentDoc = gql`
     fragment UserDetailPayload on User {
   id
@@ -1286,46 +1310,6 @@ export function useRequestJoinOrgMutation(baseOptions?: Apollo.MutationHookOptio
 export type RequestJoinOrgMutationHookResult = ReturnType<typeof useRequestJoinOrgMutation>;
 export type RequestJoinOrgMutationResult = Apollo.MutationResult<RequestJoinOrgMutation>;
 export type RequestJoinOrgMutationOptions = Apollo.BaseMutationOptions<RequestJoinOrgMutation, RequestJoinOrgMutationVariables>;
-export const ResponseMessageDocument = gql`
-    mutation ResponseMessage($text: String!, $originalMessageId: String!) {
-  responseMessage(text: $text, originalMessageId: $originalMessageId) {
-    message {
-      ...MessagePayload
-    }
-    error {
-      ...RegularError
-    }
-  }
-}
-    ${MessagePayloadFragmentDoc}
-${RegularErrorFragmentDoc}`;
-export type ResponseMessageMutationFn = Apollo.MutationFunction<ResponseMessageMutation, ResponseMessageMutationVariables>;
-
-/**
- * __useResponseMessageMutation__
- *
- * To run a mutation, you first call `useResponseMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useResponseMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [responseMessageMutation, { data, loading, error }] = useResponseMessageMutation({
- *   variables: {
- *      text: // value for 'text'
- *      originalMessageId: // value for 'originalMessageId'
- *   },
- * });
- */
-export function useResponseMessageMutation(baseOptions?: Apollo.MutationHookOptions<ResponseMessageMutation, ResponseMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ResponseMessageMutation, ResponseMessageMutationVariables>(ResponseMessageDocument, options);
-      }
-export type ResponseMessageMutationHookResult = ReturnType<typeof useResponseMessageMutation>;
-export type ResponseMessageMutationResult = Apollo.MutationResult<ResponseMessageMutation>;
-export type ResponseMessageMutationOptions = Apollo.BaseMutationOptions<ResponseMessageMutation, ResponseMessageMutationVariables>;
 export const SendInquiryDocument = gql`
     mutation SendInquiry($textInput: String!, $receiverId: String!, $category: InquiryCategory, $status: InquiryStatus) {
   sendInquiry(
@@ -1597,6 +1581,51 @@ export function useUserLogoutMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UserLogoutMutationHookResult = ReturnType<typeof useUserLogoutMutation>;
 export type UserLogoutMutationResult = Apollo.MutationResult<UserLogoutMutation>;
 export type UserLogoutMutationOptions = Apollo.BaseMutationOptions<UserLogoutMutation, UserLogoutMutationVariables>;
+export const ReplyMessageDocument = gql`
+    mutation replyMessage($content: String!, $replyTargetId: String!) {
+  replyMessage(content: $content, replyTargetId: $replyTargetId) {
+    message {
+      id
+      content
+      messageStatus
+      sentAt
+      tree {
+        id
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${RegularErrorFragmentDoc}`;
+export type ReplyMessageMutationFn = Apollo.MutationFunction<ReplyMessageMutation, ReplyMessageMutationVariables>;
+
+/**
+ * __useReplyMessageMutation__
+ *
+ * To run a mutation, you first call `useReplyMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReplyMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [replyMessageMutation, { data, loading, error }] = useReplyMessageMutation({
+ *   variables: {
+ *      content: // value for 'content'
+ *      replyTargetId: // value for 'replyTargetId'
+ *   },
+ * });
+ */
+export function useReplyMessageMutation(baseOptions?: Apollo.MutationHookOptions<ReplyMessageMutation, ReplyMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReplyMessageMutation, ReplyMessageMutationVariables>(ReplyMessageDocument, options);
+      }
+export type ReplyMessageMutationHookResult = ReturnType<typeof useReplyMessageMutation>;
+export type ReplyMessageMutationResult = Apollo.MutationResult<ReplyMessageMutation>;
+export type ReplyMessageMutationOptions = Apollo.BaseMutationOptions<ReplyMessageMutation, ReplyMessageMutationVariables>;
 export const GetInquiriesDocument = gql`
     query GetInquiries($orgId: String!) {
   getInquiries(orgId: $orgId) {
@@ -1679,50 +1708,66 @@ export function useGetInquiryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetInquiryQueryHookResult = ReturnType<typeof useGetInquiryQuery>;
 export type GetInquiryLazyQueryHookResult = ReturnType<typeof useGetInquiryLazyQuery>;
 export type GetInquiryQueryResult = Apollo.QueryResult<GetInquiryQuery, GetInquiryQueryVariables>;
-export const GetMessageTreeDocument = gql`
-    query GetMessageTree($messageId: String!) {
-  getMessageTreeByMessageId(messageId: $messageId) {
+export const GetMessagesByTreeIdDocument = gql`
+    query GetMessagesByTreeId($treeId: String!) {
+  getMessagesByTreeId(treeId: $treeId) {
     messageTree {
-      ...MessageTreePayload
+      id
+      treedMessage {
+        id
+        content
+        sentAt
+        messageStatus
+        sender {
+          id
+          userName
+          avatar
+          image
+          description
+          role
+        }
+        receiver {
+          id
+        }
+      }
     }
     error {
       ...RegularError
     }
   }
 }
-    ${MessageTreePayloadFragmentDoc}
-${RegularErrorFragmentDoc}`;
+    ${RegularErrorFragmentDoc}`;
 
 /**
- * __useGetMessageTreeQuery__
+ * __useGetMessagesByTreeIdQuery__
  *
- * To run a query within a React component, call `useGetMessageTreeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMessageTreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMessagesByTreeIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesByTreeIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetMessageTreeQuery({
+ * const { data, loading, error } = useGetMessagesByTreeIdQuery({
  *   variables: {
- *      messageId: // value for 'messageId'
+ *      treeId: // value for 'treeId'
  *   },
  * });
  */
-export function useGetMessageTreeQuery(baseOptions: Apollo.QueryHookOptions<GetMessageTreeQuery, GetMessageTreeQueryVariables>) {
+export function useGetMessagesByTreeIdQuery(baseOptions: Apollo.QueryHookOptions<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMessageTreeQuery, GetMessageTreeQueryVariables>(GetMessageTreeDocument, options);
+        return Apollo.useQuery<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>(GetMessagesByTreeIdDocument, options);
       }
-export function useGetMessageTreeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessageTreeQuery, GetMessageTreeQueryVariables>) {
+export function useGetMessagesByTreeIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMessageTreeQuery, GetMessageTreeQueryVariables>(GetMessageTreeDocument, options);
+          return Apollo.useLazyQuery<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>(GetMessagesByTreeIdDocument, options);
         }
-export type GetMessageTreeQueryHookResult = ReturnType<typeof useGetMessageTreeQuery>;
-export type GetMessageTreeLazyQueryHookResult = ReturnType<typeof useGetMessageTreeLazyQuery>;
-export type GetMessageTreeQueryResult = Apollo.QueryResult<GetMessageTreeQuery, GetMessageTreeQueryVariables>;
-export const GetMessagesDocument = gql`
-    query GetMessages {
-  getMessages {
+export type GetMessagesByTreeIdQueryHookResult = ReturnType<typeof useGetMessagesByTreeIdQuery>;
+export type GetMessagesByTreeIdLazyQueryHookResult = ReturnType<typeof useGetMessagesByTreeIdLazyQuery>;
+export type GetMessagesByTreeIdQueryResult = Apollo.QueryResult<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>;
+export const GetMessagesByCookieDocument = gql`
+    query GetMessagesByCookie {
+  getMessagesByCookie {
     messages {
       ...MessagePayload
     }
@@ -1735,31 +1780,31 @@ export const GetMessagesDocument = gql`
 ${RegularErrorFragmentDoc}`;
 
 /**
- * __useGetMessagesQuery__
+ * __useGetMessagesByCookieQuery__
  *
- * To run a query within a React component, call `useGetMessagesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMessagesByCookieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesByCookieQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetMessagesQuery({
+ * const { data, loading, error } = useGetMessagesByCookieQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetMessagesQuery(baseOptions?: Apollo.QueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+export function useGetMessagesByCookieQuery(baseOptions?: Apollo.QueryHookOptions<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+        return Apollo.useQuery<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>(GetMessagesByCookieDocument, options);
       }
-export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+export function useGetMessagesByCookieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+          return Apollo.useLazyQuery<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>(GetMessagesByCookieDocument, options);
         }
-export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
-export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
-export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
+export type GetMessagesByCookieQueryHookResult = ReturnType<typeof useGetMessagesByCookieQuery>;
+export type GetMessagesByCookieLazyQueryHookResult = ReturnType<typeof useGetMessagesByCookieLazyQuery>;
+export type GetMessagesByCookieQueryResult = Apollo.QueryResult<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>;
 export const GetOrgDocument = gql`
     query GetOrg($OrgId: String!) {
   getOrg(orgId: $OrgId) {

@@ -10,6 +10,7 @@ export const Message = objectType({
     t.field('messageStatus', { type: 'MessageStatus' });
     t.field('sender', { type: 'User' });
     t.field('receiver', { type: 'User' });
+    t.field('tree', { type: 'MessageTree' });
   },
 });
 
@@ -18,7 +19,7 @@ export const MessageTree = objectType({
   description: 'Messages Node, it connect original and response Message',
   definition(t) {
     t.implements('Node');
-    t.field('messagesWithTree', { type: list('Message') });
+    t.field('treedMessage', { type: list('Message') });
   },
 });
 

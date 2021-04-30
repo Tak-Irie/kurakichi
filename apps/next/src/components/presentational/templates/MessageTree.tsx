@@ -2,7 +2,7 @@ import { Message } from '@next/graphql';
 import { VFC } from 'react';
 import Link from 'next/link';
 import { UserTemplate, ButtonWithIcon, IconsMail, AvatarSmall, IconsUser } from '@next/ui';
-import { ResponseMessageForm } from '@next/container';
+import { ReplyMessageForm } from '@next/container';
 
 type MessageTreeProps = {
   messages: Message[];
@@ -50,7 +50,7 @@ export const MessageTree: VFC<MessageTreeProps> = ({ messages, avatar, image, us
             ))}
           </ul>
           <div className="mt-5">
-            <ResponseMessageForm originalMessageId={messages[0].id} />
+            <ReplyMessageForm replyTargetId={messages[0].id} />
           </div>
         </>
       }

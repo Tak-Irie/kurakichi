@@ -1,10 +1,8 @@
 import { Message as StoredMessage, MessageTree as StoredMessageTree } from '@prisma/client';
 import { Message } from '../domain';
 
-type MessageTree = StoredMessage & {
-  tree: StoredMessageTree & {
-    messages: StoredMessage[];
-  };
+type MessageTree = StoredMessageTree & {
+  messages: StoredMessage[];
 };
 
 export class MessageMapper {
@@ -27,7 +25,7 @@ export class MessageMapper {
   }
 
   public static treeToDomain(messageTree: MessageTree): Message[] {
-    return messageTree.tree.messages.map((message) => MessageMapper.ToDomain(message));
+    return messageTree.messages.map((message) => MessageMapper.ToDomain(message));
   }
 
   public static toStore(domainMessage: Message): StoredMessage {
