@@ -26,7 +26,7 @@ export class GetInquiriesUseCase implements IUseCase<InquiriesArg, Promise<GetIn
   public async execute(arg: InquiriesArg): Promise<GetInquiriesResponse> {
     try {
       const orgId = UniqueEntityId.reconstruct(arg.orgId);
-      const dbInquiries = await this.InquiriesRepo.getInquiries(orgId.getValue());
+      const dbInquiries = await this.InquiriesRepo.getInquiriesByOrgId(orgId.getValue());
       if (dbInquiries == false) return right(Result.success<DTOInquiry[]>([]));
 
       const dtoInquiries = createDTOInquiriesFromDomain(dbInquiries);

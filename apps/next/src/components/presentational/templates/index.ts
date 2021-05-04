@@ -4,4 +4,6 @@ export * from './UserProfile';
 export * from './UserMyPage';
 export * from './OrgMyPage';
 export * from './MessageTree';
+export * from './InquiryTree';
 export * from './UserTemplate';
+export * from './OrgTemplate';

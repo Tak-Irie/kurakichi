@@ -1,4 +1,5 @@
-import { FC, VFC } from 'react';
+import { VFC } from 'react';
+import { reactNewLineToBr } from '../../../util/reactNewLineToBr';
 
 type TextProps = {
   content: string;
@@ -9,10 +10,18 @@ type TextProps = {
 // size should be controlled by components (also responsive feat)
 
 export const TextSmall: VFC<TextProps> = ({ content }) => {
-  return <p className="mt-1 text-gray-900 text-sm">{content}</p>;
+  if (content) {
+    const _content = reactNewLineToBr(content);
+    return <p className="mt-1 inline-flex items-center text-gray-900 text-sm">{_content}</p>;
+  }
+  return <p className="mt-1 inline-flex items-center text-gray-900 text-sm">{content}</p>;
 };
 
 export const Text: VFC<TextProps> = ({ content }) => {
+  if (content) {
+    const _content = reactNewLineToBr(content);
+    return <p className="text-base text-gray-700 md:text-lg">{_content}</p>;
+  }
   return <p className="text-base text-gray-700 md:text-lg">{content}</p>;
 };
 
@@ -29,10 +38,10 @@ export const TextBig: VFC<TextProps> = ({ content }) => {
   );
 };
 
-export const TextLabel: VFC<TextProps> = ({ content }) => {
+export const TextLabel: VFC<Omit<TextProps, 'label'>> = ({ content }) => {
   return (
     <div className="mb-2">
-      <label className="text-base font-medium text-gray-700">{content}</label>
+      <label className="underline font-bold text-base  text-gray-700">{content}</label>
     </div>
   );
 };

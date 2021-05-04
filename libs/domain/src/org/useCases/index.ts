@@ -10,7 +10,10 @@ import { GetOrgsByMemberIdUseCase } from './getOrgsByMemberId/GetOrgsByMemberIdU
 
 import { GetInquiryUseCase } from './getInquiry/getInquiryUseCase';
 import { GetInquiriesUseCase } from './getInquiries/getInquiriesUseCase';
+import { GetInquiriesByTreeIdUseCase } from './getInquiriesByTreeId/GetInquiriesByTreeIdUseCase';
 import { RegisterInquiryUseCase } from './registerInquiry/registerInquiryUseCase';
+import { GetInquiriesWithStatusByOrgIdUseCase } from './getInquiriesWithStatusByOrgId/GetInquiriesWithStatusByOrgIdUseCase';
+import { ReplyInquiryUseCase } from './replyInquiry/ReplyInquiryUseCase';
 
 const orgRepo = new OrgRepo();
 const inquiryRepo = new InquiryRepo();
@@ -24,7 +27,12 @@ export const useGetOrgsByMemberIdUseCase = new GetOrgsByMemberIdUseCase(orgRepo)
 
 export const useGetInquiryUseCase = new GetInquiryUseCase(inquiryRepo);
 export const useGetInquiriesUseCase = new GetInquiriesUseCase(inquiryRepo);
+export const useGetInquiriesByTreeIdUseCase = new GetInquiriesByTreeIdUseCase(inquiryRepo, orgRepo);
 export const useRegisterInquiryUseCase = new RegisterInquiryUseCase(inquiryRepo);
+export const useGetInquiriesWithStatusByOrgIdUseCase = new GetInquiriesWithStatusByOrgIdUseCase(
+  inquiryRepo,
+);
+export const useReplyInquiryUseCase = new ReplyInquiryUseCase(inquiryRepo);
 
 export * from './DTOInquiry';
 export * from './DTOOrg';

@@ -9,6 +9,7 @@ import {
   AvatarSmall,
   IconsVerticalDots,
   IconsUser,
+  IconsUsers,
   DropDownMenu,
   DropDownMenuItem,
 } from '@next/ui';
@@ -50,6 +51,20 @@ const NavAuthSection: FC = () => {
         menuIcon={<IconsVerticalDots />}
       >
         <DropDownMenuItem linkUrl="/user/mypage" label="マイページ" icon={<IconsUser />} />
+        {data.getUserByCookie.user.belongOrgs[0]
+          ? data.getUserByCookie.user.belongOrgs.map((org) => {
+              return (
+                <div key={org.id}>
+                  <DropDownMenuItem
+                    linkUrl="/org/myorg/[id]"
+                    linkAs={`/org/myorg/${org.id}`}
+                    label={org.orgName}
+                    icon={<IconsUsers />}
+                  />
+                </div>
+              );
+            })
+          : null}
         <LogoutMenuItem />
       </DropDownMenu>
     </div>

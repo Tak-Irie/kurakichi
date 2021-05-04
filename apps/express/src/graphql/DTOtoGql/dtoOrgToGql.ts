@@ -1,4 +1,4 @@
-import { DTOOrg } from '@kurakichi/domain';
+import { DTOOrg, DTOUser } from '@kurakichi/domain';
 import { idsMapper } from '../../util/idMapper';
 import { NexusGenFieldTypes } from '../generated/nexus';
 
@@ -34,4 +34,26 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): NexusGenFieldTypes['Org'] => {
 };
 export const dtoOrgsToGql = (dtoOrgs: DTOOrg[]): NexusGenFieldTypes['Org'][] => {
   return dtoOrgs.map((org) => dtoOrgToGql(org));
+};
+
+// TODO:these function is used still impl CQRS
+export const dtoOrgToGqlWithUser = (
+  dtoOrg: DTOOrg,
+  dtoUser: DTOUser[],
+): NexusGenFieldTypes['Org'] => {
+  const org = dtoOrgToGql(dtoOrg);
+  const members = org.members.map((member) => {
+    const user = dtoUser.find((user) => user.id === member.id);
+    const _user = { ...user, belongOrgs: [], messages: [], belongSecureBases: [] };
+    return _user;
+  });
+  return { ...org, members: members };
+};
+
+export const dtoOrgsToGqlWithUser = (
+  dtoOrgs: DTOOrg[],
+  dtoUser: DTOUser[],
+): NexusGenFieldTypes['Org'][] => {
+  const orgs = dtoOrgs.map((org) => dtoOrgToGqlWithUser(org, dtoUser));
+  return orgs;
 };

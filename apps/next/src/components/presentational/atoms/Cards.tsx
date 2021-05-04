@@ -2,10 +2,11 @@ import { FC, ReactElement, VFC } from 'react';
 import Link from 'next/link';
 
 type CardProps = {
-  key?: string;
+  id?: string;
   title?: string;
   content?: string;
   linkUrl?: string;
+  linkAs?: string;
   image?: string;
   imageAlt?: string;
 };
@@ -39,11 +40,11 @@ export const SmallCard: FC<CardProps> = ({
   title = 'title',
   content = 'content',
   image = undefined,
-  key,
+  id,
   children,
 }) => {
   return (
-    <li key={key}>
+    <li key={id}>
       <div className="flex bg-gray-200 p-3 m-2 max-w-lg items-center border-2 border-red-900">
         <div className="flex items-center justify-center w-16 h-16 mr-5 rounded-full bg-yellow-100">
           <svg className="w-16 h-12 text-red-300" stroke="currentColor" viewBox="0 0 52 52">
@@ -66,17 +67,21 @@ export const SmallCard: FC<CardProps> = ({
   );
 };
 
-export const CardWithPick: VFC<CardProps> = ({ content, image, key, imageAlt, linkUrl, title }) => {
+export const CardWithPick: VFC<CardProps> = ({
+  content,
+  image,
+  imageAlt,
+  linkUrl,
+  linkAs,
+  title,
+}) => {
   return (
-    <div
-      key={key}
-      className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500"
-    >
+    <div className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500">
       <div className="flex-shrink-0">
         <img className="h-10 w-10 rounded-full" src={image} alt={imageAlt} />
       </div>
       <div className="flex-1 min-w-0">
-        <Link href={linkUrl}>
+        <Link href={linkUrl} as={linkAs}>
           <a href={linkUrl} className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true"></span>
             <p className="text-sm font-medium text-gray-900">{title}</p>

@@ -22,6 +22,7 @@ type InquiryArg = {
   content: string;
   receiverId: string;
   senderId: string;
+  orgId: string;
 };
 
 type RegisterInquiryResponse = Either<
@@ -43,7 +44,7 @@ export class RegisterInquiryUseCase
   public async execute(arg: InquiryArg): Promise<RegisterInquiryResponse> {
     try {
       // console.log('registerInquiryArg:', arg);
-      const { category, content, receiverId, senderId, status } = arg;
+      const { category, content, receiverId, senderId, status, orgId } = arg;
       const categoryOrError = InquiryCategory.create({ type: category });
       const contentOrError = InquiryContent.create({ text: content });
       const statusOrError = InquiryStatus.create({ status: status });
@@ -62,14 +63,15 @@ export class RegisterInquiryUseCase
         content: contentOrError.getValue(),
         receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
         sender: UniqueEntityId.reconstruct(senderId).getValue(),
+        orgId: UniqueEntityId.reconstruct(orgId).getValue(),
       });
 
       const dbResult = await this.InquiryRepo.registerInquiry(inquiryOrError.getValue());
-      if (dbResult == false) return left(new StoreConnectionError());
 
       const dtoInquiry = createDTOInquiryFromDomain(dbResult);
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
+      if (err === Error('データベースエラー')) return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

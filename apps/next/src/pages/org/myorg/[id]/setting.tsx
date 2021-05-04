@@ -5,7 +5,7 @@ type settingProps = {
 };
 
 const OrgSetting: FC<settingProps> = () => {
-  return <p>place</p>;
+  return <p>here is each setting</p>;
 };
 
 export default OrgSetting;

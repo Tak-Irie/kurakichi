@@ -12,6 +12,7 @@ export class InquiryMapper {
       status,
       sentAt,
       inquiryTreeId,
+      receivedOrgId,
     } = storedInquiry;
 
     const InquiryResult = Inquiry.restoreFromRepo({
@@ -23,6 +24,7 @@ export class InquiryMapper {
       sender: senderId,
       sentAt: Number(sentAt),
       treeId: inquiryTreeId,
+      orgId: receivedOrgId,
     });
 
     return InquiryResult;
@@ -34,7 +36,17 @@ export class InquiryMapper {
   }
 
   public static toStore(Inquiry: Inquiry): StoredInquiry {
-    const { category, content, id, sender, receiver, status, treeId, sentAt } = Inquiry.getProps();
+    const {
+      category,
+      content,
+      id,
+      sender,
+      receiver,
+      status,
+      treeId,
+      sentAt,
+      orgId,
+    } = Inquiry.getProps();
     return {
       id: id.getId(),
       category: category.getValue(),
@@ -44,6 +56,7 @@ export class InquiryMapper {
       receiverId: receiver.getId(),
       sentAt: BigInt(sentAt.getTime()),
       inquiryTreeId: treeId.getId(),
+      receivedOrgId: orgId.getId(),
     };
   }
 }

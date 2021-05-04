@@ -8,8 +8,8 @@ export const NavBar: FC = () => {
       <div className="flex items-center justify-between">
         <Link href="/">
           <a href="/" aria-label="Company" title="Company" className="inline-flex items-center">
-            <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-              くらきち ｰ くらしのあんぜんきち_アルファ版 -
+            <span className="ml-2 text-xl font-bold tracking-wide text-gray-800">
+              くらきち ~くらしのあんぜんきち.vAlpha~
             </span>
           </a>
         </Link>
@@ -19,6 +19,7 @@ export const NavBar: FC = () => {
           <HeaderList href="/users" title="users" label="users" />
           <HeaderList href="/orgs" title="orgs" label="orgs" />
           <HeaderList href="/user/mypage" title="mypage" label="MyPage" />
+          <HeaderList href="/org/mypage" title="orgmypage" label="OrgMyPage" />
           <HeaderDropDown />
         </ul>
         <NavAuthSection />

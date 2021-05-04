@@ -32,8 +32,10 @@ export class GetOrgsByMemberIdUseCase
 
       const dbResult = await this.OrgRepo.getOrgsByMemberId(idOrError.getValue());
       if (dbResult == false) return right(Result.success<DTOOrg[]>([]));
+      // console.log('dbResult:', dbResult);
 
       const dtoOrgs = createDTOOrgsFromDomain(dbResult);
+      // console.log('dtoOrgs:', dtoOrgs);
 
       return right(Result.success<DTOOrg[]>(dtoOrgs));
     } catch (err) {

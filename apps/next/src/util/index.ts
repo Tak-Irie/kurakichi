@@ -7,3 +7,4 @@ export * from './isServer';
 export * from './ownTypes';
 export * from './useGetIdFromUrl';
 export * from './uploadImage';
+export * from './reactNewLineToBr';

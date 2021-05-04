@@ -22,7 +22,7 @@ export const Avatar: FC<AvatarsProps> = ({
 };
 
 export const AvatarSmall: FC<AvatarsProps> = ({
-  src,
+  src = 'UNKNOWN',
   alt = 'sampleImage',
   notification = false,
 }) => {

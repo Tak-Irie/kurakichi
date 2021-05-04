@@ -1,14 +1,11 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  useSendInquiryMutation,
-  InquiryCategory,
-  InquiryStatus,
-} from '../../graphql/generated/graphql';
-import { ButtonBig, Form, InputTextarea, Select } from '@next/ui';
+import { useSendInquiryMutation, InquiryCategory, InquiryStatus } from '@next/graphql';
+import { ButtonBig, Form, InputTextarea, Select, NotificationSet, ButtonOrLoading } from '@next/ui';
 
 type SendInquiryProps = {
   orgId: string;
+  receiverId: string;
 };
 
 type SendInquiryInput = {
@@ -17,7 +14,7 @@ type SendInquiryInput = {
   status: InquiryStatus;
 };
 
-export const SendInquiry: FC<SendInquiryProps> = (props) => {
+export const SendInquiryForm: FC<SendInquiryProps> = (props) => {
   const { register, handleSubmit } = useForm<SendInquiryInput>();
   const [sendInquiry, { data, error, loading }] = useSendInquiryMutation();
 
@@ -27,13 +24,14 @@ export const SendInquiry: FC<SendInquiryProps> = (props) => {
     try {
       await sendInquiry({
         variables: {
-          receiverId: props.orgId,
+          orgId: props.orgId,
+          receiverId: props.receiverId,
           textInput: values.textInput,
           category: values.category,
           status: InquiryStatus['Unread'],
         },
       });
-      console.log('data:', data);
+      // console.log('data:', data);
     } catch (err) {
       console.log('err:', err);
     }
@@ -41,6 +39,15 @@ export const SendInquiry: FC<SendInquiryProps> = (props) => {
 
   return (
     <div>
+      <NotificationSet
+        data={data?.sendInquiry.inquiry}
+        errData={data?.sendInquiry.error}
+        sysErr={error}
+        dataLabel="送信に成功しました。返信をお待ち下さい"
+        errDataLabel="送信に失敗しました"
+        errDataContent={data?.sendInquiry.error?.message}
+        sysErrLabel="システムに問題があります。管理者に連絡して下さい"
+      />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Select<SendInquiryInput, InquiryCategory>
           fieldLabel="メッセージカテゴリー"
@@ -63,11 +70,8 @@ export const SendInquiry: FC<SendInquiryProps> = (props) => {
           required
           register={register}
         />
-        <ButtonBig type="submit">メッセージ送信</ButtonBig>
+        <ButtonOrLoading loading={loading} buttonLabel="送信" buttonType="submit" />
       </Form>
-      {loading && <p>loading!</p>}
-      {error && <p>{error.message} error</p>}
-      {data && <p> done</p>}
     </div>
   );
 };

@@ -100,9 +100,10 @@ type Mutation {
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
   registerUser(email: String!, password: String!, userName: String!): UserPayload
+  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
   replyMessage(content: String!, replyTargetId: String!): MessagePayload
   requestJoinOrg(orgId: String!): OrgPayload
-  sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
+  sendInquiry(category: InquiryCategory, orgId: String!, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
   updateUser(avatar: String, description: String, email: String, image: String, userName: String): UserPayload
 }
@@ -138,14 +139,17 @@ type OrgPayload {
 type Query {
   """get inquiries of one Org"""
   getInquiries(orgId: String!): InquiryPayload
+  getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
+  getInquiriesWithStatus(orgId: String!, status: InquiryStatus): InquiryPayload
   getInquiry(inquiryId: String!): InquiryPayload
 
   """get User's id, then show their own messages"""
   getMessagesByCookie: MessagePayload
   getMessagesByTreeId(treeId: String!): MessagePayload
-  getOrg(orgId: String!): OrgPayload
+  getOrgPrivateInfoByIdAndCookie(orgId: String!): OrgPayload
+  getOrgPublicInfoById(orgId: String!): OrgPayload
   getOrgs: OrgPayload
-  getOrgsByMemberId: OrgPayload
+  getOrgsByMemberCookie: OrgPayload
   getUserByCookie: UserPayload
   getUserById(userId: String!): UserPayload
   getUserByIdWithOrg(userId: String!): UserPayload

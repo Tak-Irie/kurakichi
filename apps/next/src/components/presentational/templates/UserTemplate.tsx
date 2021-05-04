@@ -26,7 +26,7 @@ export const UserTemplate: VFC<UserTemplateProps> = ({
       <div className="col-start-3">
         <Text2xl content={userName} />
       </div>
-      <div className="col-start-3 col-end-10">{pageContents}</div>
+      <div className="col-start-3 col-end-10 mt-2">{pageContents}</div>
     </div>
   );
 };

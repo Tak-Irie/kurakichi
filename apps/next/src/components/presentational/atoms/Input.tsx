@@ -60,7 +60,7 @@ export const InputTextarea = <T extends any>({
   register,
   required,
   placeholder = '',
-  overWriteCSS = 'flex-grow w-full h-24 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline',
+  overWriteCSS = 'flex-grow w-full h-24 px-4 mb-3 text-gray-800 transition duration-200 border-2 border-transparent rounded appearance-none focus:border-gray-700 focus:outline-none focus:shadow-outline',
 }: TextareaProps<T>) => (
   <>
     <div className="flex justify-start items-center">

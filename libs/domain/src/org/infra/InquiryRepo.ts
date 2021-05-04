@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { UniqueEntityId } from '../../shared';
 import { IInquiryRepo, Inquiry } from '../domain';
+import { InquiryStatus } from '../domain/InquiryStatus';
 import { InquiryMapper } from './InquiryMapper';
 
 export class InquiryRepo implements IInquiryRepo {
@@ -9,31 +10,41 @@ export class InquiryRepo implements IInquiryRepo {
     this.prisma = new PrismaClient();
   }
 
-  async registerInquiry(inquiry: Inquiry): Promise<Inquiry | false> {
-    const {
-      category,
-      id,
-      inquiryTreeId,
-      receiverId,
-      senderId,
-      sentAt,
-      status,
-      text,
-    } = InquiryMapper.toStore(inquiry);
-    const result = await this.prisma.inquiry.create({
-      data: {
-        id,
+  async registerInquiry(inquiry: Inquiry): Promise<Inquiry> {
+    try {
+      const {
         category,
+        id,
+        inquiryTreeId,
+        receiverId,
+        senderId,
         sentAt,
         status,
         text,
-        receiver: { connect: { id: receiverId } },
-        sender: { connect: { id: senderId } },
-        tree: { create: { id: inquiryTreeId } },
-      },
-    });
-    if (result == undefined) return false;
-    return inquiry;
+        receivedOrgId,
+      } = InquiryMapper.toStore(inquiry);
+
+      const result = await this.prisma.inquiry.create({
+        data: {
+          id,
+          category,
+          sentAt,
+          status,
+          text,
+          receiver: { connect: { id: receiverId } },
+          sender: { connect: { id: senderId } },
+          receivedOrg: { connect: { id: receivedOrgId } },
+          tree: {
+            connectOrCreate: { where: { id: inquiryTreeId }, create: { id: inquiryTreeId } },
+          },
+        },
+      });
+
+      return InquiryMapper.ToDomain(result);
+    } catch (err) {
+      console.error('dbErr:', err);
+      throw new Error('データベースエラー');
+    }
   }
 
   async getInquiry(id: UniqueEntityId): Promise<Inquiry | false> {
@@ -44,11 +55,41 @@ export class InquiryRepo implements IInquiryRepo {
 
     return domainInquiry;
   }
+  async getInquiryTreeById(treeId: UniqueEntityId): Promise<Inquiry[] | false> {
+    const result = await this.prisma.inquiry.findMany({ where: { tree: { id: treeId.getId() } } });
+    if (result == undefined) return false;
 
-  async getInquiries(id: UniqueEntityId): Promise<Inquiry[] | false> {
-    const result = await this.prisma.inquiry.findMany({ where: { receiver: { id: id.getId() } } });
+    const domainInquiries = InquiryMapper.ArrayToDomain(result);
+
+    return domainInquiries;
+  }
+
+  async getInquiriesByOrgId(id: UniqueEntityId): Promise<Inquiry[] | false> {
+    const result = await this.prisma.inquiry.findMany({
+      where: { receivedOrg: { id: id.getId() } },
+    });
     if (result == undefined) return false;
     const domainInquiries = InquiryMapper.ArrayToDomain(result);
     return domainInquiries;
+  }
+
+  async getInquiriesWithStatusByOrgId(
+    orgId: UniqueEntityId,
+    status: InquiryStatus,
+  ): Promise<Inquiry[] | false> {
+    try {
+      console.log('inqStatus:', status.getValue());
+      const Inquiries = await this.prisma.inquiry.findMany({
+        where: { receiverId: orgId.getId(), AND: [{ status: status.getValue() }] },
+      });
+      if (Inquiries == undefined) return false;
+
+      const domainInquiries = InquiryMapper.ArrayToDomain(Inquiries);
+
+      return domainInquiries;
+    } catch (err) {
+      console.log('dbErr:', err);
+      return false;
+    }
   }
 }

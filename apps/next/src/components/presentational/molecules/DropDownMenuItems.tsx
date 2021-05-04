@@ -7,16 +7,17 @@ type DropDownMenuItemProps = {
   icon: ReactElement;
   label: string;
   linkUrl?: string;
+  linkAs?: string;
   onClick?: () => void | Promise<void>;
   // isOpen?: boolean;
 };
 
-export const DropDownMenuItem: FC<DropDownMenuItemProps> = ({ linkUrl, icon, label }) => {
+export const DropDownMenuItem: FC<DropDownMenuItemProps> = ({ linkUrl, linkAs, icon, label }) => {
   return (
     <Menu.Item>
-      <Link href={linkUrl} passHref>
+      <Link href={linkUrl} as={linkAs} passHref>
         <a
-          href={linkUrl}
+          href="replace"
           className="group flex items-center px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           role="menuitem"
         >

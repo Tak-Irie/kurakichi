@@ -1,24 +1,88 @@
 import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
 import { fetchGraphqlApi } from '../../util/fetchGraphqlApi';
 import { useRouter } from 'next/router';
-import { OrgProfile } from '@next/ui';
-import { OrgPayload } from '../../graphql/generated/graphql';
+import {
+  OrgProfile,
+  OrgTemplate,
+  ButtonWithIcon,
+  IconsMail,
+  IconsCaution,
+  FeedbackCaution,
+  PopOnIcon,
+} from '@next/ui';
+import { SendInquiryForm } from '@next/container';
+import { OrgPayload, useGetUserByCookieQuery } from '@next/graphql';
+import { useState } from 'react';
+
+import { Transition } from '@headlessui/react';
 
 type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Org: NextPage<OrgProps> = (props) => {
+const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
+  // console.log('props:', props);
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+  const org = props.data.getOrgPublicInfoById.org;
 
-  return <OrgProfile {...props.data.getOrg.org} />;
+  return (
+    <OrgTemplate
+      avatar={org.avatar}
+      image={org.image}
+      orgName={org.orgName}
+      headerButtons={
+        userData?.getUserByCookie.user ? (
+          <>
+            <div className="">
+              <ButtonWithIcon
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                label="お問い合わせ"
+                icon={<IconsMail />}
+              />
+            </div>
+            <div className="mt-12 absolute w-full">
+              <Transition
+                show={isOpen}
+                enter="transition-opacity duration-150"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-150"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />
+              </Transition>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center space-x-3">
+            <PopOnIcon
+              icon={<IconsCaution />}
+              content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
+            />
+            <ButtonWithIcon
+              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              label="メッセージを送る"
+              disabled
+              icon={<IconsMail />}
+            ></ButtonWithIcon>
+          </div>
+        )
+      }
+      pageContents={<OrgProfile org={org} />}
+    />
+  );
 };
 
 // TODO:need to SSR?, examine it
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await fetchGraphqlApi({
-    query: `query GetOrgs {
+    query: `query _query {
               getOrgs {
                 orgs {
                 id
@@ -38,9 +102,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }) => {
-  const data: { getOrg: OrgPayload } = await fetchGraphqlApi({
-    query: `query GetOrg($OrgId: String!) {
-              getOrg(orgId: $OrgId) {
+  const data: { getOrgPublicInfoById: OrgPayload } = await fetchGraphqlApi({
+    query: `query _query($orgId: String!) {
+              getOrgPublicInfoById(orgId: $orgId) {
                 org {
                   id
                   orgName
@@ -54,6 +118,7 @@ export const getStaticProps = async ({ params }) => {
                   members {
                     id
                     userName
+                    avatar
                   }
                   inquiries {
                     id
@@ -65,11 +130,11 @@ export const getStaticProps = async ({ params }) => {
                   }
               }
             }`,
-    variables: { OrgId: params.id },
+    variables: { orgId: params.id },
   });
 
   // console.log('SSG data:', data.getOrg.org.members);
   return { props: { data } };
 };
 
-export default Org;
+export default OrgProfilePublicPage;

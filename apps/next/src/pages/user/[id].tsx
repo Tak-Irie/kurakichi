@@ -6,10 +6,12 @@ import {
 import { useGetIdFromUrl } from '../../util';
 
 import { LoadingStylishSpinner, UserProfile } from '@next/ui';
+import { useRouter } from 'next/router';
 
-const User: NextPage = () => {
-  const id = useGetIdFromUrl();
-  const { data, error, loading } = useGetUserByIdWithOrgQuery({ variables: { userId: id } });
+const UserProfilePage: NextPage = () => {
+  const router = useRouter();
+  const uid = router.query.id as string;
+  const { data, error, loading } = useGetUserByIdWithOrgQuery({ variables: { userId: uid } });
   const { data: clientData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
 
   if (loading) return <LoadingStylishSpinner />;
@@ -21,7 +23,7 @@ const User: NextPage = () => {
     return (
       <div>
         <UserProfile
-          userId={id}
+          userId={uid}
           avatar={avatar}
           description={description}
           image={image}
@@ -36,4 +38,4 @@ const User: NextPage = () => {
   return <LoadingStylishSpinner />;
 };
 
-export default User;
+export default UserProfilePage;

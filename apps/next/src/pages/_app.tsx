@@ -7,6 +7,7 @@ import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from '../util/createApolloClient';
 
 import { Layout } from '../components/presentational/templates/Layouts';
+import { useGetUserByCookieQuery } from '@next/graphql';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (

@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
-import { UserMyPage } from '@next/ui';
+import Link from 'next/link';
+import { UserMyPage, UserTemplate, ButtonWithIcon, IconsCog, IconsMail } from '@next/ui';
 import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
 
-const MyPage: NextPage = () => {
+const UserPrivatePage: NextPage = () => {
   // TODO:CQRS
   const { data, loading, error } = useGetUserPrivateInfoByCookieQuery();
 
@@ -22,21 +23,37 @@ const MyPage: NextPage = () => {
       belongSecureBases,
     } = data.getUserByCookie.user;
     return (
-      <div>
-        <UserMyPage
-          userName={userName}
-          description={description}
-          avatar={avatar}
-          image={image}
-          orgs={belongOrgs}
-          messages={messages}
-          email={email}
-          secureBases={belongSecureBases}
-        />
-      </div>
+      <UserTemplate
+        avatar={avatar}
+        image={image}
+        userName={userName}
+        headerButtons={
+          <>
+            <Link href="/user/setting">
+              <a href="/user/setting">
+                <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
+              </a>
+            </Link>
+            <Link href="/user/message">
+              <a href="/user/message">
+                <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+              </a>
+            </Link>
+          </>
+        }
+        pageContents={
+          <UserMyPage
+            description={description}
+            orgs={belongOrgs}
+            messages={messages}
+            email={email}
+            secureBases={belongSecureBases}
+          />
+        }
+      />
     );
   }
   return <p>{data.getUserByCookie.error.message}</p>;
 };
 
-export default MyPage;
+export default UserPrivatePage;

@@ -1,24 +1,9 @@
-import { FC, useState } from 'react';
-import Link from 'next/link';
+import { FC } from 'react';
 
-import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
-import {
-  ProfileHeader,
-  IconsMail,
-  IconsCog,
-  Text2xl,
-  TextLabeled,
-  TextLabel,
-  TableNewMessages,
-  ButtonWithIcon,
-  TableOrg,
-  TableSecureBase,
-} from '@next/ui';
+import { Message, Org, SecureBase } from '@next/graphql';
+import { TextLabeled, TextLabel, TableMessage, TableOrg, TableSecureBase } from '@next/ui';
 
 type UserProfileProps = {
-  userName: string;
-  image: string;
-  avatar: string;
   description: string;
   email: string;
   orgs: Org[];
@@ -27,9 +12,6 @@ type UserProfileProps = {
 };
 
 export const UserMyPage: FC<UserProfileProps> = ({
-  userName,
-  image,
-  avatar,
   description,
   orgs,
   messages,
@@ -38,24 +20,7 @@ export const UserMyPage: FC<UserProfileProps> = ({
 }) => {
   // console.log('messages:', messages);
   return (
-    <div className="grid grid-cols-12 pb-10">
-      <div className="col-span-full">
-        <ProfileHeader avatarSrc={avatar} imageSrc={image} colSpan="3">
-          <Link href="/user/setting">
-            <a href="/user/setting">
-              <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
-            </a>
-          </Link>
-          <Link href="/user/messages">
-            <a href="/user/messages">
-              <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
-            </a>
-          </Link>
-        </ProfileHeader>
-      </div>
-      <div className="col-start-3">
-        <Text2xl content={userName} />
-      </div>
+    <>
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="プロフィール" />
         <div className="space-y-1 mt-2">
@@ -67,11 +32,7 @@ export const UserMyPage: FC<UserProfileProps> = ({
         </div>
       </div>
       <div className="col-start-3 col-end-10 mt-5">
-        <TableNewMessages
-          tableLabel="新着メッセージ"
-          messages={messages}
-          textOfNotExist="新着メッセージはありません"
-        />
+        <TableMessage messages={messages} />
       </div>
       <div className="col-start-3 col-end-10 mt-5">
         <TableSecureBase secureBases={secureBases} />
@@ -79,6 +40,6 @@ export const UserMyPage: FC<UserProfileProps> = ({
       <div className="col-start-3 col-end-10 mt-5">
         <TableOrg orgs={orgs} />
       </div>
-    </div>
+    </>
   );
 };

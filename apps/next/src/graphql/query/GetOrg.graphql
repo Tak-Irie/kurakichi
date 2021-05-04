@@ -1,5 +1,5 @@
-query GetOrg($OrgId: String!) {
-  getOrg(orgId: $OrgId) {
+query GetOrgPublicInfoById($orgId: String!) {
+  getOrgPublicInfoById(orgId: $orgId) {
     org {
       ...OrgPayload
     }

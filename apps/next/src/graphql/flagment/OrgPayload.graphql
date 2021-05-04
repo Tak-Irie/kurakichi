@@ -10,6 +10,9 @@ fragment OrgPayload on Org {
   homePage
   members {
     id
+    userName
+    avatar
+    description
   }
   inquiries {
     id

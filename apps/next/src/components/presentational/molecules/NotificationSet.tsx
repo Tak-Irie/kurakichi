@@ -4,9 +4,9 @@ import { FC } from 'react';
 import { NotificationAlert, NotificationCaution, NotificationSuccess } from '@next/ui';
 
 type NotificationsProps = {
-  data?: any;
-  errData?: any;
-  sysErr?: ApolloError;
+  data: any;
+  errData: any;
+  sysErr: ApolloError;
   dataContent?: string;
   errDataContent?: string;
   dataLabel?: string;
@@ -14,6 +14,9 @@ type NotificationsProps = {
   sysErrLabel?: string;
 };
 
+/**
+ * @desc data, errData, sysErr is used for event trigger.
+ */
 export const NotificationSet: FC<NotificationsProps> = ({
   data,
   errData,

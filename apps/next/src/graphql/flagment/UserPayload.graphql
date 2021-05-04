@@ -8,8 +8,13 @@ fragment UserPayload on User {
   role
   belongOrgs {
     id
+    orgName
   }
   belongSecureBases {
     id
+    baseOwner {
+      id
+      userName
+    }
   }
 }

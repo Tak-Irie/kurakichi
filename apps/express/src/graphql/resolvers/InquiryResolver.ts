@@ -3,10 +3,14 @@ import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import {
   useGetInquiriesUseCase,
+  useGetInquiriesWithStatusByOrgIdUseCase,
   useGetInquiryUseCase,
   useRegisterInquiryUseCase,
+  useGetInquiriesByTreeIdUseCase,
+  useGetUsersByIdsUseCase,
+  useReplyInquiryUseCase,
 } from '@kurakichi/domain';
-import { dtoInquiryToGql, dtoInquiriesToGql } from '../DTOtoGql';
+import { dtoInquiryToGql, dtoInquiriesToGql, dtoInquiriesWithUserToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const InquiryQuery = extendType({
@@ -42,6 +46,52 @@ export const InquiryQuery = extendType({
         return { inquiry: gqlField };
       },
     });
+    t.field('getInquiriesWithStatus', {
+      type: 'InquiryPayload',
+      args: {
+        orgId: nonNull(stringArg()),
+        status: 'InquiryStatus',
+      },
+      resolve: async (_, args) => {
+        const domainInquiriesOrErr = await useGetInquiriesWithStatusByOrgIdUseCase.execute({
+          orgId: args.orgId,
+          status: args.status,
+        });
+        if (domainInquiriesOrErr.isLeft()) return returnErrorToGQL(domainInquiriesOrErr);
+
+        const gqlInquiries = dtoInquiriesToGql(domainInquiriesOrErr.value.getValue());
+        return { inquiries: gqlInquiries };
+      },
+    });
+    t.field('getInquiriesByTreeIdAndCookie', {
+      type: 'InquiryPayload',
+      args: {
+        treeId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        // console.log('queryConfirm:', args, context.req.session);
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const domainInquiriesOrErr = await useGetInquiriesByTreeIdUseCase.execute({
+          treeId: args.treeId,
+          requestUserId: idOrErr,
+        });
+        if (domainInquiriesOrErr.isLeft()) return returnErrorToGQL(domainInquiriesOrErr);
+
+        const dtoInquiries = domainInquiriesOrErr.value.getValue();
+
+        const domainUsersOrErr = await useGetUsersByIdsUseCase.execute({
+          ids: dtoInquiries.map((inquiry) => inquiry.sender),
+        });
+        if (domainUsersOrErr.isLeft()) return returnErrorToGQL(domainUsersOrErr);
+
+        const dtoUsers = domainUsersOrErr.value.getValue();
+        const gqlInquiries = dtoInquiriesWithUserToGql(dtoInquiries, dtoUsers);
+
+        return { inquiryTree: { id: gqlInquiries[0].tree.id, treedInquiry: gqlInquiries } };
+      },
+    });
   },
 });
 
@@ -53,6 +103,7 @@ export const InquiryMutation = extendType({
       args: {
         textInput: nonNull(stringArg()),
         receiverId: nonNull(stringArg()),
+        orgId: nonNull(stringArg()),
         category: 'InquiryCategory',
         status: 'InquiryStatus',
       },
@@ -61,18 +112,41 @@ export const InquiryMutation = extendType({
         const idOrErr = getUserIdByCookie(context);
         if (typeof idOrErr === 'object') return idOrErr;
 
+        const { receiverId, textInput, category, status, orgId } = args;
         const useCaseResult = await useRegisterInquiryUseCase.execute({
           senderId: idOrErr,
-          receiverId: args.receiverId,
-          content: args.textInput,
-          category: args.category,
-          status: args.status,
+          receiverId,
+          content: textInput,
+          category,
+          status,
+          orgId,
         });
 
         if (useCaseResult.isLeft()) return returnErrorToGQL(useCaseResult);
 
         const gqlField = dtoInquiryToGql(useCaseResult.value.getValue());
         return { inquiry: gqlField };
+      },
+    });
+    t.field('replyInquiry', {
+      type: 'InquiryPayload',
+      args: {
+        content: nonNull(stringArg()),
+        replyTargetId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const dtoInquiryOrErr = await useReplyInquiryUseCase.execute({
+          replyTargetId: args.replyTargetId,
+          content: args.content,
+          senderId: idOrErr,
+        });
+        if (dtoInquiryOrErr.isLeft()) return returnErrorToGQL(dtoInquiryOrErr);
+
+        const gqlInquiry = dtoInquiryToGql(dtoInquiryOrErr.value.getValue());
+        return { inquiry: gqlInquiry };
       },
     });
   },

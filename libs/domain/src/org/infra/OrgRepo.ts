@@ -16,6 +16,16 @@ export class OrgRepo implements IOrgRepo {
     return !!result;
   }
 
+  async confirmMemberExistence(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<boolean> {
+    // console.log('confirmMember:', orgId, memberId);
+    const result = await this.prisma.organization.findUnique({
+      where: { id: orgId.getId() },
+      select: { members: { where: { id: memberId.getId() } } },
+    });
+    if (result == undefined) return false;
+    return true;
+  }
+
   async registerOrg(org: Org): Promise<Org | false> {
     const data = OrgMapper.toStore(org);
     const result = await this.prisma.$transaction([
@@ -47,6 +57,7 @@ export class OrgRepo implements IOrgRepo {
   async getOrgsByMemberId(memberId: UniqueEntityId): Promise<Org[] | false> {
     const dbOrgs = await this.prisma.organization.findMany({
       where: { members: { some: { id: memberId.getId() } } },
+      include: { members: true, inquiries: true },
     });
     if (dbOrgs == undefined) return false;
 

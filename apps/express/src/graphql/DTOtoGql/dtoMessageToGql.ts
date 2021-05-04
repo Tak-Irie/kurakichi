@@ -33,7 +33,7 @@ export const dtoMessageWithSenderToGql = (
     sender: { ...dtoSender, belongOrgs: [], belongSecureBases: [], messages: [] },
     tree: idMapper(treeId),
   };
-  console.log('gqlMessage:', gqlMessage);
+  // console.log('gqlMessage:', gqlMessage);
   return gqlMessage;
 };
 

@@ -8,3 +8,4 @@ export * from './DropDownMenuItems';
 export * from './NotificationSet';
 export * from './ButtonOrLoading';
 export * from './Tables';
+export * from './BadgeInquiry';

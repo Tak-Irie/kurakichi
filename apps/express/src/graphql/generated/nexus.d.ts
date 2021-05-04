@@ -202,6 +202,7 @@ export interface NexusGenFieldTypes {
     postDialog: NexusGenRootTypes['DialogPayload'] | null; // DialogPayload
     registerOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     registerUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
+    replyInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     replyMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
@@ -228,12 +229,15 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     getInquiries: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
+    getInquiriesByTreeIdAndCookie: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
+    getInquiriesWithStatus: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     getInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     getMessagesByCookie: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
     getMessagesByTreeId: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
-    getOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    getOrgPrivateInfoByIdAndCookie: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    getOrgPublicInfoById: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getOrgs: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
-    getOrgsByMemberId: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
+    getOrgsByMemberCookie: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     getUserByCookie: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     getUserById: NexusGenRootTypes['UserPayload'] | null; // UserPayload
     getUserByIdWithOrg: NexusGenRootTypes['UserPayload'] | null; // UserPayload
@@ -340,6 +344,7 @@ export interface NexusGenFieldTypeNames {
     postDialog: 'DialogPayload'
     registerOrg: 'OrgPayload'
     registerUser: 'UserPayload'
+    replyInquiry: 'InquiryPayload'
     replyMessage: 'MessagePayload'
     requestJoinOrg: 'OrgPayload'
     sendInquiry: 'InquiryPayload'
@@ -366,12 +371,15 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     getInquiries: 'InquiryPayload'
+    getInquiriesByTreeIdAndCookie: 'InquiryPayload'
+    getInquiriesWithStatus: 'InquiryPayload'
     getInquiry: 'InquiryPayload'
     getMessagesByCookie: 'MessagePayload'
     getMessagesByTreeId: 'MessagePayload'
-    getOrg: 'OrgPayload'
+    getOrgPrivateInfoByIdAndCookie: 'OrgPayload'
+    getOrgPublicInfoById: 'OrgPayload'
     getOrgs: 'OrgPayload'
-    getOrgsByMemberId: 'OrgPayload'
+    getOrgsByMemberCookie: 'OrgPayload'
     getUserByCookie: 'UserPayload'
     getUserById: 'UserPayload'
     getUserByIdWithOrg: 'UserPayload'
@@ -452,6 +460,10 @@ export interface NexusGenArgTypes {
       password: string; // String!
       userName: string; // String!
     }
+    replyInquiry: { // args
+      content: string; // String!
+      replyTargetId: string; // String!
+    }
     replyMessage: { // args
       content: string; // String!
       replyTargetId: string; // String!
@@ -461,6 +473,7 @@ export interface NexusGenArgTypes {
     }
     sendInquiry: { // args
       category?: NexusGenEnums['InquiryCategory'] | null; // InquiryCategory
+      orgId: string; // String!
       receiverId: string; // String!
       status?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
       textInput: string; // String!
@@ -481,13 +494,23 @@ export interface NexusGenArgTypes {
     getInquiries: { // args
       orgId: string; // String!
     }
+    getInquiriesByTreeIdAndCookie: { // args
+      treeId: string; // String!
+    }
+    getInquiriesWithStatus: { // args
+      orgId: string; // String!
+      status?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
+    }
     getInquiry: { // args
       inquiryId: string; // String!
     }
     getMessagesByTreeId: { // args
       treeId: string; // String!
     }
-    getOrg: { // args
+    getOrgPrivateInfoByIdAndCookie: { // args
+      orgId: string; // String!
+    }
+    getOrgPublicInfoById: { // args
       orgId: string; // String!
     }
     getUserById: { // args
