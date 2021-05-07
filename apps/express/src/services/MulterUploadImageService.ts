@@ -1,6 +1,9 @@
 import multer from 'multer';
 import path from 'path';
 
+import imagemin from 'imagemin';
+import imageminWebp from 'imagemin-webp';
+
 // FIXME: add validation, minimize to webp(do it at front?)
 const storage = multer.diskStorage({
   destination: (_, file, cb) => {

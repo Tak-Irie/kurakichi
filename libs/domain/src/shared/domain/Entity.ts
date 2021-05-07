@@ -8,8 +8,20 @@ import { Identifier } from './Identifier';
 const isEntity = (v: unknown): v is Entity<unknown> => v instanceof Entity;
 
 /**
+ * オブジェクトの要素型のみを抽出する
+ */
+export type PropTypes<T> = T[keyof T];
+
+// FIXME:PickやOmitの要領でstring | number | string[] | number[]にしたいが、やりかたわからん
+/**
+ * オブジェクトの要素型を組込型にする
+ */
+export type PropPrimitives<T, U extends keyof T> = {
+  [P in keyof Omit<T, U>]: string;
+};
+
+/**
  * 抽象Entityクラス
- *
  */
 export abstract class Entity<T> {
   protected readonly _id: UniqueEntityId;

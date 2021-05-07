@@ -16,7 +16,7 @@ import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 export const InquiryQuery = extendType({
   type: 'Query',
   definition(t) {
-    t.field('getInquiries', {
+    t.field('getInquiriesByOrgId', {
       type: 'InquiryPayload',
       description: 'get inquiries of one Org',
       args: {

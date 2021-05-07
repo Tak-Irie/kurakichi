@@ -30,8 +30,8 @@ const NavAuthSection: FC = () => {
   if (!data?.getUserByCookie.user)
     return (
       <div>
-        <Link href="/login">
-          <a href="/login">
+        <Link href="/login" passHref>
+          <a href="replace">
             <ButtonSmall type="button">ログイン</ButtonSmall>
           </a>
         </Link>

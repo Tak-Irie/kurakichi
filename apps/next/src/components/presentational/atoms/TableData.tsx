@@ -11,8 +11,8 @@ const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => {
   return (
     <td className="max-w-0 w-full px-6 py-4 whitespace-nowrap text-base text-gray-900">
       <div className="flex">
-        <Link href={link}>
-          <a href={link} className="group inline-flex items-center space-x-2 truncate text-base">
+        <Link href={link} passHref>
+          <a href="replace" className="group inline-flex items-center space-x-2 truncate text-base">
             <div className="h-6 w-6 text-gray-500">{icon}</div>
             <p className="text-gray-500 truncate group-hover:text-gray-900">{title}</p>
           </a>

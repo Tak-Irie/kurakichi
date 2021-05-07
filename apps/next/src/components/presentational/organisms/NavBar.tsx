@@ -6,8 +6,13 @@ export const NavBar: FC = () => {
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
       <div className="flex items-center justify-between">
-        <Link href="/">
-          <a href="/" aria-label="Company" title="Company" className="inline-flex items-center">
+        <Link href="/" passHref>
+          <a
+            href="replace"
+            aria-label="Company"
+            title="Company"
+            className="inline-flex items-center"
+          >
             <span className="ml-2 text-xl font-bold tracking-wide text-gray-800">
               くらきち ~くらしのあんぜんきち.vAlpha~
             </span>
@@ -15,11 +20,8 @@ export const NavBar: FC = () => {
         </Link>
         <ul className="flex items-center space-x-8 lg:flex">
           <HeaderList href="/ex/playground" title="playground" label="PlayGround" />
-          <HeaderList href="/product" title="our product" label="Product" />
           <HeaderList href="/users" title="users" label="users" />
           <HeaderList href="/orgs" title="orgs" label="orgs" />
-          <HeaderList href="/user/mypage" title="mypage" label="MyPage" />
-          <HeaderList href="/org/mypage" title="orgmypage" label="OrgMyPage" />
           <HeaderDropDown />
         </ul>
         <NavAuthSection />

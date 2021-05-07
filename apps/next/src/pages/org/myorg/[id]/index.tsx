@@ -40,7 +40,7 @@ const OrgPrivatePage: NextPage = () => {
         <>
           <Link href="/org/myorg/[id]/setting" as={`/org/myorg/${id}/setting`} passHref>
             <a href="replace">
-              <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
+              <ButtonWithIcon type="button" label="団体情報設定" icon={<IconsCog />} />
             </a>
           </Link>
           <Link href="/org/myorg/[id]/inquiry" as={`/org/myorg/${id}/inquiry`} passHref>

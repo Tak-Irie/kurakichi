@@ -228,7 +228,7 @@ export interface NexusGenFieldTypes {
     orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
   }
   Query: { // field return type
-    getInquiries: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
+    getInquiriesByOrgId: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     getInquiriesByTreeIdAndCookie: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     getInquiriesWithStatus: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     getInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
@@ -370,7 +370,7 @@ export interface NexusGenFieldTypeNames {
     orgs: 'Org'
   }
   Query: { // field return type name
-    getInquiries: 'InquiryPayload'
+    getInquiriesByOrgId: 'InquiryPayload'
     getInquiriesByTreeIdAndCookie: 'InquiryPayload'
     getInquiriesWithStatus: 'InquiryPayload'
     getInquiry: 'InquiryPayload'
@@ -491,7 +491,7 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    getInquiries: { // args
+    getInquiriesByOrgId: { // args
       orgId: string; // String!
     }
     getInquiriesByTreeIdAndCookie: { // args

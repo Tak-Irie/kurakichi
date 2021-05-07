@@ -29,13 +29,13 @@ const UserPrivatePage: NextPage = () => {
         userName={userName}
         headerButtons={
           <>
-            <Link href="/user/setting">
-              <a href="/user/setting">
+            <Link href="/user/setting" passHref>
+              <a href="replace">
                 <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
               </a>
             </Link>
-            <Link href="/user/message">
-              <a href="/user/message">
+            <Link href="/user/message" passHref>
+              <a href="replace">
                 <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
               </a>
             </Link>

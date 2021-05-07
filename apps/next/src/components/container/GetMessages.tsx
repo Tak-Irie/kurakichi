@@ -8,7 +8,7 @@ export const GetMessages: FC = () => {
   if (loading) return <LoadingStylishSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  console.log('data:', data);
+  // console.log('data:', data);
   return (
     <div>
       {!data.getMessagesByCookie.messages ? (

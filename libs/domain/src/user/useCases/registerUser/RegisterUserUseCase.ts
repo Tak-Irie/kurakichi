@@ -1,5 +1,6 @@
 import {
   Either,
+  InvalidInputValueError,
   IUseCase,
   left,
   Result,
@@ -21,7 +22,11 @@ type RegisterUserArg = {
 type UserTypes = UserEmail | UserName | UserPassword;
 
 type RegisterUserResponse = Either<
-  EmailAlreadyExistsError | UnexpectedError | StoreConnectionError | Result<UserTypes>,
+  | InvalidInputValueError
+  | EmailAlreadyExistsError
+  | UnexpectedError
+  | StoreConnectionError
+  | Result<UserTypes>,
   Result<DTOUser>
 >;
 
@@ -53,8 +58,17 @@ export class RegisterUserUseCase
       ]);
       // console.log('verified:', verifiedResult);
 
-      if (verifiedResult.isFailure) {
-        return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
+      if (verifiedResult[0].isFailure) {
+        return left(
+          new InvalidInputValueError(
+            verifiedResult.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
       }
 
       const email = emailOrError.getValue();

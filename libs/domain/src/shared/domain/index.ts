@@ -5,6 +5,6 @@ export * from './Identifier';
 export * from './PhoneNumber';
 export * from './UniqueEntityId';
 export * from './UnixTime';
-export * from './Validation';
 export * from './ValidURL';
 export * from './ValueObject';
+export * from './Location';

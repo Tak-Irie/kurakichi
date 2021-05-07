@@ -6,6 +6,6 @@ export * from './InvalidInputValueError';
 export * from './NotExistError';
 export * from './Result';
 export * from './StoreConnectionError';
-export * from './TextUtil';
+export * from './Validation';
 export * from './UnexpectedError';
 export * from './useCase';

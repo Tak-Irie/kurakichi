@@ -39,8 +39,8 @@ const Orgs: NextPage = () => {
                 <ButtonBig
                   type="button"
                   label={
-                    <Link href="/org/[id]" as={`/org/${org.id}`}>
-                      <a href="/org/[id]">組織詳細</a>
+                    <Link href="/org/[id]" as={`/org/${org.id}`} passHref>
+                      <a href="replace">組織詳細</a>
                     </Link>
                   }
                 />

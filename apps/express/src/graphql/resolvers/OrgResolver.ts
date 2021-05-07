@@ -15,7 +15,6 @@ import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 import {
   dtoOrgToGql,
   dtoUsersToGql,
-  dtoInquiriesToGql,
   dtoOrgsToGqlWithUser,
   dtoInquiriesWithUserToGql,
 } from '../DTOtoGql';
@@ -32,13 +31,13 @@ export const orgMutation = extendType({
         phoneNumber: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
-        // console.log('catch mutation:', context.req.session);
+        // console.log('catch mutation, args, context:', args, context.req.session);
         const idOrErr = getUserIdByCookie(context);
         // console.log('id:', idOrErr);
         if (typeof idOrErr === 'object') return idOrErr;
         const orgResult = await useRegisterOrgUseCase.execute({
           adminId: idOrErr,
-          orgName: args.name,
+          name: args.name,
           location: args.location,
           email: args.email,
           phoneNumber: args.phoneNumber,

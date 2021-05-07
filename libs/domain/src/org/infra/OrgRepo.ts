@@ -112,4 +112,19 @@ export class OrgRepo implements IOrgRepo {
     const data = OrgMapper.ToDomain(result);
     return data;
   }
+
+  async updateOrg(org: Org): Promise<Org> {
+    try {
+      const primitiveOrg = OrgMapper.toStore(org);
+
+      const result = await this.prisma.organization.update({
+        where: { id: primitiveOrg.id },
+        data: primitiveOrg,
+      });
+      return OrgMapper.ToDomain(result);
+    } catch (err) {
+      console.error(err);
+      throw Error('データベースエラー');
+    }
+  }
 }

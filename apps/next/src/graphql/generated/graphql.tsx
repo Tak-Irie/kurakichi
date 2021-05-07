@@ -255,7 +255,7 @@ export type Query = {
   getMessagesByCookie?: Maybe<MessagePayload>;
   getMessagesByTreeId?: Maybe<MessagePayload>;
   /** get inquiries of one Org */
-  getInquiries?: Maybe<InquiryPayload>;
+  getInquiriesByOrgId?: Maybe<InquiryPayload>;
   getInquiry?: Maybe<InquiryPayload>;
   getInquiriesWithStatus?: Maybe<InquiryPayload>;
   getInquiriesByTreeIdAndCookie?: Maybe<InquiryPayload>;
@@ -292,7 +292,7 @@ export type QueryGetMessagesByTreeIdArgs = {
 };
 
 
-export type QueryGetInquiriesArgs = {
+export type QueryGetInquiriesByOrgIdArgs = {
   orgId: Scalars['String'];
 };
 
@@ -787,14 +787,14 @@ export type UserLogoutMutation = (
   )> }
 );
 
-export type GetInquiriesQueryVariables = Exact<{
+export type GetInquiriesByOrgIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetInquiriesQuery = (
+export type GetInquiriesByOrgIdQuery = (
   { __typename?: 'Query' }
-  & { getInquiries?: Maybe<(
+  & { getInquiriesByOrgId?: Maybe<(
     { __typename?: 'InquiryPayload' }
     & { inquiries?: Maybe<Array<Maybe<(
       { __typename?: 'Inquiry' }
@@ -1880,9 +1880,9 @@ export function useUserLogoutMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UserLogoutMutationHookResult = ReturnType<typeof useUserLogoutMutation>;
 export type UserLogoutMutationResult = Apollo.MutationResult<UserLogoutMutation>;
 export type UserLogoutMutationOptions = Apollo.BaseMutationOptions<UserLogoutMutation, UserLogoutMutationVariables>;
-export const GetInquiriesDocument = gql`
-    query GetInquiries($orgId: String!) {
-  getInquiries(orgId: $orgId) {
+export const GetInquiriesByOrgIdDocument = gql`
+    query GetInquiriesByOrgId($orgId: String!) {
+  getInquiriesByOrgId(orgId: $orgId) {
     inquiries {
       ...InquiryPayload
     }
@@ -1895,32 +1895,32 @@ export const GetInquiriesDocument = gql`
 ${RegularErrorFragmentDoc}`;
 
 /**
- * __useGetInquiriesQuery__
+ * __useGetInquiriesByOrgIdQuery__
  *
- * To run a query within a React component, call `useGetInquiriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetInquiriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetInquiriesByOrgIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInquiriesByOrgIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetInquiriesQuery({
+ * const { data, loading, error } = useGetInquiriesByOrgIdQuery({
  *   variables: {
  *      orgId: // value for 'orgId'
  *   },
  * });
  */
-export function useGetInquiriesQuery(baseOptions: Apollo.QueryHookOptions<GetInquiriesQuery, GetInquiriesQueryVariables>) {
+export function useGetInquiriesByOrgIdQuery(baseOptions: Apollo.QueryHookOptions<GetInquiriesByOrgIdQuery, GetInquiriesByOrgIdQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetInquiriesQuery, GetInquiriesQueryVariables>(GetInquiriesDocument, options);
+        return Apollo.useQuery<GetInquiriesByOrgIdQuery, GetInquiriesByOrgIdQueryVariables>(GetInquiriesByOrgIdDocument, options);
       }
-export function useGetInquiriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInquiriesQuery, GetInquiriesQueryVariables>) {
+export function useGetInquiriesByOrgIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInquiriesByOrgIdQuery, GetInquiriesByOrgIdQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetInquiriesQuery, GetInquiriesQueryVariables>(GetInquiriesDocument, options);
+          return Apollo.useLazyQuery<GetInquiriesByOrgIdQuery, GetInquiriesByOrgIdQueryVariables>(GetInquiriesByOrgIdDocument, options);
         }
-export type GetInquiriesQueryHookResult = ReturnType<typeof useGetInquiriesQuery>;
-export type GetInquiriesLazyQueryHookResult = ReturnType<typeof useGetInquiriesLazyQuery>;
-export type GetInquiriesQueryResult = Apollo.QueryResult<GetInquiriesQuery, GetInquiriesQueryVariables>;
+export type GetInquiriesByOrgIdQueryHookResult = ReturnType<typeof useGetInquiriesByOrgIdQuery>;
+export type GetInquiriesByOrgIdLazyQueryHookResult = ReturnType<typeof useGetInquiriesByOrgIdLazyQuery>;
+export type GetInquiriesByOrgIdQueryResult = Apollo.QueryResult<GetInquiriesByOrgIdQuery, GetInquiriesByOrgIdQueryVariables>;
 export const GetInquiriesByTreeIdAndCookieDocument = gql`
     query GetInquiriesByTreeIdAndCookie($treeId: String!) {
   getInquiriesByTreeIdAndCookie(treeId: $treeId) {

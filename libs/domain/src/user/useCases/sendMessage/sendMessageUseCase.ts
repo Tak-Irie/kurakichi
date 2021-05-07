@@ -36,8 +36,17 @@ export class SendMessageUseCase implements IUseCase<SendMessageArg, Promise<Send
       const contentOrError = MessageContent.create({ text: arg.textInput });
       const verifiedResults = Result.verifyResults<MessageTypes>([contentOrError]);
 
-      if (verifiedResults.isFailure)
-        return left(new InvalidInputValueError(verifiedResults.getErrorValue()));
+      if (verifiedResults[0].isFailure)
+        return left(
+          new InvalidInputValueError(
+            verifiedResults.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
 
       const messageOrError = Message.create({
         content: contentOrError.getValue(),

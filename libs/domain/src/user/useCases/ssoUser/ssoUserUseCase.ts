@@ -42,8 +42,17 @@ export class SsoUserUseCase implements IUseCase<SsoUserArgs, Promise<RegisterUse
 
       const verifiedResult = Result.verifyResults<UserTypes>([emailOrError, usernameOrError]);
 
-      if (verifiedResult.isFailure) {
-        return left(new InvalidInputValueError(verifiedResult.getErrorValue()));
+      if (verifiedResult[0].isFailure) {
+        return left(
+          new InvalidInputValueError(
+            verifiedResult.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
       }
 
       const email = emailOrError.getValue();

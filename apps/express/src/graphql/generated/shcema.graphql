@@ -138,7 +138,7 @@ type OrgPayload {
 
 type Query {
   """get inquiries of one Org"""
-  getInquiries(orgId: String!): InquiryPayload
+  getInquiriesByOrgId(orgId: String!): InquiryPayload
   getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
   getInquiriesWithStatus(orgId: String!, status: InquiryStatus): InquiryPayload
   getInquiry(inquiryId: String!): InquiryPayload

@@ -1,5 +1,5 @@
-query GetInquiries($orgId: String!) {
-  getInquiries(orgId: $orgId) {
+query GetInquiriesByOrgId($orgId: String!) {
+  getInquiriesByOrgId(orgId: $orgId) {
     inquiries {
       ...InquiryPayload
     }

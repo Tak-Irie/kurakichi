@@ -11,10 +11,10 @@ type HeaderListProps = {
 const HeaderList: FC<HeaderListProps> = (props) => {
   return (
     <li key={props.title}>
-      <Link href={props.href}>
+      <Link href={props.href} passHref>
         <a
           onClick={props.onClick}
-          href={props.href}
+          href="replace"
           aria-label={props.title}
           title={props.title}
           className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"

@@ -7,15 +7,11 @@ import {
   TableMessage,
   UserTemplate,
 } from '@next/ui';
-import {
-  useGetUserByCookieQuery,
-  useGetMessagesByTreeIdQuery,
-  useGetMessagesByCookieQuery,
-} from '@next/graphql';
+import { useGetUserByCookieQuery, useGetMessagesByCookieQuery } from '@next/graphql';
 import React from 'react';
 import Link from 'next/link';
 
-const MessagePage: NextPage = () => {
+const MessageBoxPrivatePage: NextPage = () => {
   const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   const { data, loading, error } = useGetMessagesByCookieQuery();
 
@@ -26,15 +22,16 @@ const MessagePage: NextPage = () => {
   if (data.getMessagesByCookie.error) {
     return <p>{data.getMessagesByCookie.error.message}</p>;
   }
-  if (!loading && data.getMessagesByCookie.messages && userData.getUserByCookie.user)
+  if (!loading && data.getMessagesByCookie.messages && userData.getUserByCookie.user) {
+    const _user = userData.getUserByCookie.user;
     return (
       <UserTemplate
-        avatar={userData.getUserByCookie.user.avatar}
-        image={userData.getUserByCookie.user.image}
-        userName={userData.getUserByCookie.user.userName}
+        avatar={_user.avatar}
+        image={_user.image}
+        userName={_user.userName}
         headerButtons={
-          <Link href="/user/mypage">
-            <a href="/user/mypage">
+          <Link href="/user/mypage" passHref>
+            <a href="replace">
               <ButtonWithIcon type="button" label="マイページに戻る" icon={<IconsUser />} />
             </a>
           </Link>
@@ -48,6 +45,7 @@ const MessagePage: NextPage = () => {
         }
       />
     );
+  }
 };
 
-export default MessagePage;
+export default MessageBoxPrivatePage;

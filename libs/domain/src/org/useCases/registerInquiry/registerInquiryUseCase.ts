@@ -54,8 +54,17 @@ export class RegisterInquiryUseCase
         contentOrError,
         statusOrError,
       ]);
-      if (verifiedResult.isFailure)
-        return left(Result.fail<InquiryTypes>(verifiedResult.getErrorValue()));
+      if (verifiedResult[0].isFailure)
+        return left(
+          new InvalidInputValueError(
+            verifiedResult.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
 
       const inquiryOrError = Inquiry.create({
         category: categoryOrError.getValue(),

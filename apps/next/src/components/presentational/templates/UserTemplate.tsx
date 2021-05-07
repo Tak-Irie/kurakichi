@@ -19,9 +19,7 @@ export const UserTemplate: VFC<UserTemplateProps> = ({
   return (
     <div className="grid grid-cols-12 pb-10">
       <div className="col-span-full">
-        <ProfileHeader avatarSrc={avatar} imageSrc={image} colSpan="3">
-          {headerButtons}
-        </ProfileHeader>
+        <ProfileHeader avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
       </div>
       <div className="col-start-3">
         <Text2xl content={userName} />

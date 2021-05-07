@@ -16,13 +16,13 @@ const OrgRegister: FC = () => {
   const { register, handleSubmit } = useForm<OrgRegisterInput>();
 
   const onSubmit = async (input: OrgRegisterInput) => {
-    console.log('input:', input);
+    // console.log('input:', input);
     try {
       await orgRegister({
         variables: { ...input },
       });
     } catch (err) {
-      console.log('err:', err);
+      console.error('err:', err);
     }
   };
   console.log('data:', data);

@@ -1,22 +1,15 @@
-import { FC, useState } from 'react';
-import { Transition } from '@headlessui/react';
+import { VFC, ReactNode } from 'react';
 
-import { ImageHero, AvatarBig, PopOnIcon, IconsCaution, IconsMail, ButtonWithIcon } from '@next/ui';
-
-import { SendMessage } from '@next/container';
+import { ImageHero, AvatarBig } from '@next/ui';
 
 type ProfileHeaderProps = {
   imageSrc: string;
   avatarSrc: string;
   colSpan?: string;
+  buttons?: ReactNode;
 };
 
-export const ProfileHeader: FC<ProfileHeaderProps> = ({
-  avatarSrc,
-  imageSrc,
-  children,
-  colSpan = '2',
-}) => {
+export const ProfileHeader: VFC<ProfileHeaderProps> = ({ avatarSrc, imageSrc, buttons }) => {
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full">
@@ -25,9 +18,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = ({
       <div className="col-start-3 -mt-20">
         <AvatarBig src={avatarSrc} alt="プロフィールアバター" />
       </div>
-      <div className={`col-end-11 col-span-${colSpan} mt-4`}>
-        <div className="flex w-auto items-center space-x-1">{children}</div>
-      </div>
+      <div className="col-start-6 col-end-10 mt-4 flex justify-end space-x-1">{buttons}</div>
     </div>
   );
 };

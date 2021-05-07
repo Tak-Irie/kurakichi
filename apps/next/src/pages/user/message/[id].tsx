@@ -10,13 +10,15 @@ import {
   IconsUser,
   IconsMail,
 } from '@next/ui';
-import { useGetIdFromUrl } from '../../..//util';
+import { useRouter } from 'next/router';
 
 const MessageTreePage: NextPage = () => {
-  const ids = useGetIdFromUrl();
+  const router = useRouter();
+  const messageTreeId = router.query.id as string;
+
   const { data: uData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   const { data, loading, error } = useGetMessagesByTreeIdQuery({
-    variables: { treeId: ids.mestid },
+    variables: { treeId: messageTreeId },
   });
 
   // console.log('user:', userData.getUserByCookie.user);
@@ -37,13 +39,13 @@ const MessageTreePage: NextPage = () => {
         userName={usrData.user.userName}
         headerButtons={
           <>
-            <Link href="/user/mypage">
-              <a href="/user/mypage">
+            <Link href="/user/mypage" passHref>
+              <a href="replace">
                 <ButtonWithIcon type="button" label="マイページに戻る" icon={<IconsUser />} />
               </a>
             </Link>
-            <Link href="/user/message" scroll={false}>
-              <a href="/user/message">
+            <Link href="/user/message" passHref scroll={false}>
+              <a href="replace">
                 <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
               </a>
             </Link>

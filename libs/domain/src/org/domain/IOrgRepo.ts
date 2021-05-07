@@ -12,4 +12,5 @@ export interface IOrgRepo {
   getOrgsByMemberId(memberId: UniqueEntityId): Promise<Org[] | false>;
   getOrgById(orgId: UniqueEntityId): Promise<Org | false>;
   confirmMemberExistence(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<boolean>;
+  updateOrg(org: Org): Promise<Org>;
 }
