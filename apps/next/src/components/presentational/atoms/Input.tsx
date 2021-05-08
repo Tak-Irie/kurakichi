@@ -8,7 +8,8 @@ type InputProps<T> = {
   register: UseFormRegister<T>;
   required: boolean;
   fieldLabel: string;
-  type: string;
+  type: 'date' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'time' | 'url';
+  autoComplete?: 'email' | 'new-password' | 'current-password' | 'tel' | 'username';
   helperText?: string;
   errMessage?: string | FieldError;
   overWriteCSS?: string;
@@ -23,13 +24,14 @@ type TextareaProps<T> = Omit<InputProps<T>, 'type'> & {
 export const Input = <T extends any>({
   label,
   type,
+  autoComplete,
   fieldLabel,
   register,
   helperText,
   errMessage,
   required,
   placeholder = '',
-  overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline',
+  overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black border-gray-300 border shadow-sm rounded appearance-none focus:outline-none focus:border-gray-700',
 }: InputProps<T>) => (
   <>
     <div className="flex justify-start items-center">
@@ -45,6 +47,7 @@ export const Input = <T extends any>({
       className={overWriteCSS}
       placeholder={placeholder}
       type={type}
+      autoComplete={autoComplete}
       {...register(label, { required })}
     />
   </>

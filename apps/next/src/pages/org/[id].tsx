@@ -36,7 +36,7 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
       headerButtons={
         userData?.getUserByCookie.user ? (
           <>
-            <div className="">
+            <div>
               <ButtonWithIcon
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
@@ -70,7 +70,7 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
               label="メッセージを送る"
               disabled
               icon={<IconsMail />}
-            ></ButtonWithIcon>
+            />
           </div>
         )
       }

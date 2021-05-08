@@ -13,7 +13,7 @@ export const PopOnIcon: FC<PopOnIconProps> = ({
   icon,
   content,
   placement = 'top',
-  overWriteCSS = 'absolute z-10 text:xs bg-gray-100 border border-gray-300',
+  overWriteCSS = 'absolute z-10 text:xs bg-white p-1 border rounded border-gray-300',
 }) => {
   const [visible, setVisibility] = useState(false);
   const referenceRef = useRef(null);
@@ -47,7 +47,7 @@ export const PopOnIcon: FC<PopOnIconProps> = ({
         {...attributes.popper}
         style={styles.popper}
         ref={popperRef}
-        className={`${visible ? 'visible' : 'invisible'}  ${overWriteCSS}`}
+        className={`${visible ? 'visible' : 'invisible'} ${overWriteCSS}`}
       >
         {content}
       </div>

@@ -120,6 +120,7 @@ export type Mutation = {
   registerOrg?: Maybe<OrgPayload>;
   requestJoinOrg?: Maybe<OrgPayload>;
   acceptJoinOrg?: Maybe<OrgPayload>;
+  updateOrg?: Maybe<OrgPayload>;
   sendMessage?: Maybe<MessagePayload>;
   replyMessage?: Maybe<MessagePayload>;
   sendInquiry?: Maybe<InquiryPayload>;
@@ -130,7 +131,6 @@ export type Mutation = {
 export type MutationRegisterUserArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
-  userName: Scalars['String'];
 };
 
 
@@ -182,6 +182,12 @@ export type MutationRequestJoinOrgArgs = {
 export type MutationAcceptJoinOrgArgs = {
   requestUserId: Scalars['String'];
   requestedOrgId: Scalars['String'];
+};
+
+
+export type MutationUpdateOrgArgs = {
+  orgId: Scalars['String'];
+  input?: Maybe<OrgUpdateInput>;
 };
 
 
@@ -238,6 +244,16 @@ export type OrgPayload = {
   org?: Maybe<Org>;
   orgs?: Maybe<Array<Maybe<Org>>>;
   error?: Maybe<RegularError>;
+};
+
+export type OrgUpdateInput = {
+  orgName?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  homePage?: Maybe<Scalars['String']>;
+  adminId?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -591,7 +607,6 @@ export type RegisterOrgMutation = (
 export type RegisterUserMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
-  userName: Scalars['String'];
 }>;
 
 
@@ -708,6 +723,26 @@ export type SendMessageMutation = (
     & { message?: Maybe<(
       { __typename?: 'Message' }
       & MessagePayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type UpdateOrgMutationVariables = Exact<{
+  orgId: Scalars['String'];
+  orgInput?: Maybe<OrgUpdateInput>;
+}>;
+
+
+export type UpdateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOrg?: Maybe<(
+    { __typename?: 'OrgPayload' }
+    & { org?: Maybe<(
+      { __typename?: 'Org' }
+      & OrgPayloadFragment
     )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
@@ -1443,8 +1478,8 @@ export type RegisterOrgMutationHookResult = ReturnType<typeof useRegisterOrgMuta
 export type RegisterOrgMutationResult = Apollo.MutationResult<RegisterOrgMutation>;
 export type RegisterOrgMutationOptions = Apollo.BaseMutationOptions<RegisterOrgMutation, RegisterOrgMutationVariables>;
 export const RegisterUserDocument = gql`
-    mutation RegisterUser($email: String!, $password: String!, $userName: String!) {
-  registerUser(email: $email, password: $password, userName: $userName) {
+    mutation RegisterUser($email: String!, $password: String!) {
+  registerUser(email: $email, password: $password) {
     user {
       ...UserPayload
     }
@@ -1472,7 +1507,6 @@ export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutatio
  *   variables: {
  *      email: // value for 'email'
  *      password: // value for 'password'
- *      userName: // value for 'userName'
  *   },
  * });
  */
@@ -1696,6 +1730,46 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const UpdateOrgDocument = gql`
+    mutation UpdateOrg($orgId: String!, $orgInput: OrgUpdateInput) {
+  updateOrg(orgId: $orgId, input: $orgInput) {
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
+export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
+
+/**
+ * __useUpdateOrgMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrgMutation, { data, loading, error }] = useUpdateOrgMutation({
+ *   variables: {
+ *      orgId: // value for 'orgId'
+ *      orgInput: // value for 'orgInput'
+ *   },
+ * });
+ */
+export function useUpdateOrgMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrgMutation, UpdateOrgMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrgMutation, UpdateOrgMutationVariables>(UpdateOrgDocument, options);
+      }
+export type UpdateOrgMutationHookResult = ReturnType<typeof useUpdateOrgMutation>;
+export type UpdateOrgMutationResult = Apollo.MutationResult<UpdateOrgMutation>;
+export type UpdateOrgMutationOptions = Apollo.BaseMutationOptions<UpdateOrgMutation, UpdateOrgMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($userName: String, $email: String, $description: String, $avatar: String, $image: String) {
   updateUser(

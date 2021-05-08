@@ -3,6 +3,7 @@ import {
   ExclamationIcon,
   MenuIcon,
   ChevronDownIcon,
+  ChevronUpIcon,
   DotsVerticalIcon,
   HomeIcon,
   UserIcon,
@@ -42,6 +43,12 @@ export const IconsDownChevron: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
 }) => {
   return <Icons overwriteCSS={overwriteCSS} icon={<ChevronDownIcon />} />;
+};
+
+export const IconsUpChevron: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<ChevronUpIcon />} />;
 };
 
 export const IconsVerticalDots: FC<Omit<IconsProps, 'icon'>> = ({

@@ -99,12 +99,13 @@ type Mutation {
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
-  registerUser(email: String!, password: String!, userName: String!): UserPayload
+  registerUser(email: String!, password: String!): UserPayload
   replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
   replyMessage(content: String!, replyTargetId: String!): MessagePayload
   requestJoinOrg(orgId: String!): OrgPayload
   sendInquiry(category: InquiryCategory, orgId: String!, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
   sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  updateOrg(input: OrgUpdateInput, orgId: String!): OrgPayload
   updateUser(avatar: String, description: String, email: String, image: String, userName: String): UserPayload
 }
 
@@ -134,6 +135,16 @@ type OrgPayload {
   error: RegularError
   org: Org
   orgs: [Org]
+}
+
+input OrgUpdateInput {
+  adminId: String
+  description: String
+  email: String
+  homePage: String
+  location: String
+  orgName: String
+  phoneNumber: String
 }
 
 type Query {

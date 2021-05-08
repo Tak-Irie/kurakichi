@@ -5,7 +5,7 @@ export * from './GetMessages';
 export * from './GoogleLoginButton';
 export * from './LogoutButton';
 export * from './OrgRegister';
-export * from './RegisterUser';
+export * from './RegisterUserForm';
 export * from './ReplyMessageForm';
 export * from './ReplyInquiryForm';
 export * from './SendInquiryForm';

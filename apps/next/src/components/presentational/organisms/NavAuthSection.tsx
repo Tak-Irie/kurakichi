@@ -29,7 +29,12 @@ const NavAuthSection: FC = () => {
 
   if (!data?.getUserByCookie.user)
     return (
-      <div>
+      <div className="flex space-x-1">
+        <Link href="/register" passHref>
+          <a href="replace">
+            <ButtonSmall type="button">新規登録</ButtonSmall>
+          </a>
+        </Link>
         <Link href="/login" passHref>
           <a href="replace">
             <ButtonSmall type="button">ログイン</ButtonSmall>

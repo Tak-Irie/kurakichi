@@ -8,6 +8,7 @@ import {
   useGetInquiriesUseCase,
   useGetOrgsByMemberIdUseCase,
   useGetUsersByIdsUseCase,
+  useUpdateOrgUseCase,
 } from '@kurakichi/domain';
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
@@ -18,80 +19,6 @@ import {
   dtoOrgsToGqlWithUser,
   dtoInquiriesWithUserToGql,
 } from '../DTOtoGql';
-
-export const orgMutation = extendType({
-  type: 'Mutation',
-  definition(t) {
-    t.field('registerOrg', {
-      type: 'OrgPayload',
-      args: {
-        name: nonNull(stringArg()),
-        location: nonNull(stringArg()),
-        email: nonNull(stringArg()),
-        phoneNumber: nonNull(stringArg()),
-      },
-      resolve: async (_, args, context) => {
-        // console.log('catch mutation, args, context:', args, context.req.session);
-        const idOrErr = getUserIdByCookie(context);
-        // console.log('id:', idOrErr);
-        if (typeof idOrErr === 'object') return idOrErr;
-        const orgResult = await useRegisterOrgUseCase.execute({
-          adminId: idOrErr,
-          name: args.name,
-          location: args.location,
-          email: args.email,
-          phoneNumber: args.phoneNumber,
-        });
-        // console.log('res:', orgResult);
-        if (orgResult.isLeft()) return { error: { message: orgResult.value.getErrorValue() } };
-        const gqlField = dtoOrgToGql(orgResult.value.getValue());
-        return { org: gqlField };
-      },
-    });
-    t.field('requestJoinOrg', {
-      type: 'OrgPayload',
-      args: {
-        orgId: nonNull(stringArg()),
-      },
-      resolve: async (_, args, context) => {
-        // console.log('arg:', args);
-        const idOrErr = getUserIdByCookie(context);
-        // console.log('id:', idOrErr);
-        if (typeof idOrErr === 'object') return idOrErr;
-
-        const result = await useRequestJoinOrgUseCase.execute({
-          requestUserId: idOrErr,
-          requestedOrgId: args.orgId,
-        });
-        // console.log('result:', result);
-        if (result.isLeft()) return returnErrorToGQL(result);
-
-        const gqlOrg = dtoOrgToGql(result.value.getValue());
-        return { org: gqlOrg };
-      },
-    });
-    t.field('acceptJoinOrg', {
-      type: 'OrgPayload',
-      args: {
-        requestUserId: nonNull(stringArg()),
-        requestedOrgId: nonNull(stringArg()),
-      },
-      resolve: async (_, args, context) => {
-        const idOrErr = getUserIdByCookie(context);
-        if (typeof idOrErr === 'object') return idOrErr;
-
-        const orgResult = await useAcceptJoinOrgUseCase.execute({
-          requestUserId: args.requestUserId,
-          requestedOrgId: args.requestedOrgId,
-        });
-        if (orgResult.isLeft()) return returnErrorToGQL(orgResult);
-
-        const gqlOrg = dtoOrgToGql(orgResult.value.getValue());
-        return { org: gqlOrg };
-      },
-    });
-  },
-});
 
 export const orgQuery = extendType({
   type: 'Query',
@@ -209,6 +136,101 @@ export const orgQuery = extendType({
         // console.log('gqlOrgs:', gqlOrgs[0].members);
 
         return { orgs: gqlOrgs };
+      },
+    });
+  },
+});
+
+export const orgMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('registerOrg', {
+      type: 'OrgPayload',
+      args: {
+        name: nonNull(stringArg()),
+        location: nonNull(stringArg()),
+        email: nonNull(stringArg()),
+        phoneNumber: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        // console.log('catch mutation, args, context:', args, context.req.session);
+        const idOrErr = getUserIdByCookie(context);
+        // console.log('id:', idOrErr);
+        if (typeof idOrErr === 'object') return idOrErr;
+        const orgResult = await useRegisterOrgUseCase.execute({
+          adminId: idOrErr,
+          name: args.name,
+          location: args.location,
+          email: args.email,
+          phoneNumber: args.phoneNumber,
+        });
+        // console.log('res:', orgResult);
+        if (orgResult.isLeft()) return { error: { message: orgResult.value.getErrorValue() } };
+        const gqlField = dtoOrgToGql(orgResult.value.getValue());
+        return { org: gqlField };
+      },
+    });
+    t.field('requestJoinOrg', {
+      type: 'OrgPayload',
+      args: {
+        orgId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        // console.log('arg:', args);
+        const idOrErr = getUserIdByCookie(context);
+        // console.log('id:', idOrErr);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const result = await useRequestJoinOrgUseCase.execute({
+          requestUserId: idOrErr,
+          requestedOrgId: args.orgId,
+        });
+        // console.log('result:', result);
+        if (result.isLeft()) return returnErrorToGQL(result);
+
+        const gqlOrg = dtoOrgToGql(result.value.getValue());
+        return { org: gqlOrg };
+      },
+    });
+    t.field('acceptJoinOrg', {
+      type: 'OrgPayload',
+      args: {
+        requestUserId: nonNull(stringArg()),
+        requestedOrgId: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const orgResult = await useAcceptJoinOrgUseCase.execute({
+          requestUserId: args.requestUserId,
+          requestedOrgId: args.requestedOrgId,
+        });
+        if (orgResult.isLeft()) return returnErrorToGQL(orgResult);
+
+        const gqlOrg = dtoOrgToGql(orgResult.value.getValue());
+        return { org: gqlOrg };
+      },
+    });
+    t.field('updateOrg', {
+      type: 'OrgPayload',
+      args: {
+        orgId: nonNull(stringArg()),
+        input: 'OrgUpdateInput',
+      },
+      resolve: async (_, args, context) => {
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const updateResult = await useUpdateOrgUseCase.execute({
+          ...args.input,
+          orgId: args.orgId,
+          requestUserId: idOrErr,
+        });
+        if (updateResult.isLeft()) return returnErrorToGQL(updateResult);
+
+        const gqlOrg = dtoOrgToGql(updateResult.value.getValue());
+        return { org: gqlOrg };
       },
     });
   },

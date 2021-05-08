@@ -48,7 +48,7 @@ type OrgUpdatable =
 
 type OrgValidatorArg = Partial<Pick<OrgPropPrimitives, OrgUpdatable>>;
 
-// TODO:need abstract funcs, restore, update, validate
+// FIXME:need abstract funcs, restore, update, validate
 export class Org extends AggregateRoot<OrgProps> {
   private constructor(readonly props: OrgProps) {
     super(props);
@@ -178,6 +178,7 @@ export class Org extends AggregateRoot<OrgProps> {
     return updatedOrg;
   }
 
+  // FIXME:ugly
   public static validateProps(props: OrgValidatorArg): OrgPropInResult {
     // console.log('validatePropsArg:', props);
     const results: OrgPropInResult = {};

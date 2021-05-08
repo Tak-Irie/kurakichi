@@ -18,7 +18,7 @@ export const ProfileHeader: VFC<ProfileHeaderProps> = ({ avatarSrc, imageSrc, bu
       <div className="col-start-3 -mt-20">
         <AvatarBig src={avatarSrc} alt="プロフィールアバター" />
       </div>
-      <div className="col-start-6 col-end-10 mt-4 flex justify-end space-x-1">{buttons}</div>
+      <div className="col-start-6 col-end-11 mt-4 flex justify-end space-x-1">{buttons}</div>
     </div>
   );
 };

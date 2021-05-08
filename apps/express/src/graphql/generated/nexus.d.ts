@@ -15,6 +15,15 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  OrgUpdateInput: { // input type
+    adminId?: string | null; // String
+    description?: string | null; // String
+    email?: string | null; // String
+    homePage?: string | null; // String
+    location?: string | null; // String
+    orgName?: string | null; // String
+    phoneNumber?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -207,6 +216,7 @@ export interface NexusGenFieldTypes {
     requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
+    updateOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     updateUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
   Org: { // field return type
@@ -349,6 +359,7 @@ export interface NexusGenFieldTypeNames {
     requestJoinOrg: 'OrgPayload'
     sendInquiry: 'InquiryPayload'
     sendMessage: 'MessagePayload'
+    updateOrg: 'OrgPayload'
     updateUser: 'UserPayload'
   }
   Org: { // field return type name
@@ -458,7 +469,6 @@ export interface NexusGenArgTypes {
     registerUser: { // args
       email: string; // String!
       password: string; // String!
-      userName: string; // String!
     }
     replyInquiry: { // args
       content: string; // String!
@@ -481,6 +491,10 @@ export interface NexusGenArgTypes {
     sendMessage: { // args
       receiverId: string; // String!
       textInput: string; // String!
+    }
+    updateOrg: { // args
+      input?: NexusGenInputs['OrgUpdateInput'] | null; // OrgUpdateInput
+      orgId: string; // String!
     }
     updateUser: { // args
       avatar?: string | null; // String
@@ -542,7 +556,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 

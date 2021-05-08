@@ -14,7 +14,6 @@ import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 import { EmailAlreadyExistsError } from './RegisterUserError';
 
 type RegisterUserArg = {
-  userName: string;
   email: string;
   password: string;
 };
@@ -39,7 +38,7 @@ export class RegisterUserUseCase
   public async execute(request: RegisterUserArg): Promise<RegisterUserResponse> {
     try {
       const usernameOrError = UserName.create({
-        userName: request.userName,
+        userName: request.email.split('@')[0].slice(0, 20),
       });
 
       const emailOrError = UserEmail.create({

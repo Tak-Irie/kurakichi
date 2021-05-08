@@ -7,6 +7,7 @@ import { GetOrgUseCase } from './getOrg/getOrgUseCase';
 import { AcceptJoinOrgUseCase } from './acceptJoinOrg/acceptJoinOrgUseCase';
 import { RequestJoinOrgUseCase } from './requestJoinOrg/requestJoinOrgUseCase';
 import { GetOrgsByMemberIdUseCase } from './getOrgsByMemberId/GetOrgsByMemberIdUseCase';
+import { UpdateOrgUseCase } from './updateOrg/UpdateOrgUseCase';
 
 import { GetInquiryUseCase } from './getInquiry/getInquiryUseCase';
 import { GetInquiriesUseCase } from './getInquiries/getInquiriesUseCase';
@@ -24,6 +25,7 @@ export const useGetOrgUseCase = new GetOrgUseCase(orgRepo);
 export const useAcceptJoinOrgUseCase = new AcceptJoinOrgUseCase(orgRepo);
 export const useRequestJoinOrgUseCase = new RequestJoinOrgUseCase(orgRepo);
 export const useGetOrgsByMemberIdUseCase = new GetOrgsByMemberIdUseCase(orgRepo);
+export const useUpdateOrgUseCase = new UpdateOrgUseCase(orgRepo);
 
 export const useGetInquiryUseCase = new GetInquiryUseCase(inquiryRepo);
 export const useGetInquiriesUseCase = new GetInquiriesUseCase(inquiryRepo);

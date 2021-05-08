@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         yahoo: {
           main: '#ff0033',
+          sub: 'ffffff',
         },
       },
       opacity: ['disabled'],

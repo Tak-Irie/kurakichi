@@ -15,11 +15,10 @@ const YahooLoginButton: FC = () => {
       if (verified === null) return;
 
       console.log('data:', data);
-      console.log('verified:', verified);
 
       window.location.assign(verified[0]);
     } catch (err) {
-      console.log('err:', err);
+      console.error('err:', err);
     }
   };
 

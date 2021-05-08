@@ -1,8 +1,10 @@
 import { NextPage } from 'next';
-import { LoadingStylishSpinner, ProfileHeaderSetting, Form } from '@next/ui';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { OrgTemplate, ButtonWithIcon, IconsUsers } from '@next/ui';
 import { UpdateOrgProfileForm } from '@next/container';
 import { useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
-import { useRouter } from 'next/router';
 
 const OrgSetting: NextPage = () => {
   const router = useRouter();
@@ -14,14 +16,42 @@ const OrgSetting: NextPage = () => {
   });
 
   if (data?.getOrgPrivateInfoByIdAndCookie.org) {
-    const { avatar, image, email, description, orgName } = data?.getOrgPrivateInfoByIdAndCookie.org;
+    const {
+      avatar,
+      image,
+      email,
+      description,
+      orgName,
+      homePage,
+      phoneNumber,
+      location,
+      id,
+    } = data?.getOrgPrivateInfoByIdAndCookie.org;
     return (
-      <div className="grid grid-cols-12">
-        <div className="col-span-full">
-          <ProfileHeaderSetting avatarSrc={avatar} imageSrc={image} />
-        </div>
-        <div className="mt-10 col-start-3 col-end-11">{/* <UpdateOrgProfileForm /> */}</div>
-      </div>
+      <OrgTemplate
+        avatar={avatar}
+        image={image}
+        orgName={orgName}
+        settingHeader={true}
+        headerButtons={
+          <Link href="/org/myorg/[id]" as={`/org/myorg/${id}`} passHref>
+            <a href="replace">
+              <ButtonWithIcon type="button" label="団体ページに戻る" icon={<IconsUsers />} />
+            </a>
+          </Link>
+        }
+        pageContents={
+          <UpdateOrgProfileForm
+            exDescription={description}
+            exEmail={email}
+            exHomePage={homePage}
+            exLocation={location}
+            exPhoneNumber={phoneNumber}
+            exName={orgName}
+            orgId={id}
+          />
+        }
+      />
     );
   }
 

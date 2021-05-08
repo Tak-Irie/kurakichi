@@ -29,12 +29,11 @@ export const Text2xl: VFC<TextProps> = ({ content }) => {
   return <p className="text-2xl text-gray-700">{content}</p>;
 };
 
-//TODO:, plan to change H2Text and create H1Text
-export const TextBig: VFC<TextProps> = ({ content }) => {
+export const TextH2: VFC<TextProps> = ({ content }) => {
   return (
-    <p className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+    <h2 className="max-w-lg mb-6 text-3xl font-bold text-gray-700 sm:text-4xl md:mx-auto">
       {content}
-    </p>
+    </h2>
   );
 };
 
@@ -52,5 +51,14 @@ export const TextLabeled: VFC<TextProps> = ({ content, label }) => {
       <label className="text-sm font-medium text-gray-500">{label}</label>
       <p className="mt-1 text-sm text-gray-900">{content}</p>
     </>
+  );
+};
+
+export const TextWithDivider: VFC<Omit<TextProps, 'label'>> = ({ content }) => {
+  return (
+    <div className="relative my-4 flex justify-center items-center">
+      <div className="border-t border-gray-300 w-full" />
+      <p className="absolute px-2 bg-white text-gray-700">{content}</p>
+    </div>
   );
 };

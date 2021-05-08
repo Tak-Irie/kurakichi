@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { VFC, ReactNode, useEffect, useState } from 'react';
 
 import { ImageHeroChangeable, AvatarChangeable, ButtonWithIcon, IconsCloudUpload } from '@next/ui';
 import { UploadFiles, uploadImage } from '../../../util';
@@ -6,11 +6,12 @@ import { UploadFiles, uploadImage } from '../../../util';
 type ProfileHeaderProps = {
   imageSrc: string;
   avatarSrc: string;
+  buttons?: ReactNode;
 };
 
-export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({ avatarSrc, imageSrc }) => {
+export const ProfileHeaderSetting: VFC<ProfileHeaderProps> = ({ avatarSrc, imageSrc, buttons }) => {
   const [files, setFiles] = useState<UploadFiles>({ image: imageSrc, avatar: avatarSrc });
-  const [disable, setDisable] = useState(true);
+  const [isDisable, setIsDisable] = useState(true);
 
   const handleClick = async () => {
     // console.log('clicked:', files);
@@ -20,7 +21,7 @@ export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({ avatarSrc, imageS
 
   useEffect(() => {
     if (typeof files.image === 'object' || typeof files.avatar === 'object') {
-      setDisable(false);
+      setIsDisable(false);
     }
     // console.log('filesOnEff:', files);
   }, [files]);
@@ -33,9 +34,10 @@ export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({ avatarSrc, imageS
       <div className="col-start-3 -mt-20">
         <AvatarChangeable files={files} setAvatar={setFiles} />
       </div>
-      <div className="col-span-2 col-end-11 mt-4">
+      <div className="col-span-6 col-end-11 mt-4 flex justify-end space-x-1">
+        {buttons}
         <ButtonWithIcon
-          disabled={disable}
+          disabled={isDisable}
           onClick={handleClick}
           type="button"
           label="画像をアップロードする"

@@ -134,7 +134,6 @@ export const userMutation = extendType({
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
-        userName: nonNull(stringArg()),
       },
       resolve: async (_, args, context) => {
         // console.log('getConn, args', args);
