@@ -35,6 +35,8 @@ model Organization {
   description      String
   phoneNumber      String
   location         String
+  latitude         Float
+  longitude        Float
   avatar           String
   image            String
   homePage         String

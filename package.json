@@ -107,6 +107,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.15",
+    "@googlemaps/google-maps-services-js": "^3.1.16",
     "@headlessui/react": "^1.0.0",
     "@heroicons/react": "^1.0.1",
     "@hookform/resolvers": "^2.4.0",

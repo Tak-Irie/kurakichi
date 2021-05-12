@@ -18,6 +18,10 @@ export const TextSmall: VFC<TextProps> = ({ content, textColor = 'text-grey-900'
   return <p className={`mt-1 inline-flex items-center text-sm ${textColor}`}>{content}</p>;
 };
 
+/**
+ *If you wanna use \n, give string in object to content
+ *@example ok:content={"hello\nworld"} fail:content="hello\nworld"
+ */
 export const Text: VFC<TextProps> = ({ content, textColor }) => {
   if (content) {
     const _content = reactNewLineToBr(content);

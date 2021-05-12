@@ -6,7 +6,6 @@ import {
   AggregateRoot,
   PhoneNumber,
   Location,
-  PropTypes,
   PropPrimitives,
   PropInResult,
 } from '../../shared';
@@ -30,6 +29,8 @@ export interface OrgProps {
 
 export type OrgPropInResult = PropInResult<Partial<OrgProps>>;
 type OrgPropPrimitives = PropPrimitives<OrgProps, 'members' | 'inquiries'> & {
+  latitude: number;
+  longitude: number;
   members: string[];
   inquiries: string[];
 };
@@ -113,6 +114,8 @@ export class Org extends AggregateRoot<OrgProps> {
       members,
       name,
       phoneNumber,
+      latitude,
+      longitude,
     } = storedOrg;
     const org = new Org({
       adminId: UniqueEntityId.restoreFromRepo(adminId),

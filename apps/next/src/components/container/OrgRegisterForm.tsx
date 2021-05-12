@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { yupRegisterOrg, fetchAddressByPostcode } from '@kurakichi/node-util';
-import { Form, Input, ButtonOrLoading, ButtonBig, NotificationSet } from '@next/ui';
+import { Form, Input, ButtonOrLoading, ButtonBig, NotificationSet, TextSmall } from '@next/ui';
 import { useRegisterOrgMutation } from '@next/graphql';
 
 interface OrgRegisterInput {
@@ -44,6 +44,7 @@ export const OrgRegisterForm: VFC = () => {
   }, [isLocation, setValue]);
 
   const onSubmit = async (input: OrgRegisterInput) => {
+    console.log('orgRegisterInput:', input);
     const {
       orgEmail,
       orgLocation,
@@ -76,7 +77,7 @@ export const OrgRegisterForm: VFC = () => {
         errDataContent={data?.registerOrg.error?.message}
         sysErrLabel={error?.message}
       />
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
         <Input<OrgRegisterInput>
           type="text"
           fieldLabel="団体名"
@@ -93,8 +94,8 @@ export const OrgRegisterForm: VFC = () => {
           register={register}
           errMessage={errors.orgEmail && errors.orgEmail.message}
         />
-        <span className="flex">
-          <span>
+        <span className="grid grid-cols-3">
+          <span className="col-span-2">
             <Input<OrgRegisterInput>
               type="text"
               fieldLabel="郵便番号"
@@ -105,11 +106,14 @@ export const OrgRegisterForm: VFC = () => {
               errMessage={errors.orgPostcode && errors.orgPostcode.message}
             />
           </span>
-          <ButtonBig
-            label="所在地を取得する"
-            type="button"
-            onClick={() => setIsPostcode(getValues('orgPostcode'))}
-          />
+          <span className="col-span-1 flex items-center justify-end ml-4">
+            <ButtonBig
+              label={<TextSmall content={'郵便番号から\n所在地を取得する'} />}
+              type="button"
+              color="yellow"
+              onClick={() => setIsPostcode(getValues('orgPostcode'))}
+            />
+          </span>
         </span>
         <Input<OrgRegisterInput>
           type="text"
@@ -118,6 +122,9 @@ export const OrgRegisterForm: VFC = () => {
           required={false}
           disable
           register={register}
+          helperText={
+            '郵便番号から取得された住所が自動で入力されます\n続く住所を所在地詳細に入力して下さい'
+          }
           errMessage={errors.orgLocation && errors.orgLocation.message}
         />
         <Input<OrgRegisterInput>
@@ -136,13 +143,15 @@ export const OrgRegisterForm: VFC = () => {
           register={register}
           errMessage={errors.orgPhoneNumber && errors.orgPhoneNumber.message}
         />
-        <ButtonOrLoading
-          disabled={!isValid}
-          buttonType="submit"
-          color="yellow"
-          buttonLabel={!isValid ? '未入力の項目があります' : '登録'}
-          loading={loading}
-        />
+        <span className="flex justify-end mt-5">
+          <ButtonOrLoading
+            disabled={!isValid}
+            buttonType="submit"
+            color="yellow"
+            buttonLabel={!isValid ? '未入力の項目があります' : '登録'}
+            loading={loading}
+          />
+        </span>
       </Form>
     </div>
   );

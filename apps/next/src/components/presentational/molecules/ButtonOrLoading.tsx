@@ -31,12 +31,6 @@ export const ButtonOrLoading: VFC<ButtonOrLoadingProps> = ({
       }
     />
   ) : (
-    <ButtonBig
-      disabled={disabled}
-      color={color}
-      onClick={onClick}
-      type={buttonType}
-      label={buttonLabel}
-    />
+    <ButtonBig color={color} onClick={onClick} type={buttonType} label={buttonLabel} />
   );
 };

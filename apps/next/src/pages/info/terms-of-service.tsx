@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-const SecurityPolicyPublicPage: NextPage = () => {
+const TermsOfServicePublicPage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const SecurityPolicyPublicPage: NextPage = () => {
   );
 };
 
-export default SecurityPolicyPublicPage;
+export default TermsOfServicePublicPage;

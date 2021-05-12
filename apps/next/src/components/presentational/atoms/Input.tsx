@@ -55,16 +55,29 @@ export const Input = <T extends any>({
         </span>
       )}
     </div>
-    <input
-      className={overWriteCSS}
-      placeholder={placeholder}
-      type={type}
-      autoComplete={autoComplete}
-      max={max}
-      maxLength={maxLength}
-      disabled={disable}
-      {...register(label, { required })}
-    />
+    {disable ? (
+      <fieldset disabled>
+        <input
+          className={overWriteCSS}
+          placeholder={placeholder}
+          type={type}
+          autoComplete={autoComplete}
+          max={max}
+          maxLength={maxLength}
+          {...register(label, { required })}
+        />
+      </fieldset>
+    ) : (
+      <input
+        className={overWriteCSS}
+        placeholder={placeholder}
+        type={type}
+        autoComplete={autoComplete}
+        max={max}
+        maxLength={maxLength}
+        {...register(label, { required })}
+      />
+    )}
   </>
 );
 

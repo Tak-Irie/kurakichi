@@ -11,7 +11,8 @@ import {
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
 import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
-import { AlreadyRegisteredNameError } from './registerOrgError';
+import { AlreadyRegisteredNameError, LocationNotExistError } from './registerOrgError';
+import { GoogleMapAPIService } from '../../../services';
 
 type RegisterOrgArg = {
   adminId: string;
@@ -22,7 +23,11 @@ type RegisterOrgArg = {
 };
 
 type RegisterOrgResponse = Either<
-  InvalidInputValueError | AlreadyRegisteredNameError | UnexpectedError | StoreConnectionError,
+  | InvalidInputValueError
+  | LocationNotExistError
+  | AlreadyRegisteredNameError
+  | UnexpectedError
+  | StoreConnectionError,
   Result<DTOOrg>
 >;
 
@@ -41,6 +46,11 @@ export class RegisterOrgUseCase implements IUseCase<RegisterOrgArg, Promise<Regi
       if (failProp[0]) {
         return left(new InvalidInputValueError(failProp.map((prop) => prop.getErrorValue())));
       }
+
+      const geocode = await GoogleMapAPIService.getGeoCodeByAddress(
+        validatedProps.location.getValue().getValue(),
+      );
+      if (geocode === false) return left(new LocationNotExistError());
 
       const duplicateCheck = await this.OrgRepo.confirmOrgByName(validatedProps.name.getValue());
       if (duplicateCheck) return left(new AlreadyRegisteredNameError());
