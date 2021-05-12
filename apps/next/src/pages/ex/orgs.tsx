@@ -1,9 +1,9 @@
-import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
-import { ButtonBig } from '../components/presentational/atoms/Buttons';
-import { Card, SmallCard } from '@next/ui';
-import { useRequestJoinOrgMutation, useGetOrgsQuery } from '../graphql/generated/graphql';
+import { NextPage } from 'next';
 import Link from 'next/link';
+
+import { ButtonBig, SmallCard } from '@next/ui';
+import { useRequestJoinOrgMutation, useGetOrgsQuery } from '@next/graphql';
 
 const Orgs: NextPage = () => {
   const { data, loading, error, refetch } = useGetOrgsQuery();
@@ -56,9 +56,7 @@ const Orgs: NextPage = () => {
       {joinData?.requestJoinOrg.org && (
         <p>{joinData.requestJoinOrg.org.orgName}への申請が完了しました。申請許可をお待ち下さい</p>
       )}
-      <ButtonBig type="button" onClick={handleClick}>
-        再読み込み
-      </ButtonBig>
+      <ButtonBig type="button" onClick={handleClick} label="再読み込み" />
     </>
   );
 };

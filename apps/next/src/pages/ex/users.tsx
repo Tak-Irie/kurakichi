@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { SyntheticEvent } from 'react';
-import { ButtonBig } from '../components/presentational/atoms/Buttons';
-import { useGetUsersQuery } from '../graphql/generated/graphql';
+import { ButtonBig } from '@next/ui';
+import { useGetUsersQuery } from '@next/graphql';
 
 const Users: NextPage = () => {
   const { data, loading, error, refetch } = useGetUsersQuery();
@@ -24,9 +24,7 @@ const Users: NextPage = () => {
             </ul>
           </div>
         ))}
-      <ButtonBig type="button" onClick={handleClick}>
-        再読み込み
-      </ButtonBig>
+      <ButtonBig type="button" label="再読み込み" onClick={handleClick} />
     </>
   );
 };

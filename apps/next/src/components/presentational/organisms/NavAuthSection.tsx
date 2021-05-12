@@ -1,11 +1,11 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import Link from 'next/link';
 
-import { useGetUserByCookieQuery } from '../../../graphql/generated/graphql';
 import { isServer } from '../../../util/isServer';
+import { useGetUserByCookieQuery } from '@next/graphql';
 import {
-  LoadingStylishSpinner,
-  ButtonSmall,
+  LoadingSpinner,
+  ButtonBig,
   AvatarSmall,
   IconsVerticalDots,
   IconsUser,
@@ -18,26 +18,27 @@ import { LogoutMenuItem } from '@next/container';
 const NavAuthSection: FC = () => {
   const { data, loading } = useGetUserByCookieQuery({
     skip: isServer(),
+    fetchPolicy: 'cache-first',
   });
 
   if (loading)
     return (
       <div>
-        <LoadingStylishSpinner />
+        <LoadingSpinner />
       </div>
     );
 
   if (!data?.getUserByCookie.user)
     return (
       <div className="flex space-x-1">
-        <Link href="/register" passHref>
+        <Link href="/auth/register" passHref>
           <a href="replace">
-            <ButtonSmall type="button">新規登録</ButtonSmall>
+            <ButtonBig color="yellow" type="button" label="新規登録" />
           </a>
         </Link>
-        <Link href="/login" passHref>
+        <Link href="/auth/login" passHref>
           <a href="replace">
-            <ButtonSmall type="button">ログイン</ButtonSmall>
+            <ButtonBig color="yellow" type="button" label="ログイン" />
           </a>
         </Link>
       </div>

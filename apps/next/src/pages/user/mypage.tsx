@@ -1,13 +1,22 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { UserMyPage, UserTemplate, ButtonWithIcon, IconsCog, IconsMail } from '@next/ui';
+import {
+  UserMyPage,
+  UserTemplate,
+  ButtonWithIcon,
+  IconsCog,
+  IconsMail,
+  LoadingSpinner,
+} from '@next/ui';
 import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
 
-const UserPrivatePage: NextPage = () => {
+const UserMyPagePrivatePage: NextPage = () => {
   // TODO:CQRS
-  const { data, loading, error } = useGetUserPrivateInfoByCookieQuery();
+  const { data, loading, error } = useGetUserPrivateInfoByCookieQuery({
+    fetchPolicy: 'cache-first',
+  });
 
-  if (loading) return <p>Loading</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
   if (data.getUserByCookie.user) {
@@ -56,4 +65,4 @@ const UserPrivatePage: NextPage = () => {
   return <p>{data.getUserByCookie.error.message}</p>;
 };
 
-export default UserPrivatePage;
+export default UserMyPagePrivatePage;

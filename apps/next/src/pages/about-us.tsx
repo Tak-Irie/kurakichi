@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-const ForgotPasswordPublicPage: NextPage = () => {
+const AboutUsPublicPage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const ForgotPasswordPublicPage: NextPage = () => {
   );
 };
 
-export default ForgotPasswordPublicPage;
+export default AboutUsPublicPage;

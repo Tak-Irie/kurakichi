@@ -1,12 +1,6 @@
 import { NextPage } from 'next';
 
-import {
-  ButtonWithIcon,
-  IconsUser,
-  LoadingStylishSpinner,
-  TableMessage,
-  UserTemplate,
-} from '@next/ui';
+import { ButtonWithIcon, IconsUser, LoadingSpinner, TableMessage, UserTemplate } from '@next/ui';
 import { useGetUserByCookieQuery, useGetMessagesByCookieQuery } from '@next/graphql';
 import React from 'react';
 import Link from 'next/link';
@@ -16,7 +10,7 @@ const MessageBoxPrivatePage: NextPage = () => {
   const { data, loading, error } = useGetMessagesByCookieQuery();
 
   // console.log('user:', userData.getUserByCookie.user);
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
   if (data.getMessagesByCookie.error) {

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {
   OrgTemplate,
   InquiryTree,
-  LoadingStylishSpinner,
+  LoadingSpinner,
   ButtonWithIcon,
   IconsUsers,
   IconsMail,
@@ -41,7 +41,7 @@ const InquiryTreePrivatePage: NextPage = () => {
   });
 
   // console.log('.org:', orgData.org);
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
   const inqData = data.getInquiriesByTreeIdAndCookie;

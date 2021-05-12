@@ -5,9 +5,9 @@ type OrgTemplateProps = {
   avatar: string;
   image: string;
   orgName: string;
+  pageContents: ReactNode;
   headerButtons?: ReactNode;
   settingHeader?: boolean;
-  pageContents: ReactNode;
 };
 
 export const OrgTemplate: VFC<OrgTemplateProps> = ({

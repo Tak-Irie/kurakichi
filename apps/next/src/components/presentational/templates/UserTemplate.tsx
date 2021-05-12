@@ -1,12 +1,13 @@
-import { ReactNode, VFC } from 'react';
-import { ProfileHeader, Text2xl } from '@next/ui';
+import { ReactElement, VFC } from 'react';
+import { ProfileHeader, ProfileHeaderSetting, Text2xl } from '@next/ui';
 
 type UserTemplateProps = {
   avatar: string;
   image: string;
   userName: string;
-  headerButtons?: ReactNode;
-  pageContents: ReactNode;
+  pageContents: ReactElement;
+  headerButtons?: ReactElement;
+  settingHeader?: boolean;
 };
 
 export const UserTemplate: VFC<UserTemplateProps> = ({
@@ -15,16 +16,21 @@ export const UserTemplate: VFC<UserTemplateProps> = ({
   avatar,
   image,
   userName,
+  settingHeader = false,
 }) => {
   return (
     <div className="grid grid-cols-12 pb-10">
       <div className="col-span-full">
-        <ProfileHeader avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+        {settingHeader ? (
+          <ProfileHeaderSetting avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+        ) : (
+          <ProfileHeader avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+        )}
       </div>
       <div className="col-start-3">
         <Text2xl content={userName} />
       </div>
-      <div className="col-start-3 col-end-10 mt-2">{pageContents}</div>
+      <div className="col-start-3 col-end-11 mt-2">{pageContents}</div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useGetInquiriesByOrgIdQuery, useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
 import {
   OrgMyPage,
-  LoadingStylishSpinner,
+  LoadingSpinner,
   OrgTemplate,
   ButtonWithIcon,
   IconsCog,
@@ -26,7 +26,7 @@ const InquiryBoxPrivatePage: NextPage = () => {
 
   const { data, loading, error } = useGetInquiriesByOrgIdQuery({ variables: { orgId: orgId } });
 
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
 
   if (error) return <p>{error.message}</p>;
 

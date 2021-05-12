@@ -204,7 +204,7 @@ export const userMutation = extendType({
       resolve: async (_, args) => {
         const result = await useForgotPasswordUseCase.execute(args.email);
         if (result.isLeft()) return { result: false, message: result.value.getErrorValue() };
-        return { result: true };
+        return { result: true, message: 'パスワード再登録メールを送信しました' };
       },
     });
     t.field('changePassword', {

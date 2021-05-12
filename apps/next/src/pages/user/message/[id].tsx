@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { useGetMessagesByTreeIdQuery, useGetUserByCookieQuery } from '@next/graphql';
 import {
-  LoadingStylishSpinner,
+  LoadingSpinner,
   MessageTree,
   UserTemplate,
   ButtonWithIcon,
@@ -22,7 +22,7 @@ const MessageTreePage: NextPage = () => {
   });
 
   // console.log('user:', userData.getUserByCookie.user);
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
   const mesData = data.getMessagesByTreeId;

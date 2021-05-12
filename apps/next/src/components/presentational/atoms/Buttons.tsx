@@ -1,9 +1,9 @@
-import { FC, ForwardedRef, forwardRef, ReactElement, SyntheticEvent } from 'react';
+import { VFC, ReactElement, SyntheticEvent } from 'react';
 
 type ButtonProps = {
   type: 'button' | 'submit';
   onClick?: (e: SyntheticEvent) => void | Promise<void>;
-  overwriteCSS?: string;
+  color?: string;
   disabled?: boolean;
   label?: string | ReactElement;
 };
@@ -12,45 +12,22 @@ type ButtonWithIconProps = ButtonProps & {
   icon: ReactElement;
 };
 
-export const ButtonSmall: FC<ButtonProps> = ({
-  type,
-  onClick,
-  children,
-  disabled,
-  label,
-  overwriteCSS = `${
-    disabled ? 'cursor-not-allowed' : ''
-  } bg-green-400 text-white active:bg-green-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  ease-linear transition-all duration-150`,
-}) => {
+export const ButtonBig: VFC<ButtonProps> = ({ type, onClick, disabled, label, color = 'gray' }) => {
   return (
     <div className={`${disabled ? 'opacity-50' : ''}`}>
-      <button className={overwriteCSS} disabled={disabled} type={type} onClick={onClick}>
-        {children}
-      </button>
-    </div>
-  );
-};
-
-export const ButtonBig: FC<ButtonProps> = ({
-  type,
-  onClick,
-  children,
-  disabled,
-  label,
-  overwriteCSS = `${
-    disabled ? 'cursor-not-allowed' : ''
-  } inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500`,
-}) => {
-  return (
-    <div className={`${disabled ? 'opacity-50' : ''}`}>
-      <button className={overwriteCSS} disabled={disabled} type={type} onClick={onClick}>
+      <button
+        className={`inline-flex justify-center px-4 py-2 border bold border-gray-200 text-sm font-medium rounded-md  text-${color}-700 bg-${color}-50 hover:bg-${color}-100 shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-100`}
+        disabled={disabled}
+        type={type}
+        onClick={onClick}
+      >
         {label}
       </button>
     </div>
   );
 };
 
-export const ButtonWithIcon: FC<ButtonWithIconProps> = ({
+export const ButtonWithIcon: VFC<ButtonWithIconProps> = ({
   type,
   label,
   icon,

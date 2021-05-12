@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
 import {
   OrgMyPage,
-  LoadingStylishSpinner,
+  LoadingSpinner,
   OrgTemplate,
   ButtonWithIcon,
   IconsCog,
@@ -22,7 +22,7 @@ const OrgPrivatePage: NextPage = () => {
     skip: isServer(),
   });
 
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
 
   if (error) return <p>{error.message}</p>;
 

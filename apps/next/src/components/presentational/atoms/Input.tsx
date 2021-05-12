@@ -1,7 +1,7 @@
 import { FieldError, FieldErrors, Path, UseFormRegister } from 'react-hook-form';
 
 import { PopOnIcon } from '@next/ui';
-import { IconsQuestion } from './Icons';
+import { IconsCheckCircle, IconsQuestion } from './Icons';
 
 type InputProps<T> = {
   label: Path<T>;
@@ -9,9 +9,13 @@ type InputProps<T> = {
   required: boolean;
   fieldLabel: string;
   type: 'date' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'time' | 'url';
+  disable?: boolean;
   autoComplete?: 'email' | 'new-password' | 'current-password' | 'tel' | 'username';
+  max?: number;
+  maxLength?: number;
   helperText?: string;
   errMessage?: string | FieldError;
+  isValid?: boolean;
   overWriteCSS?: string;
   placeholder?: string;
 };
@@ -27,9 +31,13 @@ export const Input = <T extends any>({
   autoComplete,
   fieldLabel,
   register,
+  disable,
   helperText,
   errMessage,
+  isValid,
   required,
+  max,
+  maxLength,
   placeholder = '',
   overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black border-gray-300 border shadow-sm rounded appearance-none focus:outline-none focus:border-gray-700',
 }: InputProps<T>) => (
@@ -39,15 +47,22 @@ export const Input = <T extends any>({
       <span className="ml-1">
         {helperText ? <PopOnIcon icon={<IconsQuestion />} content={helperText} /> : null}
       </span>
-      <span className="ml-1 text-red-500 text-xs">
-        {errMessage ? errMessage : required ? '必須項目' : null}
-      </span>
+      {isValid ? (
+        <IconsCheckCircle />
+      ) : (
+        <span className="ml-1 text-red-500 text-xs">
+          {errMessage ? errMessage : required === true ? '必須項目' : null}
+        </span>
+      )}
     </div>
     <input
       className={overWriteCSS}
       placeholder={placeholder}
       type={type}
       autoComplete={autoComplete}
+      max={max}
+      maxLength={maxLength}
+      disabled={disable}
       {...register(label, { required })}
     />
   </>

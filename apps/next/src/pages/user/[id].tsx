@@ -5,7 +5,7 @@ import {
 } from '../../graphql/generated/graphql';
 import { useGetIdFromUrl } from '../../util';
 
-import { LoadingStylishSpinner, UserProfile } from '@next/ui';
+import { LoadingSpinner, UserProfile } from '@next/ui';
 import { useRouter } from 'next/router';
 
 const UserProfilePage: NextPage = () => {
@@ -14,7 +14,7 @@ const UserProfilePage: NextPage = () => {
   const { data, error, loading } = useGetUserByIdWithOrgQuery({ variables: { userId: uid } });
   const { data: clientData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
 
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
 
   if (error) return <p>{error.message}</p>;
 
@@ -35,7 +35,7 @@ const UserProfilePage: NextPage = () => {
     );
   }
 
-  return <LoadingStylishSpinner />;
+  return <LoadingSpinner />;
 };
 
 export default UserProfilePage;

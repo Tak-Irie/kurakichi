@@ -22,7 +22,7 @@ export const Notification: FC<NotificationProps> = ({
   useEffect(() => {
     setInterval(() => {
       setIsShowing(false);
-    }, 1000 * 60);
+    }, 1000 * 10);
   }, [isShowing]);
 
   return (

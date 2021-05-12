@@ -71,8 +71,8 @@ export const CardWithPick: VFC<CardProps> = ({
   content,
   image,
   imageAlt,
-  linkUrl,
-  linkAs,
+  linkUrl = '/',
+  linkAs = '/',
   title,
 }) => {
   return (

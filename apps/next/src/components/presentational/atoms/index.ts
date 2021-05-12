@@ -8,7 +8,6 @@ export * from './Form';
 export * from './GridItem';
 export * from './GridItemWithPic';
 export * from './GridTemplate';
-export * from './HeaderList';
 export * from './Icons';
 export * from './Images';
 export * from './Input';

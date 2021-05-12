@@ -558,6 +558,9 @@ export type LoginUserMutation = (
     & { user?: Maybe<(
       { __typename?: 'User' }
       & UserPayloadFragment
+    )>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
     )> }
   )> }
 );
@@ -1360,9 +1363,13 @@ export const LoginUserDocument = gql`
     user {
       ...UserPayload
     }
+    error {
+      ...RegularError
+    }
   }
 }
-    ${UserPayloadFragmentDoc}`;
+    ${UserPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
 export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
 
 /**

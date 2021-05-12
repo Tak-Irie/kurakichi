@@ -10,6 +10,7 @@ export const LogoutButton: FC = () => {
 
   return (
     <ButtonBig
+      label="ログアウト"
       type="button"
       onClick={async (e) => {
         e.preventDefault();
@@ -18,9 +19,7 @@ export const LogoutButton: FC = () => {
         // TODO: need to reset all cache ?
         await client.resetStore();
       }}
-    >
-      Logout
-    </ButtonBig>
+    />
   );
 };
 
