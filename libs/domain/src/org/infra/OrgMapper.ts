@@ -34,6 +34,8 @@ export class OrgMapper {
       homePage,
       image,
       location,
+      latitude,
+      longitude,
       name,
       phoneNumber,
       inquiries,
@@ -48,6 +50,8 @@ export class OrgMapper {
       homePage: homePage.getURL(),
       image: image.getURL(),
       location: location.getValue(),
+      latitude: latitude.getValue(),
+      longitude: longitude.getValue(),
       name: name.getValue(),
       phoneNumber: phoneNumber.getValue(),
     };

@@ -1,6 +1,7 @@
 export * from './AggregateRoot';
 export * from './Email';
 export * from './Entity';
+export * from './Geocode';
 export * from './Identifier';
 export * from './PhoneNumber';
 export * from './UniqueEntityId';

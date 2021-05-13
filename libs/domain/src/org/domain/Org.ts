@@ -8,6 +8,7 @@ import {
   Location,
   PropPrimitives,
   PropInResult,
+  Geocode,
 } from '../../shared';
 import { OrgDescription } from './OrgDescription';
 import { OrgName } from './OrgName';
@@ -18,6 +19,8 @@ export interface OrgProps {
   email: Email;
   phoneNumber: PhoneNumber;
   location: Location;
+  latitude: Geocode;
+  longitude: Geocode;
   description: OrgDescription;
   adminId: UniqueEntityId;
   avatar: ValidURL;
@@ -28,19 +31,33 @@ export interface OrgProps {
 }
 
 export type OrgPropInResult = PropInResult<Partial<OrgProps>>;
-type OrgPropPrimitives = PropPrimitives<OrgProps, 'members' | 'inquiries'> & {
+
+type OrgPropPrimitives = PropPrimitives<
+  OrgProps,
+  'latitude' | 'longitude' | 'members' | 'inquiries'
+> & {
   latitude: number;
   longitude: number;
   members: string[];
   inquiries: string[];
 };
 
-type OrgInitialCreate = 'id' | 'name' | 'email' | 'phoneNumber' | 'location' | 'adminId';
+type OrgInitialCreate =
+  | 'id'
+  | 'name'
+  | 'email'
+  | 'phoneNumber'
+  | 'location'
+  | 'latitude'
+  | 'longitude'
+  | 'adminId';
 type OrgUpdatable =
   | 'name'
   | 'email'
   | 'phoneNumber'
   | 'location'
+  | 'latitude'
+  | 'longitude'
   | 'description'
   | 'adminId'
   | 'avatar'
@@ -81,12 +98,14 @@ export class Org extends AggregateRoot<OrgProps> {
   }
 
   public static create(props: Pick<OrgProps, OrgInitialCreate>): Result<Org> {
-    const { adminId, email, id, location, name, phoneNumber } = props;
+    const { adminId, email, id, location, name, phoneNumber, latitude, longitude } = props;
     const organization = new Org({
       id,
       name,
       email,
       location,
+      latitude,
+      longitude,
       phoneNumber,
       adminId,
       description: OrgDescription.create({ content: 'UNKNOWN' }).getValue(),
@@ -111,11 +130,11 @@ export class Org extends AggregateRoot<OrgProps> {
       image,
       inquiries,
       location,
+      latitude,
+      longitude,
       members,
       name,
       phoneNumber,
-      latitude,
-      longitude,
     } = storedOrg;
     const org = new Org({
       adminId: UniqueEntityId.restoreFromRepo(adminId),
@@ -126,7 +145,9 @@ export class Org extends AggregateRoot<OrgProps> {
       id: UniqueEntityId.restoreFromRepo(id),
       image: ValidURL.restoreFromRepo(image),
       inquiries: UniqueEntityId.restoreArrayFromRepo(inquiries),
-      location: Location.restoreFromRepo(location),
+      location: Location.restoreFromRepo({ location }),
+      latitude: Geocode.restoreFromRepo(latitude),
+      longitude: Geocode.restoreFromRepo(longitude),
       members: UniqueEntityId.restoreArrayFromRepo(members),
       name: OrgName.restoreFromRepo(name),
       phoneNumber: PhoneNumber.restoreFromRepo(phoneNumber),
@@ -144,6 +165,8 @@ export class Org extends AggregateRoot<OrgProps> {
       homePage,
       image,
       location,
+      latitude,
+      longitude,
       name,
       phoneNumber,
     } = newProps;
@@ -157,6 +180,8 @@ export class Org extends AggregateRoot<OrgProps> {
       homePage: prevHomePage,
       image: prevImg,
       location: prevLocation,
+      latitude: prevLatitude,
+      longitude: prevLongitude,
       adminId: prevAdmin,
       id,
       inquiries,
@@ -170,6 +195,8 @@ export class Org extends AggregateRoot<OrgProps> {
       homePage: homePage ? homePage : prevHomePage,
       image: image ? image : prevImg,
       location: location ? location : prevLocation,
+      latitude: latitude ? latitude : prevLatitude,
+      longitude: longitude ? longitude : prevLongitude,
       name: name ? name : prevName,
       phoneNumber: phoneNumber ? phoneNumber : prevPhone,
       adminId: adminId ? adminId : prevAdmin,
@@ -200,9 +227,7 @@ export class Org extends AggregateRoot<OrgProps> {
 
     // console.log('adminId:', adminId);
     if (adminId) {
-      const x = UniqueEntityId.reconstruct(adminId);
-      // console.log('x:', x);
-      results.adminId = x;
+      results.adminId = UniqueEntityId.reconstruct(adminId);
     }
     // console.log('result.adminId:', results.adminId);
     if (description) {
@@ -215,7 +240,7 @@ export class Org extends AggregateRoot<OrgProps> {
       results.homePage = ValidURL.create({ url: homePage });
     }
     if (location) {
-      results.location = Location.create({ location: location });
+      results.location = Location.create({ location });
     }
     if (name) {
       results.name = OrgName.create({ name });

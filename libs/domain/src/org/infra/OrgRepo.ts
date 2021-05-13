@@ -28,6 +28,7 @@ export class OrgRepo implements IOrgRepo {
 
   async registerOrg(org: Org): Promise<Org | false> {
     const data = OrgMapper.toStore(org);
+    // console.log('orgRepoRegisterData:', data);
     const result = await this.prisma.$transaction([
       this.prisma.organization.create({
         data,

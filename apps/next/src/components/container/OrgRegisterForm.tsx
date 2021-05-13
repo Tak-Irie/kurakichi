@@ -123,7 +123,7 @@ export const OrgRegisterForm: VFC = () => {
           disable
           register={register}
           helperText={
-            '郵便番号から取得された住所が自動で入力されます\n続く住所を所在地詳細に入力して下さい'
+            '郵便番号から取得された住所が自動で入力されます\n続く住所を所在地詳細に入力して下さい\n\n例:東京都千代田区千代田'
           }
           errMessage={errors.orgLocation && errors.orgLocation.message}
         />
@@ -133,6 +133,7 @@ export const OrgRegisterForm: VFC = () => {
           label="orgLocationDetail"
           required
           register={register}
+          helperText={'例:1-1 エンペラーパレス1F'}
           errMessage={errors.orgLocationDetail && errors.orgLocationDetail.message}
         />
         <Input<OrgRegisterInput>

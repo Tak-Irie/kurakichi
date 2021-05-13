@@ -8,6 +8,7 @@ import {
   UnexpectedError,
   UniqueEntityId,
   InvalidInputValueError,
+  Geocode,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
 import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
@@ -52,6 +53,10 @@ export class RegisterOrgUseCase implements IUseCase<RegisterOrgArg, Promise<Regi
       );
       if (geocode === false) return left(new LocationNotExistError());
 
+      const lat = Geocode.create({ code: geocode.lat });
+      const lng = Geocode.create({ code: geocode.lng });
+      if (lat.isFailure || lng.isFailure) return left(new LocationNotExistError());
+
       const duplicateCheck = await this.OrgRepo.confirmOrgByName(validatedProps.name.getValue());
       if (duplicateCheck) return left(new AlreadyRegisteredNameError());
 
@@ -61,6 +66,8 @@ export class RegisterOrgUseCase implements IUseCase<RegisterOrgArg, Promise<Regi
         name: validatedProps.name.getValue(),
         email: validatedProps.email.getValue(),
         location: validatedProps.location.getValue(),
+        latitude: lat.getValue(),
+        longitude: lng.getValue(),
         phoneNumber: validatedProps.phoneNumber.getValue(),
       });
       if (orgOrError.isFailure) return left(new UnexpectedError());
