@@ -7,11 +7,12 @@ type InputProps<T> = {
   label: Path<T>;
   register: UseFormRegister<T>;
   required: boolean;
-  fieldLabel: string;
+  fieldLabel?: string;
   type: 'date' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'time' | 'url';
   disable?: boolean;
   autoComplete?: 'email' | 'new-password' | 'current-password' | 'tel' | 'username';
   max?: number;
+  minLength?: number;
   maxLength?: number;
   helperText?: string;
   errMessage?: string | FieldError;
@@ -37,13 +38,16 @@ export const Input = <T extends any>({
   isValid,
   required,
   max,
+  minLength,
   maxLength,
   placeholder = '',
   overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black border-gray-300 border shadow-sm rounded appearance-none focus:outline-none focus:border-gray-700',
 }: InputProps<T>) => (
   <>
     <div className="flex justify-start items-center">
-      <label className="text-gray-700 text-xs font-bold my-1">{fieldLabel}</label>
+      {fieldLabel ? (
+        <label className="text-gray-700 text-xs font-bold my-1">{fieldLabel}</label>
+      ) : null}
       <span className="ml-1">
         {helperText ? <PopOnIcon icon={<IconsQuestion />} content={helperText} /> : null}
       </span>
@@ -63,6 +67,7 @@ export const Input = <T extends any>({
           type={type}
           autoComplete={autoComplete}
           max={max}
+          minLength={minLength}
           maxLength={maxLength}
           {...register(label, { required })}
         />
@@ -74,6 +79,7 @@ export const Input = <T extends any>({
         type={type}
         autoComplete={autoComplete}
         max={max}
+        minLength={minLength}
         maxLength={maxLength}
         {...register(label, { required })}
       />

@@ -125,7 +125,9 @@ type Org implements Node {
   id: ID!
   image: String
   inquiries: [Inquiry]
+  latitude: Float
   location: String
+  longitude: Float
   members: [User]
   orgName: String
   phoneNumber: String

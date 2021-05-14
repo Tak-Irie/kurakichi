@@ -5,6 +5,7 @@ import imagemin from 'imagemin';
 import imageminWebp from 'imagemin-webp';
 
 // FIXME: add validation, minimize to webp(do it at front?)
+// FIXME: delete Exif info
 const storage = multer.diskStorage({
   destination: (_, file, cb) => {
     const url = process.env.NX_S3 || 'apps/express/src/public/uploaded';

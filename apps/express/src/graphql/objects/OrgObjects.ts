@@ -6,6 +6,8 @@ export const Org = objectType({
     t.implements('Node');
     t.string('orgName');
     t.string('location');
+    t.float('latitude');
+    t.float('longitude');
     t.string('email');
     t.string('phoneNumber');
     t.string('image');

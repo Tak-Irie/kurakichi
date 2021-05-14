@@ -2,6 +2,8 @@ fragment OrgPayload on Org {
   id
   orgName
   location
+  latitude
+  longitude
   email
   phoneNumber
   image

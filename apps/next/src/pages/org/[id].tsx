@@ -19,7 +19,7 @@ import { Transition } from '@headlessui/react';
 type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
-  // console.log('props:', props);
+  // console.log('props:', props.data.getOrgPublicInfoById.org);
   const [isOpen, setIsOpen] = useState(false);
   const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   const router = useRouter();
@@ -109,6 +109,8 @@ export const getStaticProps = async ({ params }) => {
                   id
                   orgName
                   location
+                  latitude
+                  longitude
                   email
                   phoneNumber
                   image

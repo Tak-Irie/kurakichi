@@ -17,6 +17,7 @@ interface LocationResponse {
 
 export const fetchAddressByPostcode = async (postcode: string | number): Promise<string> => {
   let code: string;
+  console.log('postcode:', postcode);
   if (postcode === undefined) {
     return '郵便番号を入力して所在地を取得して下さい';
   }
@@ -26,7 +27,13 @@ export const fetchAddressByPostcode = async (postcode: string | number): Promise
   } else {
     code = postcode;
   }
+
   const former = code.slice(0, 3);
+
+  if (code.includes('-')) {
+    code = code.replace('-', '');
+  }
+
   const modified = former + '/' + code.slice(3, 7);
 
   const response = await fetch(`https://madefor.github.io/postal-code-api/api/v1/${modified}.json`);

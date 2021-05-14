@@ -4,6 +4,8 @@ query GetOrgPrivateInfoByIdAndCookie($orgId: String!) {
       id
       orgName
       location
+      latitude
+      longitude
       email
       phoneNumber
       avatar

@@ -10,6 +10,8 @@ export type DTOOrg = {
   image: string;
   inquiries: string[];
   location: string;
+  latitude: number;
+  longitude: number;
   members: string[];
   name: string;
   phoneNumber: string;
@@ -31,6 +33,8 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
     image,
     inquiries,
     location,
+    latitude,
+    longitude,
     members,
     name,
     phoneNumber,
@@ -45,6 +49,8 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
     image: image.getURL(),
     inquiries: inquiries.map((inquiry) => inquiry.getId()),
     location: location.getValue(),
+    latitude: latitude.getValue(),
+    longitude: longitude.getValue(),
     members: members.map((member) => member.getId()),
     name: name.getValue(),
     phoneNumber: phoneNumber.getValue(),

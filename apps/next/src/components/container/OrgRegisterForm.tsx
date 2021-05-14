@@ -6,17 +6,17 @@ import { yupRegisterOrg, fetchAddressByPostcode } from '@kurakichi/node-util';
 import { Form, Input, ButtonOrLoading, ButtonBig, NotificationSet, TextSmall } from '@next/ui';
 import { useRegisterOrgMutation } from '@next/graphql';
 
-interface OrgRegisterInput {
+type OrgRegisterInput = {
   orgName: string;
   orgEmail: string;
-  orgPostcode: number;
+  orgPostcode: string;
   orgLocation: string;
   orgLocationDetail: string;
   orgPhoneNumber: string;
-}
+};
 
 export const OrgRegisterForm: VFC = () => {
-  const [isPostcode, setIsPostcode] = useState<number>();
+  const [isPostcode, setIsPostcode] = useState('');
   const [isLocation, setIsLocation] = useState('');
   const [orgRegister, { data, loading, error }] = useRegisterOrgMutation();
 
@@ -58,7 +58,7 @@ export const OrgRegisterForm: VFC = () => {
         variables: {
           orgName,
           orgEmail,
-          orgPhoneNumber,
+          orgPhoneNumber: orgPhoneNumber.trim(),
           orgLocation: orgPostcode.toString() + orgLocation + orgLocationDetail,
         },
       });
@@ -102,7 +102,9 @@ export const OrgRegisterForm: VFC = () => {
               label="orgPostcode"
               required
               register={register}
-              maxLength={7}
+              minLength={7}
+              maxLength={8}
+              helperText={'例: 100-0001 or 1000001'}
               errMessage={errors.orgPostcode && errors.orgPostcode.message}
             />
           </span>
@@ -131,9 +133,9 @@ export const OrgRegisterForm: VFC = () => {
           type="text"
           fieldLabel="所在地詳細"
           label="orgLocationDetail"
-          required
+          required={false}
           register={register}
-          helperText={'例:1-1 エンペラーパレス1F'}
+          helperText={'例:1-1 エンペラーパレス1F\n\n※全て自動で取得された場合は不要です'}
           errMessage={errors.orgLocationDetail && errors.orgLocationDetail.message}
         />
         <Input<OrgRegisterInput>

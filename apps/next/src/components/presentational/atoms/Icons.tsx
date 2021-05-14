@@ -16,6 +16,7 @@ import {
   LogoutIcon,
   LoginIcon,
   UsersIcon,
+  WifiIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -118,4 +119,31 @@ export const IconsUsers: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
 }) => {
   return <Icons overwriteCSS={overwriteCSS} icon={<UsersIcon />} />;
+};
+export const IconsWifi: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<WifiIcon />} />;
+};
+
+export const IconsPost: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return (
+    <Icons
+      overwriteCSS={overwriteCSS}
+      icon={
+        <svg
+          fill={'rgb(239,68,68)'}
+          fillOpacity="0.9"
+          height={22}
+          width={22}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 193.333 200"
+        >
+          <path d="M20,0A19.958,19.958,0,0,0,0,20V180a19.958,19.958,0,0,0,20,20H173.332a19.958,19.958,0,0,0,20-20V20a19.958,19.958,0,0,0-20-20ZM36.669,37.495h120v25h-120Zm0,42.5h120v25h-47.5v64.606h-25V105h-47.5Z" />
+        </svg>
+      }
+    />
+  );
 };

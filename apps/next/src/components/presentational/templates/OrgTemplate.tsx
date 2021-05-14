@@ -27,7 +27,7 @@ export const OrgTemplate: VFC<OrgTemplateProps> = ({
           <ProfileHeader avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
         )}
       </div>
-      <div className="col-start-3">
+      <div className="col-start-3 bold underline mt-5">
         <Text2xl content={orgName} />
       </div>
       <div className="col-start-3 col-end-11 mt-2">{pageContents}</div>

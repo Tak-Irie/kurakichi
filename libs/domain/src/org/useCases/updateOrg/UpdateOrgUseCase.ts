@@ -43,6 +43,7 @@ export class UpdateOrgUseCase implements IUseCase<UpdateOrgArg, Promise<UpdateOr
   }
   public async execute(arg: UpdateOrgArg): Promise<UpdateOrgResponse> {
     try {
+      console.log('updateOrgArg:', arg);
       const orgIdOrError = UniqueEntityId.reconstruct(arg.orgId);
       if (orgIdOrError.isFailure)
         return left(new InvalidInputValueError(orgIdOrError.getErrorValue()));
@@ -72,15 +73,15 @@ export class UpdateOrgUseCase implements IUseCase<UpdateOrgArg, Promise<UpdateOr
       }
 
       const updatedOrg = Org.updateProps(currentOrg, {
-        adminId: validatedProps.adminId.getValue() || undefined,
-        avatar: validatedProps.avatar.getValue() || undefined,
-        description: validatedProps.description.getValue() || undefined,
-        email: validatedProps.email.getValue() || undefined,
-        homePage: validatedProps.homePage.getValue() || undefined,
-        image: validatedProps.image.getValue() || undefined,
-        location: validatedProps.location.getValue() || undefined,
-        name: validatedProps.name.getValue() || undefined,
-        phoneNumber: validatedProps.phoneNumber.getValue() || undefined,
+        adminId: validatedProps.adminId?.getValue() || undefined,
+        avatar: validatedProps.avatar?.getValue() || undefined,
+        description: validatedProps.description?.getValue() || undefined,
+        email: validatedProps.email?.getValue() || undefined,
+        homePage: validatedProps.homePage?.getValue() || undefined,
+        image: validatedProps.image?.getValue() || undefined,
+        location: validatedProps.location?.getValue() || undefined,
+        name: validatedProps.name?.getValue() || undefined,
+        phoneNumber: validatedProps.phoneNumber?.getValue() || undefined,
       });
 
       const dbResult = await this.OrgRepo.updateOrg(updatedOrg);

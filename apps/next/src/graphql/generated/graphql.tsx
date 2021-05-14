@@ -229,6 +229,8 @@ export type Org = Node & {
   id: Scalars['ID'];
   orgName?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
   email?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   image?: Maybe<Scalars['String']>;
@@ -467,7 +469,7 @@ export type OrgDetailPayloadFragment = (
 
 export type OrgPayloadFragment = (
   { __typename?: 'Org' }
-  & Pick<Org, 'id' | 'orgName' | 'location' | 'email' | 'phoneNumber' | 'image' | 'avatar' | 'description' | 'homePage'>
+  & Pick<Org, 'id' | 'orgName' | 'location' | 'latitude' | 'longitude' | 'email' | 'phoneNumber' | 'image' | 'avatar' | 'description' | 'homePage'>
   & { members?: Maybe<Array<Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'userName' | 'avatar' | 'description'>
@@ -984,7 +986,7 @@ export type GetOrgPrivateInfoByIdAndCookieQuery = (
     { __typename?: 'OrgPayload' }
     & { org?: Maybe<(
       { __typename?: 'Org' }
-      & Pick<Org, 'id' | 'orgName' | 'location' | 'email' | 'phoneNumber' | 'avatar' | 'image' | 'description' | 'homePage'>
+      & Pick<Org, 'id' | 'orgName' | 'location' | 'latitude' | 'longitude' | 'email' | 'phoneNumber' | 'avatar' | 'image' | 'description' | 'homePage'>
       & { members?: Maybe<Array<Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'id' | 'userName' | 'avatar' | 'description'>
@@ -1219,6 +1221,8 @@ export const OrgPayloadFragmentDoc = gql`
   id
   orgName
   location
+  latitude
+  longitude
   email
   phoneNumber
   image
@@ -2279,6 +2283,8 @@ export const GetOrgPrivateInfoByIdAndCookieDocument = gql`
       id
       orgName
       location
+      latitude
+      longitude
       email
       phoneNumber
       avatar

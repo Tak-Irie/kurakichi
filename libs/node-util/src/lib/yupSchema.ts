@@ -29,11 +29,12 @@ export const yupRegisterOrg = yup.object().shape({
     .required('入力必須項目です')
     .email('メールアドレスの形式を満たしていません'),
   orgPostcode: yup
-    .number()
-    .typeError('7桁の数字を入力して下さい')
+    .string()
+    .typeError('7~8桁の数字を入力して下さい')
     .required('入力必須項目です')
-    .min(7, '7桁の数字を入力して下さい'),
+    .min(7, '7桁以上を入力して下さい')
+    .max(8, '8桁以下を入力して下さい'),
   orgLocation: yup.string(),
-  orgLocationDetail: yup.string().required('入力必須項目です'),
+  orgLocationDetail: yup.string(),
   orgPhoneNumber: yup.string().required('入力必須項目です'),
 });

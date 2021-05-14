@@ -1,5 +1,7 @@
 import { VFC } from 'react';
-import { GridTemplate, GridItem, GridItemWithPic } from '@next/ui';
+
+import { MapViewer } from '@next/container';
+import { GridTemplate, TextLabeled, GridItemWithPic } from '@next/ui';
 import { Org } from '@next/graphql';
 
 type OrgProfileProps = {
@@ -15,32 +17,40 @@ export const OrgProfile: VFC<OrgProfileProps> = ({ org }) => {
     email,
     phoneNumber,
     location,
+    latitude,
+    longitude,
     homePage,
     description,
     members,
     inquiries,
   } = org;
+  const geo = { lat: latitude, lng: longitude };
 
   return (
     <>
-      <div className="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <GridTemplate>
-          <GridItem label="メールアドレス" content={email} />
-          <GridItem label="電話番号" content={phoneNumber} />
-          <GridItem label="所在地" content={location} />
-          <GridItem
-            label="ホームページ"
-            content={homePage === 'UNKNOWN' ? 'ホームページはありません' : homePage}
+      <div className="grid grid-cols-2 mt-6 gap-y-4 max-w-5xl">
+        <TextLabeled label="メールアドレス" content={email} />
+        <TextLabeled label="電話番号" content={phoneNumber} />
+        <TextLabeled label="所在地" content={location} />
+        <TextLabeled
+          label="ホームページ"
+          content={homePage === 'UNKNOWN' ? 'ホームページはありません' : homePage}
+        />
+        <TextLabeled
+          label="私達について"
+          content={description === 'UNKNOWN' ? '団体の概要を記入して下さい' : description}
+        />
+        <span className="col-span-2 mt-1">
+          <MapViewer
+            center={geo}
+            markers={[geo]}
+            mapContainerCSS={{ width: 'auto', height: 300 }}
+            zoomLevel={15}
           />
-          <GridItem
-            label="私達について"
-            content={description === 'UNKNOWN' ? '団体の概要を記入して下さい' : description}
-            colSpan="col-span-2"
-          />
-        </GridTemplate>
+        </span>
       </div>
 
-      <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
+      <div className="mt-8 max-w-5xl mx-auto">
         <h2 className="text-sm font-medium text-gray-500">団体メンバー</h2>
         <GridTemplate>
           {members

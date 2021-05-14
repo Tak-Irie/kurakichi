@@ -3,6 +3,7 @@ import { reactNewLineToBr } from '../../../util/reactNewLineToBr';
 
 type TextProps = {
   content: string;
+  overwriteCSS?: string;
   label?: string;
   textColor?: string;
 };
@@ -10,24 +11,20 @@ type TextProps = {
 // TODO:, consider what props should be customizable, color and something.
 // size should be controlled by components (also responsive feat)
 
-export const TextSmall: VFC<TextProps> = ({ content, textColor = 'text-grey-900' }) => {
-  if (content) {
-    const _content = reactNewLineToBr(content);
-    return <p className={`mt-1 inline-flex items-center text-sm ${textColor}`}>{_content}</p>;
-  }
-  return <p className={`mt-1 inline-flex items-center text-sm ${textColor}`}>{content}</p>;
-};
-
 /**
  *If you wanna use \n, give string in object to content
  *@example ok:content={"hello\nworld"} fail:content="hello\nworld"
  */
-export const Text: VFC<TextProps> = ({ content, textColor }) => {
+export const TextBase: VFC<TextProps> = ({ content, overwriteCSS = 'text-base text-gray-700' }) => {
   if (content) {
     const _content = reactNewLineToBr(content);
-    return <p className="text-base text-gray-700 md:text-lg">{_content}</p>;
+    return <p className={overwriteCSS}>{_content}</p>;
   }
-  return <p className="text-base text-gray-700 md:text-lg">{content}</p>;
+  return <p className={overwriteCSS}>{content}</p>;
+};
+
+export const TextSmall: VFC<TextProps> = ({ content }) => {
+  return <TextBase content={content} overwriteCSS="text-small text-gray-700" />;
 };
 
 export const Text2xl: VFC<TextProps> = ({ content, textColor }) => {
@@ -51,10 +48,10 @@ export const TextLabel: VFC<Omit<TextProps, 'label'>> = ({ content, textColor })
 
 export const TextLabeled: VFC<TextProps> = ({ content, label, textColor }) => {
   return (
-    <>
+    <div className="flex flex-col">
       <label className="text-sm font-medium text-gray-500">{label}</label>
-      <p className="mt-1 text-sm text-gray-900">{content}</p>
-    </>
+      <TextBase content={content} overwriteCSS="text-sm " />
+    </div>
   );
 };
 

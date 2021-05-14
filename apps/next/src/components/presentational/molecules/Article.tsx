@@ -1,6 +1,6 @@
 import { ReactElement, VFC } from 'react';
 
-import { TextH3, Text } from '@next/ui';
+import { TextH3, TextBase } from '@next/ui';
 import { LinkNextjs } from '@next/container';
 
 type ArticleProps = {
@@ -39,7 +39,7 @@ export const Article: VFC<ArticleProps> = ({
           </p>
         ) : null}
         <TextH3 content={title} />
-        {typeof description === 'string' ? <Text content={description} /> : description}
+        {typeof description === 'string' ? <TextBase content={description} /> : description}
         <LinkNextjs linkUrl={linkUrl} linkAs={linkAs} linkLabel={linkLabel} />
       </div>
     </div>

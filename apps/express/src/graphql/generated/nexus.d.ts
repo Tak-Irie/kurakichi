@@ -94,7 +94,9 @@ export interface NexusGenObjects {
     id: string; // ID!
     image?: string | null; // String
     inquiries?: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
+    latitude?: number | null; // Float
     location?: string | null; // String
+    longitude?: number | null; // Float
     members?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     orgName?: string | null; // String
     phoneNumber?: string | null; // String
@@ -227,7 +229,9 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     image: string | null; // String
     inquiries: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
+    latitude: number | null; // Float
     location: string | null; // String
+    longitude: number | null; // Float
     members: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     orgName: string | null; // String
     phoneNumber: string | null; // String
@@ -370,7 +374,9 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     image: 'String'
     inquiries: 'Inquiry'
+    latitude: 'Float'
     location: 'String'
+    longitude: 'Float'
     members: 'User'
     orgName: 'String'
     phoneNumber: 'String'

@@ -25,6 +25,24 @@ export class GoogleMapAPIService {
     // console.log('data:', data);
     return { lat: data.lat, lng: data.lng };
   }
+  public static async getGeoCodeByPostcode(postcode: string): Promise<GeoCode | false> {
+    // const postRegExp = //
+
+    const mapClient = new Client();
+    const response = await mapClient.geocode({
+      params: {
+        address: postcode,
+        key: process.env.NX_GOOGLE_GEO_API_KEY,
+        region: 'jp',
+      },
+    });
+    if (response.status != 200) {
+      return false;
+    }
+    const data = response.data.results[0].geometry.location;
+    // console.log('data:', data);
+    return { lat: data.lat, lng: data.lng };
+  }
 
   private static modifyAddress(address: string): string {
     const addressReg = /(\d{3}-?\d{4})([\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf]*\s*\d-?\d?-?\d?)\s*[\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf\d-]*/;

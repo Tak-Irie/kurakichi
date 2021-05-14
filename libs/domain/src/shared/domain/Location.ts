@@ -13,23 +13,42 @@ export class Location extends ValueObject<LocationProps> {
   }
 
   public static create(props: LocationProps): Result<Location> {
-    if (!this.validateLocationProps(props)) {
+    // console.log('locationCreate:', props);
+    const location = this.transformZenkakuToHankaku(props.location);
+    const isValid = this.validateAndModifyProps({ location });
+    if (isValid === false) {
       return Result.fail<Location>('住所の値が不正です。');
     }
 
     const _Location = new Location({
-      ...props,
+      location: isValid,
     });
+    // console.log('_L:', _Location.getValue());
     return Result.success<Location>(_Location);
   }
 
-  private static validateLocationProps(unidentifiedLocation: LocationProps): boolean {
-    if (unidentifiedLocation.location === 'UNKNOWN') return true;
-    // FIXME:need validation
-    // const isValid = someValidator(unidentifiedLocation);
-    // if (isValid === false) return false;
+  private static validateAndModifyProps(unpurifiedLocation: LocationProps): string | false {
+    const locationRegExp = /(\d{3}-?\d{4})([\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf]*\s*\d-?\d?-?\d?)(\s*[\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf\d-]*)/;
 
-    return true;
+    const isValid = locationRegExp.test(unpurifiedLocation.location);
+    if (!isValid) return false;
+
+    const purified = unpurifiedLocation.location.trim().replace(locationRegExp, '$1$2$3');
+
+    return purified;
+  }
+
+  private static transformZenkakuToHankaku(zenkakuLocation: string): string {
+    if (zenkakuLocation.includes('丁目')) {
+      if (zenkakuLocation.match(/丁目(=?[\uFF10-\uFF19])/)) {
+        zenkakuLocation = zenkakuLocation.replace('丁目', '-');
+      } else {
+        zenkakuLocation = zenkakuLocation.replace('丁目', '');
+      }
+    }
+    return zenkakuLocation.replace(/[\uFF01-\uFF5E]/g, function (s) {
+      return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
+    });
   }
 
   /**

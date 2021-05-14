@@ -8,7 +8,7 @@ type ArticlesWelfareGuideProps = {
 
 export const ArticlesWelfareGuide: VFC<ArticlesWelfareGuideProps> = ({ some }) => {
   return (
-    <div className="grid grid-cols-3 gap-8 p-10 max-w-full">
+    <div className="grid grid-cols-3 gap-8 mt-10 max-w-full">
       <Article title="暮らし" description="テスト本文" linkUrl="/guide/life" />
       <Article title="仕事・失業" description="テスト本文" linkUrl="/guide/work" />
       <Article title="医療・障害" description="テスト本文" linkUrl="/guide/medical" />
