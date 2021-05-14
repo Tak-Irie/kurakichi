@@ -1,5 +1,5 @@
 import { CSSProperties, VFC } from 'react';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, OverlayView, InfoBox } from '@react-google-maps/api';
 
 import { LoadingSpinner } from '@next/ui';
 

@@ -7,9 +7,9 @@ interface GeoCode {
 
 export class GoogleMapAPIService {
   public static async getGeoCodeByAddress(address: string): Promise<GeoCode | false> {
-    // console.log('address:', address);
+    console.log('address:', address);
     const modified = GoogleMapAPIService.modifyAddress(address);
-    // console.log('modified:', modified);
+    console.log('modified:', modified);
     const mapClient = new Client();
     const response = await mapClient.geocode({
       params: {

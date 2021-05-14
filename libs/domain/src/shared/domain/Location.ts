@@ -15,6 +15,7 @@ export class Location extends ValueObject<LocationProps> {
   public static create(props: LocationProps): Result<Location> {
     // console.log('locationCreate:', props);
     const location = this.transformZenkakuToHankaku(props.location);
+    // console.log('transformed:', location);
     const isValid = this.validateAndModifyProps({ location });
     if (isValid === false) {
       return Result.fail<Location>('住所の値が不正です。');
@@ -28,7 +29,7 @@ export class Location extends ValueObject<LocationProps> {
   }
 
   private static validateAndModifyProps(unpurifiedLocation: LocationProps): string | false {
-    const locationRegExp = /(\d{3}-?\d{4})([\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf]*\s*\d-?\d?-?\d?)(\s*[\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf\d-]*)/;
+    const locationRegExp = /(\d{3}-?\d{4})([\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf]*\s?\d?-?\d?-?\d?)(\s?[\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf\d-])?/;
 
     const isValid = locationRegExp.test(unpurifiedLocation.location);
     if (!isValid) return false;
