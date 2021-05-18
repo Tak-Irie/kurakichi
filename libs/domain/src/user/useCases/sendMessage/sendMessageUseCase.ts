@@ -10,13 +10,12 @@ import {
   InvalidInputValueError,
 } from '../../../shared';
 import { IMessageRepo, Message, MessageContent } from '../../domain';
-import { MessageStatus, MessageStatusUnion } from '../../domain/MessageStatus';
+import { MessageStatus } from '../../domain/MessageStatus';
 import { createDTOMessageFromDomain, DTOMessage } from '../DTOMessage';
 import { ReceiverNotFoundError } from './sendMessageError';
 
 type SendMessageArg = {
   textInput: string;
-  status: MessageStatusUnion;
   senderId: string;
   receiverId: string;
 };
@@ -35,29 +34,37 @@ export class SendMessageUseCase implements IUseCase<SendMessageArg, Promise<Send
   public async execute(arg: SendMessageArg): Promise<SendMessageResponse> {
     try {
       const contentOrError = MessageContent.create({ text: arg.textInput });
-      const statusOrError = MessageStatus.create({ status: arg.status });
-      const verifiedResults = Result.verifyResults<MessageTypes>([contentOrError, statusOrError]);
+      const verifiedResults = Result.verifyResults<MessageTypes>([contentOrError]);
 
-      if (verifiedResults.isFailure)
-        return left(new InvalidInputValueError(verifiedResults.getErrorValue()));
+      if (verifiedResults[0].isFailure)
+        return left(
+          new InvalidInputValueError(
+            verifiedResults.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
 
       const messageOrError = Message.create({
-        id: UniqueEntityId.create(),
         content: contentOrError.getValue(),
-        status: statusOrError.getValue(),
         sender: UniqueEntityId.reconstruct(arg.senderId).getValue(),
         receiver: UniqueEntityId.reconstruct(arg.receiverId).getValue(),
       });
       // TODO:need create error?
       if (messageOrError.isFailure) return left(new UnexpectedError());
+      // console.log('messOrErr:', messageOrError);
 
-      const domainMessage = await this.Repo.sendMessage(messageOrError.getValue());
-      if (domainMessage == false) return left(new StoreConnectionError());
+      const domainMessage = await this.Repo.registerMessage(messageOrError.getValue());
+      // console.log('domMess:', domainMessage);
 
       const dtoMessage = createDTOMessageFromDomain(domainMessage);
 
       return right(Result.success<DTOMessage>(dtoMessage));
     } catch (err) {
+      if (err.message === 'データベースエラー') return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

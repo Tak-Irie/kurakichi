@@ -1,3 +1,4 @@
+export * from './AuthContext';
 export * from './RegExp';
 export * from './createApolloClient';
 export * from './createApolloLink';
@@ -6,4 +7,5 @@ export * from './isAuth';
 export * from './isServer';
 export * from './ownTypes';
 export * from './useGetIdFromUrl';
-// export * from "./valueOfEnum"
+export * from './uploadImage';
+export * from './reactNewLineToBr';

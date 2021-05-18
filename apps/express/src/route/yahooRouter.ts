@@ -17,7 +17,7 @@ yahooRouter.get('/callback', async (req, res) => {
   try {
     const client = await memoizedYahooClient();
 
-    console.log('CbSession:', req.session);
+    // console.log('CbSession:', req.session);
 
     const tokenSet = await OidcAuthService.verifyAuthCode(
       req,

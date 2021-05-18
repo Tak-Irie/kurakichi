@@ -16,8 +16,19 @@ export class OrgRepo implements IOrgRepo {
     return !!result;
   }
 
+  async confirmMemberExistence(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<boolean> {
+    // console.log('confirmMember:', orgId, memberId);
+    const result = await this.prisma.organization.findUnique({
+      where: { id: orgId.getId() },
+      select: { members: { where: { id: memberId.getId() } } },
+    });
+    if (result == undefined) return false;
+    return true;
+  }
+
   async registerOrg(org: Org): Promise<Org | false> {
     const data = OrgMapper.toStore(org);
+    // console.log('orgRepoRegisterData:', data);
     const result = await this.prisma.$transaction([
       this.prisma.organization.create({
         data,
@@ -41,6 +52,17 @@ export class OrgRepo implements IOrgRepo {
     const domainOrgs = dbOrgs.map((org) => OrgMapper.ToDomain(org));
     // console.log('toDomOrgs:', toDomainOrgs);
 
+    return domainOrgs;
+  }
+
+  async getOrgsByMemberId(memberId: UniqueEntityId): Promise<Org[] | false> {
+    const dbOrgs = await this.prisma.organization.findMany({
+      where: { members: { some: { id: memberId.getId() } } },
+      include: { members: true, inquiries: true },
+    });
+    if (dbOrgs == undefined) return false;
+
+    const domainOrgs = OrgMapper.ArrayToDomain(dbOrgs);
     return domainOrgs;
   }
 
@@ -70,10 +92,10 @@ export class OrgRepo implements IOrgRepo {
           },
         },
       }),
-      this.prisma.organization.delete({
-        where: { id: _orgId },
-        select: { requestedMembers: { where: { id: userId } } },
-      }),
+      // this.prisma.organization.delete({
+      //   where: { id: _orgId },
+      //   select: { requestedMembers: { where: { id: userId } } },
+      // }),
     ]);
     if (result == undefined) return false;
 
@@ -90,5 +112,20 @@ export class OrgRepo implements IOrgRepo {
 
     const data = OrgMapper.ToDomain(result);
     return data;
+  }
+
+  async updateOrg(org: Org): Promise<Org> {
+    try {
+      const primitiveOrg = OrgMapper.toStore(org);
+
+      const result = await this.prisma.organization.update({
+        where: { id: primitiveOrg.id },
+        data: primitiveOrg,
+      });
+      return OrgMapper.ToDomain(result);
+    } catch (err) {
+      console.error(err);
+      throw Error('データベースエラー');
+    }
   }
 }

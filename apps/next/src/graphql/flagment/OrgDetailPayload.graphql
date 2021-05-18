@@ -1,0 +1,30 @@
+fragment OrgDetailPayload on Org {
+  id
+  orgName
+  location
+  email
+  phoneNumber
+  image
+  avatar
+  description
+  homePage
+  members {
+    id
+    userName
+    avatar
+    description
+  }
+  inquiries {
+    id
+    content
+    sentAt
+    category
+    tree {
+      id
+    }
+    inquiryStatus
+    sender {
+      id
+    }
+  }
+}

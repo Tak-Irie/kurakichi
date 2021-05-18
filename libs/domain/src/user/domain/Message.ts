@@ -1,4 +1,4 @@
-import { Entity } from '../../shared';
+import { Entity, UnixTime } from '../../shared';
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { Result } from '../../shared/Result';
 import { MessageContent } from './MessageContent';
@@ -10,6 +10,8 @@ interface MessageProps {
   status: MessageStatus;
   sender: UniqueEntityId;
   receiver: UniqueEntityId;
+  sentAt: UnixTime;
+  treeId: UniqueEntityId;
 }
 
 export type MessagePrimitive = {
@@ -18,6 +20,8 @@ export type MessagePrimitive = {
   status: MessageStatusUnion;
   sender: string;
   receiver: string;
+  sentAt: number;
+  treeId: string;
 };
 
 export class Message extends Entity<MessageProps> {
@@ -39,21 +43,46 @@ export class Message extends Entity<MessageProps> {
     return this.getProps().receiver.getId();
   }
 
-  public static create(props: MessageProps): Result<Message> {
+  public static create(
+    props: Omit<MessageProps, 'id' | 'status' | 'treeId' | 'sentAt'>,
+  ): Result<Message> {
     const message = new Message({
       ...props,
+      id: UniqueEntityId.create(),
+      status: MessageStatus.create().getValue(),
+      sentAt: UnixTime.create().getValue(),
+      treeId: UniqueEntityId.create(),
+    });
+    // Message.addDomainEvent(new _EntityCreated(Message));
+    return Result.success<Message>(message);
+  }
+
+  public static createReply(replyTarget: Message, replyContent: MessageContent): Result<Message> {
+    const { receiver, sender, treeId } = replyTarget.getProps();
+    const message = new Message({
+      id: UniqueEntityId.create(),
+      content: replyContent,
+      receiver: sender,
+      sender: receiver,
+      status: MessageStatus.create().getValue(),
+      sentAt: UnixTime.create().getValue(),
+      treeId,
     });
     // Message.addDomainEvent(new _EntityCreated(Message));
     return Result.success<Message>(message);
   }
 
   public static restoreFromRepo(storedMessage: MessagePrimitive): Message {
+    const { content, id, treeId, receiver, sender, sentAt, status } = storedMessage;
+
     return new Message({
-      id: UniqueEntityId.restoreFromRepo(storedMessage.id),
-      content: MessageContent.restoreFromRepo(storedMessage.content),
-      status: MessageStatus.restoreFromRepo(storedMessage.status),
-      receiver: UniqueEntityId.restoreFromRepo(storedMessage.receiver),
-      sender: UniqueEntityId.restoreFromRepo(storedMessage.sender),
+      id: UniqueEntityId.restoreFromRepo(id),
+      content: MessageContent.restoreFromRepo(content),
+      status: MessageStatus.restoreFromRepo(status),
+      receiver: UniqueEntityId.restoreFromRepo(receiver),
+      sender: UniqueEntityId.restoreFromRepo(sender),
+      sentAt: UnixTime.restoreFromRepo(sentAt),
+      treeId: UniqueEntityId.restoreFromRepo(treeId),
     });
   }
 

@@ -1,4 +1,4 @@
 export type IUseCaseError = {
-  message: string;
+  message: string | string;
   error?: Error;
 };

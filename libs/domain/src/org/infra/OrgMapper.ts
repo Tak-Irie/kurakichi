@@ -12,8 +12,8 @@ export class OrgMapper {
     const { members, inquiries, ...props } = storedOrg;
     const domainOrg = Org.restoreFromRepo({
       ...props,
-      members: getIdFromObjectInArray(members),
-      inquiries: getIdFromObjectInArray(inquiries),
+      members: members ? getIdFromObjectInArray(members) : [],
+      inquiries: inquiries ? getIdFromObjectInArray(inquiries) : [],
     });
 
     return domainOrg;
@@ -34,6 +34,8 @@ export class OrgMapper {
       homePage,
       image,
       location,
+      latitude,
+      longitude,
       name,
       phoneNumber,
       inquiries,
@@ -42,12 +44,14 @@ export class OrgMapper {
     return {
       id: id.getId(),
       adminId: adminId.getId(),
-      avatar: avatar as string,
-      description,
+      avatar: avatar.getURL(),
+      description: description.getContent(),
       email: email.getValue(),
-      homePage: homePage,
-      image: image as string,
+      homePage: homePage.getURL(),
+      image: image.getURL(),
       location: location.getValue(),
+      latitude: latitude.getValue(),
+      longitude: longitude.getValue(),
       name: name.getValue(),
       phoneNumber: phoneNumber.getValue(),
     };

@@ -6,9 +6,20 @@ export const Inquiry = objectType({
   definition(t) {
     t.implements('Node');
     t.string('content');
+    t.string('sentAt');
     t.field('category', { type: 'InquiryCategory' });
     t.field('inquiryStatus', { type: 'InquiryStatus' });
     t.field('sender', { type: 'User' });
+    t.field('tree', { type: 'InquiryTree' });
+  },
+});
+
+export const InquiryTree = objectType({
+  name: 'InquiryTree',
+  description: 'Inquiries Node, it connect original and response inquiry',
+  definition(t) {
+    t.implements('Node');
+    t.field('treedInquiry', { type: list('Inquiry') });
   },
 });
 
@@ -17,6 +28,7 @@ export const InquiryPayload = objectType({
   definition(t) {
     t.field('inquiry', { type: 'Inquiry' });
     t.field('inquiries', { type: list('Inquiry') });
+    t.field('inquiryTree', { type: 'InquiryTree' });
     t.field('error', { type: 'RegularError' });
   },
 });

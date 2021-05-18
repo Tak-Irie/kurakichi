@@ -1,140 +1,110 @@
-import { FC } from 'react';
-import Link from 'next/link';
+import { FC, useState } from 'react';
+import { Transition } from '@headlessui/react';
 
-import { MailIcon, CogIcon } from '@heroicons/react/outline';
-import { IconButton, GridTemplate, GridItem, GridItemWithPic, SmallText } from '@next/ui';
+import {
+  ButtonWithIcon,
+  ProfileHeader,
+  IconsMail,
+  IconsCaution,
+  PopOnIcon,
+  TextLabeled,
+  Text2xl,
+  TextLabel,
+  CardWithPick,
+  TextSmall,
+} from '@next/ui';
+import { SendMessage } from '@next/container';
 
-import { Message, Org, SecureBase } from '../../../graphql/generated/graphql';
-import { ImageHero } from '../atoms';
+import { Org } from '../../../graphql/generated/graphql';
 
 type UserProfileProps = {
+  userId: string;
   userName: string;
   image: string;
-  icon: string;
+  avatar: string;
   description: string;
-  email: string;
   orgs: Org[];
-  messages: Message[];
-  secureBases: SecureBase[];
+  loggedIn: boolean;
 };
 
-export const UserProfile: FC<UserProfileProps> = ({
-  userName,
-  image,
-  icon,
-  description,
-  orgs,
-  messages,
-  email,
-  secureBases,
-}) => {
+export const UserProfile: FC<UserProfileProps> = (props) => {
+  const { avatar, description, image, orgs, userId, userName, loggedIn } = props;
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="bg-white min-h-screen">
-      <div className="flex-1 relative z-0 flex overflow-hidden">
-        <main
-          className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last"
-          tabIndex={0}
-        >
-          <article className="bg-gray-100">
-            <div>
-              <ImageHero src={image} alt="ユーザーイメージ" />
-              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
-                  <div className="flex">
-                    <img
-                      className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
-                      src={icon === 'UNKNOWN' ? '/asian_man1.jpg' : icon}
-                      alt="ユーザーアイコン"
-                    />
-                  </div>
-                  <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-                    <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                      <IconButton label="メッセージボックス" svgIcon={<MailIcon />} />
-                      <Link href="/user/mysetting">
-                        <a href="/user/mysetting">
-                          <IconButton label="アカウント設定" svgIcon={<CogIcon />} />
-                        </a>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="sm:block mt-6 min-w-0 flex-1">
-                  <h1 className="text-2xl font-bold text-gray-900 truncate">{userName}</h1>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <GridTemplate>
-                <GridItem
-                  label="自己紹介"
-                  content={description === 'UNKNOWN' ? '自己紹介記入欄です' : description}
-                  colSpan="col-span-1"
+    <div className="grid grid-cols-12 pb-10">
+      <div className="col-span-full">
+        <ProfileHeader avatarSrc={avatar} imageSrc={image}>
+          {loggedIn ? (
+            <>
+              <div>
+                <ButtonWithIcon
+                  type="button"
+                  onClick={() => setIsOpen(!isOpen)}
+                  label="メッセージを送る"
+                  icon={<IconsMail />}
                 />
-                <GridItem label="メールアドレス" content={email} colSpan="col-span-1" />
-              </GridTemplate>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">新着メッセージ</h2>
-              <GridTemplate>
-                {messages[0] ? (
-                  messages.map((message) => {
-                    return (
-                      <div key={message.id}>
-                        <GridItem label={message.content} content={message.content} />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <SmallText>新着メッセージはありません</SmallText>
-                )}
-              </GridTemplate>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4  sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">セキュアベース</h2>
-              <GridTemplate>
-                {secureBases[0] ? (
-                  secureBases.map((base) => {
-                    return (
-                      <div key={base.id}>
-                        <GridItemWithPic
-                          name={base.baseOwner.userName}
-                          description={base.id}
-                          // url={`/org/${org.id}`}
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <SmallText>所属ベースはありません</SmallText>
-                )}
-              </GridTemplate>
-            </div>
-
-            <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
-              <h2 className="text-sm font-medium text-gray-500">所属団体</h2>
-              <GridTemplate>
-                {orgs[0] ? (
-                  orgs.map((org) => {
-                    return (
-                      <div key={org.id}>
-                        <GridItemWithPic
-                          name={org.orgName}
-                          description={org.description}
-                          url={`/org/${org.id}`}
-                        />
-                      </div>
-                    );
-                  })
-                ) : (
-                  <SmallText>所属団体はありません</SmallText>
-                )}
-              </GridTemplate>
-            </div>
-          </article>
-        </main>
+              </div>
+              <div className="mt-12 absolute w-full">
+                <Transition
+                  show={isOpen}
+                  enter="transition-opacity duration-150"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="transition-opacity duration-150"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute -ml-36">
+                    <SendMessage receiverId={userId} />
+                  </div>
+                </Transition>
+              </div>
+            </>
+          ) : (
+            <>
+              <PopOnIcon overWriteCSS="" icon={<IconsCaution />} content="ログインが必要です" />
+              <ButtonWithIcon
+                onClick={() => setIsOpen(!isOpen)}
+                type="button"
+                label="メッセージを送る"
+                disabled
+                icon={<IconsMail />}
+              ></ButtonWithIcon>
+            </>
+          )}
+        </ProfileHeader>
+      </div>
+      <div className="col-start-3">
+        <Text2xl content={userName} />
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <TextLabel content="プロフィール" />
+        <div className="space-y-1 mt-2">
+          <TextLabeled
+            label="自己紹介"
+            content={description === 'UNKNOWN' ? '自己紹介文が記入されていません' : description}
+          />
+        </div>
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <TextLabel content={'所属団体'} />
+        {orgs[0] ? (
+          orgs.map((org) => {
+            return (
+              <CardWithPick
+                key={org.id}
+                image={org.avatar === 'UNKNOWN' ? '/logo_temp.png' : org.avatar}
+                title={org.orgName}
+                content={org.description}
+                imageAlt="団体アバター"
+                linkUrl={org.id}
+              />
+            );
+          })
+        ) : (
+          <TextSmall content="所属団体はありません" />
+        )}
       </div>
     </div>
   );

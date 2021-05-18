@@ -1,26 +1,46 @@
+import { FC, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
-import { useUserLogoutMutation } from '../../graphql/generated/graphql';
-import { ButtonBig } from '../presentational/atoms/Buttons';
 
-const LogoutButton: FC = () => {
-  const [logout, { client }] = useUserLogoutMutation();
+import { ButtonBig, DropDownMenuItemButton, IconsLogout } from '@next/ui';
+import { useUserLogoutMutation } from '../../graphql/generated/graphql';
+import { AuthContext } from '../../util';
+
+export const LogoutButton: FC = () => {
   const router = useRouter();
+  const { setAuthStatus } = useContext(AuthContext);
+
+  const [logout, { client }] = useUserLogoutMutation();
 
   return (
     <ButtonBig
+      label="ログアウト"
       type="button"
       onClick={async (e) => {
         e.preventDefault();
         await logout();
-        router.replace('/');
-        // TODO: need to reset all cache ?
         await client.resetStore();
+        setAuthStatus(false);
+        router.replace('/');
       }}
-    >
-      Logout
-    </ButtonBig>
+    />
   );
 };
 
-export { LogoutButton };
+export const LogoutMenuItem: FC = () => {
+  const router = useRouter();
+  const { setAuthStatus } = useContext(AuthContext);
+  const [logout, { client }] = useUserLogoutMutation();
+
+  return (
+    <DropDownMenuItemButton
+      label="ログアウト"
+      icon={<IconsLogout />}
+      onClick={async () => {
+        await logout();
+        await client.resetStore();
+        setAuthStatus(false);
+        router.replace('/');
+      }}
+    />
+  );
+};

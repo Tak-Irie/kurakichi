@@ -7,65 +7,68 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
-  Email,
-  PhoneNumber,
+  InvalidInputValueError,
+  Geocode,
 } from '../../../shared';
 import { IOrgRepo, Org } from '../../domain';
-import { OrgLocation } from '../../domain/OrgLocation';
-import { OrgName } from '../../domain/OrgName';
 import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
-import { AlreadyRegisteredNameError } from './registerOrgError';
+import { AlreadyRegisteredNameError, LocationNotExistError } from './registerOrgError';
+import { GoogleMapAPIService } from '../../../services';
 
-type OrgArg = {
+type RegisterOrgArg = {
   adminId: string;
-  orgName: string;
+  name: string;
   location: string;
   phoneNumber: string;
   email: string;
 };
 
-type OrgTypes = OrgName | OrgLocation | Email | PhoneNumber | UniqueEntityId;
-
 type RegisterOrgResponse = Either<
-  AlreadyRegisteredNameError | UnexpectedError | StoreConnectionError | Result<OrgTypes>,
+  | InvalidInputValueError
+  | LocationNotExistError
+  | AlreadyRegisteredNameError
+  | UnexpectedError
+  | StoreConnectionError,
   Result<DTOOrg>
 >;
 
-export class RegisterOrgUseCase implements IUseCase<OrgArg, Promise<RegisterOrgResponse>> {
+export class RegisterOrgUseCase implements IUseCase<RegisterOrgArg, Promise<RegisterOrgResponse>> {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
-  public async execute(arg: OrgArg): Promise<RegisterOrgResponse> {
+  public async execute(arg: RegisterOrgArg): Promise<RegisterOrgResponse> {
     try {
-      const orgNameOrError = OrgName.create({ name: arg.orgName });
-      const locationOrError = OrgLocation.create({ location: arg.location });
-      const emailOrError = Email.create({ email: arg.email });
-      const phoneOrError = PhoneNumber.create({ phoneNumber: arg.phoneNumber });
-      const adminIdOrError = UniqueEntityId.reconstruct(arg.adminId);
-
-      const verifiedResult = Result.verifyResults<OrgTypes>([
-        orgNameOrError,
-        locationOrError,
-        emailOrError,
-        phoneOrError,
-        adminIdOrError,
-      ]);
-
-      if (verifiedResult.isFailure) {
-        return left(Result.fail<OrgTypes>(verifiedResult.getErrorValue()));
+      // console.log('registerOrgArg:', arg);
+      const validatedProps = Org.validateProps({ ...arg });
+      const failProp = Object.values(validatedProps).filter(
+        (resultProp) => resultProp.isFailure === true,
+      );
+      // console.log('failProp:', failProp);
+      if (failProp[0]) {
+        return left(new InvalidInputValueError(failProp.map((prop) => prop.getErrorValue())));
       }
 
-      const verifiedOrgName = orgNameOrError.getValue();
-      const duplicateCheck = await this.OrgRepo.confirmOrgByName(verifiedOrgName);
+      const geocode = await GoogleMapAPIService.getGeoCodeByAddress(
+        validatedProps.location.getValue().getValue(),
+      );
+      if (geocode === false) return left(new LocationNotExistError());
+
+      const lat = Geocode.create({ code: geocode.lat });
+      const lng = Geocode.create({ code: geocode.lng });
+      if (lat.isFailure || lng.isFailure) return left(new LocationNotExistError());
+
+      const duplicateCheck = await this.OrgRepo.confirmOrgByName(validatedProps.name.getValue());
       if (duplicateCheck) return left(new AlreadyRegisteredNameError());
 
       const orgOrError = Org.create({
         id: UniqueEntityId.create(),
-        adminId: adminIdOrError.getValue(),
-        name: verifiedOrgName,
-        email: emailOrError.getValue(),
-        location: locationOrError.getValue(),
-        phoneNumber: phoneOrError.getValue(),
+        adminId: validatedProps.adminId.getValue(),
+        name: validatedProps.name.getValue(),
+        email: validatedProps.email.getValue(),
+        location: validatedProps.location.getValue(),
+        latitude: lat.getValue(),
+        longitude: lng.getValue(),
+        phoneNumber: validatedProps.phoneNumber.getValue(),
       });
       if (orgOrError.isFailure) return left(new UnexpectedError());
 

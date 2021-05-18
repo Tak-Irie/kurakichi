@@ -1,6 +1,11 @@
 /**
- * @class 統一された"型"のリザルトを返すためのクラス
- * @description throw new Error を使わずにエラーハンドリングできる
+ * オブジェクトの要素型をResultクラスに格納した状態にする
+ */
+export type PropInResult<T> = { [P in keyof T]: Result<T[P]> };
+
+/**
+ * throw new Error を使わずにエラーハンドリングする。想定されるエラーはこちらを使用する
+ * 外部ライブラリ連携及び想定外のエラーはtry-catch(err){...}する
  */
 export class Result<T> {
   public readonly isSuccess: boolean;
@@ -10,14 +15,10 @@ export class Result<T> {
 
   public constructor(isSuccess: boolean, error?: string, value?: T) {
     if (isSuccess && error) {
-      throw new Error(
-        '不正なオペレーションが検出されました、あり得ない値の組合わせです',
-      );
+      throw new Error('不正なオペレーションが検出されました、あり得ない値の組合わせです');
     }
     if (!isSuccess && !error) {
-      throw new Error(
-        '不正なオペレーションが検出されました、あり得ない値の組合わせです',
-      );
+      throw new Error('不正なオペレーションが検出されました、あり得ない値の組合わせです');
     }
     if (error) this.error = error;
     if (value) this.value = value;
@@ -25,14 +26,6 @@ export class Result<T> {
     this.isFailure = !isSuccess;
 
     Object.freeze(this);
-  }
-
-  public static verifyResult<U>(result: Result<U>): Result<U> {
-    if (result.isFailure) {
-      return Result.fail<U>(result.getErrorValue());
-    }
-
-    return Result.success<U>(result.getValue());
   }
 
   /**
@@ -58,11 +51,19 @@ export class Result<T> {
     return this.value;
   }
 
-  // verifyResult"s"
-  public static verifyResults<U>(results: Result<U>[]): Result<U> {
-    const arrayResults = Object.values(results);
-    const findErr = arrayResults.find(({ isFailure }) => isFailure === true);
+  public static verifyResult<U>(result: Result<U>): Result<U> {
+    if (result.isFailure) {
+      return Result.fail<U>(result.getErrorValue());
+    }
 
-    return findErr || Result.success<U>();
+    return Result.success<U>(result.getValue());
+  }
+
+  public static verifyResults<U>(results: Result<U>[]): Result<U>[] {
+    const isInvalid = results.filter(({ isFailure }) => isFailure === true);
+    if (isInvalid[0]) {
+      return isInvalid;
+    }
+    return results;
   }
 }

@@ -13,6 +13,7 @@ import { IInquiryRepo, Inquiry } from '../../domain';
 import { InquiryCategory, InquiryCategoryUnion } from '../../domain/InquiryCategory';
 import { InquiryContent } from '../../domain/InquiryContent';
 import { InquiryStatusUnion, InquiryStatus } from '../../domain/InquiryStatus';
+import { createDTOInquiryFromDomain, DTOInquiry } from '../DTOInquiry';
 import { ReceiverNotExistError } from './registerInquiryError';
 
 type InquiryArg = {
@@ -21,6 +22,7 @@ type InquiryArg = {
   content: string;
   receiverId: string;
   senderId: string;
+  orgId: string;
 };
 
 type RegisterInquiryResponse = Either<
@@ -29,7 +31,7 @@ type RegisterInquiryResponse = Either<
   | UnexpectedError
   | StoreConnectionError
   | Result<InquiryTypes>,
-  Result<Inquiry>
+  Result<DTOInquiry>
 >;
 
 type InquiryTypes = InquiryCategory | InquiryContent | InquiryStatus;
@@ -41,7 +43,8 @@ export class RegisterInquiryUseCase
   }
   public async execute(arg: InquiryArg): Promise<RegisterInquiryResponse> {
     try {
-      const { category, content, receiverId, senderId, status } = arg;
+      // console.log('registerInquiryArg:', arg);
+      const { category, content, receiverId, senderId, status, orgId } = arg;
       const categoryOrError = InquiryCategory.create({ type: category });
       const contentOrError = InquiryContent.create({ text: content });
       const statusOrError = InquiryStatus.create({ status: status });
@@ -51,21 +54,33 @@ export class RegisterInquiryUseCase
         contentOrError,
         statusOrError,
       ]);
-      if (verifiedResult.isFailure)
-        return left(Result.fail<InquiryTypes>(verifiedResult.getErrorValue()));
+      if (verifiedResult[0].isFailure)
+        return left(
+          new InvalidInputValueError(
+            verifiedResult.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
 
       const inquiryOrError = Inquiry.create({
-        id: UniqueEntityId.create(),
         category: categoryOrError.getValue(),
         status: statusOrError.getValue(),
         content: contentOrError.getValue(),
         receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
         sender: UniqueEntityId.reconstruct(senderId).getValue(),
+        orgId: UniqueEntityId.reconstruct(orgId).getValue(),
       });
+
       const dbResult = await this.InquiryRepo.registerInquiry(inquiryOrError.getValue());
-      if (dbResult == false) return left(new StoreConnectionError());
-      return right(Result.success<Inquiry>(dbResult));
+
+      const dtoInquiry = createDTOInquiryFromDomain(dbResult);
+      return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
+      if (err === Error('データベースエラー')) return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

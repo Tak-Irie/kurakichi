@@ -1,4 +1,4 @@
-import { list, objectType } from 'nexus';
+import { list, objectType, inputObjectType } from 'nexus';
 
 export const Org = objectType({
   name: 'Org',
@@ -6,6 +6,8 @@ export const Org = objectType({
     t.implements('Node');
     t.string('orgName');
     t.string('location');
+    t.float('latitude');
+    t.float('longitude');
     t.string('email');
     t.string('phoneNumber');
     t.string('image');
@@ -23,5 +25,18 @@ export const OrgPayload = objectType({
     t.field('org', { type: 'Org' });
     t.field('orgs', { type: list('Org') });
     t.field('error', { type: 'RegularError' });
+  },
+});
+
+export const OrgUpdateInput = inputObjectType({
+  name: 'OrgUpdateInput',
+  definition(t) {
+    t.string('orgName');
+    t.string('location');
+    t.string('email');
+    t.string('phoneNumber');
+    t.string('description');
+    t.string('homePage');
+    t.string('adminId');
   },
 });

@@ -3,7 +3,17 @@ import { Inquiry } from '../domain';
 
 export class InquiryMapper {
   public static ToDomain(storedInquiry: StoredInquiry): Inquiry {
-    const { category, id, receiverId, senderId, text, status } = storedInquiry;
+    const {
+      category,
+      id,
+      receiverId,
+      senderId,
+      text,
+      status,
+      sentAt,
+      inquiryTreeId,
+      receivedOrgId,
+    } = storedInquiry;
 
     const InquiryResult = Inquiry.restoreFromRepo({
       id,
@@ -12,6 +22,9 @@ export class InquiryMapper {
       content: text,
       receiver: receiverId,
       sender: senderId,
+      sentAt: Number(sentAt),
+      treeId: inquiryTreeId,
+      orgId: receivedOrgId,
     });
 
     return InquiryResult;
@@ -22,8 +35,18 @@ export class InquiryMapper {
     return arrayResult;
   }
 
-  public static toStore(Inquiry: Inquiry): Omit<StoredInquiry, 'createdAt'> {
-    const { category, content, id, sender, receiver, status } = Inquiry.getProps();
+  public static toStore(Inquiry: Inquiry): StoredInquiry {
+    const {
+      category,
+      content,
+      id,
+      sender,
+      receiver,
+      status,
+      treeId,
+      sentAt,
+      orgId,
+    } = Inquiry.getProps();
     return {
       id: id.getId(),
       category: category.getValue(),
@@ -31,6 +54,9 @@ export class InquiryMapper {
       senderId: sender.getId(),
       text: content.getText(),
       receiverId: receiver.getId(),
+      sentAt: BigInt(sentAt.getTime()),
+      inquiryTreeId: treeId.getId(),
+      receivedOrgId: orgId.getId(),
     };
   }
 }

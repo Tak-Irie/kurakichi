@@ -9,13 +9,14 @@ import {
   InvalidInputValueError,
   UniqueEntityId,
 } from '../../../shared';
-import { IUserRepository, UserEmail } from '../../domain';
+import { IUserRepository } from '../../domain';
 import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 import { UserNotExistError } from './updateUserError';
 
 type UpdateUserArg = {
   userId: string;
   description?: string;
+  userName?: string;
   email?: string;
   avatar?: string;
   image?: string;
@@ -31,7 +32,7 @@ export class UpdateUserUseCase implements IUseCase<UpdateUserArg, Promise<Update
     this.UserRepo = UserRepo;
   }
   public async execute(arg: UpdateUserArg): Promise<UpdateUserResponse> {
-    const { userId, avatar, description, email, image } = arg;
+    const { userId, avatar, description, email, image, userName } = arg;
     try {
       const idOrError = UniqueEntityId.reconstruct(userId);
       if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));
@@ -39,13 +40,16 @@ export class UpdateUserUseCase implements IUseCase<UpdateUserArg, Promise<Update
       const storedUser = await this.UserRepo.getUserByUserId(idOrError.getValue());
       if (storedUser == undefined) return left(new UserNotExistError());
 
-      console.log('beforeChange:', storedUser);
+      // console.log('beforeChange:', storedUser);
 
       if (email) {
-        const emailOrError = UserEmail.create({ email });
-        if (emailOrError.isFailure)
-          return left(new InvalidInputValueError(emailOrError.getErrorValue()));
-        storedUser.updateEmail(emailOrError.getValue());
+        const result = storedUser.updateEmail(email);
+        if (typeof result == 'string') return left(new InvalidInputValueError(result));
+      }
+
+      if (userName) {
+        const result = storedUser.updateUserName(userName);
+        if (typeof result == 'string') return left(new InvalidInputValueError(result));
       }
 
       // FIXME:create service class is better, don't you think?
@@ -64,7 +68,7 @@ export class UpdateUserUseCase implements IUseCase<UpdateUserArg, Promise<Update
         storedUser.updateImage(image);
       }
 
-      console.log('afterChange:', storedUser);
+      // console.log('afterChange:', storedUser);
       const dbResult = await this.UserRepo.updateUser(storedUser);
       if (dbResult == false) return left(new StoreConnectionError());
 

@@ -1,6 +1,12 @@
-import { FC } from 'react';
+import { VFC } from 'react';
 
-export const LoadingCard: FC = () => {
+type LoadingProps = {
+  color?: string;
+  height?: string;
+  width?: string;
+};
+
+export const LoadingCard: VFC<LoadingProps> = ({ color }) => {
   return (
     <div className="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
       <div className="animate-pulse flex space-x-4">
@@ -17,15 +23,14 @@ export const LoadingCard: FC = () => {
   );
 };
 
-export const LoadingStylishSpinner: FC = () => {
+export const LoadingSpinner: VFC<LoadingProps> = ({
+  color = 'gray',
+  height = 'h-10',
+  width = 'w-10',
+}) => {
   return (
-    <svg className="flex animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900" />
-  );
-};
-
-// FIXME:create simple version
-export const LoadingSimpleSpinner: FC = () => {
-  return (
-    <svg className="flex animate-spin rounded-full w-10 h-10 border-t-2 border-b-2 border-pink-600" />
+    <svg
+      className={`animate-spin flex-shrink rounded-full ${height} ${width} border-t-2 border-b-2 border-${color}-900`}
+    />
   );
 };

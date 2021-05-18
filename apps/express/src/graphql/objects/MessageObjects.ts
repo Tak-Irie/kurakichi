@@ -6,9 +6,20 @@ export const Message = objectType({
   definition(t) {
     t.implements('Node');
     t.string('content');
+    t.string('sentAt');
     t.field('messageStatus', { type: 'MessageStatus' });
     t.field('sender', { type: 'User' });
     t.field('receiver', { type: 'User' });
+    t.field('tree', { type: 'MessageTree' });
+  },
+});
+
+export const MessageTree = objectType({
+  name: 'MessageTree',
+  description: 'Messages Node, it connect original and response Message',
+  definition(t) {
+    t.implements('Node');
+    t.field('treedMessage', { type: list('Message') });
   },
 });
 
@@ -17,6 +28,7 @@ export const MessagePayload = objectType({
   definition(t) {
     t.field('message', { type: 'Message' });
     t.field('messages', { type: list('Message') });
+    t.field('messageTree', { type: 'MessageTree' });
     t.field('error', { type: 'RegularError' });
   },
 });

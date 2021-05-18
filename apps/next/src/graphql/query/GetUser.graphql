@@ -1,0 +1,10 @@
+query GetUserById($userId: String!) {
+  getUserById(userId: $userId) {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

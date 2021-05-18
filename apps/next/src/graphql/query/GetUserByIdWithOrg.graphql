@@ -1,0 +1,25 @@
+query GetUserByIdWithOrg($userId: String!) {
+  getUserByIdWithOrg(userId: $userId) {
+    user {
+      id
+      userName
+      image
+      avatar
+      description
+      belongOrgs {
+        id
+        orgName
+        location
+        email
+        phoneNumber
+        image
+        avatar
+        description
+        homePage
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

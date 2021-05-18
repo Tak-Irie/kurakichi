@@ -1,0 +1,7 @@
+query getInquiriesWithStatus($orgId: String!, $status: InquiryStatus) {
+  getInquiriesWithStatus(orgId: $orgId, status: $status) {
+    inquiries {
+      ...InquiryPayload
+    }
+  }
+}

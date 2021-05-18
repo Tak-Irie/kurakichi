@@ -1,21 +1,21 @@
 import { FC } from 'react';
-import { useGetMessagesQuery } from '../../graphql/generated/graphql';
-import { LoadingStylishSpinner, SmallCard } from '@next/ui';
+import { useGetMessagesByCookieQuery } from '../../graphql/generated/graphql';
+import { LoadingSpinner, SmallCard } from '@next/ui';
 
 export const GetMessages: FC = () => {
-  const { data, loading, error, fetchMore } = useGetMessagesQuery();
+  const { data, loading, error, fetchMore } = useGetMessagesByCookieQuery();
 
-  if (loading) return <LoadingStylishSpinner />;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  console.log('data:', data);
+  // console.log('data:', data);
   return (
     <div>
-      {!data.getMessages.messages ? (
+      {!data.getMessagesByCookie.messages ? (
         <p>no massage</p>
       ) : (
         <ul>
-          {data.getMessages.messages.map((message) => {
+          {data.getMessagesByCookie.messages.map((message) => {
             return <SmallCard key={message.id} title={message.id} content={message.content} />;
           })}
         </ul>

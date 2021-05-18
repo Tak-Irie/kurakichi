@@ -1,13 +1,13 @@
 import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
 import { User, UserEmail, UserPassword, UserName } from './index';
 
-const username = UserName.create({ username: 'okName' }).getValue();
+const userName = UserName.create({ userName: 'okName' }).getValue();
 const email = UserEmail.create({ email: 'success@email.com' }).getValue();
 const passwordFnc = UserPassword.create({ password: 'password', isHashed: false });
 
-const invalidShortUsername = UserName.create({ username: 's' });
+const invalidShortUsername = UserName.create({ userName: 's' });
 const invalidLongUsername = UserName.create({
-  username: 'looooooooooooooooooooooooooooooooooooooooong',
+  userName: 'looooooooooooooooooooooooooooooooooooooooong',
 });
 
 const invalidEmail = UserEmail.create({ email: 'invalidFormat' });
@@ -17,10 +17,10 @@ describe('ドメインユーザー', () => {
     const pass = await passwordFnc;
     const result = User.create({
       id: UniqueEntityId.create(),
-      username,
+      userName,
       email,
       password: pass.getValue(),
-    }).getValue();
+    });
 
     expect(result.getId()).toBeTruthy();
     expect(result.getUsername()).toBe('okName');

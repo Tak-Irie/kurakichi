@@ -1,6 +1,13 @@
 fragment InquiryPayload on Inquiry {
   id
   content
+  sentAt
   category
-  status
+  inquiryStatus
+  sender {
+    id
+  }
+  tree {
+    id
+  }
 }

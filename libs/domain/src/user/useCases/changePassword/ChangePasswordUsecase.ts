@@ -7,12 +7,13 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
+  InvalidInputValueError,
 } from '../../../shared';
 import { IUserRepository, UserPassword } from '../../domain';
-import { InvalidPasswordError, InvalidNewPasswordError } from './ChangePasswordError';
+import { InvalidPasswordError, SSOUserError } from './ChangePasswordError';
 
 type ChangePasswordResponse = Either<
-  InvalidPasswordError | InvalidNewPasswordError | UnexpectedError,
+  InvalidInputValueError | InvalidPasswordError | SSOUserError | UnexpectedError,
   Result<boolean>
 >;
 
@@ -30,23 +31,17 @@ export class ChangePasswordUseCase
   public async execute(req: ChangePasswordArg): Promise<ChangePasswordResponse> {
     try {
       const newPass = await UserPassword.create({ password: req.newPass, isHashed: false });
-      // FIXME:need fix error message handling
-      if (newPass.isFailure) return left(new InvalidNewPasswordError());
+      if (newPass.isFailure) return left(new InvalidInputValueError(newPass.getErrorValue()));
 
       const id = UniqueEntityId.reconstruct(req.userId);
-
       const foundUser = await this.userRepository.getUserByUserId(id.getValue());
-
       if (foundUser === undefined) return left(new StoreConnectionError());
 
-      const storedEncryptedPass = foundUser.getPassword();
+      const storedPass = foundUser.getPassword();
+      if (storedPass === 'IT_IS_SSO_USER') return left(new SSOUserError());
+      if (storedPass === undefined) return left(new UnexpectedError());
 
-      // TODO: add pattern foundUser use sso
-      // FIXME:
-      if (storedEncryptedPass === undefined) return left(new UnexpectedError());
-
-      const passVerified = await UserPassword.verifyPassword(req.currentPass, storedEncryptedPass);
-
+      const passVerified = await UserPassword.verifyPassword(req.currentPass, storedPass);
       if (passVerified === false) return left(new InvalidPasswordError());
 
       const passChanged = await this.userRepository.changeUserPassword(

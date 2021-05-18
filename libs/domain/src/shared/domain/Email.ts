@@ -1,5 +1,6 @@
 import { Result } from '../../shared/Result';
 import { ValueObject } from '../../shared/domain/ValueObject';
+import validator from 'validator';
 
 export type EmailProps = {
   email: string;
@@ -14,10 +15,8 @@ export class Email extends ValueObject<EmailProps> {
     return this.props.email;
   }
 
-  private static isValidEmail(email: string) {
-    const emailRegExp = /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/;
-
-    return emailRegExp.test(email);
+  private static isValidEmail(unidentifiedEmail: string) {
+    return validator.isEmail(unidentifiedEmail);
   }
 
   private static formatEmail(email: string): string {

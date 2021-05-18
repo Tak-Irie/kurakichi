@@ -1,5 +1,5 @@
-query GetMessages {
-  getMessages {
+query GetMessagesByCookie {
+  getMessagesByCookie {
     messages {
       ...MessagePayload
     }

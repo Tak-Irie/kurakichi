@@ -23,7 +23,7 @@ export class PhoneNumber extends ValueObject<PhoneNumberProps> {
 
   public static create(props: PhoneNumberProps): Result<PhoneNumber> {
     if (!this.isValidPhoneNumber(props.phoneNumber)) {
-      return Result.fail<PhoneNumber>('電話番号が存在しない形式です');
+      return Result.fail<PhoneNumber>('電話番号:存在しない形式です');
     }
 
     return Result.success<PhoneNumber>(new PhoneNumber({ phoneNumber: props.phoneNumber }));

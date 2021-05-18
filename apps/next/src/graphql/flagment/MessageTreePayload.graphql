@@ -1,0 +1,6 @@
+fragment MessageTreePayload on MessageTree {
+  id
+  treedMessage {
+    id
+  }
+}

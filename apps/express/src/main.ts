@@ -5,5 +5,5 @@ const main = async () => {
 };
 
 main().catch((err) => {
-  console.log('errOnServer:', err);
+  console.error('errOnServer:', err);
 });

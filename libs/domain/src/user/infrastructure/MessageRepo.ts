@@ -8,6 +8,16 @@ export class MessageRepo implements IMessageRepo {
   constructor() {
     this.prisma = new PrismaClient();
   }
+
+  async getMessage(messageId: UniqueEntityId): Promise<Message | false> {
+    const message = await this.prisma.message.findUnique({ where: { id: messageId.getId() } });
+    if (message == undefined) return false;
+    // console.log('messagesRepo:', messages);
+    const domainMessage = MessageMapper.ToDomain(message);
+
+    // console.log('domainMessages:', domainMessages);
+    return domainMessage;
+  }
   async getMessages(userId: UniqueEntityId): Promise<Message[] | false> {
     const messages = await this.prisma.message.findMany({ where: { receiverId: userId.getId() } });
     if (messages == undefined) return false;
@@ -18,21 +28,67 @@ export class MessageRepo implements IMessageRepo {
     return domainMessages;
   }
 
-  async sendMessage(message: Message): Promise<Message | false> {
-    // console.log('repoMess:', message);
-    const { id, receiverId, status, senderId, text } = await MessageMapper.toStore(message);
-
-    const result = await this.prisma.message.create({
-      data: {
+  async registerMessage(message: Message): Promise<Message> {
+    try {
+      // console.log('repoMess:', message);
+      const {
         id,
-        text,
+        receiverId,
+        senderId,
+        sentAt,
         status,
-        receiver: { connect: { id: receiverId } },
-        sender: { connect: { id: senderId } },
-      },
-    });
-    if (result == undefined) return false;
+        text,
+        messageTreeId,
+      } = MessageMapper.toStore(message);
+      // console.log('data:', data);
 
-    return message;
+      const result = await this.prisma.message.create({
+        data: {
+          id,
+          text,
+          status,
+          sentAt,
+          receiver: { connect: { id: receiverId } },
+          sender: { connect: { id: senderId } },
+          tree: {
+            connectOrCreate: { where: { id: messageTreeId }, create: { id: messageTreeId } },
+          },
+        },
+      });
+      // console.log('result:', result);
+
+      return message;
+    } catch (err) {
+      console.log('dbError:', err);
+      throw new Error('データベースエラー');
+    }
+  }
+
+  async getMessageTreeById(treeId: UniqueEntityId): Promise<Message[]> {
+    try {
+      // console.log('terrId:', treeId);
+      const messages = await this.prisma.messageTree.findUnique({
+        where: { id: treeId.getId() },
+        include: { messages: true },
+      });
+      // console.log('messages:', messages);
+
+      const domainMessage = MessageMapper.treeToDomain(messages);
+      return domainMessage;
+    } catch (err) {
+      console.log('dbError:', err);
+      throw new Error('データベースエラー');
+    }
+  }
+
+  async getMessagesByReceiverId(receiverId: UniqueEntityId): Promise<Message[] | false> {
+    const messages = await this.prisma.message.findMany({
+      where: { receiverId: receiverId.getId() },
+    });
+    // console.log('messages at repo:', messages);
+    if (messages == undefined) return false;
+
+    const domainMessages = MessageMapper.arrayToDomain(messages);
+    return domainMessages;
   }
 }

@@ -8,14 +8,15 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from '../../../shared';
-import { IInquiryRepo, Inquiry } from '../../domain';
+import { IInquiryRepo } from '../../domain';
+import { createDTOInquiryFromDomain, DTOInquiry } from '../DTOInquiry';
 import { InquiryNotExistError } from './getInquiryError';
 
 type InquiryArg = { inquiryId: string };
 
 type GetInquiryResponse = Either<
   InquiryNotExistError | UnexpectedError | StoreConnectionError,
-  Result<Inquiry>
+  Result<DTOInquiry>
 >;
 
 export class GetInquiryUseCase implements IUseCase<InquiryArg, Promise<GetInquiryResponse>> {
@@ -26,10 +27,11 @@ export class GetInquiryUseCase implements IUseCase<InquiryArg, Promise<GetInquir
     try {
       const inquiryId = UniqueEntityId.reconstruct(arg.inquiryId);
 
-      const repoResult = await this.InquiryRepo.getInquiry(inquiryId.getValue());
-      if (repoResult == false) return left(new StoreConnectionError());
+      const dbResult = await this.InquiryRepo.getInquiry(inquiryId.getValue());
+      if (dbResult == false) return left(new StoreConnectionError());
 
-      return right(Result.success<Inquiry>(repoResult));
+      const dtoInquiry = createDTOInquiryFromDomain(dbResult);
+      return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
       return left(new UnexpectedError(err));
     }

@@ -11,9 +11,14 @@ import { SsoUserUseCase } from './ssoUser/ssoUserUseCase';
 import { ForgotPasswordUseCase } from './forgotPassword/ForgotPasswordUseCase';
 import { ChangePasswordUseCase } from './changePassword/ChangePasswordUseCase';
 import { UpdateUserUseCase } from './updateUser/updateUserUseCase';
+import { GetUsersByOrgIdUseCase } from './getUsersByOrgId/getUsersByOrgIdUseCase';
+import { GetUsersByIdsUseCase } from './getUsersByIds/GetUsersByIdsUseCase';
 
 import { SendMessageUseCase } from './sendMessage/sendMessageUseCase';
 import { GetMessagesUseCase } from './getMessages/getMessagesUseCase';
+import { GetMessagesByReceiverIdUseCase } from './getMessagesByReceiverId/GetMessagesByReceiverIdUseCase';
+import { ReplyMessageUseCase } from './replyMessage/ReplyMessageUseCase';
+import { GetMessagesByTreeIdUseCase } from './getMessagesByTreeId/GetMessagesByTreeIdUseCase';
 
 const userRepo = new UserRepository();
 const messageRepo = new MessageRepo();
@@ -28,9 +33,14 @@ export const useSsoUserUseCase = new SsoUserUseCase(userRepo);
 export const useForgotPasswordUseCase = new ForgotPasswordUseCase(userRepo);
 export const useChangePasswordUseCase = new ChangePasswordUseCase(userRepo);
 export const useUpdateUserUseCase = new UpdateUserUseCase(userRepo);
+export const useGetUsersByOrgIdUseCase = new GetUsersByOrgIdUseCase(userRepo);
+export const useGetUsersByIdsUseCase = new GetUsersByIdsUseCase(userRepo);
 
 export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
 export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);
+export const useGetMessagesByReceiverIdUseCase = new GetMessagesByReceiverIdUseCase(messageRepo);
+export const useReplyMessageUseCase = new ReplyMessageUseCase(messageRepo);
+export const useGetMessagesByTreeIdUseCase = new GetMessagesByTreeIdUseCase(messageRepo);
 
 export * from './DTOUser';
 export * from './DTOMessage';

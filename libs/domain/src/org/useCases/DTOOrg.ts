@@ -10,10 +10,17 @@ export type DTOOrg = {
   image: string;
   inquiries: string[];
   location: string;
+  latitude: number;
+  longitude: number;
   members: string[];
   name: string;
   phoneNumber: string;
 };
+
+// export type DAOOrg = Omit<DTOOrg, 'inquiries' | 'members'> & {
+//   members: DTOUser[];
+//   inquiries: DTOInquiry[];
+// };
 
 export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
   const {
@@ -26,6 +33,8 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
     image,
     inquiries,
     location,
+    latitude,
+    longitude,
     members,
     name,
     phoneNumber,
@@ -33,13 +42,15 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
   return {
     id: id.getId(),
     adminId: adminId.getId(),
-    avatar: avatar as string,
-    description,
+    avatar: avatar.getURL(),
+    description: description.getContent(),
     email: email.getValue(),
-    homePage: homePage,
-    image: image as string,
+    homePage: homePage.getURL(),
+    image: image.getURL(),
     inquiries: inquiries.map((inquiry) => inquiry.getId()),
     location: location.getValue(),
+    latitude: latitude.getValue(),
+    longitude: longitude.getValue(),
     members: members.map((member) => member.getId()),
     name: name.getValue(),
     phoneNumber: phoneNumber.getValue(),

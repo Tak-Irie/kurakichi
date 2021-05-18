@@ -9,5 +9,8 @@ export interface IOrgRepo {
   requestJoinOrg(reqId: UniqueEntityId, orgId: UniqueEntityId): Promise<Org | false>;
   acceptJoinOrg(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<Org | false>;
   getOrgs(): Promise<Org[]>;
+  getOrgsByMemberId(memberId: UniqueEntityId): Promise<Org[] | false>;
   getOrgById(orgId: UniqueEntityId): Promise<Org | false>;
+  confirmMemberExistence(orgId: UniqueEntityId, memberId: UniqueEntityId): Promise<boolean>;
+  updateOrg(org: Org): Promise<Org>;
 }

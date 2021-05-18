@@ -1,6 +1,7 @@
 mutation SendInquiry(
   $textInput: String!
   $receiverId: String!
+  $orgId: String!
   $category: InquiryCategory
   $status: InquiryStatus
 ) {
@@ -9,6 +10,7 @@ mutation SendInquiry(
     receiverId: $receiverId
     category: $category
     status: $status
+    orgId: $orgId
   ) {
     inquiry {
       ...InquiryPayload

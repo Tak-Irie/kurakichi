@@ -1,0 +1,10 @@
+query GetOrgsByMemberCookie {
+  getOrgsByMemberCookie {
+    orgs {
+      ...OrgDetailPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

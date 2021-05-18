@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { Header } from '../organisms/Header';
-import { Footer } from '../organisms/Footer';
+import { Footer, NavBar, NavAlpha } from '@next/ui';
 
 const Layout: FC = ({ children }) => {
   return (
     <>
-      <Header />
+      <NavAlpha />
+      <NavBar />
       <main className="bg-green-50">{children}</main>
       <Footer />
     </>

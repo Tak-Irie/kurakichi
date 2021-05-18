@@ -3,24 +3,25 @@ import { ValueObject } from '../../shared/domain/ValueObject';
 
 export type InquiryStatusUnion = 'DONE' | 'WORKING' | 'UNREAD' | 'DRAFT';
 
-type InquiryCategoryProps = {
+type InquiryStatusProps = {
   status: InquiryStatusUnion;
 };
 
-export class InquiryStatus extends ValueObject<InquiryCategoryProps> {
-  private constructor(readonly props: InquiryCategoryProps) {
+export class InquiryStatus extends ValueObject<InquiryStatusProps> {
+  private constructor(readonly props: InquiryStatusProps) {
     super(props);
   }
   // FIXME:
   public getValue(): InquiryStatusUnion {
     return this.props.status;
   }
-  public static create(props: InquiryCategoryProps): Result<InquiryStatus> {
-    const inquiryCategory = new InquiryStatus({
+  public static create(props: InquiryStatusProps): Result<InquiryStatus> {
+    const inquiryStatus = new InquiryStatus({
       ...props,
     });
-    return Result.success<InquiryStatus>(inquiryCategory);
+    return Result.success<InquiryStatus>(inquiryStatus);
   }
+
   public static restoreFromRepo(status: InquiryStatusUnion): InquiryStatus {
     return new InquiryStatus({ status });
   }

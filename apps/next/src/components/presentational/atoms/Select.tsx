@@ -1,4 +1,8 @@
+import { useState, Fragment } from 'react';
 import { Path, UseFormRegister } from 'react-hook-form';
+import { Listbox, Transition } from '@headlessui/react';
+
+import { IconsSelector, IconsCheck } from '@next/ui';
 
 type SelectProps<T, U> = {
   label: Path<T>;
@@ -19,9 +23,9 @@ export const Select = <T extends any, U extends string>({
   options,
 }: SelectProps<T, U>) => (
   <>
-    <label className="uppercase text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
+    <label className="text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
     <select
-      className="flex-grow w-full h-12 px-4 mb-3 text-black transition duration-200 border-2 border-transparent rounded appearance-none md:mr-2 md:mb-0 bg-deep-purple-900 focus:border-teal-accent-700 focus:outline-none focus:shadow-outline"
+      className="cursor-pointer flex-grow w-full h-12 px-4 mb-3 border border-gray-400 appearance-none text-gray-900 rounded"
       {...register(label, { required })}
     >
       {options.map((option) => {

@@ -15,9 +15,9 @@ export class MessageStatus extends ValueObject<MessageCategoryProps> {
   public getValue(): MessageStatusUnion {
     return this.props.status;
   }
-  public static create(props: MessageCategoryProps): Result<MessageStatus> {
+  public static create(): Result<MessageStatus> {
     const messageStatus = new MessageStatus({
-      ...props,
+      status: 'UNREAD',
     });
     return Result.success<MessageStatus>(messageStatus);
   }

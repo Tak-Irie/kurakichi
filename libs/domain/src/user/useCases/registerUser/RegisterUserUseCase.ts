@@ -1,5 +1,6 @@
 import {
   Either,
+  InvalidInputValueError,
   IUseCase,
   left,
   Result,
@@ -13,7 +14,6 @@ import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 import { EmailAlreadyExistsError } from './RegisterUserError';
 
 type RegisterUserArg = {
-  userName: string;
   email: string;
   password: string;
 };
@@ -21,7 +21,11 @@ type RegisterUserArg = {
 type UserTypes = UserEmail | UserName | UserPassword;
 
 type RegisterUserResponse = Either<
-  EmailAlreadyExistsError | UnexpectedError | StoreConnectionError | Result<UserTypes>,
+  | InvalidInputValueError
+  | EmailAlreadyExistsError
+  | UnexpectedError
+  | StoreConnectionError
+  | Result<UserTypes>,
   Result<DTOUser>
 >;
 
@@ -34,7 +38,7 @@ export class RegisterUserUseCase
   public async execute(request: RegisterUserArg): Promise<RegisterUserResponse> {
     try {
       const usernameOrError = UserName.create({
-        userName: request.userName,
+        userName: request.email.split('@')[0].slice(0, 20),
       });
 
       const emailOrError = UserEmail.create({
@@ -51,9 +55,19 @@ export class RegisterUserUseCase
         passwordOrError,
         usernameOrError,
       ]);
+      // console.log('verified:', verifiedResult);
 
-      if (verifiedResult.isFailure) {
-        return left(Result.fail<UserTypes>(verifiedResult.getErrorValue()));
+      if (verifiedResult[0].isFailure) {
+        return left(
+          new InvalidInputValueError(
+            verifiedResult.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            }),
+          ),
+        );
       }
 
       const email = emailOrError.getValue();
@@ -71,14 +85,16 @@ export class RegisterUserUseCase
         password,
         userName,
       });
+      // console.log('user:', user);
 
       const result = await this.userRepository.registerUser(user);
-
       if (result === undefined) {
         return left(new StoreConnectionError());
       }
+      // console.log('registeredResult:', result);
 
       const userDTO = createDTOUserFromDomain(result);
+      // console.log('userDTO:', userDTO);
 
       return right(Result.success<DTOUser>(userDTO));
     } catch (err) {

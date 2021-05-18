@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
-import { XMarkSVG, HamburgerMenuSVG } from '../atoms/SVG';
-import { HeaderList } from '../atoms/HeaderList';
+import { HeaderList, XMarkSVG, HamburgerMenuSVG } from '@next/ui';
 
 const HeaderDropDown: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +15,7 @@ const HeaderDropDown: FC = () => {
         <HamburgerMenuSVG />
       </button>
       {isMenuOpen && (
-        <div className="absolute top-0 right-0 w-4/12 z-10">
+        <div className="absolute top-0 right-0 w-4/12 z-20">
           <div className="p-5 bg-white border rounded shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -33,23 +32,19 @@ const HeaderDropDown: FC = () => {
             <nav>
               <ul>
                 <HeaderList
-                  href="/ex/map"
-                  title="map"
-                  label="map"
+                  linkUrl="/ex/map"
+                  linkLabel="map"
+                  ariaLabel="map"
                   onClick={() => setIsMenuOpen(false)}
                 />
                 <HeaderList
-                  href="/ex/dialog"
-                  title="dialog"
-                  label="dialog"
+                  linkUrl="/ex/dialog"
+                  linkLabel="dialog"
+                  ariaLabel="dialog"
                   onClick={() => setIsMenuOpen(false)}
                 />
-                <HeaderList
-                  href="/ex/org"
-                  title="org"
-                  label="org"
-                  onClick={() => setIsMenuOpen(false)}
-                />
+                <HeaderList linkUrl="/ex/users" ariaLabel="users" linkLabel="users" />
+                <HeaderList linkUrl="/ex/orgs" ariaLabel="orgs" linkLabel="orgs" />
               </ul>
             </nav>
           </div>

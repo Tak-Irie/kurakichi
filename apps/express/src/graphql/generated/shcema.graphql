@@ -24,6 +24,8 @@ type Inquiry implements Node {
   id: ID!
   inquiryStatus: InquiryStatus
   sender: User
+  sentAt: String
+  tree: InquiryTree
 }
 
 enum InquiryCategory {
@@ -38,6 +40,7 @@ type InquiryPayload {
   error: RegularError
   inquiries: [Inquiry]
   inquiry: Inquiry
+  inquiryTree: InquiryTree
 }
 
 enum InquiryStatus {
@@ -45,6 +48,13 @@ enum InquiryStatus {
   DRAFT
   UNREAD
   WORKING
+}
+
+"""Inquiries Node, it connect original and response inquiry"""
+type InquiryTree implements Node {
+  """GUID for a resource"""
+  id: ID!
+  treedInquiry: [Inquiry]
 }
 
 """Message from User to User"""
@@ -56,11 +66,14 @@ type Message implements Node {
   messageStatus: MessageStatus
   receiver: User
   sender: User
+  sentAt: String
+  tree: MessageTree
 }
 
 type MessagePayload {
   error: RegularError
   message: Message
+  messageTree: MessageTree
   messages: [Message]
 }
 
@@ -68,6 +81,13 @@ enum MessageStatus {
   DRAFT
   READ
   UNREAD
+}
+
+"""Messages Node, it connect original and response Message"""
+type MessageTree implements Node {
+  """GUID for a resource"""
+  id: ID!
+  treedMessage: [Message]
 }
 
 type Mutation {
@@ -79,11 +99,14 @@ type Mutation {
   logout: RegularPayload
   postDialog(dialogContent: String!, id: String!): DialogPayload
   registerOrg(email: String!, location: String!, name: String!, phoneNumber: String!): OrgPayload
+  registerUser(email: String!, password: String!): UserPayload
+  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
+  replyMessage(content: String!, replyTargetId: String!): MessagePayload
   requestJoinOrg(orgId: String!): OrgPayload
-  sendInquiry(category: InquiryCategory, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
-  sendMessage(messageStatus: MessageStatus, receiverId: String!, textInput: String!): MessagePayload
-  updateUser(avatar: String, description: String, email: String, image: String): UserPayload
-  userRegister(email: String!, password: String!, userName: String!): UserPayload
+  sendInquiry(category: InquiryCategory, orgId: String!, receiverId: String!, status: InquiryStatus, textInput: String!): InquiryPayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  updateOrg(input: OrgUpdateInput, orgId: String!): OrgPayload
+  updateUser(avatar: String, description: String, email: String, image: String, userName: String): UserPayload
 }
 
 """Identifier"""
@@ -102,7 +125,9 @@ type Org implements Node {
   id: ID!
   image: String
   inquiries: [Inquiry]
+  latitude: Float
   location: String
+  longitude: Float
   members: [User]
   orgName: String
   phoneNumber: String
@@ -114,17 +139,34 @@ type OrgPayload {
   orgs: [Org]
 }
 
+input OrgUpdateInput {
+  adminId: String
+  description: String
+  email: String
+  homePage: String
+  location: String
+  orgName: String
+  phoneNumber: String
+}
+
 type Query {
   """get inquiries of one Org"""
-  getInquiries(orgId: String!): InquiryPayload
+  getInquiriesByOrgId(orgId: String!): InquiryPayload
+  getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
+  getInquiriesWithStatus(orgId: String!, status: InquiryStatus): InquiryPayload
   getInquiry(inquiryId: String!): InquiryPayload
 
   """get User's id, then show their own messages"""
-  getMessages: MessagePayload
-  getOrg(orgId: String!): OrgPayload
+  getMessagesByCookie: MessagePayload
+  getMessagesByTreeId(treeId: String!): MessagePayload
+  getOrgPrivateInfoByIdAndCookie(orgId: String!): OrgPayload
+  getOrgPublicInfoById(orgId: String!): OrgPayload
   getOrgs: OrgPayload
+  getOrgsByMemberCookie: OrgPayload
+  getUserByCookie: UserPayload
+  getUserById(userId: String!): UserPayload
+  getUserByIdWithOrg(userId: String!): UserPayload
   getUsers: UserPayload!
-  me: UserPayload
   node(id: ID): Node
 }
 

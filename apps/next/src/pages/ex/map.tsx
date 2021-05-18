@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+
+import { MapViewer } from '@next/container';
 
 const containerStyle = {
   width: '80vw',
@@ -10,22 +11,26 @@ const center = {
   lng: 139.7673,
 };
 
+const mark2 = {
+  lat: 35.6909,
+  lng: 139.7773,
+};
+const mark3 = {
+  lat: 35.6709,
+  lng: 139.7573,
+};
+
 const Map: NextPage = () => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
-  });
-
-  if (loadError) return <p>Mapの読み込みに失敗しました</p>;
-
-  return isLoaded ? (
-    <>
-      <p>this is ex1</p>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={18}>
-        <Marker position={center} />
-      </GoogleMap>
-    </>
-  ) : (
-    <p>読込中です</p>
+  return (
+    <div>
+      <p>sample of MapViewerComponent</p>
+      <MapViewer
+        center={center}
+        mapContainerCSS={containerStyle}
+        zoomLevel={11}
+        markers={[center, mark2, mark3]}
+      />
+    </div>
   );
 };
 

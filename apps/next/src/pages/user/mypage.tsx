@@ -1,16 +1,26 @@
 import { NextPage } from 'next';
-import { UserProfile } from '@next/ui';
+import Link from 'next/link';
+import {
+  UserMyPage,
+  UserTemplate,
+  ButtonWithIcon,
+  IconsCog,
+  IconsMail,
+  LoadingSpinner,
+} from '@next/ui';
+import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
 
-import { useGetMyInfoDetailQuery } from '../../graphql/generated/graphql';
+const UserMyPagePrivatePage: NextPage = () => {
+  // TODO:CQRS
+  const { data, loading, error } = useGetUserPrivateInfoByCookieQuery({
+    fetchPolicy: 'cache-first',
+  });
 
-const MyPage: NextPage = () => {
-  const { data, loading, error } = useGetMyInfoDetailQuery();
-
-  if (loading) return <p>loading</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  if (data) {
-    console.log('MyPageData:', data.me.user);
+  if (data.getUserByCookie.user) {
+    // console.log('MyPageData:', data.me.user);
     const {
       image,
       userName,
@@ -20,22 +30,39 @@ const MyPage: NextPage = () => {
       messages,
       email,
       belongSecureBases,
-    } = data.me.user;
+    } = data.getUserByCookie.user;
     return (
-      <div>
-        <UserProfile
-          userName={userName}
-          description={description}
-          icon={avatar}
-          image={image}
-          orgs={belongOrgs}
-          messages={messages}
-          email={email}
-          secureBases={belongSecureBases}
-        />
-      </div>
+      <UserTemplate
+        avatar={avatar}
+        image={image}
+        userName={userName}
+        headerButtons={
+          <>
+            <Link href="/user/setting" passHref>
+              <a href="replace">
+                <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
+              </a>
+            </Link>
+            <Link href="/user/message" passHref>
+              <a href="replace">
+                <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+              </a>
+            </Link>
+          </>
+        }
+        pageContents={
+          <UserMyPage
+            description={description}
+            orgs={belongOrgs}
+            messages={messages}
+            email={email}
+            secureBases={belongSecureBases}
+          />
+        }
+      />
     );
   }
+  return <p>{data.getUserByCookie.error.message}</p>;
 };
 
-export default MyPage;
+export default UserMyPagePrivatePage;

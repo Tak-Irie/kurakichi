@@ -2,14 +2,21 @@ fragment OrgPayload on Org {
   id
   orgName
   location
+  latitude
+  longitude
   email
   phoneNumber
   image
-  icon
+  avatar
   description
   homePage
   members {
     id
     userName
+    avatar
+    description
+  }
+  inquiries {
+    id
   }
 }

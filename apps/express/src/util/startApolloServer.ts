@@ -3,8 +3,6 @@ import * as session from 'express-session';
 import * as http from 'http';
 import cors from 'cors';
 
-import { PrismaClient } from '@prisma/client';
-
 import { ApolloServer } from 'apollo-server-express';
 import * as connectRedis from 'connect-redis';
 
@@ -12,9 +10,9 @@ import { COOKIE_NAME, isProd } from '@kurakichi/node-util';
 
 import { GraphqlSchema as schema } from '../graphql/makeSchema';
 import { sentryTest } from '../util/sentry';
-import { googleRouter } from '../route/googleRouter';
-import { yahooRouter } from '../route/yahooRouter';
 import { redis, pubsub } from '../util/redisClient';
+
+import { googleRouter, geocodeRouter, yahooRouter, uploadRouter } from '../route';
 
 export const startApolloServer = async () => {
   const server = new ApolloServer({
@@ -30,7 +28,6 @@ export const startApolloServer = async () => {
 
   await server.start();
 
-  const prisma = new PrismaClient({ log: ['query', 'info', `warn`, `error`] });
   const app = express();
 
   app.set('trust proxy', 1);
@@ -73,6 +70,8 @@ export const startApolloServer = async () => {
   });
   app.use('/google', googleRouter);
   app.use('/yahoo', yahooRouter);
+  app.use('/upload', uploadRouter);
+  app.use('/geocode', geocodeRouter);
 
   app.get('/', (req, res) => {
     console.log('got access');

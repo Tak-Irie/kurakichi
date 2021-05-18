@@ -1,0 +1,16 @@
+mutation replyMessage($content: String!, $replyTargetId: String!) {
+  replyMessage(content: $content, replyTargetId: $replyTargetId) {
+    message {
+      id
+      content
+      messageStatus
+      sentAt
+      tree {
+        id
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

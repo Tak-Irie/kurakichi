@@ -1,5 +1,17 @@
-mutation UpdateUser($email: String, $description: String, $avatar: String, $image: String) {
-  updateUser(email: $email, description: $description, avatar: $avatar, image: $image) {
+mutation UpdateUser(
+  $userName: String
+  $email: String
+  $description: String
+  $avatar: String
+  $image: String
+) {
+  updateUser(
+    userName: $userName
+    email: $email
+    description: $description
+    avatar: $avatar
+    image: $image
+  ) {
     user {
       ...UserPayload
     }

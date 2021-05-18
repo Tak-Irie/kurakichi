@@ -1,16 +1,18 @@
-import { FC } from 'react';
+import { Dispatch, SetStateAction, useEffect, VFC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../graphql/generated/graphql';
-import { ButtonBig, Form, InputTextarea } from '@next/ui';
+import { Form, InputTextarea, NotificationSet, ButtonOrLoading } from '@next/ui';
 
 type SendMessageProps = {
   receiverId: string;
+  onClick?: () => void;
+  dispatcher?: Dispatch<SetStateAction<boolean>>;
 };
 
 type SendMessageInput = {
   textInput: string;
 };
-export const SendMessage: FC<SendMessageProps> = (props) => {
+export const SendMessage: VFC<SendMessageProps> = ({ receiverId, dispatcher, onClick }) => {
   const { register, handleSubmit } = useForm<SendMessageInput>();
   const [sendMessage, { data, error, loading }] = useSendMessageMutation();
 
@@ -20,10 +22,10 @@ export const SendMessage: FC<SendMessageProps> = (props) => {
       await sendMessage({
         variables: {
           TextInput: values.textInput,
-          ReceiverId: props.receiverId,
+          ReceiverId: receiverId,
         },
       });
-      console.log(':', data);
+      console.log('returnData:', data);
     } catch (err) {
       console.log('err:', err);
     }
@@ -31,6 +33,13 @@ export const SendMessage: FC<SendMessageProps> = (props) => {
 
   return (
     <div>
+      <NotificationSet
+        data={data?.sendMessage.message}
+        errData={data?.sendMessage.error}
+        sysErr={error}
+        dataContent="メッセージを送信しました"
+        errDataContent={data?.sendMessage.error?.message}
+      />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputTextarea<SendMessageInput>
           rows={3}
@@ -40,11 +49,13 @@ export const SendMessage: FC<SendMessageProps> = (props) => {
           required
           register={register}
         />
-        <ButtonBig type="submit">メッセージ送信</ButtonBig>
+        <ButtonOrLoading
+          onClick={onClick}
+          loading={loading}
+          buttonType="submit"
+          buttonLabel="メッセージ送信"
+        />
       </Form>
-      {loading && <p>loading!</p>}
-      {error && <p>{error.message} error</p>}
-      {data && <p> done</p>}
     </div>
   );
 };
