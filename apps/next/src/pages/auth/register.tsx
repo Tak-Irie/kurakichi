@@ -21,16 +21,11 @@ const RegisterPublicPage: NextPage = () => {
             </div>
             <div className="mt-5 space-y-4">
               <Disclosure
-                label={
-                  <TextSmall
-                    textColor="text-yellow-800"
-                    content="※ くらきちはソーシャルログインのご利用をおすすめしています"
-                  />
-                }
-                labelCSS="bg-yellow-50 rounded-full border border-gray-100"
+                label={'※ くらきちはソーシャルログインのご利用をおすすめしています'}
+                labelCSS="bg-yellow-50 text-yellow-800 rounded-full border border-gray-100"
                 iconCSS="h-4 w-4 ml-1 text-yellow-800"
                 content={
-                  <div>
+                  <div className="bg-gray-50 border border-gray-200 p-2">
                     <TextSmall
                       content={
                         '1.\n上記のソーシャルログインは不正アクセスに対して強力です\n不審なアクセスがあった場合、すぐに知らせてくれます'
@@ -46,16 +41,11 @@ const RegisterPublicPage: NextPage = () => {
                 }
               />
               <Disclosure
-                label={
-                  <TextSmall
-                    textColor="text-yellow-800"
-                    content="※ GoogleやYahoo以外のログインを利用したい"
-                  />
-                }
-                labelCSS="bg-yellow-50 rounded-full border border-gray-100"
+                label="※ GoogleやYahoo以外のログインを利用したい"
+                labelCSS="bg-yellow-50 text-yellow-800 rounded-full border border-gray-100"
                 iconCSS="h-4 w-4 ml-1 text-yellow-800"
                 content={
-                  <>
+                  <div className="bg-gray-50 border border-gray-200 p-2">
                     <TextSmall
                       content={
                         'くらきちは第三者機関によって認定されたソーシャルログインのみを採用しています\n独自規格のログインは安全性を担保できませんので採用しておりません'
@@ -73,7 +63,7 @@ const RegisterPublicPage: NextPage = () => {
                     >
                       OpenID - OpenID Certification - Certified OpenID Providers
                     </a>
-                  </>
+                  </div>
                 }
               />
             </div>

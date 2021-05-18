@@ -16,7 +16,7 @@ export const ButtonBig: VFC<ButtonProps> = ({ type, onClick, disabled, label, co
   return (
     <div className={`${disabled ? 'opacity-50' : ''}`}>
       <button
-        className={`inline-flex justify-center px-4 py-2 border bold border-gray-200 text-sm font-medium rounded-md  text-${color}-700 bg-${color}-50 hover:bg-${color}-100 shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-100`}
+        className={`px-4 py-2 border border-gray-200 text-sm rounded-md  text-${color}-700 bg-${color}-50 hover:bg-${color}-100 shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-100`}
         disabled={disabled}
         type={type}
         onClick={onClick}

@@ -48,7 +48,7 @@ export const GeocodeByPostcodeForm: VFC<GeocodeByPostcodeButtonProps> = ({
   }, [isLocation, dispatcher]);
 
   return (
-    <div>
+    <div className="p-2 border border-gray-200 rounded">
       <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
         <span className="space-y-1">
           <ButtonWithIcon type="submit" label={buttonLabel} icon={<IconsPost />} />

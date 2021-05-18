@@ -2,7 +2,14 @@ import { VFC } from 'react';
 import Link from 'next/link';
 
 import { Message, Org, SecureBase, User, Inquiry } from '@next/graphql';
-import { AvatarSmall, TextSmall, TextLabel, CardWithPick, BadgeInquiry } from '@next/ui';
+import {
+  AvatarSmall,
+  TextSmall,
+  TextLabel,
+  CardWithPick,
+  BadgeInquiryCategory,
+  BadgeInquiryStatus,
+} from '@next/ui';
 
 type TableProps = {
   tableLabel?: string;
@@ -167,28 +174,23 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
   textOfNotExist = '新着のお問い合わせはありません',
   onClick,
 }) => {
+  const labelCss = 'py-1 text-xs text-center font-medium text-gray-500';
+  const dataCss = 'py-1 flex h-auto items-center justify-center';
   return (
     <>
       <TextLabel content={tableLabel} />
       {inquiries[0] ? (
         <div className="bg-gray-50 shadow border-2 border-gray-200 rounded-lg">
-          <div className="grid grid-cols-6 divide-y divide-gray-200">
-            <div className="col-star-1 py-1 text-center text-xs font-medium text-gray-500">
-              送信者
-            </div>
-            <div className="col-span-3 py-1 text-center text-xs font-medium text-gray-500">
-              内容
-            </div>
-            <div className="col-end-6 py-1 text-xs text-center font-medium text-gray-500">
-              カテゴリ
-            </div>
-            <div className="col-end-7 py-1 px-1 text-center text-xs font-medium text-gray-500">
-              受信日
-            </div>
+          <div className="grid grid-cols-8 divide-y divide-gray-200">
+            <div className={labelCss}>送信者</div>
+            <div className={`${labelCss} col-span-4`}>内容</div>
+            <div className={labelCss}>対応状況</div>
+            <div className={labelCss}>カテゴリ</div>
+            <div className={labelCss}>受信日</div>
             {inquiries.map((inquiry) => (
-              <div className="relative col-span-full grid grid-cols-6" key={inquiry.id}>
+              <div className="relative col-span-full grid grid-cols-8" key={inquiry.id}>
                 <Link
-                  href="/org/myorg/[id]/inquiry/[inqid]"
+                  href="/org/myorg/[id]/inquiry/[inqtid]"
                   as={`/org/myorg/${orgId}/inquiry/${inquiry.tree.id}`}
                   passHref
                 >
@@ -199,18 +201,29 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
                     link to inquiry
                   </a>
                 </Link>
-                <div className="col-start-1 pl-2 py-2 space-x-1 flex items-center">
+                <div className={`${dataCss} space-x-2`}>
                   <AvatarSmall src={inquiry.sender?.avatar} alt="ユーザーアバター" />
                   <TextSmall content={inquiry.sender?.userName} />
                 </div>
-                <div className="col-span-3 mx-1 py-2 whitespace-nowrap overflow-scroll">
-                  <TextSmall content={inquiry.content} />
+                <div className={`${dataCss} col-span-4`}>
+                  <div className="px-2 w-full">
+                    <TextSmall content={inquiry.content} />
+                  </div>
                 </div>
-                <div className="col-end-6 mx-1 p-3 flex justify-center overflow-scroll">
-                  <BadgeInquiry category={inquiry.category} />
+                <div className={dataCss}>
+                  <div className="px-2 w-full">
+                    <BadgeInquiryStatus size="large" status={inquiry.inquiryStatus} />
+                  </div>
                 </div>
-                <div className="col-end-7 px-1 flex justify-center py-1">
-                  <TextSmall content={inquiry.sentAt} />
+                <div className={dataCss}>
+                  <div className="px-2 w-full">
+                    <BadgeInquiryCategory size="large" category={inquiry.category} />
+                  </div>
+                </div>
+                <div className={dataCss}>
+                  <div className="px-2 w-full">
+                    <TextSmall content={inquiry.sentAt} />
+                  </div>
                 </div>
               </div>
             ))}

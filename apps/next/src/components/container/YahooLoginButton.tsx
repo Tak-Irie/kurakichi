@@ -14,7 +14,7 @@ const YahooLoginButton: FC = () => {
 
       if (verified === null) return;
 
-      console.log('data:', data);
+      // console.log('data:', data);
 
       window.location.assign(verified[0]);
     } catch (err) {

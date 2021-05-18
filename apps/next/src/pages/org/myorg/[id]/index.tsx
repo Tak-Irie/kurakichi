@@ -15,10 +15,8 @@ import { useRouter } from 'next/router';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();
-  // const ids = useGetIdFromUrl();
   const { data, loading, error } = useGetOrgPrivateInfoByIdAndCookieQuery({
     variables: { orgId: router.query.id as string },
-    // variables: { orgId: ids.oid },
     skip: isServer(),
   });
 
@@ -26,11 +24,10 @@ const OrgPrivatePage: NextPage = () => {
 
   if (error) return <p>{error.message}</p>;
 
-  const orgData = data.getOrgPrivateInfoByIdAndCookie;
+  if (data.getOrgPrivateInfoByIdAndCookie.error)
+    return <p>{data.getOrgPrivateInfoByIdAndCookie.error.message}</p>;
 
-  if (orgData.error) return <p>{orgData.error.message}</p>;
-
-  const { avatar, image, orgName, id } = orgData.org;
+  const { avatar, image, orgName, id } = data.getOrgPrivateInfoByIdAndCookie.org;
   return (
     <OrgTemplate
       avatar={avatar}
@@ -50,7 +47,7 @@ const OrgPrivatePage: NextPage = () => {
           </Link>
         </>
       }
-      pageContents={<OrgMyPage org={orgData.org} />}
+      pageContents={<OrgMyPage org={data.getOrgPrivateInfoByIdAndCookie.org} />}
     />
   );
 };

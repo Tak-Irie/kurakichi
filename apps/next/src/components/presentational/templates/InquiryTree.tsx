@@ -1,16 +1,24 @@
 import { Inquiry } from '@next/graphql';
 import { VFC } from 'react';
-import { AvatarSmall, BadgeInquiry, TextSmall } from '@next/ui';
-import { ReplyInquiryForm } from '@next/container';
+import { AvatarSmall, BadgeInquiryCategory, TextSmall } from '@next/ui';
+import { ReplyInquiryForm, AcceptJoinOrgButton } from '@next/container';
 
 type InquiryTreeProps = {
   inquiries: Inquiry[];
+  orgId: string;
 };
 
-export const InquiryTree: VFC<InquiryTreeProps> = ({ inquiries }) => {
+export const InquiryTree: VFC<InquiryTreeProps> = ({ inquiries, orgId }) => {
   return (
     <>
-      <BadgeInquiry size="large" category={inquiries[0].category} />
+      <div className="max-w-xs max-h-20">
+        <BadgeInquiryCategory size="large" category={inquiries[0].category} />
+        {inquiries[0].category === 'APPLICATION' ? (
+          <div className="mt-2 w-full flex justify-end">
+            <AcceptJoinOrgButton requestUserId={inquiries[0].sender.id} requestedOrgId={orgId} />
+          </div>
+        ) : null}
+      </div>
       <ul className="divide-y mt-4 p-2 divide-gray-200 bg-gray-50 shadow border-2 border-gray-200 rounded-lg">
         {inquiries.map((inquiry) => (
           <li key={inquiry.id}>
@@ -29,6 +37,7 @@ export const InquiryTree: VFC<InquiryTreeProps> = ({ inquiries }) => {
           </li>
         ))}
       </ul>
+
       <div className="mt-5">
         <ReplyInquiryForm replyTargetId={inquiries[0].id} />
       </div>

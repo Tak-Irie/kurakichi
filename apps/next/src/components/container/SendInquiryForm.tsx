@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, VFC, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendInquiryMutation, InquiryCategory, InquiryStatus } from '@next/graphql';
 import { ButtonBig, Form, InputTextarea, Select, NotificationSet, ButtonOrLoading } from '@next/ui';
@@ -14,7 +14,7 @@ type SendInquiryInput = {
   status: InquiryStatus;
 };
 
-export const SendInquiryForm: FC<SendInquiryProps> = (props) => {
+export const SendInquiryForm: VFC<SendInquiryProps> = ({ orgId, receiverId }) => {
   const { register, handleSubmit } = useForm<SendInquiryInput>();
   const [sendInquiry, { data, error, loading }] = useSendInquiryMutation();
 
@@ -24,8 +24,8 @@ export const SendInquiryForm: FC<SendInquiryProps> = (props) => {
     try {
       await sendInquiry({
         variables: {
-          orgId: props.orgId,
-          receiverId: props.receiverId,
+          orgId: orgId,
+          receiverId: receiverId,
           textInput: values.textInput,
           category: values.category,
           status: InquiryStatus['Unread'],
@@ -70,7 +70,9 @@ export const SendInquiryForm: FC<SendInquiryProps> = (props) => {
           required
           register={register}
         />
-        <ButtonOrLoading loading={loading} buttonLabel="送信" buttonType="submit" />
+        <span className="w-full border-gray-400 flex justify-end py-2">
+          <ButtonOrLoading loading={loading} buttonLabel="送信" buttonType="submit" />
+        </span>
       </Form>
     </div>
   );

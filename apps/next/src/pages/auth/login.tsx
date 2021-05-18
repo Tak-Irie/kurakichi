@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
-import Link from 'next/link';
 
-import { LoginForm, GoogleLoginButton, YahooLoginButton } from '@next/container';
+import { LoginForm, GoogleLoginButton, YahooLoginButton, LinkNextjs } from '@next/container';
 import { TextSmall, TextWithDivider, FormPageTemplate } from '@next/ui';
 
 const Login: NextPage = () => {
@@ -26,26 +25,21 @@ const Login: NextPage = () => {
             <TextWithDivider content="くらきちログイン" />
             <LoginForm />
           </div>
-          <div className="mt-10">
-            <Link href="/auth/forgot-password" passHref>
-              <a href="replace" className="flex justify-end">
-                <span className="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100">
-                  <TextSmall
-                    textColor="text-yellow-800"
-                    content="※パスワードを忘れてしまった方はこちら"
-                  />
-                </span>
-              </a>
-            </Link>
+          <div className="mt-10 flex justify-end">
+            <LinkNextjs
+              linkUrl="/auth/forgot-password"
+              linkLabel={
+                <TextSmall textColor="yellow" content="※パスワードを忘れてしまった方はこちら" />
+              }
+              overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
+            />
           </div>
-          <div className="mt-5">
-            <Link href="/auth/register" passHref>
-              <a href="replace" className="flex justify-end">
-                <span className="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100">
-                  <TextSmall textColor="text-yellow-800" content="※ユーザー新規登録はこちら" />
-                </span>
-              </a>
-            </Link>
+          <div className="mt-5 flex justify-end">
+            <LinkNextjs
+              linkUrl="/auth/register"
+              linkLabel={<TextSmall textColor="yellow" content="※ユーザー新規登録はこちら" />}
+              overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
+            />
           </div>
         </>
       }

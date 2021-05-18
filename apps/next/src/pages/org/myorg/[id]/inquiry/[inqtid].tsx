@@ -12,50 +12,46 @@ import {
 import {
   useGetOrgPrivateInfoByIdAndCookieQuery,
   useGetInquiriesByTreeIdAndCookieQuery,
+  useAcceptJoinOrgMutation,
 } from '@next/graphql';
-import { isServer, useGetIdFromUrl } from '../../../../../util';
+import { isServer } from '../../../../../util';
 import { useRouter } from 'next/router';
 
 const InquiryTreePrivatePage: NextPage = () => {
   const router = useRouter();
-  // const ids = useGetIdFromUrl();
-  // console.log('ids:', ids);
-  // console.log('data of router:', router);
   const orgId = router.query.id as string;
-  const inqtId = router.query.inqid as string;
-  // console.log('data of routerQuery:', router.query);
-  // console.log('ids:', qobj.oid);
-  // console.log('ids:', qobj.inqtid);
-  const { data: oData } = useGetOrgPrivateInfoByIdAndCookieQuery({
-    fetchPolicy: 'cache-only',
-    // variables: { orgId: qobj.oid as string },
+  const inqtId = router.query.inqtid as string;
+  const { data: orgData } = useGetOrgPrivateInfoByIdAndCookieQuery({
+    fetchPolicy: 'cache-first',
     variables: { orgId },
-    skip: isServer(),
-    ssr: false,
+    // skip: isServer(),
+    // ssr: false,
   });
   const { data, loading, error } = useGetInquiriesByTreeIdAndCookieQuery({
-    // variables: { treeId: qobj.inqtid as string },
     variables: { treeId: inqtId },
-    skip: isServer(),
-    ssr: false,
+    // skip: isServer(),
+    // ssr: false,
   });
 
   // console.log('.org:', orgData.org);
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  const inqData = data.getInquiriesByTreeIdAndCookie;
-  const orgData = oData.getOrgPrivateInfoByIdAndCookie;
-
-  if (inqData.error) {
-    return <p>{inqData.error.message}</p>;
+  if (data?.getInquiriesByTreeIdAndCookie.error) {
+    return <p>{data.getInquiriesByTreeIdAndCookie.error.message}</p>;
   }
-  if (!loading && inqData.inquiryTree && orgData.org)
+
+  if (
+    data?.getInquiriesByTreeIdAndCookie.inquiryTree &&
+    orgData?.getOrgPrivateInfoByIdAndCookie.org
+  ) {
+    const inqData = data.getInquiriesByTreeIdAndCookie.inquiryTree;
+    const orgCachedData = orgData.getOrgPrivateInfoByIdAndCookie.org;
     return (
       <OrgTemplate
-        avatar={orgData.org.avatar}
-        image={orgData.org.image}
-        orgName={orgData.org.orgName}
+        avatar={orgCachedData.avatar}
+        image={orgCachedData.image}
+        orgName={orgCachedData.orgName}
         headerButtons={
           <>
             <Link href="/org/myorg/[id]" as={`/org/myorg/${orgId}`} passHref>
@@ -75,9 +71,11 @@ const InquiryTreePrivatePage: NextPage = () => {
             </Link>
           </>
         }
-        pageContents={<InquiryTree inquiries={inqData.inquiryTree.treedInquiry} />}
+        pageContents={<InquiryTree orgId={orgCachedData.id} inquiries={inqData.treedInquiry} />}
       />
     );
+  }
+  return <p>something wrong</p>;
 };
 
 export default InquiryTreePrivatePage;

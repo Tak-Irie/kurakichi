@@ -11,7 +11,7 @@ const AuthSuccess: NextPage = () => {
   if (error) return <p>{error.message}</p>;
 
   if (data.getUserByCookie.error) return <p>{data.getUserByCookie.error.message}</p>;
-  console.log('data:', data);
+  // console.log('data:', data);
   return (
     <>
       <p>認証に成功しました！</p>

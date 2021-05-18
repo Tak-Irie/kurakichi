@@ -1,4 +1,4 @@
-import { FieldError, FieldErrors, Path, UseFormRegister } from 'react-hook-form';
+import { FieldError, Path, UseFormRegister } from 'react-hook-form';
 
 import { PopOnIcon } from '@next/ui';
 import { IconsCheckCircle, IconsQuestion } from './Icons';
@@ -53,10 +53,10 @@ export const Input = <T extends any>({
       </span>
       {isValid ? (
         <IconsCheckCircle />
+      ) : errMessage ? (
+        <span className="ml-1 text-red-800 bg-red-100 p-1 text-xs rounded">{errMessage}</span>
       ) : (
-        <span className="ml-1 text-red-500 text-xs">
-          {errMessage ? errMessage : required === true ? '必須項目' : null}
-        </span>
+        <span className="ml-1 text-red-500 text-xs">{required === true ? '必須項目' : null}</span>
       )}
     </div>
     {disable ? (
@@ -97,14 +97,12 @@ export const InputTextarea = <T extends any>({
   register,
   required,
   placeholder = '',
-  overWriteCSS = 'flex-grow w-full h-24 px-4 mb-3 text-gray-800 transition duration-200 border-2 border-transparent rounded appearance-none focus:border-gray-700 focus:outline-none focus:shadow-outline',
+  overWriteCSS = 'flex-grow w-full h-32 px-4 my-2 text-gray-800 border border-gray-400 rounded',
 }: TextareaProps<T>) => (
   <>
-    <div className="flex justify-start items-center">
-      <label className="text-gray-700 text-xs font-bold my-1">{fieldLabel}</label>
-      {helperText ? <PopOnIcon icon={<IconsQuestion />} content={helperText} /> : null}
-      {errMessage ? <span>a</span> : null}
-    </div>
+    <label className="text-gray-700 text-xs font-bold my-1 mr-auto">{fieldLabel}</label>
+    {helperText ? <PopOnIcon icon={<IconsQuestion />} content={helperText} /> : null}
+    {errMessage ? <span>a</span> : null}
     <textarea
       placeholder={placeholder}
       cols={cols}

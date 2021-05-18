@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import 'tailwindcss/tailwind.css';
 
+import { AuthContext } from '../util';
 import { apolloClient } from '../util/createApolloClient';
 import { Layout } from '@next/ui';
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  const [authStatus, setAuthStatus] = useState<boolean>(false);
   return (
     <ApolloProvider client={apolloClient}>
       <Head>
@@ -17,9 +19,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
         />
         <title>くらきち~くらしのあんぜんきち~</title>
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <AuthContext.Provider value={{ authStatus, setAuthStatus }}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AuthContext.Provider>
     </ApolloProvider>
   );
 }

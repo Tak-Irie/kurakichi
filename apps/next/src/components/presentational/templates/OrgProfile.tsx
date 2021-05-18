@@ -50,7 +50,7 @@ export const OrgProfile: VFC<OrgProfileProps> = ({ org }) => {
         </span>
       </div>
 
-      <div className="mt-8 max-w-5xl mx-auto">
+      <div className="mt-8">
         <h2 className="text-sm font-medium text-gray-500">団体メンバー</h2>
         <GridTemplate>
           {members

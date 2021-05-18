@@ -8,7 +8,7 @@ type BadgesProps = {
 export const Badge: VFC<BadgesProps> = ({ color, content }) => {
   return (
     <span
-      className={`inline-flex flex-grow justify-center items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${color}-100 text-${color}-800`}
+      className={`inline-flex justify-center items-center w-full px-2.5 py-0.5 rounded-full text-xs font-medium bg-${color}-100 text-${color}-800`}
     >
       {content}
     </span>
@@ -18,7 +18,7 @@ export const Badge: VFC<BadgesProps> = ({ color, content }) => {
 export const BadgeLarge: VFC<BadgesProps> = ({ color, content }) => {
   return (
     <span
-      className={`inline-flex flex-grow justify-center items-center px-3 py-0.5  rounded-full text-base font-bold bg-${color}-100 text-${color}-800`}
+      className={`inline-flex justify-center items-center w-full px-3 py-0.5  rounded-full text-sm font-bold bg-${color}-100 text-${color}-800`}
     >
       {content}
     </span>

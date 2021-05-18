@@ -1,4 +1,5 @@
 import { ReactElement, VFC } from 'react';
+import Image from 'next/image';
 
 import { TextH3, TextBase } from '@next/ui';
 import { LinkNextjs } from '@next/container';
@@ -22,16 +23,16 @@ export const Article: VFC<ArticleProps> = ({
   linkAs,
   date,
   category,
-  linkLabel = '詳しく見る',
+  linkLabel = 'くわしく',
   imageAlt = 'articleImage',
   imageSrc = '/logo_temp.png',
 }) => {
   return (
-    <div className="transition-shadow duration-300 bg-white rounded shadow-sm">
-      <img src={imageSrc} alt={imageAlt} className="object-cover w-full h-64" />
-      <div className="p-5 border border-t-0">
+    <div className="flex flex-col bg-white border border-gray-200 rounded shadow">
+      <img className="h-72 object-cover" src={imageSrc} alt={imageAlt} />
+      <div className="p-5 space-y-2 flex flex-col h-full">
         {category ? (
-          <p className="mb-3 text-xs font-semibold tracking-wide uppercase">
+          <p className="mb-3 text-xs font-semibold">
             <p className="" aria-label="Category">
               {category}
             </p>
@@ -40,7 +41,9 @@ export const Article: VFC<ArticleProps> = ({
         ) : null}
         <TextH3 content={title} />
         {typeof description === 'string' ? <TextBase content={description} /> : description}
-        <LinkNextjs linkUrl={linkUrl} linkAs={linkAs} linkLabel={linkLabel} />
+        <div className="flex justify-end items-end h-full">
+          <LinkNextjs linkUrl={linkUrl} linkAs={linkAs} linkLabel={linkLabel} />
+        </div>
       </div>
     </div>
   );

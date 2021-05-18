@@ -50,14 +50,15 @@ export class AcceptJoinOrgUseCase
       //   'requestedOrg:',
       //   requestedOrg.getMembers().map((member) => member.getId()),
       // );
-      // console.log('joinId:', req.requestUserId);
-      const alreadyBelongTo = requestedOrg.getMembers().some((member) => {
-        member === req.requestUserId;
-        // console.log(typeof member.getId());
-        // console.log(typeof req.joinUserId);
-      });
-      // console.log('be:', belonged);
-      if (alreadyBelongTo) return left(new AlreadyUserIsMemberError());
+      console.log('orgId:', req.requestedOrgId);
+      console.log('joinerId:', req.requestUserId);
+      const isBelonged = requestedOrg.getMembers().some(
+        (member) => member === req.requestUserId,
+        // console.log('member:', member);
+        // console.log('requester', req.requestUserId);
+      );
+      // console.log('be:', isBelonged);
+      if (isBelonged) return left(new AlreadyUserIsMemberError());
 
       const registeredResult = await this.OrgRepo.acceptJoinOrg(
         UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),

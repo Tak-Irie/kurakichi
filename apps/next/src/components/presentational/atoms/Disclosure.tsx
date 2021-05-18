@@ -23,16 +23,20 @@ export const Disclosure: VFC<DisclosureProps> = ({
       {({ open }) => (
         <>
           <HeadlessDisclosure.Button>
-            <span className={`flex ${labelCSS}`}>
-              {label}
-              <span className="flex items-center">
-                {open ? (
-                  <IconsUpChevron overwriteCSS={iconCSS} />
-                ) : (
-                  <IconsDownChevron overwriteCSS={iconCSS} />
-                )}
+            {typeof label === 'string' ? (
+              <span className={`flex ${labelCSS}`}>
+                {label}
+                <span className="flex items-center">
+                  {open ? (
+                    <IconsUpChevron overwriteCSS={iconCSS} />
+                  ) : (
+                    <IconsDownChevron overwriteCSS={iconCSS} />
+                  )}
+                </span>
               </span>
-            </span>
+            ) : (
+              label
+            )}
           </HeadlessDisclosure.Button>
           <HeadlessDisclosure.Panel className={contentCSS}>{content}</HeadlessDisclosure.Panel>
         </>

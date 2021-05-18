@@ -9,12 +9,11 @@ import {
   IconsCaution,
   FeedbackCaution,
   PopOnIcon,
+  Disclosure,
 } from '@next/ui';
 import { SendInquiryForm } from '@next/container';
 import { OrgPayload, useGetUserByCookieQuery } from '@next/graphql';
 import { useState } from 'react';
-
-import { Transition } from '@headlessui/react';
 
 type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -35,29 +34,18 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
       orgName={org.orgName}
       headerButtons={
         userData?.getUserByCookie.user ? (
-          <>
-            <div>
+          <Disclosure
+            label={
               <ButtonWithIcon
-                type="button"
                 onClick={() => setIsOpen(!isOpen)}
+                type="button"
                 label="お問い合わせ"
                 icon={<IconsMail />}
               />
-            </div>
-            <div className="mt-12 absolute w-full">
-              <Transition
-                show={isOpen}
-                enter="transition-opacity duration-150"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="transition-opacity duration-150"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />
-              </Transition>
-            </div>
-          </>
+            }
+            contentCSS="absolute z-10 mt-12"
+            content={<SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />}
+          />
         ) : (
           <div className="flex items-center space-x-3">
             <PopOnIcon
@@ -67,7 +55,7 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
             <ButtonWithIcon
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              label="メッセージを送る"
+              label="お問い合わせ"
               disabled
               icon={<IconsMail />}
             />

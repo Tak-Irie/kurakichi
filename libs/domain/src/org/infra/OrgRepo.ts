@@ -92,10 +92,10 @@ export class OrgRepo implements IOrgRepo {
           },
         },
       }),
-      this.prisma.organization.delete({
-        where: { id: _orgId },
-        select: { requestedMembers: { where: { id: userId } } },
-      }),
+      // this.prisma.organization.delete({
+      //   where: { id: _orgId },
+      //   select: { requestedMembers: { where: { id: userId } } },
+      // }),
     ]);
     if (result == undefined) return false;
 

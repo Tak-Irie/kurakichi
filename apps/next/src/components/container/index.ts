@@ -1,3 +1,4 @@
+export * from './AcceptJoinOrgButton';
 export * from './ChangeUserPassword';
 export * from './FileUploader';
 export * from './ForgotPasswordForm';

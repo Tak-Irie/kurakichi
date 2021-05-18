@@ -1,3 +1,4 @@
+export * from './AuthContext';
 export * from './RegExp';
 export * from './createApolloClient';
 export * from './createApolloLink';

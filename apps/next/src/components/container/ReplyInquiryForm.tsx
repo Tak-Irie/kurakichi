@@ -18,7 +18,7 @@ export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({ replyTargetId, onC
   const [replyInquiry, { data, error, loading }] = useReplyInquiryMutation();
 
   const onSubmit = async (values: InquiryInquiryInput) => {
-    console.log('resInquiryValues:', values);
+    // console.log('resInquiryValues:', values);
     try {
       await replyInquiry({
         variables: {
@@ -28,7 +28,7 @@ export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({ replyTargetId, onC
         update: (cache, { data: { replyInquiry } }) => {
           // console.log('cache:', cache);
           // console.log('update:', replyInquiry);
-          // console.log('treeId:', replyInquiry.Inquiry.tree.id);
+          // console.log('treeId:', replyInquiry.inquiry.tree.id);
           cache.modify({
             id: 'InquiryTree:' + replyInquiry.inquiry.tree.id,
             fields: {
@@ -70,12 +70,13 @@ export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({ replyTargetId, onC
           required
           register={register}
         />
-        <span className="inline-flex items-end pb-1">
+        <span className="flex w-full justify-end py-2">
           <ButtonOrLoading
             onClick={onClick}
             loading={loading}
             buttonType="submit"
             buttonLabel="返信する"
+            color="yellow"
           />
         </span>
       </Form>
