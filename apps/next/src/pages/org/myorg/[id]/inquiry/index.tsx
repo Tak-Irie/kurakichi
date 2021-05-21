@@ -2,8 +2,17 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useGetInquiriesByOrgIdQuery, useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
-import { LoadingSpinner, OrgTemplate, ButtonWithIcon, IconsUsers, TableInquiry } from '@next/ui';
+import {
+  useGetInquiriesByOrgIdQuery,
+  useGetOrgPrivateInfoByIdAndCookieQuery,
+} from '../../../../../graphql';
+import {
+  LoadingSpinner,
+  OrgTemplate,
+  ButtonWithIcon,
+  IconsUsers,
+  TableInquiry,
+} from '../../../../../components/presentational';
 import { isServer } from '../../../../../util';
 
 const InquiryBoxPrivatePage: NextPage = () => {
@@ -22,7 +31,16 @@ const InquiryBoxPrivatePage: NextPage = () => {
   if (error) return <p>{error.message}</p>;
 
   if (data?.getOrgPrivateInfoByIdAndCookie.org) {
-    const { avatar, image, orgName, id } = data?.getOrgPrivateInfoByIdAndCookie.org;
+    const { avatar, image, orgName, id, inquiries } = data?.getOrgPrivateInfoByIdAndCookie.org;
+    const descByDay = [...inquiries].sort((id_a, id_b) => {
+      if (id_a > id_b) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+    console.log('descByDay:', descByDay);
+
     return (
       <OrgTemplate
         avatar={avatar}
@@ -36,11 +54,7 @@ const InquiryBoxPrivatePage: NextPage = () => {
           </Link>
         }
         pageContents={
-          <TableInquiry
-            inquiries={data.getOrgPrivateInfoByIdAndCookie.org.inquiries}
-            orgId={id}
-            tableLabel="お問い合わせ一覧"
-          />
+          <TableInquiry inquiries={descByDay} orgId={id} tableLabel="お問い合わせ一覧" />
         }
       />
     );

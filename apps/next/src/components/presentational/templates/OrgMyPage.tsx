@@ -1,5 +1,4 @@
-import { FC, useState } from 'react';
-import { Transition } from '@headlessui/react';
+import { FC } from 'react';
 
 import {
   GridTemplate,
@@ -18,6 +17,9 @@ type OrgMyPageProps = {
 export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
   const { id, email, phoneNumber, location, homePage, description, members, inquiries } = props.org;
   // console.log('inquiries on orgMy:', inquiries);
+  const unreadInq = inquiries.filter((inq) => inq.inquiryStatus === 'UNREAD');
+  const descById = unreadInq.reverse();
+
   return (
     <>
       <div className="col-start-3 col-end-10 mt-5">
@@ -26,7 +28,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
           orgId={id}
           limit={20}
           status={InquiryStatus['Unread']}
-          initialInquiries={inquiries}
+          initialInquiries={descById}
         />
       </div>
       <div className="col-start-3 col-end-10 mt-5">

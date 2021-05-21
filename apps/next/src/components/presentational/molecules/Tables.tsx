@@ -1,7 +1,7 @@
 import { VFC } from 'react';
 import Link from 'next/link';
 
-import { Message, Org, SecureBase, User, Inquiry } from '@next/graphql';
+import { Message, Org, SecureBase, User, Inquiry } from '../../../graphql';
 import {
   AvatarSmall,
   TextSmall,
@@ -9,7 +9,7 @@ import {
   CardWithPick,
   BadgeInquiryCategory,
   BadgeInquiryStatus,
-} from '@next/ui';
+} from '../../presentational';
 
 type TableProps = {
   tableLabel?: string;
