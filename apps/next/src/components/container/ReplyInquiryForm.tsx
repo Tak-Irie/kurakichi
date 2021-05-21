@@ -1,9 +1,9 @@
 import { VFC } from 'react';
 import { useForm } from 'react-hook-form';
-
-import { Form, InputTextarea, NotificationSet, ButtonOrLoading } from '@next/ui';
-import { useReplyInquiryMutation } from '@next/graphql';
 import { gql } from '@apollo/client';
+
+import { Form, InputTextarea, NotificationSet, ButtonOrLoading } from '../presentational';
+import { useReplyInquiryMutation } from '../../graphql';
 
 type ResponseInquiryProps = {
   replyTargetId: string;

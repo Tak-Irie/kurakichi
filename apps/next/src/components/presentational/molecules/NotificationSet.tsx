@@ -1,7 +1,7 @@
-import { ApolloError } from '@apollo/client';
 import { FC } from 'react';
+import { ApolloError } from '@apollo/client';
 
-import { NotificationAlert, NotificationCaution, NotificationSuccess } from '@next/ui';
+import { NotificationAlert, NotificationCaution, NotificationSuccess } from '../../presentational';
 
 type NotificationsProps = {
   data: any;
@@ -12,6 +12,7 @@ type NotificationsProps = {
   dataLabel?: string;
   errDataLabel?: string;
   sysErrLabel?: string;
+  showingMS?: number;
 };
 
 /**
@@ -26,12 +27,19 @@ export const NotificationSet: FC<NotificationsProps> = ({
   dataLabel = '成功！',
   errDataLabel = 'エラー！',
   sysErrLabel = 'エラー！',
+  showingMS,
 }) => {
   return (
     <>
-      {sysErr ? <NotificationAlert label={sysErrLabel} content={sysErr.message} /> : null}
-      {errData ? <NotificationCaution label={errDataLabel} content={errDataContent} /> : null}
-      {data ? <NotificationSuccess label={dataLabel} content={dataContent} /> : null}
+      {sysErr ? (
+        <NotificationAlert showingMS={showingMS} label={sysErrLabel} content={sysErr.message} />
+      ) : null}
+      {errData ? (
+        <NotificationCaution showingMS={showingMS} label={errDataLabel} content={errDataContent} />
+      ) : null}
+      {data ? (
+        <NotificationSuccess showingMS={showingMS} label={dataLabel} content={dataContent} />
+      ) : null}
     </>
   );
 };

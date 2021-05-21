@@ -1,6 +1,6 @@
 import { VFC, ReactNode } from 'react';
 
-import { ImageHero, AvatarBig } from '@next/ui';
+import { ImageHero, AvatarBig } from '../../presentational';
 
 type ProfileHeaderProps = {
   imageSrc: string;

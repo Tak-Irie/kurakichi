@@ -2,6 +2,7 @@ import { enumType, list, objectType } from 'nexus';
 
 export const User = objectType({
   name: 'User',
+  description: 'include all actor that means client, member of orgs, sys admin',
   definition(t) {
     t.implements('Node');
     t.string('email');
@@ -21,6 +22,7 @@ export const UserPayload = objectType({
   definition(t) {
     t.field('user', { type: 'User' });
     t.field('users', { type: list('User') });
+    t.field('pageInfo', { type: 'PageInfo' });
     t.field('error', { type: 'RegularError' });
   },
 });

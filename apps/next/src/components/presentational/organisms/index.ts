@@ -12,3 +12,4 @@ export * from './ProfileHeader';
 export * from './ProfileHeaderSetting';
 export * from './HelperPop';
 export * from './UseCasePresenter';
+export * from './BadgeInquiryStatusChangeable';

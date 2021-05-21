@@ -8,6 +8,7 @@ type NotificationProps = {
   onClick?: () => void;
   label: string;
   content: string;
+  showingMS?: number;
 };
 
 export const Notification: FC<NotificationProps> = ({
@@ -15,6 +16,7 @@ export const Notification: FC<NotificationProps> = ({
   label,
   icon,
   iconColor,
+  showingMS = 1000 * 10,
   onClick,
 }) => {
   const [isShowing, setIsShowing] = useState(true);
@@ -22,8 +24,8 @@ export const Notification: FC<NotificationProps> = ({
   useEffect(() => {
     setInterval(() => {
       setIsShowing(false);
-    }, 1000 * 10);
-  }, [isShowing]);
+    }, showingMS);
+  }, [isShowing, showingMS]);
 
   return (
     <Transition
@@ -68,6 +70,7 @@ export const NotificationSuccess: FC<NotificationProps> = ({
   label = 'Success!!',
   content,
   onClick,
+  showingMS,
 }) => {
   return (
     <Notification
@@ -76,6 +79,7 @@ export const NotificationSuccess: FC<NotificationProps> = ({
       label={label}
       icon={<CheckCircleIcon />}
       iconColor="text-green-400"
+      showingMS={showingMS}
     />
   );
 };
@@ -84,6 +88,7 @@ export const NotificationCaution: FC<NotificationProps> = ({
   label = 'Caution!',
   content,
   onClick,
+  showingMS,
 }) => {
   return (
     <Notification
@@ -92,6 +97,7 @@ export const NotificationCaution: FC<NotificationProps> = ({
       label={label}
       icon={<ExclamationIcon />}
       iconColor="text-yellow-500"
+      showingMS={showingMS}
     />
   );
 };
@@ -100,6 +106,7 @@ export const NotificationAlert: FC<NotificationProps> = ({
   label = 'Alert!',
   content,
   onClick,
+  showingMS,
 }) => {
   return (
     <Notification
@@ -108,6 +115,7 @@ export const NotificationAlert: FC<NotificationProps> = ({
       label={label}
       icon={<BanIcon />}
       iconColor="text-red-500"
+      showingMS={showingMS}
     />
   );
 };

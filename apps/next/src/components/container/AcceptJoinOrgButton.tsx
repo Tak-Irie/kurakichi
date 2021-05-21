@@ -1,8 +1,8 @@
 import { VFC } from 'react';
-
-import { useAcceptJoinOrgMutation } from '@next/graphql';
 import { gql } from '@apollo/client';
-import { ButtonOrLoading, NotificationSet } from '@next/ui';
+
+import { useAcceptJoinOrgMutation } from '../../graphql';
+import { ButtonOrLoading, NotificationSet } from '../../components/presentational';
 
 type AcceptJoinOrgButtonProps = {
   requestUserId: string;

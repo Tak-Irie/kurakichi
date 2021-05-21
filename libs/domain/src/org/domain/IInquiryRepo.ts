@@ -9,6 +9,9 @@ export interface IInquiryRepo {
   getInquiriesWithStatusByOrgId(
     orgId: UniqueEntityId,
     status: InquiryStatus,
+    limit: number,
+    endCursor: UniqueEntityId | 'UNKNOWN',
   ): Promise<Inquiry[] | false>;
   registerInquiry(inquiry: Inquiry): Promise<Inquiry>;
+  updateInquiryStatus(inquiryId: UniqueEntityId, status: InquiryStatus): Promise<Inquiry>;
 }

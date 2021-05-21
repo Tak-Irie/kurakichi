@@ -15,6 +15,7 @@ import { GetInquiriesByTreeIdUseCase } from './getInquiriesByTreeId/GetInquiries
 import { RegisterInquiryUseCase } from './registerInquiry/registerInquiryUseCase';
 import { GetInquiriesWithStatusByOrgIdUseCase } from './getInquiriesWithStatusByOrgId/GetInquiriesWithStatusByOrgIdUseCase';
 import { ReplyInquiryUseCase } from './replyInquiry/ReplyInquiryUseCase';
+import { UpdateInquiryStatusUseCase } from './updateInquiryStatus/UpdateInquiryStatusUseCase';
 
 const orgRepo = new OrgRepo();
 const inquiryRepo = new InquiryRepo();
@@ -35,6 +36,7 @@ export const useGetInquiriesWithStatusByOrgIdUseCase = new GetInquiriesWithStatu
   inquiryRepo,
 );
 export const useReplyInquiryUseCase = new ReplyInquiryUseCase(inquiryRepo);
+export const useUpdateInquiryStatusUseCase = new UpdateInquiryStatusUseCase(inquiryRepo);
 
 export * from './DTOInquiry';
 export * from './DTOOrg';

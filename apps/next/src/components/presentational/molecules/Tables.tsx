@@ -121,7 +121,6 @@ export const TableMessage: VFC<TableMessageProps> = ({
   messages,
   tableLabel = '新着メッセージ',
   textOfNotExist = '新着メッセージはありません',
-  onClick,
 }) => {
   return (
     <>
@@ -172,7 +171,6 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
   orgId,
   tableLabel = '新着お問い合わせ',
   textOfNotExist = '新着のお問い合わせはありません',
-  onClick,
 }) => {
   const labelCss = 'py-1 text-xs text-center font-medium text-gray-500';
   const dataCss = 'py-1 flex h-auto items-center justify-center';

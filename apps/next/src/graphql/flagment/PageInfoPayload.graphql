@@ -1,0 +1,5 @@
+fragment PageInfoPayload on PageInfo {
+  hasMore
+  endCursor
+  limit
+}

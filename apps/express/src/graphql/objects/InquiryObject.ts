@@ -29,6 +29,7 @@ export const InquiryPayload = objectType({
     t.field('inquiry', { type: 'Inquiry' });
     t.field('inquiries', { type: list('Inquiry') });
     t.field('inquiryTree', { type: 'InquiryTree' });
+    t.field('pageInfo', { type: 'PageInfo' });
     t.field('error', { type: 'RegularError' });
   },
 });

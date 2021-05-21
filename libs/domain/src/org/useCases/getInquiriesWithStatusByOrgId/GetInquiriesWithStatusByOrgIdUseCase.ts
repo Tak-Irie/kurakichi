@@ -14,7 +14,12 @@ import { IInquiryRepo } from '../../domain';
 import { InquiryStatus, InquiryStatusUnion } from '../../domain/InquiryStatus';
 import { DTOInquiry, createDTOInquiriesFromDomain } from '../DTOInquiry';
 
-type GetInquiriesWithStatusByOrgIdArg = { orgId: string; status: InquiryStatusUnion };
+type GetInquiriesWithStatusByOrgIdArg = {
+  orgId: string;
+  status: InquiryStatusUnion;
+  limit: number;
+  endCursor?: string;
+};
 
 type GetInquiriesWithUnreadByOrgIdResponse = Either<
   NotExistError | InvalidInputValueError | UnexpectedError | StoreConnectionError,
@@ -23,7 +28,8 @@ type GetInquiriesWithUnreadByOrgIdResponse = Either<
 
 export class GetInquiriesWithStatusByOrgIdUseCase
   implements
-    IUseCase<GetInquiriesWithStatusByOrgIdArg, Promise<GetInquiriesWithUnreadByOrgIdResponse>> {
+    IUseCase<GetInquiriesWithStatusByOrgIdArg, Promise<GetInquiriesWithUnreadByOrgIdResponse>>
+{
   constructor(private InquiryRepo: IInquiryRepo) {
     this.InquiryRepo = InquiryRepo;
   }
@@ -31,7 +37,8 @@ export class GetInquiriesWithStatusByOrgIdUseCase
     arg: GetInquiriesWithStatusByOrgIdArg,
   ): Promise<GetInquiriesWithUnreadByOrgIdResponse> {
     try {
-      // console.log('argStatus:', arg.status);
+      // console.log('args:', arg);
+      let cursor: UniqueEntityId | undefined;
 
       const idOrErr = UniqueEntityId.reconstruct(arg.orgId);
       if (idOrErr.isFailure) return left(new InvalidInputValueError(idOrErr.getErrorValue()));
@@ -40,15 +47,25 @@ export class GetInquiriesWithStatusByOrgIdUseCase
       if (statusOrErr.isFailure)
         return left(new InvalidInputValueError(statusOrErr.getErrorValue()));
 
+      if (arg.endCursor) {
+        const endCursorOrErr = UniqueEntityId.reconstruct(arg.endCursor);
+        if (endCursorOrErr.isFailure)
+          return left(new InvalidInputValueError(endCursorOrErr.getErrorValue()));
+        cursor = endCursorOrErr.getValue();
+      }
+
       // console.log('statusOrErr:', statusOrErr.getValue());
 
       const dbResult = await this.InquiryRepo.getInquiriesWithStatusByOrgId(
         idOrErr.getValue(),
         statusOrErr.getValue(),
+        arg.limit,
+        cursor,
       );
       if (dbResult == false) return left(new NotExistError('該当メッセージはありません'));
 
       const dtoInquiries = createDTOInquiriesFromDomain(dbResult);
+      // console.log('dtoInquiriesInUC:', dtoInquiries);
       return right(Result.success<DTOInquiry[]>(dtoInquiries));
     } catch (err) {
       return left(new UnexpectedError(err));

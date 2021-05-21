@@ -10,9 +10,9 @@ import {
   FeedbackCaution,
   PopOnIcon,
   Disclosure,
-} from '@next/ui';
-import { SendInquiryForm } from '@next/container';
-import { OrgPayload, useGetUserByCookieQuery } from '@next/graphql';
+} from '../../components/presentational';
+import { SendInquiryForm } from '../../components/container';
+import { OrgPayload, useGetUserByCookieQuery } from '../../graphql';
 import { useState } from 'react';
 
 type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
@@ -25,46 +25,50 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-  const org = props.data.getOrgPublicInfoById.org;
 
-  return (
-    <OrgTemplate
-      avatar={org.avatar}
-      image={org.image}
-      orgName={org.orgName}
-      headerButtons={
-        userData?.getUserByCookie.user ? (
-          <Disclosure
-            label={
+  if (props.data.getOrgPublicInfoById.org) {
+    const org = props.data.getOrgPublicInfoById.org;
+
+    return (
+      <OrgTemplate
+        avatar={org.avatar}
+        image={org.image}
+        orgName={org.orgName}
+        headerButtons={
+          userData?.getUserByCookie.user ? (
+            <Disclosure
+              label={
+                <ButtonWithIcon
+                  onClick={() => setIsOpen(!isOpen)}
+                  type="button"
+                  label="お問い合わせ"
+                  icon={<IconsMail />}
+                />
+              }
+              contentCSS="absolute z-10 mt-12"
+              content={<SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />}
+            />
+          ) : (
+            <div className="flex items-center space-x-3">
+              <PopOnIcon
+                icon={<IconsCaution />}
+                content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
+              />
               <ButtonWithIcon
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
                 label="お問い合わせ"
+                disabled
                 icon={<IconsMail />}
               />
-            }
-            contentCSS="absolute z-10 mt-12"
-            content={<SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />}
-          />
-        ) : (
-          <div className="flex items-center space-x-3">
-            <PopOnIcon
-              icon={<IconsCaution />}
-              content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
-            />
-            <ButtonWithIcon
-              onClick={() => setIsOpen(!isOpen)}
-              type="button"
-              label="お問い合わせ"
-              disabled
-              icon={<IconsMail />}
-            />
-          </div>
-        )
-      }
-      pageContents={<OrgProfile org={org} />}
-    />
-  );
+            </div>
+          )
+        }
+        pageContents={<OrgProfile org={org} />}
+      />
+    );
+  }
+  return <p>loading</p>;
 };
 
 // TODO:need to SSR?, examine it

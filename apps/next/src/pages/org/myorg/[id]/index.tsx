@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
+import { useGetOrgPrivateInfoByIdAndCookieQuery } from '../../../../graphql/generated/graphql';
 import {
   OrgMyPage,
   LoadingSpinner,
@@ -9,9 +10,8 @@ import {
   ButtonWithIcon,
   IconsCog,
   IconsMail,
-} from '@next/ui';
-import { isServer, useGetIdFromUrl } from '../../../../util';
-import { useRouter } from 'next/router';
+} from '../../../../components/presentational';
+import { isServer } from '../../../../util';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();
@@ -24,10 +24,10 @@ const OrgPrivatePage: NextPage = () => {
 
   if (error) return <p>{error.message}</p>;
 
-  if (data.getOrgPrivateInfoByIdAndCookie.error)
-    return <p>{data.getOrgPrivateInfoByIdAndCookie.error.message}</p>;
+  if (data?.getOrgPrivateInfoByIdAndCookie.error)
+    return <p>{data?.getOrgPrivateInfoByIdAndCookie.error.message}</p>;
 
-  const { avatar, image, orgName, id } = data.getOrgPrivateInfoByIdAndCookie.org;
+  const { avatar, image, orgName, id } = data?.getOrgPrivateInfoByIdAndCookie.org;
   return (
     <OrgTemplate
       avatar={avatar}

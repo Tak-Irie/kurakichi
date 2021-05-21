@@ -29,6 +29,7 @@ export const MessagePayload = objectType({
     t.field('message', { type: 'Message' });
     t.field('messages', { type: list('Message') });
     t.field('messageTree', { type: 'MessageTree' });
+    t.field('pageInfo', { type: 'PageInfo' });
     t.field('error', { type: 'RegularError' });
   },
 });

@@ -61,6 +61,7 @@ export interface NexusGenObjects {
     inquiries?: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
     inquiry?: NexusGenRootTypes['Inquiry'] | null; // Inquiry
     inquiryTree?: NexusGenRootTypes['InquiryTree'] | null; // InquiryTree
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   InquiryTree: { // root type
     id: string; // ID!
@@ -80,6 +81,7 @@ export interface NexusGenObjects {
     message?: NexusGenRootTypes['Message'] | null; // Message
     messageTree?: NexusGenRootTypes['MessageTree'] | null; // MessageTree
     messages?: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   MessageTree: { // root type
     id: string; // ID!
@@ -105,6 +107,12 @@ export interface NexusGenObjects {
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
     org?: NexusGenRootTypes['Org'] | null; // Org
     orgs?: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
+  PageInfo: { // root type
+    endCursor?: string | null; // String
+    hasMore?: boolean | null; // Boolean
+    limit?: number | null; // Int
   }
   Query: {};
   RegularError: { // root type
@@ -139,6 +147,7 @@ export interface NexusGenObjects {
   }
   UserPayload: { // root type
     error?: NexusGenRootTypes['RegularError'] | null; // RegularError
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
     user?: NexusGenRootTypes['User'] | null; // User
     users?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
@@ -179,6 +188,7 @@ export interface NexusGenFieldTypes {
     inquiries: Array<NexusGenRootTypes['Inquiry'] | null> | null; // [Inquiry]
     inquiry: NexusGenRootTypes['Inquiry'] | null; // Inquiry
     inquiryTree: NexusGenRootTypes['InquiryTree'] | null; // InquiryTree
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   InquiryTree: { // field return type
     id: string; // ID!
@@ -198,6 +208,7 @@ export interface NexusGenFieldTypes {
     message: NexusGenRootTypes['Message'] | null; // Message
     messageTree: NexusGenRootTypes['MessageTree'] | null; // MessageTree
     messages: Array<NexusGenRootTypes['Message'] | null> | null; // [Message]
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   MessageTree: { // field return type
     id: string; // ID!
@@ -218,6 +229,7 @@ export interface NexusGenFieldTypes {
     requestJoinOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     sendInquiry: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     sendMessage: NexusGenRootTypes['MessagePayload'] | null; // MessagePayload
+    updateInquiryStatus: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
     updateOrg: NexusGenRootTypes['OrgPayload'] | null; // OrgPayload
     updateUser: NexusGenRootTypes['UserPayload'] | null; // UserPayload
   }
@@ -240,6 +252,12 @@ export interface NexusGenFieldTypes {
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
     org: NexusGenRootTypes['Org'] | null; // Org
     orgs: Array<NexusGenRootTypes['Org'] | null> | null; // [Org]
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
+  PageInfo: { // field return type
+    endCursor: string | null; // String
+    hasMore: boolean | null; // Boolean
+    limit: number | null; // Int
   }
   Query: { // field return type
     getInquiriesByOrgId: NexusGenRootTypes['InquiryPayload'] | null; // InquiryPayload
@@ -292,6 +310,7 @@ export interface NexusGenFieldTypes {
   }
   UserPayload: { // field return type
     error: NexusGenRootTypes['RegularError'] | null; // RegularError
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
     user: NexusGenRootTypes['User'] | null; // User
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
@@ -324,6 +343,7 @@ export interface NexusGenFieldTypeNames {
     inquiries: 'Inquiry'
     inquiry: 'Inquiry'
     inquiryTree: 'InquiryTree'
+    pageInfo: 'PageInfo'
   }
   InquiryTree: { // field return type name
     id: 'ID'
@@ -343,6 +363,7 @@ export interface NexusGenFieldTypeNames {
     message: 'Message'
     messageTree: 'MessageTree'
     messages: 'Message'
+    pageInfo: 'PageInfo'
   }
   MessageTree: { // field return type name
     id: 'ID'
@@ -363,6 +384,7 @@ export interface NexusGenFieldTypeNames {
     requestJoinOrg: 'OrgPayload'
     sendInquiry: 'InquiryPayload'
     sendMessage: 'MessagePayload'
+    updateInquiryStatus: 'InquiryPayload'
     updateOrg: 'OrgPayload'
     updateUser: 'UserPayload'
   }
@@ -385,6 +407,12 @@ export interface NexusGenFieldTypeNames {
     error: 'RegularError'
     org: 'Org'
     orgs: 'Org'
+    pageInfo: 'PageInfo'
+  }
+  PageInfo: { // field return type name
+    endCursor: 'String'
+    hasMore: 'Boolean'
+    limit: 'Int'
   }
   Query: { // field return type name
     getInquiriesByOrgId: 'InquiryPayload'
@@ -437,6 +465,7 @@ export interface NexusGenFieldTypeNames {
   }
   UserPayload: { // field return type name
     error: 'RegularError'
+    pageInfo: 'PageInfo'
     user: 'User'
     users: 'User'
   }
@@ -498,6 +527,10 @@ export interface NexusGenArgTypes {
       receiverId: string; // String!
       textInput: string; // String!
     }
+    updateInquiryStatus: { // args
+      inquiryId: string; // String!
+      inquiryStatus: NexusGenEnums['InquiryStatus']; // InquiryStatus!
+    }
     updateOrg: { // args
       input?: NexusGenInputs['OrgUpdateInput'] | null; // OrgUpdateInput
       orgId: string; // String!
@@ -518,6 +551,8 @@ export interface NexusGenArgTypes {
       treeId: string; // String!
     }
     getInquiriesWithStatus: { // args
+      endCursor?: string | null; // String
+      limit: number; // Int!
       orgId: string; // String!
       status?: NexusGenEnums['InquiryStatus'] | null; // InquiryStatus
     }

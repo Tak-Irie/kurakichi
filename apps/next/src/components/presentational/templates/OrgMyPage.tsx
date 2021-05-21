@@ -1,9 +1,15 @@
 import { FC, useState } from 'react';
 import { Transition } from '@headlessui/react';
 
-import { GridTemplate, GridItem, TextLabel, TableOrgMember, TableInquiry } from '@next/ui';
-
-import { Org } from '@next/graphql';
+import {
+  GridTemplate,
+  GridItem,
+  TextLabel,
+  TableOrgMember,
+  TableInquiry,
+} from '../../presentational';
+import { InquiryStatus, Org } from '../../../graphql/generated/graphql';
+import { InquiryInfiniteTable } from '../../container';
 
 type OrgMyPageProps = {
   org: Org;
@@ -11,10 +17,20 @@ type OrgMyPageProps = {
 
 export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
   const { id, email, phoneNumber, location, homePage, description, members, inquiries } = props.org;
-  console.log('inquiries on orgMy:', inquiries);
+  // console.log('inquiries on orgMy:', inquiries);
   return (
     <>
       <div className="col-start-3 col-end-10 mt-5">
+        <label>this is inf</label>
+        <InquiryInfiniteTable
+          orgId={id}
+          limit={20}
+          status={InquiryStatus['Unread']}
+          initialInquiries={inquiries}
+        />
+      </div>
+      <div className="col-start-3 col-end-10 mt-5">
+        <label>this is normal</label>
         <TableInquiry orgId={id} inquiries={inquiries} />
       </div>
       <div className="col-start-3 col-end-10 mt-5">

@@ -1,4 +1,4 @@
-import { extendType, nonNull, stringArg } from 'nexus';
+import { extendType, intArg, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
 
 import {
@@ -9,6 +9,7 @@ import {
   useGetInquiriesByTreeIdUseCase,
   useGetUsersByIdsUseCase,
   useReplyInquiryUseCase,
+  useUpdateInquiryStatusUseCase,
 } from '@kurakichi/domain';
 import { dtoInquiryToGql, dtoInquiriesToGql, dtoInquiriesWithUserToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
@@ -51,16 +52,32 @@ export const InquiryQuery = extendType({
       args: {
         orgId: nonNull(stringArg()),
         status: 'InquiryStatus',
+        endCursor: stringArg(),
+        limit: nonNull(intArg()),
       },
       resolve: async (_, args) => {
+        console.log('getInquiriesArgs:', args);
+        const limitPlusOne = args.limit + 1;
+
         const domainInquiriesOrErr = await useGetInquiriesWithStatusByOrgIdUseCase.execute({
           orgId: args.orgId,
           status: args.status,
+          endCursor: args.endCursor,
+          limit: limitPlusOne,
         });
         if (domainInquiriesOrErr.isLeft()) return returnErrorToGQL(domainInquiriesOrErr);
 
+        let hasMore = true;
+        const _inquiries = domainInquiriesOrErr.value.getValue();
+        if (_inquiries.length <= args.limit) {
+          hasMore = false;
+        }
+
         const gqlInquiries = dtoInquiriesToGql(domainInquiriesOrErr.value.getValue());
-        return { inquiries: gqlInquiries };
+        return {
+          inquiries: gqlInquiries,
+          pageInfo: { hasMore, limit: args.limit, endCursor: _inquiries.pop().id },
+        };
       },
     });
     t.field('getInquiriesByTreeIdAndCookie', {
@@ -142,6 +159,26 @@ export const InquiryMutation = extendType({
           replyTargetId: args.replyTargetId,
           content: args.content,
           senderId: idOrErr,
+        });
+        if (dtoInquiryOrErr.isLeft()) return returnErrorToGQL(dtoInquiryOrErr);
+
+        const gqlInquiry = dtoInquiryToGql(dtoInquiryOrErr.value.getValue());
+        return { inquiry: gqlInquiry };
+      },
+    });
+    t.field('updateInquiryStatus', {
+      type: 'InquiryPayload',
+      args: {
+        inquiryId: nonNull(stringArg()),
+        inquiryStatus: nonNull('InquiryStatus'),
+      },
+      resolve: async (_, args, context) => {
+        const idOrErr = getUserIdByCookie(context);
+        if (typeof idOrErr === 'object') return idOrErr;
+
+        const dtoInquiryOrErr = await useUpdateInquiryStatusUseCase.execute({
+          inquiryId: args.inquiryId,
+          inquiryStatus: args.inquiryStatus,
         });
         if (dtoInquiryOrErr.isLeft()) return returnErrorToGQL(dtoInquiryOrErr);
 
