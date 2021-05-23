@@ -64,9 +64,19 @@ export class InquiryRepo implements IInquiryRepo {
     return domainInquiries;
   }
 
-  async getInquiriesByOrgId(id: UniqueEntityId): Promise<Inquiry[] | false> {
+  async getInquiriesByOrgId(
+    orgId: UniqueEntityId,
+    limit: number,
+    endCursor: UniqueEntityId | undefined,
+  ): Promise<Inquiry[] | false> {
+    const isCursor = endCursor === undefined ? undefined : endCursor.getId();
+
     const result = await this.prisma.inquiry.findMany({
-      where: { receivedOrg: { id: id.getId() } },
+      orderBy: { id: 'desc' },
+      take: limit,
+      skip: isCursor ? 1 : undefined,
+      cursor: isCursor ? { id: isCursor } : undefined,
+      where: { receivedOrgId: orgId.getId() },
     });
     if (result == undefined) return false;
     const domainInquiries = InquiryMapper.ArrayToDomain(result);

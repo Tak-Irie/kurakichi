@@ -11,7 +11,7 @@ import {
   useReplyInquiryUseCase,
   useUpdateInquiryStatusUseCase,
 } from '@kurakichi/domain';
-import { dtoInquiryToGql, dtoInquiriesToGql, dtoInquiriesWithUserToGql } from '../DTOtoGql';
+import { dtoInquiryToGql, dtoInquiriesWithUserToGql } from '../DTOtoGql';
 import { returnErrorToGQL } from '../../util/returnErrorToGQL';
 
 export const InquiryQuery = extendType({
@@ -22,15 +22,36 @@ export const InquiryQuery = extendType({
       description: 'get inquiries of one Org',
       args: {
         orgId: nonNull(stringArg()),
+        endCursor: stringArg(),
+        limit: nonNull(intArg()),
       },
       resolve: async (_, args) => {
-        const domainResponse = await useGetInquiriesUseCase.execute({ orgId: args.orgId });
+        const limitPlusOne = args.limit + 1;
+        const domainResponse = await useGetInquiriesUseCase.execute({
+          orgId: args.orgId,
+          limit: limitPlusOne,
+          endCursor: args.endCursor,
+        });
         if (domainResponse.isLeft()) return returnErrorToGQL(domainResponse);
 
-        const inquiries = domainResponse.value.getValue();
-        const gqlField = dtoInquiriesToGql(inquiries);
+        const dtoInquiries = domainResponse.value.getValue();
+        let hasMore = true;
+        if (dtoInquiries.length <= args.limit) {
+          hasMore = false;
+        }
+        // TODO:temp
+        const domainUsersOrErr = await useGetUsersByIdsUseCase.execute({
+          ids: dtoInquiries.map((inquiry) => inquiry.sender),
+        });
+        if (domainUsersOrErr.isLeft()) return returnErrorToGQL(domainUsersOrErr);
+        const dtoUsers = domainUsersOrErr.value.getValue();
 
-        return { inquiries: gqlField };
+        const gqlInquiries = dtoInquiriesWithUserToGql(dtoInquiries, dtoUsers);
+
+        return {
+          inquiries: gqlInquiries,
+          pageInfo: { hasMore, limit: args.limit, endCursor: gqlInquiries.pop().id },
+        };
       },
     });
     t.field('getInquiry', {
@@ -67,8 +88,8 @@ export const InquiryQuery = extendType({
         });
         if (domainInquiriesOrErr.isLeft()) return returnErrorToGQL(domainInquiriesOrErr);
 
-        let hasMore = true;
         const dtoInquiries = domainInquiriesOrErr.value.getValue();
+        let hasMore = true;
         if (dtoInquiries.length <= args.limit) {
           hasMore = false;
         }

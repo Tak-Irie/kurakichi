@@ -545,6 +545,8 @@ export interface NexusGenArgTypes {
   }
   Query: {
     getInquiriesByOrgId: { // args
+      endCursor?: string | null; // String
+      limit: number; // Int!
       orgId: string; // String!
     }
     getInquiriesByTreeIdAndCookie: { // args

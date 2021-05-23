@@ -8,7 +8,7 @@ import {
   TableInquiry,
 } from '../../presentational';
 import { InquiryStatus, Org } from '../../../graphql/generated/graphql';
-import { InquiryInfiniteTable } from '../../container';
+import { InquiryInfiniteTableWithStatus } from '../../container';
 import { TextSmall } from '../atoms';
 
 type OrgMyPageProps = {
@@ -27,7 +27,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="未読お問い合わせ" />
         {inquiries[0] ? (
-          <InquiryInfiniteTable
+          <InquiryInfiniteTableWithStatus
             orgId={id}
             limit={20}
             status={InquiryStatus['Unread']}

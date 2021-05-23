@@ -5,7 +5,11 @@ import { InquiryStatus } from './InquiryStatus';
 export interface IInquiryRepo {
   getInquiry(inquiryId: UniqueEntityId): Promise<Inquiry | false>;
   getInquiryTreeById(treeId: UniqueEntityId): Promise<Inquiry[] | false>;
-  getInquiriesByOrgId(orgId: UniqueEntityId): Promise<Inquiry[] | false>;
+  getInquiriesByOrgId(
+    orgId: UniqueEntityId,
+    limit: number,
+    endCursor: UniqueEntityId | 'UNKNOWN',
+  ): Promise<Inquiry[] | false>;
   getInquiriesWithStatusByOrgId(
     orgId: UniqueEntityId,
     status: InquiryStatus,

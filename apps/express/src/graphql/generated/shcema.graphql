@@ -168,7 +168,7 @@ type PageInfo {
 
 type Query {
   """get inquiries of one Org"""
-  getInquiriesByOrgId(orgId: String!): InquiryPayload
+  getInquiriesByOrgId(endCursor: String, limit: Int!, orgId: String!): InquiryPayload
   getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
   getInquiriesWithStatus(endCursor: String, limit: Int!, orgId: String!, status: InquiryStatus): InquiryPayload
   getInquiry(inquiryId: String!): InquiryPayload

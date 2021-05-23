@@ -332,6 +332,8 @@ export type QueryGetMessagesByTreeIdArgs = {
 
 export type QueryGetInquiriesByOrgIdArgs = {
   orgId: Scalars['String'];
+  endCursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -879,6 +881,8 @@ export type ReplyMessageMutation = (
 
 export type GetInquiriesByOrgIdQueryVariables = Exact<{
   orgId: Scalars['String'];
+  endCursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 }>;
 
 
@@ -889,7 +893,10 @@ export type GetInquiriesByOrgIdQuery = (
     & { inquiries?: Maybe<Array<Maybe<(
       { __typename?: 'Inquiry' }
       & InquiryPayloadFragment
-    )>>>, error?: Maybe<(
+    )>>>, pageInfo?: Maybe<(
+      { __typename?: 'PageInfo' }
+      & PageInfoPayloadFragment
+    )>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
     )> }
@@ -2073,10 +2080,13 @@ export type ReplyMessageMutationHookResult = ReturnType<typeof useReplyMessageMu
 export type ReplyMessageMutationResult = Apollo.MutationResult<ReplyMessageMutation>;
 export type ReplyMessageMutationOptions = Apollo.BaseMutationOptions<ReplyMessageMutation, ReplyMessageMutationVariables>;
 export const GetInquiriesByOrgIdDocument = gql`
-    query GetInquiriesByOrgId($orgId: String!) {
-  getInquiriesByOrgId(orgId: $orgId) {
+    query GetInquiriesByOrgId($orgId: String!, $endCursor: String, $limit: Int!) {
+  getInquiriesByOrgId(orgId: $orgId, endCursor: $endCursor, limit: $limit) {
     inquiries {
       ...InquiryPayload
+    }
+    pageInfo {
+      ...PageInfoPayload
     }
     error {
       ...RegularError
@@ -2084,6 +2094,7 @@ export const GetInquiriesByOrgIdDocument = gql`
   }
 }
     ${InquiryPayloadFragmentDoc}
+${PageInfoPayloadFragmentDoc}
 ${RegularErrorFragmentDoc}`;
 
 /**
@@ -2099,6 +2110,8 @@ ${RegularErrorFragmentDoc}`;
  * const { data, loading, error } = useGetInquiriesByOrgIdQuery({
  *   variables: {
  *      orgId: // value for 'orgId'
+ *      endCursor: // value for 'endCursor'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

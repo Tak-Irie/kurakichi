@@ -1,7 +1,10 @@
-query GetInquiriesByOrgId($orgId: String!) {
-  getInquiriesByOrgId(orgId: $orgId) {
+query GetInquiriesByOrgId($orgId: String!, $endCursor: String, $limit: Int!) {
+  getInquiriesByOrgId(orgId: $orgId, endCursor: $endCursor, limit: $limit) {
     inquiries {
       ...InquiryPayload
+    }
+    pageInfo {
+      ...PageInfoPayload
     }
     error {
       ...RegularError

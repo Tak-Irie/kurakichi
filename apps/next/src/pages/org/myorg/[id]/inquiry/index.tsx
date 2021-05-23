@@ -16,6 +16,7 @@ import {
   TextLabel,
 } from '../../../../../components/presentational';
 import { isServer } from '../../../../../util';
+import { InquiryInfiniteTable } from '../../../../../components/container';
 
 const InquiryBoxPrivatePage: NextPage = () => {
   const router = useRouter();
@@ -31,17 +32,17 @@ const InquiryBoxPrivatePage: NextPage = () => {
     loading: inqLoading,
     error: inqError,
   } = useGetInquiriesByOrgIdQuery({
-    variables: { orgId },
+    variables: { orgId, limit: 20 },
   });
 
   if (loading || inqLoading) return <LoadingSpinner />;
 
-  if (error || inqError) return <p>{error.message || inqError.message}</p>;
+  if (error || inqError) return <p>{error?.message || inqError?.message}</p>;
 
   if (data?.getOrgPrivateInfoByIdAndCookie.org && inqData.getInquiriesByOrgId.inquiries) {
     const { avatar, image, orgName, id, inquiries } = data?.getOrgPrivateInfoByIdAndCookie.org;
     const inq = inqData?.getInquiriesByOrgId.inquiries;
-    console.log('inq:', inq);
+    // console.log('inq:', inq);
     // const modifiedInq = inquiries.concat(inq);
     // const descByDay = [...inq].reverse();
     // console.log('descByDay:', descByDay);
@@ -60,7 +61,10 @@ const InquiryBoxPrivatePage: NextPage = () => {
         }
         pageContents={
           inq[0] ? (
-            <TableInquiry inquiries={inq} orgId={id} tableLabel="お問い合わせ一覧" />
+            <>
+              <TextLabel content="お問い合わせ一覧" />
+              <InquiryInfiniteTable orgId={id} initialInquiries={inq} limit={20} />
+            </>
           ) : (
             <>
               <TextLabel content="お問い合わせ一覧" />
