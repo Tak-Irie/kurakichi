@@ -1,13 +1,13 @@
 import { VFC, useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { TableInquiry } from '../presentational';
+import { LoadingSpinner, TableInquiry, TextSmall } from '../presentational';
 import { Inquiry, InquiryStatus, useGetInquiriesWithStatusLazyQuery } from '../../graphql';
 
 type InquiryInfiniteTableProps = {
   initialInquiries: Inquiry[];
   orgId: string;
-  status: InquiryStatus;
+  status?: InquiryStatus;
   limit?: number;
 };
 
@@ -25,7 +25,9 @@ export const InquiryInfiniteTable: VFC<InquiryInfiniteTableProps> = ({
   status,
 }) => {
   // console.log('statusInTable:', status);
-  const [getInquiry, { data, loading, error }] = useGetInquiriesWithStatusLazyQuery();
+  const [getInquiry, { data, loading, error }] = useGetInquiriesWithStatusLazyQuery({
+    onCompleted: (_d) => console.log('complete:', _d),
+  });
 
   const [inquiries, setInquiries] = useState<InquiriesInfo>({
     loadedInquiries: initialInquiries,
@@ -33,28 +35,36 @@ export const InquiryInfiniteTable: VFC<InquiryInfiniteTableProps> = ({
   });
 
   const handleScroll = async () => {
-    // console.log('inHandle:', inquiries.loadedInquiries);
+    console.log('inHandle:', inquiries);
     // console.log('inHandlePop:', inquiries.loadedInquiries[limit]);
+    if (inquiries.pageInfo.hasMore === false) {
+      return;
+    }
+    const length = inquiries.loadedInquiries.length;
     getInquiry({
       variables: {
         limit,
         orgId,
         status,
-        endCursor: inquiries.loadedInquiries[limit].id,
+        endCursor: inquiries.loadedInquiries[length - 1].id,
       },
     });
+    console.log('data:', data);
   };
 
   useEffect(() => {
+    console.log('fire:');
+    console.log('inqsB:', inquiries.loadedInquiries);
     if (data?.getInquiriesWithStatus.inquiries) {
       setInquiries((prev) => {
         return {
           loadedInquiries: prev.loadedInquiries.concat(data.getInquiriesWithStatus.inquiries),
-          pageInfo: prev.pageInfo,
+          pageInfo: { hasMore: data.getInquiriesWithStatus.pageInfo.hasMore },
         };
       });
     }
     console.log('dataUploaded:', data);
+    console.log('inqsA:', inquiries.loadedInquiries);
   }, [data]);
 
   return (
@@ -64,13 +74,17 @@ export const InquiryInfiniteTable: VFC<InquiryInfiniteTableProps> = ({
       hasMore={inquiries.pageInfo.hasMore}
       height={400}
       endMessage={
-        <p style={{ textAlign: 'center' }}>
-          <b>Yay! You have seen it all</b>
-        </p>
+        <span className="bg-yellow-100 flex rounded justify-center">
+          <TextSmall textColor="yellow" content="未読お問い合わせは以上です" />
+        </span>
       }
-      loader={<h4>Loading...</h4>}
+      loader={<LoadingSpinner />}
     >
-      <TableInquiry inquiries={inquiries.loadedInquiries} orgId={orgId} />
+      <TableInquiry
+        inquiries={inquiries.loadedInquiries}
+        orgId={orgId}
+        tableLabel="未読お問い合わせ"
+      />
     </InfiniteScroll>
   );
 };

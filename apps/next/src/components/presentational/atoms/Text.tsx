@@ -5,7 +5,7 @@ type TextProps = {
   content: string;
   overwriteCSS?: string;
   label?: string;
-  textColor?: string;
+  textColor?: 'gray' | 'green' | 'blue' | 'red' | 'yellow';
 };
 
 // TODO:, consider what props should be customizable, color and something.

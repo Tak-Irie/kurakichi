@@ -169,14 +169,12 @@ export const TableMessage: VFC<TableMessageProps> = ({
 export const TableInquiry: VFC<TableInquiryProps> = ({
   inquiries,
   orgId,
-  tableLabel = '新着お問い合わせ',
   textOfNotExist = '新着のお問い合わせはありません',
 }) => {
   const labelCss = 'py-1 text-xs text-center font-medium text-gray-500';
   const dataCss = 'py-1 flex h-auto items-center justify-center';
   return (
-    <>
-      <TextLabel content={tableLabel} />
+    <div>
       {inquiries[0] ? (
         <div className="bg-gray-50 shadow border-2 border-gray-200 rounded-lg">
           <div className="grid grid-cols-8 divide-y divide-gray-200">
@@ -230,6 +228,6 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
       ) : (
         <TextSmall content={textOfNotExist} />
       )}
-    </>
+    </div>
   );
 };

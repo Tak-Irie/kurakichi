@@ -1,4 +1,5 @@
 import { VFC } from 'react';
+import { gql } from '@apollo/client';
 
 import { InquiryStatus, useUpdateInquiryStatusMutation } from '../../graphql';
 import { ButtonOrLoading, NotificationSet } from '../presentational';
@@ -19,6 +20,33 @@ export const UpdateInquiryStatusButton: VFC<UpdateInquiryStatusButtonProps> = ({
       variables: {
         inquiryId,
         inquiryStatus,
+      },
+      update: (
+        cache,
+        {
+          data: {
+            updateInquiryStatus: { inquiry },
+          },
+        },
+      ) => {
+        cache.modify({
+          id: 'Inquiry:' + inquiry.id,
+          fields: {
+            inquiryStatus() {
+              // console.log('existing:', existing);
+              // console.log('data:', inquiry);
+              const newStatus = cache.writeFragment({
+                data: inquiry,
+                fragment: gql`
+                  fragment _InquiryStatus on Inquiry {
+                    status
+                  }
+                `,
+              });
+              // console.log('new:', newStatus);
+            },
+          },
+        });
       },
     });
   };

@@ -1,8 +1,8 @@
 import { VFC } from 'react';
 
-import { MapViewer } from '@next/container';
-import { GridTemplate, TextLabeled, GridItemWithPic } from '@next/ui';
-import { Org } from '@next/graphql';
+import { MapViewer } from '../../container';
+import { GridTemplate, TextLabeled, GridItemWithPic } from '../../presentational';
+import { Org } from '../../../graphql';
 
 type OrgProfileProps = {
   org: Org;

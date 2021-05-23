@@ -1,5 +1,5 @@
 import { ReactNode, VFC } from 'react';
-import { ProfileHeader, ProfileHeaderSetting, Text2xl } from '@next/ui';
+import { ProfileHeader, ProfileHeaderSetting, Text2xl } from '../../presentational';
 
 type OrgTemplateProps = {
   avatar: string;

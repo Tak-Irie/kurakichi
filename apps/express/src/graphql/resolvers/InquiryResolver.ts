@@ -68,15 +68,22 @@ export const InquiryQuery = extendType({
         if (domainInquiriesOrErr.isLeft()) return returnErrorToGQL(domainInquiriesOrErr);
 
         let hasMore = true;
-        const _inquiries = domainInquiriesOrErr.value.getValue();
-        if (_inquiries.length <= args.limit) {
+        const dtoInquiries = domainInquiriesOrErr.value.getValue();
+        if (dtoInquiries.length <= args.limit) {
           hasMore = false;
         }
 
-        const gqlInquiries = dtoInquiriesToGql(domainInquiriesOrErr.value.getValue());
+        // TODO:temp
+        const domainUsersOrErr = await useGetUsersByIdsUseCase.execute({
+          ids: dtoInquiries.map((inquiry) => inquiry.sender),
+        });
+        if (domainUsersOrErr.isLeft()) return returnErrorToGQL(domainUsersOrErr);
+
+        const dtoUsers = domainUsersOrErr.value.getValue();
+        const gqlInquiries = dtoInquiriesWithUserToGql(dtoInquiries, dtoUsers);
         return {
           inquiries: gqlInquiries,
-          pageInfo: { hasMore, limit: args.limit, endCursor: _inquiries.pop().id },
+          pageInfo: { hasMore, limit: args.limit, endCursor: gqlInquiries.pop().id },
         };
       },
     });
@@ -98,6 +105,7 @@ export const InquiryQuery = extendType({
 
         const dtoInquiries = domainInquiriesOrErr.value.getValue();
 
+        // TODO:temp
         const domainUsersOrErr = await useGetUsersByIdsUseCase.execute({
           ids: dtoInquiries.map((inquiry) => inquiry.sender),
         });

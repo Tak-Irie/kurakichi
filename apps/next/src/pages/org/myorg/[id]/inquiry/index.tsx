@@ -12,6 +12,8 @@ import {
   ButtonWithIcon,
   IconsUsers,
   TableInquiry,
+  TextSmall,
+  TextLabel,
 } from '../../../../../components/presentational';
 import { isServer } from '../../../../../util';
 
@@ -24,22 +26,25 @@ const InquiryBoxPrivatePage: NextPage = () => {
     skip: isServer(),
   });
 
-  // const { data, loading, error } = useGetInquiriesByOrgIdQuery({ variables: { orgId: orgId } });
+  const {
+    data: inqData,
+    loading: inqLoading,
+    error: inqError,
+  } = useGetInquiriesByOrgIdQuery({
+    variables: { orgId },
+  });
 
-  if (loading) return <LoadingSpinner />;
+  if (loading || inqLoading) return <LoadingSpinner />;
 
-  if (error) return <p>{error.message}</p>;
+  if (error || inqError) return <p>{error.message || inqError.message}</p>;
 
-  if (data?.getOrgPrivateInfoByIdAndCookie.org) {
+  if (data?.getOrgPrivateInfoByIdAndCookie.org && inqData.getInquiriesByOrgId.inquiries) {
     const { avatar, image, orgName, id, inquiries } = data?.getOrgPrivateInfoByIdAndCookie.org;
-    const descByDay = [...inquiries].sort((id_a, id_b) => {
-      if (id_a > id_b) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
-    console.log('descByDay:', descByDay);
+    const inq = inqData?.getInquiriesByOrgId.inquiries;
+    console.log('inq:', inq);
+    // const modifiedInq = inquiries.concat(inq);
+    // const descByDay = [...inq].reverse();
+    // console.log('descByDay:', descByDay);
 
     return (
       <OrgTemplate
@@ -54,7 +59,14 @@ const InquiryBoxPrivatePage: NextPage = () => {
           </Link>
         }
         pageContents={
-          <TableInquiry inquiries={descByDay} orgId={id} tableLabel="お問い合わせ一覧" />
+          inq[0] ? (
+            <TableInquiry inquiries={inq} orgId={id} tableLabel="お問い合わせ一覧" />
+          ) : (
+            <>
+              <TextLabel content="お問い合わせ一覧" />
+              <TextSmall content="お問い合わせは有りません" />
+            </>
+          )
         }
       />
     );

@@ -84,6 +84,7 @@ export class InquiryRepo implements IInquiryRepo {
       const isCursor = endCursor === undefined ? undefined : endCursor.getId();
 
       const Inquiries = await this.prisma.inquiry.findMany({
+        orderBy: { id: 'desc' },
         take: limit,
         skip: isCursor ? 1 : undefined,
         cursor: isCursor ? { id: isCursor } : undefined,

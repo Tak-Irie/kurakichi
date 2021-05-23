@@ -9,6 +9,7 @@ import {
   useGetOrgsByMemberIdUseCase,
   useGetUsersByIdsUseCase,
   useUpdateOrgUseCase,
+  useGetInquiriesWithStatusByOrgIdUseCase,
 } from '@kurakichi/domain';
 import { extendType, nonNull, stringArg } from 'nexus';
 import { getUserIdByCookie } from '../../util/getUserIdByCookie';
@@ -87,30 +88,35 @@ export const orgQuery = extendType({
 
         // console.log('users:', gqlUsers);
 
-        const inquiryResult = await useGetInquiriesUseCase.execute({ orgId });
-        if (inquiryResult.isLeft()) return returnErrorToGQL(inquiryResult);
+        const inquiryResult = await useGetInquiriesWithStatusByOrgIdUseCase.execute({
+          orgId,
+          limit: 20,
+          status: 'UNREAD',
+        });
 
-        const dtoInquiries = inquiryResult.value.getValue();
-        // console.log('dtoInquiries:', dtoInquiries);
+        if (inquiryResult.isRight()) {
+          const dtoInquiries = inquiryResult.value.getValue();
+          // console.log('dtoInquiries:', dtoInquiries);
 
-        if (dtoInquiries[0]) {
-          const inquirySender = await useGetUsersByIdsUseCase.execute({
-            ids: dtoInquiries.map((inq) => inq.sender),
-          });
-          if (inquirySender.isLeft()) return returnErrorToGQL(inquirySender);
+          if (dtoInquiries[0]) {
+            const inquirySender = await useGetUsersByIdsUseCase.execute({
+              ids: dtoInquiries.map((inq) => inq.sender),
+            });
+            if (inquirySender.isLeft()) return returnErrorToGQL(inquirySender);
 
-          const gqlInquiries = dtoInquiriesWithUserToGql(
-            dtoInquiries,
-            inquirySender.value.getValue(),
-          );
+            const gqlInquiries = dtoInquiriesWithUserToGql(
+              dtoInquiries,
+              inquirySender.value.getValue(),
+            );
 
-          // console.log('getOrgPayload:', {
-          //   org: { ...gqlOrg, members: gqlUsers, inquiries: gqlInquiries },
-          // });
-          // console.log('getOrgPayloadMember:', gqlUsers);
-          // console.log('getOrgPayloadInquiry:', gqlInquiries);
+            // console.log('getOrgPayload:', {
+            //   org: { ...gqlOrg, members: gqlUsers, inquiries: gqlInquiries },
+            // });
+            // console.log('getOrgPayloadMember:', gqlUsers);
+            // console.log('getOrgPayloadInquiry:', gqlInquiries);
 
-          return { org: { ...gqlOrg, members: gqlUsers, inquiries: gqlInquiries } };
+            return { org: { ...gqlOrg, members: gqlUsers, inquiries: gqlInquiries } };
+          }
         }
         return { org: { ...gqlOrg, members: gqlUsers } };
       },

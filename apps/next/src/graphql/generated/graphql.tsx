@@ -433,7 +433,7 @@ export type InquiryPayloadFragment = (
   & Pick<Inquiry, 'id' | 'content' | 'sentAt' | 'category' | 'inquiryStatus'>
   & { sender?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id'>
+    & Pick<User, 'id' | 'avatar' | 'userName'>
   )>, tree?: Maybe<(
     { __typename?: 'InquiryTree' }
     & Pick<InquiryTree, 'id'>
@@ -1222,6 +1222,8 @@ export const InquiryPayloadFragmentDoc = gql`
   inquiryStatus
   sender {
     id
+    avatar
+    userName
   }
   tree {
     id
