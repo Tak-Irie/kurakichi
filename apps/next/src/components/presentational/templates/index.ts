@@ -1,4 +1,5 @@
 export * from './FormPageTemplate';
+export * from './GeneralTemplate';
 export * from './Layouts';
 export * from './OrgProfile';
 export * from './UserProfile';

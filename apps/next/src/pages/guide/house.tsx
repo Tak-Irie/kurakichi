@@ -1,12 +1,11 @@
 import { NextPage } from 'next';
-
 import { GeneralTemplate, TextLabel, TextSmall, ButtonBig } from '../../components/presentational';
 import { LinkNextjs } from '../../components/container';
 
-const ChildGuidePublicPage: NextPage = () => {
+const HouseGuidePublicPage: NextPage = () => {
   return (
     <GeneralTemplate
-      formTitle="育児で利用できる公共福祉サービス"
+      formTitle="住居に係る公共福祉サービス"
       formContent={
         <div className="h-screen">
           <TextLabel content="Alpha版：作成中" />
@@ -25,4 +24,4 @@ const ChildGuidePublicPage: NextPage = () => {
   );
 };
 
-export default ChildGuidePublicPage;
+export default HouseGuidePublicPage;
