@@ -13,8 +13,8 @@ const PregnantGuidePublicPage: NextPage = () => {
           <TextSmall content="※ こちらのページはあくまで事例紹介・基礎知識に留まるものであり、くらきちの本旨はクライアントを専門家へ繋げることです" />
           <div className="flex justify-end w-auto">
             <LinkNextjs
-              linkLabel={<ButtonBig type="button" color="yellow" label="トップに戻る" />}
-              linkUrl="/"
+              labelOrElement={<ButtonBig type="button" color="yellow" label="トップに戻る" />}
+              url="/"
             />
           </div>
         </div>

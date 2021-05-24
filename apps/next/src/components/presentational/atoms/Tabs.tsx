@@ -1,56 +1,65 @@
-import { tailwindJoin } from '@kurakichi/node-util';
-import { Dispatch, FC, ReactElement, SetStateAction, useState } from 'react';
+import { Dispatch, VFC, ReactElement, SetStateAction, useState } from 'react';
+import { classNames } from '../../../util/tailwindUtil';
 
 type TabsProps = {
-  tabs: {
-    label: string;
-    id: string;
-    index: number;
-  }[];
   clickHandler: Dispatch<SetStateAction<number>>;
-  isShow: number;
-  elements: ReactElement[];
+  labels: string[];
 };
 
-export const Tabs: FC<TabsProps> = ({ tabs, clickHandler, elements, isShow }) => {
+export const Tabs: VFC<TabsProps> = ({ clickHandler, labels }) => {
+  const tabs = labels.map((label, index) => {
+    return {
+      name: label,
+      id: index,
+    };
+  });
+  // const tabs = [
+  //   { name: 'Applied', id: 0 },
+  //   { name: 'Phone Screening', id: 1 },
+  //   { name: 'Interview', id: 2 },
+  // ];
+  const [isSelected, setIsSelected] = useState(tabs[0]);
+
+  const handleClick = (id: number) => {
+    setIsSelected(tabs[id]);
+    clickHandler(id);
+  };
+
   return (
-    <div>
-      <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        <select
-          id="tabs"
-          name="tabs"
-          className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          defaultValue={isShow}
-        >
-          {tabs.map((tab) => (
-            <option key={tab.label}>{tab.label}</option>
-          ))}
-        </select>
-      </div>
-      <div className="hidden sm:block">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex" aria-label="Tabs">
+    <div className="pb-5 border-b border-gray-200 sm:pb-0">
+      <div className="mt-3 sm:mt-4">
+        <div className="sm:hidden">
+          <label htmlFor="current-tab" className="sr-only">
+            Select a tab
+          </label>
+          <select
+            id="current-tab"
+            name="current-tab"
+            className="block bold w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm rounded-md"
+            defaultValue={isSelected.name}
+          >
+            {tabs.map((tab) => (
+              <option key={tab.name}>{tab.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="hidden sm:block">
+          <nav className="-mb-px flex space-x-8">
             {tabs.map((tab) => (
               <button
-                onClick={() => clickHandler(tab.index)}
-                key={tab.id}
-                className={
-                  'w-full py-4 px-1 text-center border-b-2 font-medium text-sm ' +
-                  (tab.index === isShow
-                    ? 'border-indigo-500 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300')
-                }
+                onClick={() => handleClick(tab.id)}
+                key={tab.name}
+                className={classNames(
+                  isSelected.id === tab.id
+                    ? `border-yellow-500 text-yellow-600`
+                    : `border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300`,
+                  `whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm`,
+                )}
               >
-                {tab.label}
+                {tab.name}
               </button>
             ))}
           </nav>
-          {elements.map((element, index) => {
-            return <div className={isShow === index ? 'block' : 'hidden'}>{element}</div>;
-          })}
         </div>
       </div>
     </div>

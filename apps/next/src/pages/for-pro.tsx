@@ -1,13 +1,13 @@
 import { NextPage } from 'next';
 
-import { LinkNextjs } from '@next/container';
+import { LinkNextjs } from '../components/container';
 
 const ForProfessionalPublicPage: NextPage = () => {
   return (
     <div className="grid grid-cols-12">
       <div className="col-start-1 col-end-13 bg-white border border-gray-200 p-10 m-5 ">
-        <LinkNextjs linkLabel="団体登録する" linkUrl="/org/register" />
-        <LinkNextjs linkLabel="ユーザー登録する" linkUrl="/auth/register" />
+        <LinkNextjs labelOrElement="団体登録する" url="/org/register" />
+        <LinkNextjs labelOrElement="ユーザー登録する" url="/auth/register" />
         <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
           <div className="max-w-xl sm:mx-auto lg:max-w-2xl">
             <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">

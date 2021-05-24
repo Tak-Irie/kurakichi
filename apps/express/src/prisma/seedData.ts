@@ -2,7 +2,7 @@ import { Organization, User } from '@prisma/client';
 
 const shared = {
   image: 'UNKNOWN',
-  description: 'プロトタイプ用の仮データです',
+  description: '都民向けの福祉サービスの相談・受付を行っております',
   avatar: 'UNKNOWN',
   homePage: 'UNKNOWN',
   adminId: '01F4BVK5ZA3NA42HXKAS0EDHC2',
@@ -14,10 +14,21 @@ export const users: User[] = [
     name: 'seedAdmin',
     avatar: 'UNKNOWN',
     description: 'プロトタイプ用の仮ユーザーです',
-    email: 'example@example.com',
+    email: 'example-admin@example.com',
     image: 'UNKNOWN',
     password: 'TEST_USER',
     role: 'USER',
+    ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
+  },
+  {
+    id: '01F57P2MEJAWTM75CT151BSCD0',
+    name: 'testUser',
+    avatar: 'UNKNOWN',
+    description: 'テスト用のユーザーです',
+    email: 'example-test@example.com',
+    image: 'UNKNOWN',
+    password: 'THIS_IS_TEST_USER_PASSWORD',
+    role: 'PRO',
     ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
   },
 ];
@@ -32,6 +43,7 @@ export const orgs: Organization[] = [
     email: 'hokkaido@example.com',
     phoneNumber: '011-231-4111',
     ...shared,
+    description: '道民向けの福祉サービスの相談・受付を行っております',
   },
   {
     id: '01F5JNGTQJX784BBMRJR7MJX8D',
@@ -132,6 +144,7 @@ export const orgs: Organization[] = [
     email: 'tokyo@example.com',
     phoneNumber: '03-5321-1111',
     ...shared,
+    description: '都民向けの福祉サービスの相談・受付を行っております',
   },
   {
     id: '01F5MYGH3TMYFD6KXH6S4X514M',
@@ -141,16 +154,6 @@ export const orgs: Organization[] = [
     longitude: 136.9067123,
     email: 'aiti@example.com',
     phoneNumber: '052-961-2111',
-    ...shared,
-  },
-  {
-    id: '01F5JRVYRFAZJTY6WFMRY20KHZ',
-    name: '北海道庁',
-    location: '060-8588北海道札幌市中央区北三条西6北海道庁',
-    latitude: 43.06439,
-    longitude: 141.3468805,
-    email: 'hokkaido@example.com',
-    phoneNumber: '011-231-4111',
     ...shared,
   },
   {
@@ -302,6 +305,7 @@ export const orgs: Organization[] = [
     email: 'kyoto@example.com',
     phoneNumber: '075-451-8111',
     ...shared,
+    description: '府民向けの福祉サービスの相談・受付を行っております',
   },
   {
     id: '01F5MZ7SJ2BD3VXQQM1VY7G12Z',
@@ -312,6 +316,7 @@ export const orgs: Organization[] = [
     email: 'osaka@example.com',
     phoneNumber: '06-6941-0351',
     ...shared,
+    description: '府民向けの福祉サービスの相談・受付を行っております',
   },
   {
     id: '01F5MZ8YZ2JFEYGSM9R92ZS895',

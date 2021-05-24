@@ -12,6 +12,8 @@ export * from './OrgRegisterForm';
 export * from './RegisterUserForm';
 export * from './ReplyMessageForm';
 export * from './ReplyInquiryForm';
+export * from './SearchOrgByPrefForm';
+export * from './SearchOrgByServiceForm';
 export * from './SendInquiryForm';
 export * from './SendMessage';
 export * from './UpdateUserProfile';

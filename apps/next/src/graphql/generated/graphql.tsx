@@ -1082,7 +1082,24 @@ export type GetOrgsQuery = (
     { __typename?: 'OrgPayload' }
     & { orgs?: Maybe<Array<Maybe<(
       { __typename?: 'Org' }
-      & Pick<Org, 'id' | 'orgName' | 'location'>
+      & OrgPayloadFragment
+    )>>>, error?: Maybe<(
+      { __typename?: 'RegularError' }
+      & RegularErrorFragment
+    )> }
+  )> }
+);
+
+export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOrgsForMapQuery = (
+  { __typename?: 'Query' }
+  & { getOrgs?: Maybe<(
+    { __typename?: 'OrgPayload' }
+    & { orgs?: Maybe<Array<Maybe<(
+      { __typename?: 'Org' }
+      & Pick<Org, 'id' | 'orgName' | 'latitude' | 'longitude' | 'location' | 'description'>
     )>>>, error?: Maybe<(
       { __typename?: 'RegularError' }
       & RegularErrorFragment
@@ -2486,16 +2503,15 @@ export const GetOrgsDocument = gql`
     query GetOrgs {
   getOrgs {
     orgs {
-      id
-      orgName
-      location
+      ...OrgPayload
     }
     error {
       ...RegularError
     }
   }
 }
-    ${RegularErrorFragmentDoc}`;
+    ${OrgPayloadFragmentDoc}
+${RegularErrorFragmentDoc}`;
 
 /**
  * __useGetOrgsQuery__
@@ -2523,6 +2539,50 @@ export function useGetOrgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetOrgsQueryHookResult = ReturnType<typeof useGetOrgsQuery>;
 export type GetOrgsLazyQueryHookResult = ReturnType<typeof useGetOrgsLazyQuery>;
 export type GetOrgsQueryResult = Apollo.QueryResult<GetOrgsQuery, GetOrgsQueryVariables>;
+export const GetOrgsForMapDocument = gql`
+    query GetOrgsForMap {
+  getOrgs {
+    orgs {
+      id
+      orgName
+      latitude
+      longitude
+      location
+      description
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
+    ${RegularErrorFragmentDoc}`;
+
+/**
+ * __useGetOrgsForMapQuery__
+ *
+ * To run a query within a React component, call `useGetOrgsForMapQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrgsForMapQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrgsForMapQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrgsForMapQuery(baseOptions?: Apollo.QueryHookOptions<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>(GetOrgsForMapDocument, options);
+      }
+export function useGetOrgsForMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>(GetOrgsForMapDocument, options);
+        }
+export type GetOrgsForMapQueryHookResult = ReturnType<typeof useGetOrgsForMapQuery>;
+export type GetOrgsForMapLazyQueryHookResult = ReturnType<typeof useGetOrgsForMapLazyQuery>;
+export type GetOrgsForMapQueryResult = Apollo.QueryResult<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>;
 export const GetOrgsByMemberCookieDocument = gql`
     query GetOrgsByMemberCookie {
   getOrgsByMemberCookie {

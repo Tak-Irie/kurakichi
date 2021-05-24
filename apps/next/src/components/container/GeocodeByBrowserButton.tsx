@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState, VFC } from 'react';
 
-import { ButtonWithIcon, IconsWifi } from '@next/ui';
+import { ButtonWithIcon, IconsWifi } from '../presentational';
 
 type GeocodeByBrowserButtonProps = {
   buttonLabel: string;

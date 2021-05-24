@@ -2,6 +2,8 @@ export * from './FormPageTemplate';
 export * from './GeneralTemplate';
 export * from './Layouts';
 export * from './OrgProfile';
+export * from './OrgService';
+export * from './OrgArticle';
 export * from './UserProfile';
 export * from './UserMyPage';
 export * from './OrgMyPage';

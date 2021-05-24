@@ -5,6 +5,7 @@ type OrgTemplateProps = {
   avatar: string;
   image: string;
   orgName: string;
+  pageTabs: ReactNode;
   pageContents: ReactNode;
   headerButtons?: ReactNode;
   settingHeader?: boolean;
@@ -12,6 +13,7 @@ type OrgTemplateProps = {
 
 export const OrgTemplate: VFC<OrgTemplateProps> = ({
   headerButtons,
+  pageTabs,
   pageContents,
   avatar,
   image,
@@ -30,6 +32,7 @@ export const OrgTemplate: VFC<OrgTemplateProps> = ({
       <div className="col-start-3 bold underline mt-5">
         <Text2xl content={orgName} />
       </div>
+      <div className="col-start-3 col-end-11 mt-2">{pageTabs}</div>
       <div className="col-start-3 col-end-11 mt-2">{pageContents}</div>
     </div>
   );

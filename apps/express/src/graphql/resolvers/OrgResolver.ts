@@ -5,7 +5,6 @@ import {
   useAcceptJoinOrgUseCase,
   useRequestJoinOrgUseCase,
   useGetUsersByOrgIdUseCase,
-  useGetInquiriesUseCase,
   useGetOrgsByMemberIdUseCase,
   useGetUsersByIdsUseCase,
   useUpdateOrgUseCase,
@@ -28,11 +27,10 @@ export const orgQuery = extendType({
       type: 'OrgPayload',
       resolve: async () => {
         const result = await useGetOrgsUseCase.execute();
-        // console.log('resRes:', result.value.getValue());
         if (result.isLeft()) return { error: { message: result.value.getErrorValue() } };
+        // console.log('resRes:', result.value.getValue());
 
         const domainOrgs = result.value.getValue();
-
         const gqlOrgs = domainOrgs.map((domainOrg) => dtoOrgToGql(domainOrg));
 
         return { orgs: gqlOrgs };

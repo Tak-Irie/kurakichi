@@ -1,7 +1,10 @@
 import { CSSProperties, VFC } from 'react';
-import { GoogleMap, useLoadScript, Marker, OverlayView, InfoBox } from '@react-google-maps/api';
+import { useRouter } from 'next/router';
+import { GoogleMap, useLoadScript, Marker, OverlayView } from '@react-google-maps/api';
 
-import { LoadingSpinner } from '@next/ui';
+import { LoadingSpinner, ButtonBig, TextSmall } from '../presentational';
+import { LinkNextjs } from '../container';
+import { Org } from '../../graphql';
 
 type Geocode = {
   lat: number;
@@ -12,28 +15,55 @@ type MapViewerProps = {
   mapContainerCSS: CSSProperties;
   zoomLevel: number;
   center: Geocode;
-  markers: Geocode[];
+  orgs?: Org[];
 };
 
 /**
  * zoomLevelInfo, 10:beyondPref, 11:pref, 12-13:cities 14:city 15:likeAroundStation
  */
-export const MapViewer: VFC<MapViewerProps> = ({ center, mapContainerCSS, markers, zoomLevel }) => {
+export const MapViewer: VFC<MapViewerProps> = ({ center, mapContainerCSS, orgs, zoomLevel }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
   });
 
   if (loadError) return <p>Mapの読み込みに失敗しました</p>;
 
+  if (orgs) {
+    return isLoaded ? (
+      <GoogleMap mapContainerStyle={mapContainerCSS} center={center} zoom={zoomLevel}>
+        {orgs.map((org) => {
+          return (
+            <span key={org.id}>
+              <OverlayView
+                position={{ lat: org.latitude, lng: org.longitude }}
+                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              >
+                <div className="bg-white border border-gray-200 p-1 rounded">
+                  <LinkNextjs
+                    url="/org/[id]"
+                    as={`/org/${org.id}`}
+                    labelOrElement={<ButtonBig type="button" label={org.orgName} color="yellow" />}
+                  />
+                  <TextSmall content={org.description} />
+                </div>
+              </OverlayView>
+              <Marker position={center} />;
+            </span>
+          );
+        })}
+      </GoogleMap>
+    ) : (
+      <div style={mapContainerCSS}>
+        <span className="flex">
+          <LoadingSpinner />
+          <p>地図を読み込んでいます</p>
+        </span>
+      </div>
+    );
+  }
   return isLoaded ? (
     <GoogleMap mapContainerStyle={mapContainerCSS} center={center} zoom={zoomLevel}>
-      {markers.map((marker) => {
-        return (
-          <span key={marker.lat}>
-            <Marker position={marker} />;
-          </span>
-        );
-      })}
+      <Marker position={center} />;
     </GoogleMap>
   ) : (
     <div style={mapContainerCSS}>

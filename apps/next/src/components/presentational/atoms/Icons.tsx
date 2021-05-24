@@ -19,6 +19,7 @@ import {
   WifiIcon,
   SelectorIcon,
   CheckIcon,
+  SearchIcon,
 } from '@heroicons/react/outline';
 
 type IconsProps = {
@@ -87,6 +88,11 @@ export const IconsCheck: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
 }) => {
   return <Icons overwriteCSS={overwriteCSS} icon={<CheckIcon />} />;
+};
+export const IconsSearch: FC<Omit<IconsProps, 'icon'>> = ({
+  overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
+}) => {
+  return <Icons overwriteCSS={overwriteCSS} icon={<SearchIcon />} />;
 };
 
 export const IconsCheckCircle: FC<Omit<IconsProps, 'icon'>> = ({

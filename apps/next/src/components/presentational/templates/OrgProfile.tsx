@@ -41,12 +41,7 @@ export const OrgProfile: VFC<OrgProfileProps> = ({ org }) => {
           content={description === 'UNKNOWN' ? '団体の概要を記入して下さい' : description}
         />
         <span className="col-span-2 mt-1">
-          <MapViewer
-            center={geo}
-            markers={[geo]}
-            mapContainerCSS={{ width: 'auto', height: 300 }}
-            zoomLevel={15}
-          />
+          <MapViewer center={geo} mapContainerCSS={{ width: 'auto', height: 300 }} zoomLevel={15} />
         </span>
       </div>
 

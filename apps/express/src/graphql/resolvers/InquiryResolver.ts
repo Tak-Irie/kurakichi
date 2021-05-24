@@ -77,7 +77,7 @@ export const InquiryQuery = extendType({
         limit: nonNull(intArg()),
       },
       resolve: async (_, args) => {
-        console.log('getInquiriesArgs:', args);
+        // console.log('getInquiriesArgs:', args);
         const limitPlusOne = args.limit + 1;
 
         const domainInquiriesOrErr = await useGetInquiriesWithStatusByOrgIdUseCase.execute({

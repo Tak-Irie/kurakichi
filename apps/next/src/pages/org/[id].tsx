@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
-import { fetchGraphqlApi } from '../../util/fetchGraphqlApi';
 import { useRouter } from 'next/router';
+
+import { fetchGraphqlApi } from '../../util/fetchGraphqlApi';
 import {
   OrgProfile,
   OrgTemplate,
@@ -10,16 +12,21 @@ import {
   FeedbackCaution,
   PopOnIcon,
   Disclosure,
+  Tabs,
+  OrgService,
+  OrgArticle,
+  TextSmall,
 } from '../../components/presentational';
 import { SendInquiryForm } from '../../components/container';
 import { OrgPayload, useGetUserByCookieQuery } from '../../graphql';
-import { useState } from 'react';
 
 type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
   // console.log('props:', props.data.getOrgPublicInfoById.org);
-  const [isOpen, setIsOpen] = useState(false);
+  const [openedInqForm, setOpenedInqForm] = useState(false);
+  const [shownTab, setShownTab] = useState(0);
+
   const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   const router = useRouter();
   if (router.isFallback) {
@@ -39,7 +46,7 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
             <Disclosure
               label={
                 <ButtonWithIcon
-                  onClick={() => setIsOpen(!isOpen)}
+                  onClick={() => setOpenedInqForm(!openedInqForm)}
                   type="button"
                   label="お問い合わせ"
                   icon={<IconsMail />}
@@ -55,7 +62,7 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
                 content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
               />
               <ButtonWithIcon
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setOpenedInqForm(!openedInqForm)}
                 type="button"
                 label="お問い合わせ"
                 disabled
@@ -64,7 +71,32 @@ const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
             </div>
           )
         }
-        pageContents={<OrgProfile org={org} />}
+        pageTabs={<Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />}
+        pageContents={
+          shownTab === 0 ? (
+            <OrgProfile org={org} />
+          ) : shownTab === 1 ? (
+            <OrgService
+              title="事業紹介"
+              content={
+                <TextSmall
+                  content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n・※ 編集機能を現在作成中です`}
+                />
+              }
+            />
+          ) : shownTab === 2 ? (
+            <OrgArticle
+              title="記事"
+              content={
+                <TextSmall
+                  content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+                />
+              }
+            />
+          ) : (
+            <p>error</p>
+          )
+        }
       />
     );
   }
