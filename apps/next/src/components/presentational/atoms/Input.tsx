@@ -1,6 +1,6 @@
 import { FieldError, Path, UseFormRegister } from 'react-hook-form';
 
-import { PopOnIcon } from '@next/ui';
+import { PopOnIcon } from '../../presentational';
 import { IconsCheckCircle, IconsQuestion } from './Icons';
 
 type InputProps<T> = {

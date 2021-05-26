@@ -5,7 +5,7 @@ type TextProps = {
   content: string;
   overwriteCSS?: string;
   label?: string;
-  textColor?: 'gray' | 'green' | 'blue' | 'red' | 'yellow';
+  color?: 'gray' | 'green' | 'blue' | 'red' | 'yellow';
 };
 
 // TODO:, consider what props should be customizable, color and something.
@@ -23,33 +23,33 @@ export const TextBase: VFC<TextProps> = ({ content, overwriteCSS = 'text-base te
   return <p className={overwriteCSS}>{content}</p>;
 };
 
-export const TextSmall: VFC<TextProps> = ({ content, textColor = 'gray' }) => {
-  return <TextBase content={content} overwriteCSS={`text-small text-${textColor}-700`} />;
+export const TextSmall: VFC<TextProps> = ({ content, color = 'gray' }) => {
+  return <TextBase content={content} overwriteCSS={`text-small text-${color}-700`} />;
 };
 
-export const Text2xl: VFC<TextProps> = ({ content, textColor = 'gray' }) => {
-  return <p className={`text-2xl text-${textColor}-700`}>{content}</p>;
+export const Text2xl: VFC<TextProps> = ({ content, color = 'gray' }) => {
+  return <p className={`text-2xl text-${color}-700`}>{content}</p>;
 };
 
-export const TextH1: VFC<TextProps> = ({ content, textColor = 'gray' }) => {
-  return <h1 className={`text-4xl font-bold text-${textColor}-700`}>{content}</h1>;
+export const TextH1: VFC<TextProps> = ({ content, color = 'gray' }) => {
+  return <h1 className={`text-4xl font-bold text-${color}-700`}>{content}</h1>;
 };
-export const TextH2: VFC<TextProps> = ({ content, textColor = 'gray' }) => {
-  return <h2 className={`text-3xl font-bold text-${textColor}-700`}>{content}</h2>;
+export const TextH2: VFC<TextProps> = ({ content, color = 'gray' }) => {
+  return <h2 className={`text-3xl font-bold text-${color}-700`}>{content}</h2>;
 };
-export const TextH3: VFC<TextProps> = ({ content, textColor = 'gray' }) => {
-  return <h3 className={`text-2xl font-bold text-${textColor}-700`}>{content}</h3>;
+export const TextH3: VFC<TextProps> = ({ content, color = 'gray' }) => {
+  return <h3 className={`text-2xl font-bold text-${color}-700`}>{content}</h3>;
 };
 
-export const TextLabel: VFC<Omit<TextProps, 'label'>> = ({ content, textColor = 'gray' }) => {
+export const TextLabel: VFC<Omit<TextProps, 'label'>> = ({ content, color = 'gray' }) => {
   return (
     <div className="mb-2">
-      <label className={`underline font-bold text-base  text-${textColor}-700`}>{content}</label>
+      <label className={`underline font-bold text-base  text-${color}-700`}>{content}</label>
     </div>
   );
 };
 
-export const TextLabeled: VFC<TextProps> = ({ content, label, textColor }) => {
+export const TextLabeled: VFC<TextProps> = ({ content, label, color }) => {
   return (
     <div className="flex flex-col">
       <label className="text-sm font-medium text-gray-500">{label}</label>
@@ -58,7 +58,7 @@ export const TextLabeled: VFC<TextProps> = ({ content, label, textColor }) => {
   );
 };
 
-export const TextWithDivider: VFC<Omit<TextProps, 'label'>> = ({ content, textColor }) => {
+export const TextWithDivider: VFC<Omit<TextProps, 'label'>> = ({ content, color }) => {
   return (
     <div className="relative my-4 flex justify-center items-center">
       <div className="border-t border-gray-300 w-full" />

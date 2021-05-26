@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Footer, NavBar, NavAlpha } from '@next/ui';
+import { Footer, NavBar, NavAlpha } from '../../presentational';
 
 const Layout: FC = ({ children }) => {
   return (
