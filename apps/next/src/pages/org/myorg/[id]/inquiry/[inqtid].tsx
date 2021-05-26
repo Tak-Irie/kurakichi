@@ -8,12 +8,13 @@ import {
   ButtonWithIcon,
   IconsUsers,
   IconsMail,
-} from '@next/ui';
+} from '../../../../../components/presentational';
 import {
   useGetOrgPrivateInfoByIdAndCookieQuery,
   useGetInquiriesByTreeIdAndCookieQuery,
   useAcceptJoinOrgMutation,
-} from '@next/graphql';
+  useUpdateInquiryStatusMutation,
+} from '../../../../../graphql';
 import { isServer } from '../../../../../util';
 import { useRouter } from 'next/router';
 

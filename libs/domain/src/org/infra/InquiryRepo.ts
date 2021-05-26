@@ -64,9 +64,19 @@ export class InquiryRepo implements IInquiryRepo {
     return domainInquiries;
   }
 
-  async getInquiriesByOrgId(id: UniqueEntityId): Promise<Inquiry[] | false> {
+  async getInquiriesByOrgId(
+    orgId: UniqueEntityId,
+    limit: number,
+    endCursor: UniqueEntityId | undefined,
+  ): Promise<Inquiry[] | false> {
+    const isCursor = endCursor === undefined ? undefined : endCursor.getId();
+
     const result = await this.prisma.inquiry.findMany({
-      where: { receivedOrg: { id: id.getId() } },
+      orderBy: { id: 'desc' },
+      take: limit,
+      skip: isCursor ? 1 : undefined,
+      cursor: isCursor ? { id: isCursor } : undefined,
+      where: { receivedOrgId: orgId.getId() },
     });
     if (result == undefined) return false;
     const domainInquiries = InquiryMapper.ArrayToDomain(result);
@@ -76,11 +86,19 @@ export class InquiryRepo implements IInquiryRepo {
   async getInquiriesWithStatusByOrgId(
     orgId: UniqueEntityId,
     status: InquiryStatus,
+    limit: number,
+    endCursor: UniqueEntityId | undefined,
   ): Promise<Inquiry[] | false> {
     try {
-      console.log('inqStatus:', status.getValue());
+      // console.log('inqStatus,limit,orgId,cursor:', status.getValue(), limit, orgId, endCursor);
+      const isCursor = endCursor === undefined ? undefined : endCursor.getId();
+
       const Inquiries = await this.prisma.inquiry.findMany({
-        where: { receiverId: orgId.getId(), AND: [{ status: status.getValue() }] },
+        orderBy: { id: 'desc' },
+        take: limit,
+        skip: isCursor ? 1 : undefined,
+        cursor: isCursor ? { id: isCursor } : undefined,
+        where: { receivedOrgId: orgId.getId(), AND: [{ status: status.getValue() }] },
       });
       if (Inquiries == undefined) return false;
 
@@ -90,6 +108,25 @@ export class InquiryRepo implements IInquiryRepo {
     } catch (err) {
       console.log('dbErr:', err);
       return false;
+    }
+  }
+  async updateInquiryStatus(
+    inquiryId: UniqueEntityId,
+    inquiryStatus: InquiryStatus,
+  ): Promise<Inquiry> {
+    try {
+      const updatedInquiry = await this.prisma.inquiry.update({
+        where: { id: inquiryId.getId() },
+        data: {
+          status: inquiryStatus.getValue(),
+        },
+      });
+
+      const domainInquiry = InquiryMapper.ToDomain(updatedInquiry);
+      return domainInquiry;
+    } catch (err) {
+      console.error('dbErr', err);
+      throw Error('データベースエラー');
     }
   }
 }

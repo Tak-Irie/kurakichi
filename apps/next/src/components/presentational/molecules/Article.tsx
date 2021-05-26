@@ -1,8 +1,8 @@
 import { ReactElement, VFC } from 'react';
 import Image from 'next/image';
 
-import { TextH3, TextBase } from '@next/ui';
-import { LinkNextjs } from '@next/container';
+import { TextH3, TextBase } from '../../presentational';
+import { LinkNextjs } from '../../container';
 
 type ArticleProps = {
   title: string;
@@ -42,7 +42,7 @@ export const Article: VFC<ArticleProps> = ({
         <TextH3 content={title} />
         {typeof description === 'string' ? <TextBase content={description} /> : description}
         <div className="flex justify-end items-end h-full">
-          <LinkNextjs linkUrl={linkUrl} linkAs={linkAs} linkLabel={linkLabel} />
+          <LinkNextjs url={linkUrl} as={linkAs} labelOrElement={linkLabel} />
         </div>
       </div>
     </div>

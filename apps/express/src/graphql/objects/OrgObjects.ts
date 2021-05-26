@@ -2,6 +2,8 @@ import { list, objectType, inputObjectType } from 'nexus';
 
 export const Org = objectType({
   name: 'Org',
+  description:
+    'Organization which is running welfare service like npo, hospital, clinic, gov/pref/city office, etc',
   definition(t) {
     t.implements('Node');
     t.string('orgName');
@@ -24,6 +26,7 @@ export const OrgPayload = objectType({
   definition(t) {
     t.field('org', { type: 'Org' });
     t.field('orgs', { type: list('Org') });
+    t.field('pageInfo', { type: 'PageInfo' });
     t.field('error', { type: 'RegularError' });
   },
 });

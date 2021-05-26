@@ -1,8 +1,6 @@
 export * from './ActivityTable';
 export * from './ArticlesWelfareGuide';
 export * from './AvatarChangeable';
-export * from './Feature';
-export * from './Feature2';
 export * from './Footer';
 export * from './ImageHeroChangeable';
 export * from './NavAuthSection';
@@ -12,3 +10,4 @@ export * from './ProfileHeader';
 export * from './ProfileHeaderSetting';
 export * from './HelperPop';
 export * from './UseCasePresenter';
+export * from './BadgeInquiryStatusChangeable';

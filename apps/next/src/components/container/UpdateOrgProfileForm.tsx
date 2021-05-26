@@ -1,8 +1,8 @@
 import { VFC } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useUpdateOrgMutation } from '@next/graphql';
-import { Form, Input, InputTextarea, NotificationSet, ButtonOrLoading } from '@next/ui';
+import { useUpdateOrgMutation } from '../../graphql';
+import { Form, Input, InputTextarea, NotificationSet, ButtonOrLoading } from '../presentational';
 
 type UpdateOrgProfileProps = {
   exName: string;

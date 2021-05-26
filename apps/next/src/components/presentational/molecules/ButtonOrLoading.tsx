@@ -1,13 +1,13 @@
 import { VFC } from 'react';
 
-import { ButtonBig, LoadingSpinner } from '@next/ui';
+import { ButtonBig, LoadingSpinner } from '../../presentational';
 
 type ButtonOrLoadingProps = {
   loading: boolean;
   buttonLabel: string;
   buttonType: 'submit' | 'button';
   onClick?: () => void;
-  color?: string;
+  color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
   disabled?: boolean;
 };
 

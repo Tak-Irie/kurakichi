@@ -1,6 +1,11 @@
 import { VFC, ReactNode, useEffect, useState } from 'react';
 
-import { ImageHeroChangeable, AvatarChangeable, ButtonWithIcon, IconsCloudUpload } from '@next/ui';
+import {
+  ImageHeroChangeable,
+  AvatarChangeable,
+  ButtonWithIcon,
+  IconsCloudUpload,
+} from '../../presentational';
 import { UploadFiles, uploadImage } from '../../../util';
 
 type ProfileHeaderProps = {

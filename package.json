@@ -150,6 +150,7 @@
     "react-dropzone": "^11.3.2",
     "react-google-button": "^0.7.2",
     "react-hook-form": "^7.6.1",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.2.5",
     "subscriptions-transport-ws": "^0.9.18",
     "swr": "^0.5.6",

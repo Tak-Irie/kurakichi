@@ -1,5 +1,5 @@
 import { VFC } from 'react';
-import { LinkNextjs } from '@next/container';
+import { LinkNextjs } from '../../container';
 
 type HeaderListProps = {
   linkUrl: string;
@@ -24,9 +24,9 @@ const HeaderList: VFC<HeaderListProps> = ({
     <li key={ariaLabel}>
       <LinkNextjs
         overwriteCSS={overwriteCSS}
-        linkUrl={linkUrl}
-        linkAs={linkAs}
-        linkLabel={linkLabel}
+        url={linkUrl}
+        as={linkAs}
+        labelOrElement={linkLabel}
         ariaLabel={ariaLabel}
         ariaRole={ariaRole}
         onClick={onClick}

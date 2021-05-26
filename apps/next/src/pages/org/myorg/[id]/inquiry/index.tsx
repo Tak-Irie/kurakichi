@@ -2,9 +2,21 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useGetInquiriesByOrgIdQuery, useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
-import { LoadingSpinner, OrgTemplate, ButtonWithIcon, IconsUsers, TableInquiry } from '@next/ui';
+import {
+  useGetInquiriesByOrgIdQuery,
+  useGetOrgPrivateInfoByIdAndCookieQuery,
+} from '../../../../../graphql';
+import {
+  LoadingSpinner,
+  OrgTemplate,
+  ButtonWithIcon,
+  IconsUsers,
+  TableInquiry,
+  TextSmall,
+  TextLabel,
+} from '../../../../../components/presentational';
 import { isServer } from '../../../../../util';
+import { InquiryInfiniteTable } from '../../../../../components/container';
 
 const InquiryBoxPrivatePage: NextPage = () => {
   const router = useRouter();
@@ -15,14 +27,26 @@ const InquiryBoxPrivatePage: NextPage = () => {
     skip: isServer(),
   });
 
-  // const { data, loading, error } = useGetInquiriesByOrgIdQuery({ variables: { orgId: orgId } });
+  const {
+    data: inqData,
+    loading: inqLoading,
+    error: inqError,
+  } = useGetInquiriesByOrgIdQuery({
+    variables: { orgId, limit: 20 },
+  });
 
-  if (loading) return <LoadingSpinner />;
+  if (loading || inqLoading) return <LoadingSpinner />;
 
-  if (error) return <p>{error.message}</p>;
+  if (error || inqError) return <p>{error?.message || inqError?.message}</p>;
 
-  if (data?.getOrgPrivateInfoByIdAndCookie.org) {
-    const { avatar, image, orgName, id } = data?.getOrgPrivateInfoByIdAndCookie.org;
+  if (data?.getOrgPrivateInfoByIdAndCookie.org && inqData.getInquiriesByOrgId.inquiries) {
+    const { avatar, image, orgName, id, inquiries } = data?.getOrgPrivateInfoByIdAndCookie.org;
+    const inq = inqData?.getInquiriesByOrgId.inquiries;
+    // console.log('inq:', inq);
+    // const modifiedInq = inquiries.concat(inq);
+    // const descByDay = [...inq].reverse();
+    // console.log('descByDay:', descByDay);
+
     return (
       <OrgTemplate
         avatar={avatar}
@@ -36,11 +60,17 @@ const InquiryBoxPrivatePage: NextPage = () => {
           </Link>
         }
         pageContents={
-          <TableInquiry
-            inquiries={data.getOrgPrivateInfoByIdAndCookie.org.inquiries}
-            orgId={id}
-            tableLabel="お問い合わせ一覧"
-          />
+          inq[0] ? (
+            <>
+              <TextLabel content="お問い合わせ一覧" />
+              <InquiryInfiniteTable orgId={id} initialInquiries={inq} limit={20} />
+            </>
+          ) : (
+            <>
+              <TextLabel content="お問い合わせ一覧" />
+              <TextSmall content="お問い合わせは有りません" />
+            </>
+          )
         }
       />
     );

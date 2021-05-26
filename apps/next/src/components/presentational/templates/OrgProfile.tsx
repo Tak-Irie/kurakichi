@@ -1,8 +1,8 @@
 import { VFC } from 'react';
 
-import { MapViewer } from '@next/container';
-import { GridTemplate, TextLabeled, GridItemWithPic } from '@next/ui';
-import { Org } from '@next/graphql';
+import { MapViewer } from '../../container';
+import { GridTemplate, TextLabeled, GridItemWithPic } from '../../presentational';
+import { Org } from '../../../graphql';
 
 type OrgProfileProps = {
   org: Org;
@@ -41,12 +41,7 @@ export const OrgProfile: VFC<OrgProfileProps> = ({ org }) => {
           content={description === 'UNKNOWN' ? '団体の概要を記入して下さい' : description}
         />
         <span className="col-span-2 mt-1">
-          <MapViewer
-            center={geo}
-            markers={[geo]}
-            mapContainerCSS={{ width: 'auto', height: 300 }}
-            zoomLevel={15}
-          />
+          <MapViewer center={geo} mapContainerCSS={{ width: 'auto', height: 300 }} zoomLevel={15} />
         </span>
       </div>
 

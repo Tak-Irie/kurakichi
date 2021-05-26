@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState, VFC } from 'react';
 import useSWR from 'swr';
 import { useForm } from 'react-hook-form';
 
-import { ButtonWithIcon, IconsPost, Form, Input } from '@next/ui';
+import { ButtonWithIcon, IconsPost, Form, Input } from '../presentational';
 
 type Geocode = {
   lat: number;

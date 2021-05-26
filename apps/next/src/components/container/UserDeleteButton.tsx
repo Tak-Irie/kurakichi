@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useUserDeleteMutation } from '../../graphql/generated/graphql';
-import { ButtonBig } from '../presentational/atoms/Buttons';
+import { ButtonBig } from '../presentational';
 
 const UserDeleteButton: FC = () => {
   const [userDelete, { client }] = useUserDeleteMutation();
@@ -15,9 +15,8 @@ const UserDeleteButton: FC = () => {
         await client.resetStore();
         router.push('/');
       }}
-    >
-      Delete your account
-    </ButtonBig>
+      label="Delete your account"
+    />
   );
 };
 

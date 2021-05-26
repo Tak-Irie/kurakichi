@@ -1,13 +1,18 @@
 import { NextPage } from 'next';
 
-import { LoginForm, GoogleLoginButton, YahooLoginButton, LinkNextjs } from '@next/container';
-import { TextSmall, TextWithDivider, FormPageTemplate } from '@next/ui';
+import {
+  LoginForm,
+  GoogleLoginButton,
+  YahooLoginButton,
+  LinkNextjs,
+} from '../../components/container';
+import { TextSmall, TextWithDivider, FormPageTemplate } from '../../components/presentational';
 
 const Login: NextPage = () => {
   return (
     <FormPageTemplate
-      formTitle="ログイン"
-      formContent={
+      title="ログイン"
+      content={
         <>
           <div>
             <TextWithDivider content="ソーシャルログイン" />
@@ -27,17 +32,17 @@ const Login: NextPage = () => {
           </div>
           <div className="mt-10 flex justify-end">
             <LinkNextjs
-              linkUrl="/auth/forgot-password"
-              linkLabel={
-                <TextSmall textColor="yellow" content="※パスワードを忘れてしまった方はこちら" />
+              url="/auth/forgot-password"
+              labelOrElement={
+                <TextSmall color="yellow" content="※パスワードを忘れてしまった方はこちら" />
               }
               overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
             />
           </div>
           <div className="mt-5 flex justify-end">
             <LinkNextjs
-              linkUrl="/auth/register"
-              linkLabel={<TextSmall textColor="yellow" content="※ユーザー新規登録はこちら" />}
+              url="/auth/register"
+              labelOrElement={<TextSmall color="yellow" content="※ユーザー新規登録はこちら" />}
               overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
             />
           </div>

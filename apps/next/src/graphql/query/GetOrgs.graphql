@@ -1,9 +1,7 @@
 query GetOrgs {
   getOrgs {
     orgs {
-      id
-      orgName
-      location
+      ...OrgPayload
     }
     error {
       ...RegularError

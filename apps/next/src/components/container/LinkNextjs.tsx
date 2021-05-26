@@ -2,9 +2,9 @@ import { ReactElement, VFC } from 'react';
 import Link from 'next/link';
 
 type LinkNextjsProps = {
-  linkUrl: string;
-  linkLabel: string | ReactElement;
-  linkAs?: string;
+  url: string;
+  labelOrElement: string | ReactElement;
+  as?: string;
   overwriteCSS?: string;
   ariaLabel?: string;
   ariaRole?: string;
@@ -12,19 +12,19 @@ type LinkNextjsProps = {
 };
 
 /**
- * props passed to \<a ...props>{linkLabel}\</a> except for linkAs and linkUrl
+ * props is passed to \<a ...props>{labelOrElement}\</a> except for as and url
  */
 export const LinkNextjs: VFC<LinkNextjsProps> = ({
-  linkAs,
-  linkUrl,
-  linkLabel,
+  as,
+  url,
+  labelOrElement,
   overwriteCSS = 'inline-flex items-center',
   ariaLabel,
   ariaRole,
   onClick,
 }) => {
   return (
-    <Link href={linkUrl} as={linkAs} passHref>
+    <Link href={url} as={as} passHref>
       <a
         href="replace"
         className={overwriteCSS}
@@ -33,7 +33,7 @@ export const LinkNextjs: VFC<LinkNextjsProps> = ({
         role={ariaRole}
         onClick={onClick}
       >
-        {linkLabel}
+        {labelOrElement}
       </a>
     </Link>
   );

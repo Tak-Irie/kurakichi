@@ -6,6 +6,8 @@ fragment InquiryPayload on Inquiry {
   inquiryStatus
   sender {
     id
+    avatar
+    userName
   }
   tree {
     id

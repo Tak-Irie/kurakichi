@@ -1,7 +1,7 @@
 import { VFC } from 'react';
 import Link from 'next/link';
 
-import { Message, Org, SecureBase, User, Inquiry } from '@next/graphql';
+import { Message, Org, SecureBase, User, Inquiry } from '../../../graphql';
 import {
   AvatarSmall,
   TextSmall,
@@ -9,7 +9,7 @@ import {
   CardWithPick,
   BadgeInquiryCategory,
   BadgeInquiryStatus,
-} from '@next/ui';
+} from '../../presentational';
 
 type TableProps = {
   tableLabel?: string;
@@ -121,7 +121,6 @@ export const TableMessage: VFC<TableMessageProps> = ({
   messages,
   tableLabel = '新着メッセージ',
   textOfNotExist = '新着メッセージはありません',
-  onClick,
 }) => {
   return (
     <>
@@ -170,15 +169,12 @@ export const TableMessage: VFC<TableMessageProps> = ({
 export const TableInquiry: VFC<TableInquiryProps> = ({
   inquiries,
   orgId,
-  tableLabel = '新着お問い合わせ',
   textOfNotExist = '新着のお問い合わせはありません',
-  onClick,
 }) => {
   const labelCss = 'py-1 text-xs text-center font-medium text-gray-500';
   const dataCss = 'py-1 flex h-auto items-center justify-center';
   return (
-    <>
-      <TextLabel content={tableLabel} />
+    <div>
       {inquiries[0] ? (
         <div className="bg-gray-50 shadow border-2 border-gray-200 rounded-lg">
           <div className="grid grid-cols-8 divide-y divide-gray-200">
@@ -232,6 +228,6 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
       ) : (
         <TextSmall content={textOfNotExist} />
       )}
-    </>
+    </div>
   );
 };

@@ -1,9 +1,15 @@
-import { FC, useState } from 'react';
-import { Transition } from '@headlessui/react';
+import { FC } from 'react';
 
-import { GridTemplate, GridItem, TextLabel, TableOrgMember, TableInquiry } from '@next/ui';
-
-import { Org } from '@next/graphql';
+import {
+  GridTemplate,
+  GridItem,
+  TextLabel,
+  TableOrgMember,
+  TableInquiry,
+} from '../../presentational';
+import { InquiryStatus, Org } from '../../../graphql/generated/graphql';
+import { InquiryInfiniteTableWithStatus } from '../../container';
+import { TextSmall } from '../atoms';
 
 type OrgMyPageProps = {
   org: Org;
@@ -11,11 +17,25 @@ type OrgMyPageProps = {
 
 export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
   const { id, email, phoneNumber, location, homePage, description, members, inquiries } = props.org;
-  console.log('inquiries on orgMy:', inquiries);
+  // console.log('inquiries on orgMy:', inquiries);
+  const unreadInq = inquiries.filter((inq) => inq.inquiryStatus === 'UNREAD');
+  // const descById = unreadInq.reverse();
+  // const descById = [...inquiries].reverse();
+
   return (
     <>
       <div className="col-start-3 col-end-10 mt-5">
-        <TableInquiry orgId={id} inquiries={inquiries} />
+        <TextLabel content="未読お問い合わせ" />
+        {inquiries[0] ? (
+          <InquiryInfiniteTableWithStatus
+            orgId={id}
+            limit={20}
+            status={InquiryStatus['Unread']}
+            initialInquiries={unreadInq}
+          />
+        ) : (
+          <TextSmall content="未読お問い合わせはありません" />
+        )}
       </div>
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="プロフィール" />

@@ -1,6 +1,7 @@
-import { InquiryCategory, InquiryStatus } from '@next/graphql';
 import { VFC } from 'react';
-import { Badge, BadgeLarge } from '@next/ui';
+
+import { InquiryCategory, InquiryStatus } from '../../../graphql';
+import { Badge, BadgeLarge } from '../../presentational';
 
 type BadgeInquiryCategoryProps = {
   category: InquiryCategory;

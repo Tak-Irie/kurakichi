@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useUpdateUserMutation } from '../../graphql/generated/graphql';
-import { Form, Input, InputTextarea, NotificationSet, ButtonOrLoading } from '@next/ui';
+
+import { useUpdateUserMutation } from '../../graphql';
+import { Form, Input, InputTextarea, NotificationSet, ButtonOrLoading } from '../presentational';
 
 type UpdateUserProfileProps = {
   exName: string;

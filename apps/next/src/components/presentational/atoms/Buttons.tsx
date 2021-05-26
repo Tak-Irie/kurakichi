@@ -3,7 +3,7 @@ import { VFC, ReactElement, SyntheticEvent } from 'react';
 type ButtonProps = {
   type: 'button' | 'submit';
   onClick?: (e: SyntheticEvent) => void | Promise<void>;
-  color?: string;
+  color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
   disabled?: boolean;
   label?: string | ReactElement;
 };

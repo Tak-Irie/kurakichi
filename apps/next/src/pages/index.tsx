@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import { NextPage } from 'next';
 
-import { MapViewer, GeocodeByBrowserButton, GeocodeByPostcodeForm } from '@next/container';
+import {
+  MapViewer,
+  GeocodeByBrowserButton,
+  GeocodeByPostcodeForm,
+  SearchOrgByPrefForm,
+  SearchOrgByServiceForm,
+} from '../components/container';
 import {
   ArticlesWelfareGuide,
   TextH2,
-  TextH1,
-  PopOnIcon,
   HelperPop,
-  UseCasePresenter,
-} from '@next/ui';
-import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
+  LoadingSpinner,
+} from '../components/presentational';
+import { useGetOrgsForMapQuery } from '../graphql';
 
 const tokyoPublicOffice = {
   lat: 35.6896342,
@@ -19,12 +23,11 @@ const tokyoPublicOffice = {
 
 const IndexPage: NextPage = () => {
   const [isLocation, setIsLocation] = useState(tokyoPublicOffice);
+  const { data, loading, error } = useGetOrgsForMapQuery();
 
-  // const { data, loading, error } = useGetUserPrivateInfoByCookieQuery({
-  //   fetchPolicy: 'cache-first',
-  // });
-
-  // if (loading) return <p>load</p>;
+  if (error) {
+    return <p>{error.message}</p>;
+  }
 
   return (
     <div className="grid grid-cols-12">
@@ -41,16 +44,22 @@ const IndexPage: NextPage = () => {
         </div>
         <div className="grid grid-cols-10 mt-5">
           <div className="col-span-8">
-            <MapViewer
-              center={isLocation}
-              markers={[isLocation]}
-              mapContainerCSS={{ height: '50vh', width: 'auto' }}
-              zoomLevel={13}
-            />
+            {loading && !data?.getOrgs.orgs ? (
+              <LoadingSpinner />
+            ) : (
+              <MapViewer
+                center={isLocation}
+                mapContainerCSS={{ height: '50vh', width: 'auto' }}
+                orgs={data.getOrgs.orgs}
+                zoomLevel={13}
+              />
+            )}
           </div>
           <div className="col-span-2 ml-10 space-y-10 flex flex-col">
             <GeocodeByBrowserButton dispatcher={setIsLocation} buttonLabel="位置情報から検索" />
             <GeocodeByPostcodeForm dispatcher={setIsLocation} buttonLabel="郵便番号から検索" />
+            {/* <SearchOrgByPrefForm />
+            <SearchOrgByServiceForm /> */}
           </div>
         </div>
       </div>

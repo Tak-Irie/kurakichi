@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
-import { fetchGraphqlApi } from '../../util/fetchGraphqlApi';
 import { useRouter } from 'next/router';
+
+import { fetchGraphqlApi } from '../../util/fetchGraphqlApi';
 import {
   OrgProfile,
   OrgTemplate,
@@ -10,61 +12,95 @@ import {
   FeedbackCaution,
   PopOnIcon,
   Disclosure,
-} from '@next/ui';
-import { SendInquiryForm } from '@next/container';
-import { OrgPayload, useGetUserByCookieQuery } from '@next/graphql';
-import { useState } from 'react';
+  Tabs,
+  OrgService,
+  OrgArticle,
+  TextSmall,
+} from '../../components/presentational';
+import { SendInquiryForm } from '../../components/container';
+import { OrgPayload, useGetUserByCookieQuery } from '../../graphql';
 
 type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 const OrgProfilePublicPage: NextPage<OrgProps> = (props) => {
   // console.log('props:', props.data.getOrgPublicInfoById.org);
-  const [isOpen, setIsOpen] = useState(false);
+  const [openedInqForm, setOpenedInqForm] = useState(false);
+  const [shownTab, setShownTab] = useState(0);
+
   const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-  const org = props.data.getOrgPublicInfoById.org;
 
-  return (
-    <OrgTemplate
-      avatar={org.avatar}
-      image={org.image}
-      orgName={org.orgName}
-      headerButtons={
-        userData?.getUserByCookie.user ? (
-          <Disclosure
-            label={
+  if (props.data.getOrgPublicInfoById.org) {
+    const org = props.data.getOrgPublicInfoById.org;
+
+    return (
+      <OrgTemplate
+        avatar={org.avatar}
+        image={org.image}
+        orgName={org.orgName}
+        headerButtons={
+          userData?.getUserByCookie.user ? (
+            <Disclosure
+              label={
+                <ButtonWithIcon
+                  onClick={() => setOpenedInqForm(!openedInqForm)}
+                  type="button"
+                  label="お問い合わせ"
+                  icon={<IconsMail />}
+                />
+              }
+              contentCSS="absolute z-10 mt-12"
+              content={<SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />}
+            />
+          ) : (
+            <div className="flex items-center space-x-3">
+              <PopOnIcon
+                icon={<IconsCaution />}
+                content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
+              />
               <ButtonWithIcon
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setOpenedInqForm(!openedInqForm)}
                 type="button"
                 label="お問い合わせ"
+                disabled
                 icon={<IconsMail />}
               />
-            }
-            contentCSS="absolute z-10 mt-12"
-            content={<SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />}
-          />
-        ) : (
-          <div className="flex items-center space-x-3">
-            <PopOnIcon
-              icon={<IconsCaution />}
-              content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
+            </div>
+          )
+        }
+        pageTabs={<Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />}
+        pageContents={
+          shownTab === 0 ? (
+            <OrgProfile org={org} />
+          ) : shownTab === 1 ? (
+            <OrgService
+              title="事業紹介"
+              content={
+                <TextSmall
+                  content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n・※ 編集機能を現在作成中です`}
+                />
+              }
             />
-            <ButtonWithIcon
-              onClick={() => setIsOpen(!isOpen)}
-              type="button"
-              label="お問い合わせ"
-              disabled
-              icon={<IconsMail />}
+          ) : shownTab === 2 ? (
+            <OrgArticle
+              title="記事"
+              content={
+                <TextSmall
+                  content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+                />
+              }
             />
-          </div>
-        )
-      }
-      pageContents={<OrgProfile org={org} />}
-    />
-  );
+          ) : (
+            <p>error</p>
+          )
+        }
+      />
+    );
+  }
+  return <p>loading</p>;
 };
 
 // TODO:need to SSR?, examine it

@@ -22,6 +22,31 @@ export class InquiryStatus extends ValueObject<InquiryStatusProps> {
     return Result.success<InquiryStatus>(inquiryStatus);
   }
 
+  // temp
+  public static _create(status: string): Result<InquiryStatus> {
+    let _status: InquiryStatus | undefined;
+    switch (status) {
+      case 'DONE':
+        _status = new InquiryStatus({ status: 'DONE' });
+        break;
+      case 'WORKING':
+        _status = new InquiryStatus({ status: 'WORKING' });
+        break;
+      case 'UNREAD':
+        _status = new InquiryStatus({ status: 'UNREAD' });
+        break;
+      case 'DRAFT':
+        _status = new InquiryStatus({ status: 'DRAFT' });
+        break;
+      default:
+        _status = undefined;
+    }
+    if (_status === undefined) {
+      return Result.fail<InquiryStatus>(status);
+    }
+    return Result.success<InquiryStatus>(_status);
+  }
+
   public static restoreFromRepo(status: InquiryStatusUnion): InquiryStatus {
     return new InquiryStatus({ status });
   }

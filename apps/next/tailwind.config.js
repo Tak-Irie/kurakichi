@@ -1,6 +1,12 @@
 module.exports = {
-  purge: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    content: [
+      '.apps/next/src/pages/**/*.{js,ts,jsx,tsx}',
+      '.apps/next/src/components/**/*.{js,ts,jsx,tsx}',
+    ],
+  },
+  darkMode: false,
   theme: {
     extend: {
       fontFamily: {
