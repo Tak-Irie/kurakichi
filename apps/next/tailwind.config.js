@@ -1,8 +1,11 @@
 module.exports = {
-  purge: [
-    '.apps/next/src/pages/**/*.{js,ts,jsx,tsx}',
-    '.apps/next/src/components/**/*.{js,ts,jsx,tsx}',
-  ],
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    content: [
+      '.apps/next/src/pages/**/*.{js,ts,jsx,tsx}',
+      '.apps/next/src/components/**/*.{js,ts,jsx,tsx}',
+    ],
+  },
   darkMode: false,
   theme: {
     extend: {

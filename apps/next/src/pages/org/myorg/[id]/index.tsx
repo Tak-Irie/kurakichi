@@ -16,7 +16,6 @@ import {
   IconsMail,
   Tabs,
 } from '../../../../components/presentational';
-import { isServer } from '../../../../util';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();
