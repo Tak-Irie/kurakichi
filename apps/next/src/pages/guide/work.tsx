@@ -4,8 +4,8 @@ import { LinkNextjs } from '../../components/container';
 const WorkGuidePublicPage: NextPage = () => {
   return (
     <GeneralTemplate
-      formTitle="仕事に係る公共サービス"
-      formContent={
+      title="仕事に係る公共サービス"
+      content={
         <div className="h-screen">
           <TextLabel content="Alpha版：作成中" />
           <TextSmall content="※ くらきち製作者は福祉の専門家では有りません" />

@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 
-import { OrgRegisterForm } from '@next/container';
-import { FormPageTemplate } from '@next/ui';
+import { OrgRegisterForm } from '../../components/container';
+import { FormPageTemplate } from '../../components/presentational';
 
 const RegisterOrgPublicPage: NextPage = () => {
-  return <FormPageTemplate formTitle="団体登録" formContent={<OrgRegisterForm />} />;
+  return <FormPageTemplate title="団体登録" content={<OrgRegisterForm />} />;
 };
 
 export default RegisterOrgPublicPage;

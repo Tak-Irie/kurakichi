@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -5,19 +6,24 @@ import Link from 'next/link';
 import { useGetOrgPrivateInfoByIdAndCookieQuery } from '../../../../graphql/generated/graphql';
 import {
   OrgMyPage,
+  OrgArticle,
+  OrgService,
+  TextSmall,
   LoadingSpinner,
   OrgTemplate,
   ButtonWithIcon,
   IconsCog,
   IconsMail,
+  Tabs,
 } from '../../../../components/presentational';
 import { isServer } from '../../../../util';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();
+  const [shownTab, setShownTab] = useState(0);
+
   const { data, loading, error } = useGetOrgPrivateInfoByIdAndCookieQuery({
     variables: { orgId: router.query.id as string },
-    skip: isServer(),
   });
 
   if (loading) return <LoadingSpinner />;
@@ -47,7 +53,32 @@ const OrgPrivatePage: NextPage = () => {
           </Link>
         </>
       }
-      pageContents={<OrgMyPage org={data.getOrgPrivateInfoByIdAndCookie.org} />}
+      pageTabs={<Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />}
+      pageContents={
+        shownTab === 0 ? (
+          <OrgMyPage org={data.getOrgPrivateInfoByIdAndCookie.org} />
+        ) : shownTab === 1 ? (
+          <OrgService
+            title="事業紹介"
+            content={
+              <TextSmall
+                content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+              />
+            }
+          />
+        ) : shownTab === 2 ? (
+          <OrgArticle
+            title="記事"
+            content={
+              <TextSmall
+                content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+              />
+            }
+          />
+        ) : (
+          <p>error</p>
+        )
+      }
     />
   );
 };

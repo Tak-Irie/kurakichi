@@ -12,8 +12,8 @@ import {
   TextLabel,
   CardWithPick,
   TextSmall,
-} from '@next/ui';
-import { SendMessage } from '@next/container';
+} from '../../presentational';
+import { SendMessage } from '../../container';
 
 import { Org } from '../../../graphql/generated/graphql';
 
@@ -34,46 +34,50 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
   return (
     <div className="grid grid-cols-12 pb-10">
       <div className="col-span-full">
-        <ProfileHeader avatarSrc={avatar} imageSrc={image}>
-          {loggedIn ? (
-            <>
-              <div>
+        <ProfileHeader
+          avatarSrc={avatar}
+          imageSrc={image}
+          buttons={
+            loggedIn ? (
+              <>
+                <div>
+                  <ButtonWithIcon
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    label="メッセージを送る"
+                    icon={<IconsMail />}
+                  />
+                </div>
+                <div className="mt-12 absolute w-full">
+                  <Transition
+                    show={isOpen}
+                    enter="transition-opacity duration-150"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity duration-150"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute -ml-36">
+                      <SendMessage receiverId={userId} />
+                    </div>
+                  </Transition>
+                </div>
+              </>
+            ) : (
+              <>
+                <PopOnIcon overWriteCSS="" icon={<IconsCaution />} content="ログインが必要です" />
                 <ButtonWithIcon
-                  type="button"
                   onClick={() => setIsOpen(!isOpen)}
+                  type="button"
                   label="メッセージを送る"
+                  disabled
                   icon={<IconsMail />}
-                />
-              </div>
-              <div className="mt-12 absolute w-full">
-                <Transition
-                  show={isOpen}
-                  enter="transition-opacity duration-150"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="transition-opacity duration-150"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="absolute -ml-36">
-                    <SendMessage receiverId={userId} />
-                  </div>
-                </Transition>
-              </div>
-            </>
-          ) : (
-            <>
-              <PopOnIcon overWriteCSS="" icon={<IconsCaution />} content="ログインが必要です" />
-              <ButtonWithIcon
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-                label="メッセージを送る"
-                disabled
-                icon={<IconsMail />}
-              ></ButtonWithIcon>
-            </>
-          )}
-        </ProfileHeader>
+                ></ButtonWithIcon>
+              </>
+            )
+          }
+        ></ProfileHeader>
       </div>
       <div className="col-start-3">
         <Text2xl content={userName} />

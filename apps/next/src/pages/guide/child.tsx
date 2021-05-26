@@ -6,8 +6,8 @@ import { LinkNextjs } from '../../components/container';
 const ChildGuidePublicPage: NextPage = () => {
   return (
     <GeneralTemplate
-      formTitle="育児で利用できる公共福祉サービス"
-      formContent={
+      title="育児で利用できる公共福祉サービス"
+      content={
         <div className="h-screen">
           <TextLabel content="Alpha版：作成中" />
           <TextSmall content="※ くらきち製作者は福祉の専門家では有りません" />

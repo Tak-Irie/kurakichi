@@ -6,8 +6,8 @@ import { TextWithDivider, TextSmall, Disclosure, FormPageTemplate } from '@next/
 const RegisterPublicPage: NextPage = () => {
   return (
     <FormPageTemplate
-      formTitle="新規登録"
-      formContent={
+      title="新規登録"
+      content={
         <>
           <div className="mt-10 ">
             <TextWithDivider content="ソーシャルログインを利用する" />

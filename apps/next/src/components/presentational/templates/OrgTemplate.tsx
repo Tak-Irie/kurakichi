@@ -5,7 +5,7 @@ type OrgTemplateProps = {
   avatar: string;
   image: string;
   orgName: string;
-  pageTabs: ReactNode;
+  pageTabs?: ReactNode;
   pageContents: ReactNode;
   headerButtons?: ReactNode;
   settingHeader?: boolean;

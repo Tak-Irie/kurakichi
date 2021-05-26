@@ -11,8 +11,8 @@ import { TextSmall, TextWithDivider, FormPageTemplate } from '../../components/p
 const Login: NextPage = () => {
   return (
     <FormPageTemplate
-      formTitle="ログイン"
-      formContent={
+      title="ログイン"
+      content={
         <>
           <div>
             <TextWithDivider content="ソーシャルログイン" />
@@ -34,7 +34,7 @@ const Login: NextPage = () => {
             <LinkNextjs
               url="/auth/forgot-password"
               labelOrElement={
-                <TextSmall textColor="yellow" content="※パスワードを忘れてしまった方はこちら" />
+                <TextSmall color="yellow" content="※パスワードを忘れてしまった方はこちら" />
               }
               overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
             />
@@ -42,7 +42,7 @@ const Login: NextPage = () => {
           <div className="mt-5 flex justify-end">
             <LinkNextjs
               url="/auth/register"
-              labelOrElement={<TextSmall textColor="yellow" content="※ユーザー新規登録はこちら" />}
+              labelOrElement={<TextSmall color="yellow" content="※ユーザー新規登録はこちら" />}
               overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
             />
           </div>

@@ -71,7 +71,7 @@ export const InquiryInfiniteTable: VFC<InquiryInfiniteTableProps> = ({
       height={400}
       endMessage={
         <span className="bg-yellow-100 flex rounded justify-center">
-          <TextSmall textColor="yellow" content="お問い合わせは以上です" />
+          <TextSmall color="yellow" content="お問い合わせは以上です" />
         </span>
       }
       loader={<LoadingSpinner />}
@@ -136,7 +136,7 @@ export const InquiryInfiniteTableWithStatus: VFC<InquiryInfiniteTableWithStatusP
       height={400}
       endMessage={
         <span className="bg-yellow-100 flex rounded justify-center">
-          <TextSmall textColor="yellow" content="未読お問い合わせは以上です" />
+          <TextSmall color="yellow" content="未読お問い合わせは以上です" />
         </span>
       }
       loader={<LoadingSpinner />}

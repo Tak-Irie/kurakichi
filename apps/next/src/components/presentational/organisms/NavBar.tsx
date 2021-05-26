@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { HeaderList, HeaderDropDown, NavAuthSection, ImageLogo } from '@next/ui';
+import { HeaderList, NavAuthSection } from '../../presentational';
 
 export const NavBar: FC = () => {
   return (
@@ -21,12 +21,10 @@ export const NavBar: FC = () => {
           </Link>
         </div>
       </div>
-      <ul className="col-start-5 col-end-11 flex justify-between items-center space-x-8">
-        <HeaderList linkUrl="/ex/playground" ariaLabel="playground" linkLabel="PlayGround" />
+      <ul className="col-start-5 col-end-11 flex justify-around items-center space-x-8">
         <HeaderList linkUrl="/howto" ariaLabel="playground" linkLabel="つかいかた" />
         <HeaderList linkUrl="/about-us" ariaLabel="aboutUs" linkLabel="くらきちについて" />
         <HeaderList linkUrl="/for-pro" ariaLabel="forPros" linkLabel="福祉職の皆様へ" />
-        <HeaderDropDown />
       </ul>
       <span className="col-start-12  mr-2 flex justify-end">
         <NavAuthSection />
