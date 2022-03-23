@@ -1,0 +1,8 @@
+type Org implements Node {
+  id: ID!
+}
+
+type Query {
+  org(id:ID!):Org
+  orgs: [Org!]
+}
