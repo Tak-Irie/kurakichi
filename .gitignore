@@ -2,6 +2,9 @@ redis
 eventstore
 rabbitmq
 
+**/dist
+.DS_Store
+
 # terraform
 **/.terraform
 *.tfstate
