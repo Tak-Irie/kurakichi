@@ -9,3 +9,11 @@ nrwl/nx -> yarn workspace</br>
 MongoDB -> EventStoreDB</br>
 
 branch_oldに旧Versionのコードがあります
+
+## Architecture Image
+
+![Architecture Image](images/kurakichi-architecture.png)
+
+## Infrastructure Image
+
+![Infrastructure Image](images/kurakichi-infra.png)
