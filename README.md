@@ -17,3 +17,7 @@ branch_oldに旧Versionのコードがあります
 ## Infrastructure Image
 
 ![Infrastructure Image](images/kurakichi-infra.png)
+
+## Others
+
+[くらきちのコンセプト](https://grey-jackal-f64.notion.site/d2c3c4d3249d43feafac8946cf7a42df)
