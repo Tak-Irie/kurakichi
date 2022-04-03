@@ -1,29 +1,46 @@
 import express from "express";
+import session from "express-session";
+import connectRedis from "connect-redis";
 import cors from "cors";
 
 import { testRouter } from "../route/testRoute";
+import { COOKIE_MAX_AGE, COOKIE_NAME, IS_PROD } from "./Constants";
+import { Redis } from "ioredis";
 
-const createExpress = async () => {
+type ExpressArgs = {
+  redis: Redis;
+};
+
+const createExpress = async ({ redis }: ExpressArgs) => {
   const app = express();
-  app.set("trust proxy", 1);
+  const RedisSessionStore = connectRedis(session);
+
   app.use(
-    cors({
-      origin: [
-        process.env.CORS_WEB || "http://localhost:3000",
-        "https://studio.apollographql.com",
-      ],
-      credentials: true,
+    session({
+      name: COOKIE_NAME,
+      store: new RedisSessionStore({
+        client: redis,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: COOKIE_MAX_AGE,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: IS_PROD,
+        domain: IS_PROD ? "www.kurakichi.org" : undefined,
+      },
+      saveUninitialized: false,
+      secret: process.env.SESSION_SECRET as string,
+      resave: false,
     })
   );
-
-  //TODO:temp
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
 
   app.get("/", (req, res) => {
     res.send("hello world");
   });
-  app.use("/test", testRouter);
+  app.get("/t", (req, res) => {
+    res.send("You have reached");
+  });
 
   return app;
 };

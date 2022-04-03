@@ -1,4 +1,4 @@
-schema: ./modules/shared/infrastructure/graphql/*.graphql
+schema: ./modules/shared/infra/graphql/*.graphql
 generates:
   ./apps/server/src/graphql/generated/resolversTypes.ts:
     config:
