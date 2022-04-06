@@ -23,9 +23,11 @@
     "ioredis": "^4.28.3",
     "mongodb": "^4.3.1",
     "mongoose": "^6.1.8",
+    "node-fetch": "^3.2.3",
     "openid-client": "^5.1.4",
     "ulid": "^2.3.0",
-    "ws": "^8.5.0"
+    "ws": "^8.5.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/connect-redis": "^0.0.18",

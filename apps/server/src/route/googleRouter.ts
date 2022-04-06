@@ -34,6 +34,7 @@ googleRouter.get("/callback", async (req, res) => {
       salt: CRYPT_SALT,
     });
     const client = await createGoogleClient();
+
     const tokenSet = await oidc.verifyAuthCode({
       req,
       client,

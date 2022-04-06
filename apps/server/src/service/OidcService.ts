@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { Client, generators, TokenSet } from "openid-client";
-import { Cryptograph } from "@kurakichi/modules";
+import {} from "@kurakichi/modules";
 import { AuthService } from "./AuthService";
 import { Redis } from "ioredis";
 
@@ -79,8 +79,8 @@ class OidcAuthService {
     client,
     callback_uri,
   }: VerifyAuthCodeArg) {
+    //
     if (!req.session.authSession) return false;
-
     const storedParams = await this.authService.getStoredAuthParam(
       req.session.authSession
     );
