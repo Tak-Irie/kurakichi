@@ -23,7 +23,11 @@ override.tf.json
 terraform.rc
 show.json
 
-# created
+# yarn (using Zero-Installs)
+.yarn/
+!.yarn/releases/*
+
+# generated
 logs
 *.log
 npm-debug.log*
