@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { OidcAuthService } from "../service/OidcService";
-import { CRYPT_PASS, CRYPT_SALT } from "../util/Constants";
+import {
+  CRYPT_PASS,
+  CRYPT_SALT,
+  SSO_REDIRECT_FAIL,
+  SSO_REDIRECT_SUCCESS,
+} from "../util/Constants";
 import { createGoogleClient } from "../util/createOidcClient";
 import { redis } from "../util/createRedis";
 
@@ -67,10 +72,10 @@ googleRouter.get("/callback", async (req, res) => {
 
     req.session.userId = value.id;
 
-    res.redirect("http://localhost:4200/auth/success");
+    res.redirect(SSO_REDIRECT_SUCCESS);
   } catch (err) {
     console.log("err:", err);
-    res.redirect("http://localhost:4200/auth/fail");
+    res.redirect(SSO_REDIRECT_FAIL);
   }
 });
 

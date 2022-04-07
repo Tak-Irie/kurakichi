@@ -1,0 +1,7 @@
+type Query {
+  hoge(id: ID!): Hoge
+}
+
+type Hoge {
+  id: ID!
+}

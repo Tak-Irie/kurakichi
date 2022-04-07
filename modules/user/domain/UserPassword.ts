@@ -2,6 +2,7 @@ import * as argon2 from "argon2";
 
 import { Result, Guard } from "../../shared/core";
 import { ValueObject } from "../../shared/domain";
+import { Hash } from "../../shared/util";
 
 type UserPasswordProps = {
   password: string;
@@ -56,7 +57,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
   }
 
   private static async hashPassword(password: string): Promise<string> {
-    const hashedPassword = await argon2.hash(password);
+    const hashedPassword = await Hash.hashByArgon2({ plainText: password });
 
     return hashedPassword;
   }

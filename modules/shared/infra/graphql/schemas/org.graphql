@@ -1,0 +1,106 @@
+type Query {
+  getOrgPrivateInfoByIdAndCookie(orgId: String!): OrgPayload
+  getOrgPublicInfoById(orgId: String!): OrgPayload
+  getOrgs: OrgPayload
+  getOrgsByMemberCookie: OrgPayload
+  getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
+  getInquiriesWithStatus(
+    endCursor: String
+    limit: Int!
+    orgId: String!
+    status: InquiryStatus
+  ): InquiryPayload
+  getInquiry(inquiryId: String!): InquiryPayload
+}
+
+type Mutation {
+  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
+  registerOrg(
+    email: String!
+    location: String!
+    name: String!
+    phoneNumber: String!
+  ): OrgPayload
+  updateOrg(input: OrgUpdateInput, orgId: String!): OrgPayload
+  requestJoinOrg(orgId: String!): OrgPayload
+  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
+  sendInquiry(
+    category: InquiryCategory
+    orgId: String!
+    receiverId: String!
+    status: InquiryStatus
+    textInput: String!
+  ): InquiryPayload
+  updateInquiryStatus(
+    inquiryId: String!
+    inquiryStatus: InquiryStatus!
+  ): InquiryPayload
+}
+
+type Org implements Node {
+  avatar: String
+  description: String
+  email: String
+  homePage: String
+  id: ID!
+  image: String
+  inquiries: [Inquiry]
+  latitude: Float
+  location: String
+  longitude: Float
+  members: [User]
+  orgName: String
+  phoneNumber: String
+}
+
+type OrgPayload {
+  error: RegularError
+  org: Org
+  orgs: [Org]
+  pageInfo: PageInfo
+}
+
+input OrgUpdateInput {
+  adminId: String
+  description: String
+  email: String
+  homePage: String
+  location: String
+  orgName: String
+  phoneNumber: String
+}
+
+type InquiryPayload {
+  error: RegularError
+  inquiries: [Inquiry]
+  inquiry: Inquiry
+  inquiryTree: InquiryTree
+  pageInfo: PageInfo
+}
+type Inquiry implements Node {
+  category: InquiryCategory
+  content: String
+  id: ID!
+  inquiryStatus: InquiryStatus
+  sender: User
+  sentAt: String
+  tree: InquiryTree
+}
+
+enum InquiryCategory {
+  APPLICATION
+  CONTACT
+  COUNSEL
+  INQUIRY
+  OTHERS
+}
+enum InquiryStatus {
+  DONE
+  DRAFT
+  UNREAD
+  WORKING
+}
+type InquiryTree implements Node {
+  id: ID!
+  treedInquiry: [Inquiry]
+}

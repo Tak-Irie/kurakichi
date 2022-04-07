@@ -1,6 +1,6 @@
 import { IDomainEvent } from "./IDomainEvent";
 import { AggregateRoot } from "../AggregateRoot";
-import { UniqueEntityID } from "../UniqueEntityID";
+import { UniqueEntityId } from "../UniqueEntityId";
 
 export class DomainEvents {
   private static handlersMap = {};
@@ -40,7 +40,7 @@ export class DomainEvents {
   }
 
   private static findMarkedAggregateByID(
-    id: UniqueEntityID
+    id: UniqueEntityId
   ): AggregateRoot<unknown> {
     let found: AggregateRoot<unknown>;
     for (const aggregate of this.markedAggregates) {
@@ -52,7 +52,7 @@ export class DomainEvents {
     return found;
   }
 
-  public static dispatchEventsForAggregate(id: UniqueEntityID): void {
+  public static dispatchEventsForAggregate(id: UniqueEntityId): void {
     const aggregate = this.findMarkedAggregateByID(id);
 
     if (aggregate) {

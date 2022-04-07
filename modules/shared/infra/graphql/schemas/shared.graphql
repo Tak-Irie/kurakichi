@@ -1,0 +1,24 @@
+interface Node {
+  id: ID!
+}
+
+type Query {
+  node(id: ID!): Node
+  nodes(ids: [ID]!): [Node]
+}
+
+type PageInfo {
+  endCursor: String
+  hasMore: Boolean
+  limit: Int
+}
+
+type RegularError {
+  invalidField: [String!]
+  message: String!
+}
+
+type RegularPayload {
+  message: String
+  result: Boolean
+}

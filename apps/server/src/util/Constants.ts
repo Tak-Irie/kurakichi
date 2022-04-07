@@ -13,6 +13,10 @@ const CRYPT_PASS =
 const CRYPT_SALT =
   process.env.CRYPT_SALT ||
   "e68e6611ddbdac8dcad4bbe4d9a3456a627b8acd05839eb45fa240e9c8dcb9a8";
+const SSO_REDIRECT_SUCCESS =
+  process.env.SSO_REDIRECT_SUCCESS || "http://localhost:4200/auth/success";
+const SSO_REDIRECT_FAIL =
+  process.env.SSO_REDIRECT_FAIL || "http://localhost:4200/auth/fail";
 
 export {
   APOLLO_SERVER_URI,
@@ -26,4 +30,6 @@ export {
   IS_PROD,
   CRYPT_PASS,
   CRYPT_SALT,
+  SSO_REDIRECT_SUCCESS,
+  SSO_REDIRECT_FAIL,
 };

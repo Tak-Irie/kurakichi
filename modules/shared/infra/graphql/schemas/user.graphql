@@ -1,0 +1,95 @@
+type Query {
+  getUserByCookie: UserPayload
+  getUserById(userId: String!): UserPayload
+  getUserByIdWithOrg(userId: String!): UserPayload
+  getUsers: UserPayload!
+  getMessagesByCookie: MessagePayload
+  getMessagesByTreeId(treeId: String!): MessagePayload
+}
+
+type Mutation {
+  registerUser(input: registerUserInput!): RegisterUserPayload!
+  replyMessage(content: String!, replyTargetId: String!): MessagePayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  updateUser(
+    avatar: String
+    description: String
+    email: String
+    image: String
+    userName: String
+  ): UserPayload
+  changePassword(currentPass: String!, newPass: String!): RegularPayload
+  deleteUser: RegularPayload
+  forgetPassword(email: String!): RegularPayload
+  login(email: String!, password: String!): UserPayload
+  logout: RegularPayload
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+  email: String!
+  avatar: String
+  selfIntro: String
+  description: String
+  heroImage: String
+  belongOrgs: [Org!]
+  belongBases: [Base!]
+  messages: [Message!]
+  role: UserRole
+}
+
+type Message implements Node {
+  id: ID!
+}
+
+enum UserRole {
+  VISITOR
+  CLIENT
+  EXPERT
+}
+
+input registerUserInput {
+  email: String!
+  password: String!
+}
+
+type RegisterUserPayload {
+  user: User!
+}
+
+type MessagePayload {
+  error: RegularError
+  message: Message
+  messageTree: MessageTree
+  messages: [Message]
+  pageInfo: PageInfo
+}
+
+enum MessageStatus {
+  DRAFT
+  READ
+  UNREAD
+}
+
+type Message implements Node {
+  content: String
+  id: ID!
+  messageStatus: MessageStatus
+  receiver: User
+  sender: User
+  sentAt: String
+  tree: MessageTree
+}
+
+type MessageTree implements Node {
+  id: ID!
+  treedMessage: [Message]
+}
+
+type UserPayload {
+  error: RegularError
+  pageInfo: PageInfo
+  user: User
+  users: [User]
+}

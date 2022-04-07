@@ -1,19 +1,21 @@
-schema: ./modules/shared/infra/graphql/*.graphql
+schema: ./modules/shared/infra/graphql/schemas/*.graphql
 generates:
   ./apps/server/src/graphql/generated/resolversTypes.ts:
     config:
       useIndexSignature: true
+      mappers:
+        Hoge: \@kurakichi/modules/shared/infra/graphql/models#HogeModel
     plugins:
       - typescript
       - typescript-resolvers
-  ./apps/web/src/generated/graphql.ts:
-    documents: "./apps/web/src/graphql/**/*.graphql"
+  ./apps/web/src/generated/graphql.tsx:
+    # documents: "./apps/web/src/graphql/**/*.graphql"
     plugins:
       - typescript
       - typescript-operations
       - typescript-react-apollo
     config:
       withHooks: true
-  ./apps/server/src/graphql/generated/schema.graphql:
-    plugins:
-      - schema-ast
+  # ./apps/server/src/graphql/generated/schema.graphql:
+  #   plugins:
+  #     - schema-ast

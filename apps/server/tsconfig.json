@@ -1,12 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "baseUrl": "./",
-  },
+  "compilerOptions": {},
   "references": [
     {
-      "path": "../../modules/"
+      "path": "../../modules"
     }
   ]
 }

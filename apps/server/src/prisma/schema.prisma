@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PSQL_URL")
+}
+
+model User {
+  id                String         @id
+  email             String         @unique
+  name              String
+  password          String
+  ssoSub            String
+  avatar            String
+  image             String
+  description       String
+  role              USER_ROLE
+  receivedMessages  Message[]      @relation("receive")
+  sentMessages      Message[]      @relation("sent")
+  manageOrgs        Organization[] @relation("orgAdmin")
+  belongOrgs        Organization[] @relation("orgMember")
+  requestJoinOrgs   Organization[] @relation("requestedMember")
+  manageSecureBases SecureBase[]   @relation("baseAdmin")
+  belongSecureBases SecureBase[]   @relation("baseMember")
+  sentInquiries     Inquiry[]      @relation("sentInquiry")
+  receivedInquiries Inquiry[]      @relation("receivedInquiry")
+}
+
+model Organization {
+  id               String    @id
+  name             String    @unique
+  email            String
+  description      String
+  phoneNumber      String
+  location         String
+  latitude         Float
+  longitude        Float
+  avatar           String
+  image            String
+  homePage         String
+  adminId          String
+  admin            User      @relation("orgAdmin", fields: [adminId], references: [id])
+  members          User[]    @relation("orgMember")
+  requestedMembers User[]    @relation("requestedMember")
+  inquiries        Inquiry[] @relation("gotInquiry")
+  articles         Article[] @relation("orgArticle")
+}
+
+model Message {
+  id            String         @id
+  text          String
+  senderId      String
+  receiverId    String
+  sentAt        BigInt
+  status        MESSAGE_STATUS
+  receiver      User           @relation("receive", fields: [receiverId], references: [id])
+  sender        User           @relation("sent", fields: [senderId], references: [id])
+  tree          MessageTree    @relation("messageTree", fields: [messageTreeId], references: [id])
+  messageTreeId String
+}
+
+model MessageTree {
+  id       String    @id
+  messages Message[] @relation("messageTree")
+}
+
+model Inquiry {
+  id            String           @id
+  text          String
+  senderId      String
+  receiverId    String
+  receivedOrgId String
+  inquiryTreeId String
+  sentAt        BigInt
+  category      INQUIRY_CATEGORY
+  status        INQUIRY_STATUS
+  sender        User             @relation("sentInquiry", fields: [senderId], references: [id])
+  receiver      User             @relation("receivedInquiry", fields: [receiverId], references: [id])
+  receivedOrg   Organization     @relation("gotInquiry", fields: [receivedOrgId], references: [id])
+  tree          InquiryTree      @relation("inquiryTree", fields: [inquiryTreeId], references: [id])
+}
+
+model InquiryTree {
+  id       String    @id
+  messages Inquiry[] @relation("inquiryTree")
+}
+
+model SecureBase {
+  id      String  @id
+  adminId String
+  admin   User    @relation("baseAdmin", fields: [adminId], references: [id])
+  members User[]  @relation("baseMember")
+  karte   Karte?
+  dialog  Dialog?
+}
+
+model Dialog {
+  id     String     @id
+  text   String
+  baseId String     @unique
+  base   SecureBase @relation(fields: [baseId], references: [id])
+}
+
+model Karte {
+  id     String     @id
+  record String
+  baseId String     @unique
+  base   SecureBase @relation(fields: [baseId], references: [id])
+}
+
+model Article {
+  id        String       @id
+  image     String
+  text      String
+  orgId     String
+  writerOrg Organization @relation("orgArticle", fields: [orgId], references: [id])
+}
+
+enum USER_ROLE {
+  USER
+  PRO
+}
+
+enum INQUIRY_CATEGORY {
+  COUNSEL
+  INQUIRY
+  CONTACT
+  APPLICATION
+  OTHERS
+}
+
+enum INQUIRY_STATUS {
+  UNREAD
+  WORKING
+  DONE
+  DRAFT
+}
+
+enum MESSAGE_STATUS {
+  READ
+  UNREAD
+  DRAFT
+}

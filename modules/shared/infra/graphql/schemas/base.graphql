@@ -1,0 +1,29 @@
+type Mutation {
+  postDialog(dialogContent: String!, id: String!): DialogPayload
+}
+
+type Dialog implements Node {
+  base: Base
+  dialogContent: String
+  id: ID!
+}
+
+type DialogPayload {
+  dialog: [Dialog]
+  error: RegularError
+}
+
+type Base implements Node {
+  baseOwner: User
+  id: ID!
+  members: [User]
+}
+
+type BasePayload {
+  error: RegularError
+  base: Base
+}
+
+type Subscription {
+  dialogPosted: Dialog
+}

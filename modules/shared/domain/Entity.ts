@@ -1,16 +1,20 @@
-import { UniqueEntityID } from "./UniqueEntityID";
+import { UniqueEntityId } from "./UniqueEntityId";
 
 const isEntity = (v: unknown): v is Entity<unknown> => {
   return v instanceof Entity;
 };
 
 export abstract class Entity<T> {
-  protected readonly _id: UniqueEntityID;
+  protected readonly _id: UniqueEntityId;
   public readonly props: T;
 
-  constructor(props: T, id?: UniqueEntityID) {
-    this._id = id ? id : new UniqueEntityID();
+  constructor(props: T, id?: UniqueEntityId) {
+    this._id = id ? id : UniqueEntityId.createULID();
     this.props = props;
+  }
+
+  public getProps() {
+    return this.props;
   }
 
   public equals(object?: Entity<T>): boolean {
