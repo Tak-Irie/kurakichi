@@ -1,5 +1,5 @@
-import { UseCaseError } from "../usecase";
 import { Result } from "../core";
+import { UseCaseError } from "./UseCaseError";
 
 export class UnexpectedError extends Result<UseCaseError> {
   public constructor(error?: Error) {

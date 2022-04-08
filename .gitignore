@@ -1,6 +1,7 @@
 redis
 eventstore
 rabbitmq
+postgres
 
 node_modules
 

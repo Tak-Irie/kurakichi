@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { Redis } from "ioredis";
-import { Client, TokenSet, generators } from "openid-client";
+import { Client, TokenSet, generators, UserinfoResponse } from "openid-client";
 
 import { Cryptograph } from "@kurakichi/modules";
 import { AuthService } from "./AuthService";
@@ -29,6 +29,20 @@ type VerifyAuthCodeArg = {
   req: Request;
   client: Client;
   callback_uri: string;
+};
+
+type UserInfo = {
+  sub: string;
+  email?: string;
+  picture?: string;
+};
+type Address = {
+  formatted?: string;
+  street_address?: string;
+  locality?: string;
+  region?: string;
+  postal_code?: string;
+  country?: string;
 };
 
 class OidcAuthService {
@@ -101,7 +115,7 @@ class OidcAuthService {
   }
 
   public async getUserInfo(client: Client, tokenSet: TokenSet) {
-    const userInfo = await client.userinfo(tokenSet);
+    const userInfo = await client.userinfo<UserInfo, Address>(tokenSet);
     return userInfo;
   }
 

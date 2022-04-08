@@ -16,6 +16,6 @@ generates:
       - typescript-react-apollo
     config:
       withHooks: true
-  # ./apps/server/src/graphql/generated/schema.graphql:
-  #   plugins:
-  #     - schema-ast
+  ./apps/server/src/graphql/generated/schema.graphql:
+    plugins:
+      - schema-ast

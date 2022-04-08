@@ -1,9 +1,12 @@
-import { DTOInquiry, DTOUser } from '@kurakichi/domain';
-import { idMapper } from '../../util/idMapper';
-import { NexusGenFieldTypes } from '../generated/nexus';
+import { DTOInquiry, DTOUser } from "@kurakichi/domain";
+import { idMapper } from "../../util/idMapper";
+import { NexusGenFieldTypes } from "../generated/nexus";
 
-export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): NexusGenFieldTypes['Inquiry'] => {
-  const { category, content, id, receiver, sender, status, sentAt, tree } = dtoInquiry;
+export const dtoInquiryToGql = (
+  dtoInquiry: DTOInquiry
+): NexusGenFieldTypes["Inquiry"] => {
+  const { category, content, id, receiver, sender, status, sentAt, tree } =
+    dtoInquiry;
 
   return {
     id,
@@ -16,7 +19,9 @@ export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): NexusGenFieldTypes['Inq
   };
 };
 
-export const dtoInquiriesToGql = (dtoInquiries: DTOInquiry[]): NexusGenFieldTypes['Inquiry'][] => {
+export const dtoInquiriesToGql = (
+  dtoInquiries: DTOInquiry[]
+): NexusGenFieldTypes["Inquiry"][] => {
   const gqlFields = dtoInquiries.map((inquiry) => dtoInquiryToGql(inquiry));
   return gqlFields;
 };
@@ -24,9 +29,10 @@ export const dtoInquiriesToGql = (dtoInquiries: DTOInquiry[]): NexusGenFieldType
 // TODO:temp impl
 export const dtoInquiryWithUserToGql = (
   dtoInquiry: DTOInquiry,
-  dtoUsers: DTOUser[],
-): NexusGenFieldTypes['Inquiry'] => {
-  const { category, content, id, receiver, sender, status, sentAt, tree } = dtoInquiry;
+  dtoUsers: DTOUser[]
+): NexusGenFieldTypes["Inquiry"] => {
+  const { category, content, id, receiver, sender, status, sentAt, tree } =
+    dtoInquiry;
   const _sender = dtoUsers.find((user) => user.id === sender);
 
   return {
@@ -34,7 +40,7 @@ export const dtoInquiryWithUserToGql = (
     content,
     category,
     inquiryStatus: status,
-    sender: { ..._sender, belongOrgs: [], belongSecureBases: [], messages: [] },
+    sender: { ..._sender, belongOrgs: [], belongBases: [], messages: [] },
     sentAt,
     tree: idMapper(tree),
   };
@@ -42,7 +48,9 @@ export const dtoInquiryWithUserToGql = (
 
 export const dtoInquiriesWithUserToGql = (
   dtoInquiry: DTOInquiry[],
-  dtoUsers: DTOUser[],
-): NexusGenFieldTypes['Inquiry'][] => {
-  return dtoInquiry.map((inquiry) => dtoInquiryWithUserToGql(inquiry, dtoUsers));
+  dtoUsers: DTOUser[]
+): NexusGenFieldTypes["Inquiry"][] => {
+  return dtoInquiry.map((inquiry) =>
+    dtoInquiryWithUserToGql(inquiry, dtoUsers)
+  );
 };

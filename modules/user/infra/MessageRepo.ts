@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
-import { IMessageRepo, Message } from '../domain';
-import { MessageMapper } from './MessageMapper';
+import { PrismaClient } from "@prisma/client";
+import { UniqueEntityId } from "../../shared/domain";
+import { IMessageRepo, Message } from "../domain";
+import { MessageMapper } from "./MessageMapper";
 
 export class MessageRepo implements IMessageRepo {
   private prisma: PrismaClient;
@@ -10,7 +10,9 @@ export class MessageRepo implements IMessageRepo {
   }
 
   async getMessage(messageId: UniqueEntityId): Promise<Message | false> {
-    const message = await this.prisma.message.findUnique({ where: { id: messageId.getId() } });
+    const message = await this.prisma.message.findUnique({
+      where: { id: messageId.getId() },
+    });
     if (message == undefined) return false;
     // console.log('messagesRepo:', messages);
     const domainMessage = MessageMapper.ToDomain(message);
@@ -19,10 +21,14 @@ export class MessageRepo implements IMessageRepo {
     return domainMessage;
   }
   async getMessages(userId: UniqueEntityId): Promise<Message[] | false> {
-    const messages = await this.prisma.message.findMany({ where: { receiverId: userId.getId() } });
+    const messages = await this.prisma.message.findMany({
+      where: { receiverId: userId.getId() },
+    });
     if (messages == undefined) return false;
     // console.log('messagesRepo:', messages);
-    const domainMessages = messages.map((message) => MessageMapper.ToDomain(message));
+    const domainMessages = messages.map((message) =>
+      MessageMapper.ToDomain(message)
+    );
 
     // console.log('domainMessages:', domainMessages);
     return domainMessages;
@@ -44,7 +50,10 @@ export class MessageRepo implements IMessageRepo {
           receiver: { connect: { id: receiverId } },
           sender: { connect: { id: senderId } },
           tree: {
-            connectOrCreate: { where: { id: messageTreeId }, create: { id: messageTreeId } },
+            connectOrCreate: {
+              where: { id: messageTreeId },
+              create: { id: messageTreeId },
+            },
           },
         },
       });
@@ -52,8 +61,8 @@ export class MessageRepo implements IMessageRepo {
 
       return message;
     } catch (err) {
-      console.log('dbError:', err);
-      throw new Error('データベースエラー');
+      console.log("dbError:", err);
+      throw new Error("データベースエラー");
     }
   }
 
@@ -69,12 +78,14 @@ export class MessageRepo implements IMessageRepo {
       const domainMessage = MessageMapper.treeToDomain(messages);
       return domainMessage;
     } catch (err) {
-      console.log('dbError:', err);
-      throw new Error('データベースエラー');
+      console.log("dbError:", err);
+      throw new Error("データベースエラー");
     }
   }
 
-  async getMessagesByReceiverId(receiverId: UniqueEntityId): Promise<Message[] | false> {
+  async getMessagesByReceiverId(
+    receiverId: UniqueEntityId
+  ): Promise<Message[] | false> {
     const messages = await this.prisma.message.findMany({
       where: { receiverId: receiverId.getId() },
     });

@@ -40,7 +40,7 @@ export class OrgRepo implements IOrgRepo {
       }),
       this.prisma.user.update({
         where: { id: data.adminId },
-        data: { belongOrgs: { connect: { id: data.id } }, role: "PRO" },
+        data: { belongOrgs: { connect: { id: data.id } }, role: "EXPERT" },
       }),
     ]);
 
@@ -102,7 +102,7 @@ export class OrgRepo implements IOrgRepo {
         data: {
           members: {
             connect: { id: userId },
-            update: { where: { id: userId }, data: { role: "PRO" } },
+            update: { where: { id: userId }, data: { role: "EXPERT" } },
           },
         },
       }),

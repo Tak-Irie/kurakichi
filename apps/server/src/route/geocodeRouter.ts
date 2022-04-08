@@ -1,7 +1,7 @@
-import * as express from "express";
-import { GoogleMapAPIService } from "../../../../../_kurakichi_shadow_nx/apps/express/src/services";
+import { Router } from "express";
+import { GoogleMapAPIService } from "../service/GoogleMapAPIService";
 
-export const geocodeRouter = express.Router();
+export const geocodeRouter = Router();
 
 geocodeRouter.get("/postcode", async (req, res) => {
   try {

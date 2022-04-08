@@ -1,4 +1,4 @@
-import { Message } from "../../user copy/domain";
+import { Message } from "../domain";
 
 export type DTOMessage = {
   id: string;

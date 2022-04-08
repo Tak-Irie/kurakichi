@@ -11,7 +11,7 @@ interface UserProps {
   description: string;
   avatar: string;
   image: string;
-  role: "USER" | "PRO";
+  role: "USER" | "EXPERT" | "CLIENT";
   password: UserPassword;
   ssoSub: string;
   messages: UniqueEntityId[];
@@ -28,7 +28,7 @@ type UserPrimitive = {
   image: string;
   password: string;
   ssoSub: string;
-  role: "USER" | "PRO";
+  role: "USER" | "EXPERT" | "CLIENT";
   messages: string[];
   belongOrgs: string[];
   belongSecureBases: string[];

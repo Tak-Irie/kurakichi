@@ -22,8 +22,8 @@ model User {
   manageOrgs        Organization[] @relation("orgAdmin")
   belongOrgs        Organization[] @relation("orgMember")
   requestJoinOrgs   Organization[] @relation("requestedMember")
-  manageSecureBases SecureBase[]   @relation("baseAdmin")
-  belongSecureBases SecureBase[]   @relation("baseMember")
+  manageBases       Base[]         @relation("baseAdmin")
+  belongBases       Base[]         @relation("baseMember")
   sentInquiries     Inquiry[]      @relation("sentInquiry")
   receivedInquiries Inquiry[]      @relation("receivedInquiry")
 }
@@ -87,7 +87,7 @@ model InquiryTree {
   messages Inquiry[] @relation("inquiryTree")
 }
 
-model SecureBase {
+model Base {
   id      String  @id
   adminId String
   admin   User    @relation("baseAdmin", fields: [adminId], references: [id])
@@ -97,17 +97,17 @@ model SecureBase {
 }
 
 model Dialog {
-  id     String     @id
+  id     String @id
   text   String
-  baseId String     @unique
-  base   SecureBase @relation(fields: [baseId], references: [id])
+  baseId String @unique
+  base   Base   @relation(fields: [baseId], references: [id])
 }
 
 model Karte {
-  id     String     @id
+  id     String @id
   record String
-  baseId String     @unique
-  base   SecureBase @relation(fields: [baseId], references: [id])
+  baseId String @unique
+  base   Base   @relation(fields: [baseId], references: [id])
 }
 
 model Article {
@@ -120,7 +120,8 @@ model Article {
 
 enum USER_ROLE {
   USER
-  PRO
+  EXPERT
+  CLIENT
 }
 
 enum INQUIRY_CATEGORY {

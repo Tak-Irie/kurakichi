@@ -1,13 +1,8 @@
-import {
-  Either,
-  IUseCase,
-  left,
-  Result,
-  right,
-  UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IUserRepository } from "../../../user copy/domain";
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
+import { IUseCase } from "../../../shared/usecase";
+import { UnexpectedError } from "../../../shared/usecase/UnexpectedError";
+import { IUserRepository } from "../../domain/IUserRepository";
 import { UserNotFoundOrDeletedError } from "./LogoutUserErrors";
 
 type LogoutUserResponse = Either<
@@ -33,14 +28,14 @@ export class LogoutUserUseCase
 
     try {
       const user = await this.userRepo.getUserByUserId(
-        UniqueEntityId.reconstruct(userId).getValue()
+        UniqueEntityId.restoreFromRepo({ id: userId })
       );
 
       if (user === undefined) {
         return left(new UserNotFoundOrDeletedError());
       }
       // TODO: OIDCとRedisを組み込んだAuthサービスをつくる
-      return right(Result.success<void>());
+      return right(Result.success<void>(undefined));
     } catch (err) {
       return left(new UnexpectedError());
     }

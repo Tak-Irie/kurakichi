@@ -1,83 +1,114 @@
 import {
   Either,
+  InvalidInputValueError,
+  IUseCase,
   left,
   Result,
   right,
-  UseCase,
-  Guard,
-  UnexpectedAppError,
-} from "../../../shared/core";
-import { UniqueEntityID } from "../../../shared/domain";
-import {
-  InputInvalidValueError,
   StoreConnectionError,
-} from "../../../shared/usecase";
+  UnexpectedError,
+  UniqueEntityId,
+} from "../../../shared";
 import {
+  IUserRepository,
   User,
   UserEmail,
   UserName,
   UserPassword,
-  UserRepository,
-} from "../../domain";
-import { EmailAlreadyExistsError } from "./registerUserError";
+} from "../../../user copy/domain";
+import { createDTOUserFromDomain, DTOUser } from "../DTOUser";
+import { EmailAlreadyExistsError } from "./RegisterUserError";
 
 type RegisterUserArg = {
   email: string;
   password: string;
 };
 
+type UserTypes = UserEmail | UserName | UserPassword;
+
 type RegisterUserResponse = Either<
-  InputInvalidValueError | EmailAlreadyExistsError | StoreConnectionError,
-  Result<User>
+  | InvalidInputValueError
+  | EmailAlreadyExistsError
+  | UnexpectedError
+  | StoreConnectionError
+  | Result<UserTypes>,
+  Result<DTOUser>
 >;
 
 export class RegisterUserUseCase
-  implements UseCase<RegisterUserArg, Promise<RegisterUserResponse>>
+  implements IUseCase<RegisterUserArg, Promise<RegisterUserResponse>>
 {
-  constructor(private userRepository: UserRepository) {
+  constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
-  public async execute(arg: RegisterUserArg): Promise<RegisterUserResponse> {
+  public async execute(
+    request: RegisterUserArg
+  ): Promise<RegisterUserResponse> {
     try {
-      const emailResult = UserEmail.create({ email: arg.email });
+      const usernameOrError = UserName.create({
+        userName: request.email.split("@")[0].slice(0, 20),
+      });
 
-      if (emailResult.isFailure)
-        return left(
-          new InputInvalidValueError(emailResult.getErrorValue(), "NOTHING")
-        );
+      const emailOrError = UserEmail.create({
+        email: request.email,
+      });
 
-      const passResult = await UserPassword.create({
-        password: arg.password,
+      const passwordOrError = await UserPassword.create({
+        password: request.password,
         isHashed: false,
       });
 
-      if (passResult.isFailure) {
+      const verifiedResult = Result.verifyResults<UserTypes>([
+        emailOrError,
+        passwordOrError,
+        usernameOrError,
+      ]);
+      // console.log('verified:', verifiedResult);
+
+      if (verifiedResult[0].isFailure) {
         return left(
-          new InputInvalidValueError(passResult.getErrorValue(), "NOTHING")
+          new InvalidInputValueError(
+            verifiedResult.map((result) => {
+              if (result.isFailure) {
+                return result.getErrorValue();
+              }
+              return undefined;
+            })
+          )
         );
       }
 
-      const userName = UserName.create({
-        userName: "test" + arg.email.split("@")[0],
-      }).getValue();
+      const email = emailOrError.getValue();
+      const password = passwordOrError.getValue();
+      const userName = usernameOrError.getValue();
 
+      const userEmailAlreadyRegistered =
+        await this.userRepository.confirmExistence(email);
+
+      if (userEmailAlreadyRegistered) {
+        return left(new EmailAlreadyExistsError(email.props.email));
+      }
       const user = User.create({
-        id: new UniqueEntityID(),
-        email: emailResult.getValue(),
-        password: passResult.getValue(),
+        id: UniqueEntityId.create(),
+        email,
+        password,
         userName,
       });
+      // console.log('user:', user);
 
       const result = await this.userRepository.registerUser(user);
-
-      if (!result) {
-        return left(new StoreConnectionError("NOTHING"));
+      if (result === undefined) {
+        return left(new StoreConnectionError());
       }
+      // console.log('registeredResult:', result);
 
-      return right(Result.success(user));
+      const userDTO = createDTOUserFromDomain(result);
+      // console.log('userDTO:', userDTO);
+
+      return right(Result.success<DTOUser>(userDTO));
     } catch (err) {
-      return left(new UnexpectedAppError(err));
+      return left(new UnexpectedError(err));
     }
   }
 }

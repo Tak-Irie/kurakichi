@@ -54,6 +54,22 @@ export class Result<T> {
     return new Result<U>(false, error, "NOTHING");
   }
 
+  public static verifyResult<U>(result: Result<U>): Result<U> {
+    if (result.isFailure) {
+      return Result.fail<U>(result.getErrorValue());
+    }
+
+    return Result.success<U>(result.getValue());
+  }
+
+  public static verifyResults<U>(results: Result<U>[]): Result<U>[] {
+    const isInvalid = results.filter(({ isFailure }) => isFailure === true);
+    if (isInvalid[0]) {
+      return isInvalid;
+    }
+    return results;
+  }
+
   //TODO:YAGNI
   // public static combine<U>(results: Result<U>[]): Result<U> {
   //   for (const result of results) {

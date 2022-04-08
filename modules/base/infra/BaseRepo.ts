@@ -1,14 +1,15 @@
-import { PrismaClient } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
-import { SecureBase, ISecureBaseRepo } from '../domain';
-import { SecureBaseMapper } from './SecureBaseMapper';
+import { PrismaClient } from "@prisma/client";
+import { UniqueEntityId } from "../../shared/domain";
+import { Base } from "../domain/Base";
+import { IBaseRepo } from "../domain/ISecureBaseRepo";
+import { SecureBaseMapper } from "./SecureBaseMapper";
 
-export class SecureBaseRepo implements ISecureBaseRepo {
+export class BaseRepo implements IBaseRepo {
   private prisma: PrismaClient;
   constructor() {
     this.prisma = new PrismaClient();
   }
-  async getSecureBase(baseId: UniqueEntityId): Promise<SecureBase | false> {
+  async getSecureBase(baseId: UniqueEntityId): Promise<Base | false> {
     const dbResult = await this.prisma.secureBase.findUnique({
       where: { id: baseId.getId() },
       include: { members: true },
@@ -16,7 +17,7 @@ export class SecureBaseRepo implements ISecureBaseRepo {
     if (dbResult == undefined) return false;
     return SecureBaseMapper.ToDomain(dbResult);
   }
-  async registerSecureBase(secureBase: SecureBase): Promise<SecureBase | false> {
+  async registerSecureBase(secureBase: Base): Promise<Base | false> {
     const baseId = secureBase.getId();
     const adminId = secureBase.getRoomOwner().getId();
     const dbResult = await this.prisma.$transaction([

@@ -1,0 +1,249 @@
+type Base implements Node {
+  baseOwner: User
+  id: ID!
+  members: [User]
+}
+
+type BasePayload {
+  base: Base
+  error: RegularError
+}
+
+type Dialog implements Node {
+  base: Base
+  dialogContent: String
+  id: ID!
+}
+
+type DialogPayload {
+  dialog: [Dialog]
+  error: RegularError
+}
+
+type Hoge {
+  id: ID!
+}
+
+type Inquiry implements Node {
+  category: InquiryCategory
+  content: String
+  id: ID!
+  inquiryStatus: InquiryStatus
+  sender: User
+  sentAt: String
+  tree: InquiryTree
+}
+
+enum InquiryCategory {
+  APPLICATION
+  CONTACT
+  COUNSEL
+  INQUIRY
+  OTHERS
+}
+
+type InquiryPayload {
+  error: RegularError
+  inquiries: [Inquiry]
+  inquiry: Inquiry
+  inquiryTree: InquiryTree
+  pageInfo: PageInfo
+}
+
+enum InquiryStatus {
+  DONE
+  DRAFT
+  UNREAD
+  WORKING
+}
+
+type InquiryTree implements Node {
+  id: ID!
+  treedInquiry: [Inquiry]
+}
+
+type Message implements Node {
+  content: String
+  id: ID!
+  messageStatus: MessageStatus
+  receiver: User
+  sender: User
+  sentAt: String
+  tree: MessageTree
+}
+
+type MessagePayload {
+  error: RegularError
+  message: Message
+  messageTree: MessageTree
+  messages: [Message]
+  pageInfo: PageInfo
+}
+
+enum MessageStatus {
+  DRAFT
+  READ
+  UNREAD
+}
+
+type MessageTree implements Node {
+  id: ID!
+  treedMessage: [Message]
+}
+
+type Mutation {
+  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
+  changePassword(currentPass: String!, newPass: String!): RegularPayload
+  deleteUser: RegularPayload
+  forgetPassword(email: String!): RegularPayload
+  login(email: String!, password: String!): UserPayload
+  logout: RegularPayload
+  postDialog(dialogContent: String!, id: String!): DialogPayload
+  registerOrg(
+    email: String!
+    location: String!
+    name: String!
+    phoneNumber: String!
+  ): OrgPayload
+  registerUser(input: registerUserInput!): RegisterUserPayload!
+  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
+  replyMessage(content: String!, replyTargetId: String!): MessagePayload
+  requestJoinOrg(orgId: String!): OrgPayload
+  sendInquiry(
+    category: InquiryCategory
+    orgId: String!
+    receiverId: String!
+    status: InquiryStatus
+    textInput: String!
+  ): InquiryPayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  updateInquiryStatus(
+    inquiryId: String!
+    inquiryStatus: InquiryStatus!
+  ): InquiryPayload
+  updateOrg(input: OrgUpdateInput, orgId: String!): OrgPayload
+  updateUser(
+    avatar: String
+    description: String
+    email: String
+    image: String
+    userName: String
+  ): UserPayload
+}
+
+interface Node {
+  id: ID!
+}
+
+type Org implements Node {
+  avatar: String
+  description: String
+  email: String
+  homePage: String
+  id: ID!
+  image: String
+  inquiries: [Inquiry]
+  latitude: Float
+  location: String
+  longitude: Float
+  members: [User]
+  orgName: String
+  phoneNumber: String
+}
+
+type OrgPayload {
+  error: RegularError
+  org: Org
+  orgs: [Org]
+  pageInfo: PageInfo
+}
+
+input OrgUpdateInput {
+  adminId: String
+  description: String
+  email: String
+  homePage: String
+  location: String
+  orgName: String
+  phoneNumber: String
+}
+
+type PageInfo {
+  endCursor: String
+  hasMore: Boolean
+  limit: Int
+}
+
+type Query {
+  getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
+  getInquiriesWithStatus(
+    endCursor: String
+    limit: Int!
+    orgId: String!
+    status: InquiryStatus
+  ): InquiryPayload
+  getInquiry(inquiryId: String!): InquiryPayload
+  getMessagesByCookie: MessagePayload
+  getMessagesByTreeId(treeId: String!): MessagePayload
+  getOrgPrivateInfoByIdAndCookie(orgId: String!): OrgPayload
+  getOrgPublicInfoById(orgId: String!): OrgPayload
+  getOrgs: OrgPayload
+  getOrgsByMemberCookie: OrgPayload
+  getUserByCookie: UserPayload
+  getUserById(userId: String!): UserPayload
+  getUserByIdWithOrg(userId: String!): UserPayload
+  getUsers: UserPayload!
+
+  node(id: ID!): Node
+  nodes(ids: [ID]!): [Node]
+}
+
+type RegisterUserPayload {
+  user: User!
+}
+
+type RegularError {
+  invalidField: [String!]
+  message: String!
+}
+
+type RegularPayload {
+  message: String
+  result: Boolean
+}
+
+type Subscription {
+  dialogPosted: Dialog
+}
+
+type User implements Node {
+  avatar: String
+  belongBases: [Base!]
+  belongOrgs: [Org!]
+  description: String
+  email: String!
+  heroImage: String
+  id: ID!
+  messages: [Message!]
+  name: String!
+  role: UserRole
+  selfIntro: String
+}
+
+type UserPayload {
+  error: RegularError
+  pageInfo: PageInfo
+  user: User
+  users: [User]
+}
+
+enum UserRole {
+  CLIENT
+  EXPERT
+  VISITOR
+}
+
+input registerUserInput {
+  email: String!
+  password: String!
+}

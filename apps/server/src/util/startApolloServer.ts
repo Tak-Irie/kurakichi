@@ -12,24 +12,19 @@ import {
   LOCAL_WEB,
 } from "./Constants";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { GraphQLSchema } from "graphql";
 
 type ApolloSeverProps = {
-  typeDefs: any;
-  resolvers: any;
+  schema: GraphQLSchema;
   express: Express.Application;
 };
 
-const startApolloServer = async ({
-  typeDefs,
-  resolvers,
-  express,
-}: ApolloSeverProps) => {
+const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
   const httpServer = http.createServer(express);
   const wsServer = new WebSocketServer({
     server: httpServer,
     path: GRAPHQL_PATH,
   });
-  const schema = makeExecutableSchema({ typeDefs, resolvers });
   const serverCleanup = useServer({ schema }, wsServer);
 
   const apolloServer = new ApolloServer({

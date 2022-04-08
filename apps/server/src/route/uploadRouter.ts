@@ -1,18 +1,18 @@
-import * as express from 'express';
-import { profileUploader } from '../services';
+import * as express from "express";
+import { profileUploader } from "../service";
 
 export const uploadRouter = express.Router();
 
-uploadRouter.post('/profile', profileUploader, (req, res) => {
+uploadRouter.post("/profile", profileUploader, (req, res) => {
   try {
     // console.log('req.session:', req.session);
     // console.log('req.headers:', req.headers);
     // console.log('req.body', req.body);
     // console.log('req.file', req.files);
 
-    return res.send('success');
+    return res.send("success");
   } catch (err) {
-    console.log('uploadErr:', err);
-    res.send('fail');
+    console.log("uploadErr:", err);
+    res.send("fail");
   }
 });

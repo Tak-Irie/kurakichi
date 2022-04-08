@@ -1,9 +1,7 @@
-import { DTOSecureBase } from '@kurakichi/domain';
-import { idMapper, idsMapper } from '../../util/idMapper';
-import { NexusGenFieldTypes } from '../generated/nexus';
+import { idMapper, idsMapper } from "../../util/idMapper";
 
-export const secureBaseToGql = (secureBase: DTOSecureBase): NexusGenFieldTypes['SecureBase'] => {
-  const { baseOwner, id, members } = secureBase;
+export const baseToGql = (base: DTOBase): NexusGenFieldTypes["Base"] => {
+  const { baseOwner, id, members } = base;
   return {
     id,
     baseOwner: idMapper(baseOwner),

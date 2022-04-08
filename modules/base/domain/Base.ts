@@ -2,20 +2,20 @@ import { Result } from "../../shared/core";
 import { AggregateRoot } from "../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
 
-interface SecureBaseProps {
+interface BaseProps {
   id: UniqueEntityId;
   baseOwner: UniqueEntityId;
   members: UniqueEntityId[];
 }
 
-type SecureBaseRaw = {
+type BaseRaw = {
   id: string;
   baseOwner: string;
   members: string[];
 };
 
-export class SecureBase extends AggregateRoot<SecureBaseProps> {
-  private constructor(readonly props: SecureBaseProps) {
+export class Base extends AggregateRoot<BaseProps> {
+  private constructor(readonly props: BaseProps) {
     super(props);
   }
 
@@ -32,17 +32,17 @@ export class SecureBase extends AggregateRoot<SecureBaseProps> {
     return this.props.members;
   }
 
-  public static create(props: SecureBaseProps): Result<SecureBase> {
-    const base = new SecureBase({
+  public static create(props: BaseProps): Result<Base> {
+    const base = new Base({
       ...props,
     });
-    // SecureBase.addDomainEvent(new RoomCreated(SecureBase));
+    // Base.addDomainEvent(new RoomCreated(Base));
 
-    return Result.success<SecureBase>(base);
+    return Result.success<Base>(base);
   }
 
-  public static restoreFromRepo(secureBase: SecureBaseRaw): SecureBase {
-    return new SecureBase({
+  public static restoreFromRepo(secureBase: BaseRaw): Base {
+    return new Base({
       id: UniqueEntityId.restoreFromRepo({ id: secureBase.id }),
       baseOwner: UniqueEntityId.restoreFromRepo({ id: secureBase.baseOwner }),
       members: UniqueEntityId.restoreArrayFromRepo(
