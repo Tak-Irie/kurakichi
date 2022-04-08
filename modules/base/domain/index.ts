@@ -1,4 +1,4 @@
 export * from "./Base";
-export * from "./ISecureBaseRepo";
+export * from "./IBaseRepo";
 export * from "./Karte";
 export * from "./Member";

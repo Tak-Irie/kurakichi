@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { UniqueEntityId } from "../../shared/domain";
 import { Base } from "../domain/Base";
-import { IBaseRepo } from "../domain/ISecureBaseRepo";
-import { SecureBaseMapper } from "./SecureBaseMapper";
+import { IBaseRepo } from "../domain/IBaseRepo";
+import { SecureBaseMapper } from "./BaseMapper";
 
 export class BaseRepo implements IBaseRepo {
   private prisma: PrismaClient;

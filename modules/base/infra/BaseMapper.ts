@@ -1,24 +1,26 @@
-import { SecureBase as StoredSecureBase, User as StoredUser } from '@prisma/client';
-import { UniqueEntityId } from '../../shared';
-import { SecureBase } from '../domain';
+import { Base as StoredBase, User as StoredUser } from "@prisma/client";
+import { UniqueEntityId } from "../../shared/domain";
+import { Base } from "../domain";
 
-type SecureBaseRelations = StoredSecureBase & {
+type BaseRelations = StoredBase & {
   members?: StoredUser[];
 };
 
 export class SecureBaseMapper {
-  public static ToDomain(storedRoom: SecureBaseRelations): SecureBase {
-    const domainRoom = SecureBase.create({
-      id: UniqueEntityId.reconstruct(storedRoom.id).getValue(),
-      baseOwner: UniqueEntityId.reconstruct(storedRoom.adminId).getValue(),
-      members: storedRoom.members.map((member) => UniqueEntityId.reconstruct(member.id).getValue()),
+  public static ToDomain(storedBase: BaseRelations): Base {
+    const domainRoom = Base.create({
+      id: UniqueEntityId.restoreFromRepo(storedBase.id),
+      baseOwner: UniqueEntityId.restoreFromRepo(storedBase.adminId),
+      members: storedBase.members.map((member) =>
+        UniqueEntityId.restoreFromRepo(member.id).getValue()
+      ),
     });
 
     return domainRoom.getValue();
   }
   // public static async toStore(
   //   domainMessage: SecureBase,
-  // ): Promise<Omit<StoredSecureBase, 'createdAt' | 'read_flag'>> {
+  // ): Promise<Omit<StoredBase, 'createdAt' | 'read_flag'>> {
   //   const props = domainMessage.getProps();
   //   const rawData = {
   //     id: props.id.getId(),

@@ -1,6 +1,8 @@
 import { Client } from "@googlemaps/google-maps-services-js";
 import { JapaneseAddressRegExp } from "@kurakichi/modules";
 
+// FIXME:These services temporally created.it must be written in modules/*
+
 interface GeoCode {
   lat: number;
   lng: number;

@@ -1,5 +1,7 @@
 import * as mailer from "@sendgrid/mail";
 
+// FIXME:These services temporally created.it must be written in modules/*
+
 class SendGridMailerService {
   public static async sendMail(to: string, token: string) {
     mailer.setApiKey(process.env.SENDGRID_API_KEY as string);

@@ -3,7 +3,7 @@ import path from "path";
 
 import imagemin from "imagemin";
 import imageminWebp from "imagemin-webp";
-
+// FIXME:These services temporally created.it must be written in modules/*
 // FIXME: add validation, minimize to webp(do it at front?)
 // FIXME: delete Exif info
 const storage = multer.diskStorage({

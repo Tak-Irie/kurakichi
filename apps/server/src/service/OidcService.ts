@@ -5,6 +5,8 @@ import { Client, TokenSet, generators, UserinfoResponse } from "openid-client";
 import { Cryptograph } from "@kurakichi/modules";
 import { AuthService } from "./AuthService";
 
+// FIXME:These services temporally created.it must be written in modules/*
+
 type GetAuthUrlArg = {
   client: Client;
   state: string;

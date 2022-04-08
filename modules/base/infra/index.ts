@@ -1,2 +1,2 @@
-export * from "./SecureBaseMapper";
-export * from "./SecureBaseRepo";
+export * from "./BaseMapper";
+export * from "./BaseRepo";
