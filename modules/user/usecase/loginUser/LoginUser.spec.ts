@@ -1,14 +1,14 @@
 // import { MockUserRepository, invalidEmail, validPassword } from '../../../test/helper/userHelper';
-// import { LoginUserUseCase } from './LoginUserUseCase';
+// import { LoginUserUsecase } from './LoginUserUsecase';
 
 // const repo = new MockUserRepository();
 
 // describe('ユーザーログインテスト', () => {
-//   const useLoginUserUseCase = new LoginUserUseCase(repo);
+//   const useLoginUserUsecase = new LoginUserUsecase(repo);
 
 //   //TODO: Jestがargon2を読み込まない。ApolloMockテストのときまた考える
 //   // test('ログイン成功', async (done) => {
-//   //   const result = await useLoginUserUseCase.execute({
+//   //   const result = await useLoginUserUsecase.execute({
 //   //     email: validEmail,
 //   //     password: validPassword,
 //   //   });
@@ -17,7 +17,7 @@
 //   //   done();
 //   // });
 //   test('存在しないEmailアドレスにより失敗', async (done) => {
-//     const result = await useLoginUserUseCase.execute({
+//     const result = await useLoginUserUsecase.execute({
 //       email: invalidEmail,
 //       password: validPassword,
 //     });
@@ -30,7 +30,7 @@
 //   });
 //   // 同上
 //   // test('誤ったパスワードにより失敗', async (done) => {
-//   //   const result = await useLoginUserUseCase.execute({
+//   //   const result = await useLoginUserUsecase.execute({
 //   //     email: validEmail,
 //   //     password: invalidPassword,
 //   //   });

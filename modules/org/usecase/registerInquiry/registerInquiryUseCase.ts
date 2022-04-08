@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -8,13 +8,16 @@ import {
   UnexpectedError,
   InvalidInputValueError,
   UniqueEntityId,
-} from '../../../shared';
-import { IInquiryRepo, Inquiry } from '../../domain';
-import { InquiryCategory, InquiryCategoryUnion } from '../../domain/InquiryCategory';
-import { InquiryContent } from '../../domain/InquiryContent';
-import { InquiryStatusUnion, InquiryStatus } from '../../domain/InquiryStatus';
-import { createDTOInquiryFromDomain, DTOInquiry } from '../DTOInquiry';
-import { ReceiverNotExistError } from './registerInquiryError';
+} from "../../../shared";
+import { IInquiryRepo, Inquiry } from "../../domain";
+import {
+  InquiryCategory,
+  InquiryCategoryUnion,
+} from "../../domain/InquiryCategory";
+import { InquiryContent } from "../../domain/InquiryContent";
+import { InquiryStatusUnion, InquiryStatus } from "../../domain/InquiryStatus";
+import { createDTOInquiryFromDomain, DTOInquiry } from "../DTOInquiry";
+import { ReceiverNotExistError } from "./registerInquiryError";
 
 type InquiryArg = {
   category: InquiryCategoryUnion;
@@ -36,8 +39,8 @@ type RegisterInquiryResponse = Either<
 
 type InquiryTypes = InquiryCategory | InquiryContent | InquiryStatus;
 
-export class RegisterInquiryUseCase
-  implements IUseCase<InquiryArg, Promise<RegisterInquiryResponse>>
+export class RegisterInquiryUsecase
+  implements IUsecase<InquiryArg, Promise<RegisterInquiryResponse>>
 {
   constructor(private InquiryRepo: IInquiryRepo) {
     this.InquiryRepo = InquiryRepo;
@@ -63,8 +66,8 @@ export class RegisterInquiryUseCase
                 return result.getErrorValue();
               }
               return undefined;
-            }),
-          ),
+            })
+          )
         );
 
       const inquiryOrError = Inquiry.create({
@@ -76,12 +79,15 @@ export class RegisterInquiryUseCase
         orgId: UniqueEntityId.reconstruct(orgId).getValue(),
       });
 
-      const dbResult = await this.InquiryRepo.registerInquiry(inquiryOrError.getValue());
+      const dbResult = await this.InquiryRepo.registerInquiry(
+        inquiryOrError.getValue()
+      );
 
       const dtoInquiry = createDTOInquiryFromDomain(dbResult);
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
-      if (err === Error('データベースエラー')) return left(new StoreConnectionError());
+      if (err === Error("データベースエラー"))
+        return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

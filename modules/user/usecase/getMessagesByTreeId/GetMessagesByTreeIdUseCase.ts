@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -25,9 +25,9 @@ type GetMessagesByTreeIdResponse = Either<
   Result<DTOMessage[]>
 >;
 
-export class GetMessagesByTreeIdUseCase
+export class GetMessagesByTreeIdUsecase
   implements
-    IUseCase<GetMessagesByTreeIdArg, Promise<GetMessagesByTreeIdResponse>>
+    IUsecase<GetMessagesByTreeIdArg, Promise<GetMessagesByTreeIdResponse>>
 {
   constructor(private MessageRepo: IMessageRepo) {
     this.MessageRepo = MessageRepo;

@@ -1,15 +1,10 @@
+import { Either, Result } from "../../../shared/core";
 import {
-  Either,
-  IUseCase,
-  left,
-  Result,
-  right,
-  StoreConnectionError,
-  UnexpectedError,
-  UniqueEntityId,
   InvalidInputValueError,
-} from "../../../shared";
-import { IUserRepository, UserPassword } from "../../../user copy/domain";
+  IUsecase,
+  UnexpectedError,
+} from "../../../shared/usecase";
+import { IUserRepository, UserPassword } from "../../domain";
 import { InvalidPasswordError, SSOUserError } from "./ChangePasswordError";
 
 type ChangePasswordResponse = Either<
@@ -25,8 +20,8 @@ type ChangePasswordArg = {
   newPass: string;
   userId: string;
 };
-export class ChangePasswordUseCase
-  implements IUseCase<ChangePasswordArg, Promise<ChangePasswordResponse>>
+export class ChangePasswordUsecase
+  implements IUsecase<ChangePasswordArg, Promise<ChangePasswordResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;

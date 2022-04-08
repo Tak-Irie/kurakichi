@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -9,11 +9,14 @@ import {
   UniqueEntityId,
   InvalidInputValueError,
   Geocode,
-} from '../../../shared';
-import { IOrgRepo, Org } from '../../domain';
-import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
-import { AlreadyRegisteredNameError, LocationNotExistError } from './registerOrgError';
-import { GoogleMapAPIService } from '../../../services';
+} from "../../../shared";
+import { IOrgRepo, Org } from "../../domain";
+import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
+import {
+  AlreadyRegisteredNameError,
+  LocationNotExistError,
+} from "./registerOrgError";
+import { GoogleMapAPIService } from "../../../services";
 
 type RegisterOrgArg = {
   adminId: string;
@@ -32,7 +35,9 @@ type RegisterOrgResponse = Either<
   Result<DTOOrg>
 >;
 
-export class RegisterOrgUseCase implements IUseCase<RegisterOrgArg, Promise<RegisterOrgResponse>> {
+export class RegisterOrgUsecase
+  implements IUsecase<RegisterOrgArg, Promise<RegisterOrgResponse>>
+{
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
@@ -41,23 +46,30 @@ export class RegisterOrgUseCase implements IUseCase<RegisterOrgArg, Promise<Regi
       // console.log('registerOrgArg:', arg);
       const validatedProps = Org.validateProps({ ...arg });
       const failProp = Object.values(validatedProps).filter(
-        (resultProp) => resultProp.isFailure === true,
+        (resultProp) => resultProp.isFailure === true
       );
       // console.log('failProp:', failProp);
       if (failProp[0]) {
-        return left(new InvalidInputValueError(failProp.map((prop) => prop.getErrorValue())));
+        return left(
+          new InvalidInputValueError(
+            failProp.map((prop) => prop.getErrorValue())
+          )
+        );
       }
 
       const geocode = await GoogleMapAPIService.getGeoCodeByAddress(
-        validatedProps.location.getValue().getValue(),
+        validatedProps.location.getValue().getValue()
       );
       if (geocode === false) return left(new LocationNotExistError());
 
       const lat = Geocode.create({ code: geocode.lat });
       const lng = Geocode.create({ code: geocode.lng });
-      if (lat.isFailure || lng.isFailure) return left(new LocationNotExistError());
+      if (lat.isFailure || lng.isFailure)
+        return left(new LocationNotExistError());
 
-      const duplicateCheck = await this.OrgRepo.confirmOrgByName(validatedProps.name.getValue());
+      const duplicateCheck = await this.OrgRepo.confirmOrgByName(
+        validatedProps.name.getValue()
+      );
       if (duplicateCheck) return left(new AlreadyRegisteredNameError());
 
       const orgOrError = Org.create({

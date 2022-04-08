@@ -1,46 +1,46 @@
-import { RegisterUserUseCase } from "./registerUser/RegisterUserUseCase";
-import { GetUsersUseCase } from "./getUsers/GetUsersUseCase";
-import { LoginUserUseCase } from "./loginUser/LoginUserUseCase";
-import { GetUserByIdUseCase } from "./getUserById/GetUserByIdUseCase";
-import { DeleteUserUseCase } from "./deleteUser/DeleteUserUseCase";
-import { SsoUserUseCase } from "./ssoUser/ssoUserUseCase";
-import { ForgotPasswordUseCase } from "./forgotPassword/ForgotPasswordUseCase";
-import { UpdateUserUseCase } from "./updateUser/updateUserUseCase";
-import { GetUsersByOrgIdUseCase } from "./getUsersByOrgId/getUsersByOrgIdUseCase";
-import { GetUsersByIdsUseCase } from "./getUsersByIds/GetUsersByIdsUseCase";
+import { RegisterUserUsecase } from "./registerUser/RegisterUserUsecase";
+import { GetUsersUsecase } from "./getUsers/GetUsersUsecase";
+import { LoginUserUsecase } from "./loginUser/LoginUserUsecase";
+import { GetUserByIdUsecase } from "./getUserById/GetUserByIdUsecase";
+import { DeleteUserUsecase } from "./deleteUser/DeleteUserUsecase";
+import { SsoUserUsecase } from "./ssoUser/ssoUserUsecase";
+import { ForgotPasswordUsecase } from "./forgotPassword/ForgotPasswordUsecase";
+import { UpdateUserUsecase } from "./updateUser/updateUserUsecase";
+import { GetUsersByOrgIdUsecase } from "./getUsersByOrgId/getUsersByOrgIdUsecase";
+import { GetUsersByIdsUsecase } from "./getUsersByIds/GetUsersByIdsUsecase";
 
-import { SendMessageUseCase } from "./sendMessage/sendMessageUseCase";
-import { GetMessagesUseCase } from "./getMessages/getMessagesUseCase";
-import { GetMessagesByReceiverIdUseCase } from "./getMessagesByReceiverId/GetMessagesByReceiverIdUseCase";
-import { ReplyMessageUseCase } from "./replyMessage/ReplyMessageUseCase";
-import { GetMessagesByTreeIdUseCase } from "./getMessagesByTreeId/GetMessagesByTreeIdUseCase";
+import { SendMessageUsecase } from "./sendMessage/sendMessageUsecase";
+import { GetMessagesUsecase } from "./getMessages/getMessagesUsecase";
+import { GetMessagesByReceiverIdUsecase } from "./getMessagesByReceiverId/GetMessagesByReceiverIdUsecase";
+import { ReplyMessageUsecase } from "./replyMessage/ReplyMessageUsecase";
+import { GetMessagesByTreeIdUsecase } from "./getMessagesByTreeId/GetMessagesByTreeIdUsecase";
 import { MessageRepo } from "../infra/MessageRepo";
-import { LogoutUserUseCase } from "./logoutUser/LogoutUserUseCase";
-import { ChangePasswordUseCase } from "./changePassword/ChangePasswordUsecase";
+import { LogoutUserUsecase } from "./logoutUser/LogoutUserUsecase";
+import { ChangePasswordUsecase } from "./changePassword/ChangePasswordUsecase";
 import { UserRepository } from "../infra/UserRepository";
 
 const userRepo = new UserRepository();
 const messageRepo = new MessageRepo();
 
-export const useGetUserById = new GetUserByIdUseCase(userRepo);
-export const useRegisterUserUseCase = new RegisterUserUseCase(userRepo);
-export const useGetUsersUseCase = new GetUsersUseCase(userRepo);
-export const useLoginUserUseCase = new LoginUserUseCase(userRepo);
-export const useLogoutUserUseCase = new LogoutUserUseCase(userRepo);
-export const useDeleteUserUseCase = new DeleteUserUseCase(userRepo);
-export const useSsoUserUseCase = new SsoUserUseCase(userRepo);
-export const useForgotPasswordUseCase = new ForgotPasswordUseCase(userRepo);
-export const useChangePasswordUseCase = new ChangePasswordUseCase(userRepo);
-export const useUpdateUserUseCase = new UpdateUserUseCase(userRepo);
-export const useGetUsersByOrgIdUseCase = new GetUsersByOrgIdUseCase(userRepo);
-export const useGetUsersByIdsUseCase = new GetUsersByIdsUseCase(userRepo);
+export const useGetUserById = new GetUserByIdUsecase(userRepo);
+export const useRegisterUserUsecase = new RegisterUserUsecase(userRepo);
+export const useGetUsersUsecase = new GetUsersUsecase(userRepo);
+export const useLoginUserUsecase = new LoginUserUsecase(userRepo);
+export const useLogoutUserUsecase = new LogoutUserUsecase(userRepo);
+export const useDeleteUserUsecase = new DeleteUserUsecase(userRepo);
+export const useSsoUserUsecase = new SsoUserUsecase(userRepo);
+export const useForgotPasswordUsecase = new ForgotPasswordUsecase(userRepo);
+export const useChangePasswordUsecase = new ChangePasswordUsecase(userRepo);
+export const useUpdateUserUsecase = new UpdateUserUsecase(userRepo);
+export const useGetUsersByOrgIdUsecase = new GetUsersByOrgIdUsecase(userRepo);
+export const useGetUsersByIdsUsecase = new GetUsersByIdsUsecase(userRepo);
 
-export const useSendMessageUseCase = new SendMessageUseCase(messageRepo);
-export const useGetMessagesUseCase = new GetMessagesUseCase(messageRepo);
-export const useGetMessagesByReceiverIdUseCase =
-  new GetMessagesByReceiverIdUseCase(messageRepo);
-export const useReplyMessageUseCase = new ReplyMessageUseCase(messageRepo);
-export const useGetMessagesByTreeIdUseCase = new GetMessagesByTreeIdUseCase(
+export const useSendMessageUsecase = new SendMessageUsecase(messageRepo);
+export const useGetMessagesUsecase = new GetMessagesUsecase(messageRepo);
+export const useGetMessagesByReceiverIdUsecase =
+  new GetMessagesByReceiverIdUsecase(messageRepo);
+export const useReplyMessageUsecase = new ReplyMessageUsecase(messageRepo);
+export const useGetMessagesByTreeIdUsecase = new GetMessagesByTreeIdUsecase(
   messageRepo
 );
 

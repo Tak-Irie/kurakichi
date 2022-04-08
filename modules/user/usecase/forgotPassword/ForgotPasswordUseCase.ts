@@ -1,6 +1,6 @@
 import {
   Either,
-  IUseCase,
+  IUsecase,
   left,
   Result,
   right,
@@ -16,8 +16,8 @@ type ForgetPasswordResponse = Either<
   Result<true>
 >;
 
-export class ForgotPasswordUseCase
-  implements IUseCase<string, Promise<ForgetPasswordResponse>>
+export class ForgotPasswordUsecase
+  implements IUsecase<string, Promise<ForgetPasswordResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;

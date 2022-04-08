@@ -22,7 +22,7 @@ export class UserRepository implements IUserRepository {
       include: {
         receivedMessages: { select: { id: true } },
         belongOrgs: { select: { id: true } },
-        belongSecureBases: { select: { id: true } },
+        belongBases: { select: { id: true } },
       },
     });
     if (!result) return undefined;
@@ -46,7 +46,7 @@ export class UserRepository implements IUserRepository {
       include: {
         receivedMessages: { select: { id: true } },
         belongOrgs: { select: { id: true } },
-        belongSecureBases: { select: { id: true } },
+        belongBases: { select: { id: true } },
       },
     });
     if (!result) return false;
@@ -83,7 +83,7 @@ export class UserRepository implements IUserRepository {
       include: {
         receivedMessages: { select: { id: true } },
         belongOrgs: { select: { id: true } },
-        belongSecureBases: { select: { id: true } },
+        belongBases: { select: { id: true } },
       },
     });
 
@@ -102,7 +102,7 @@ export class UserRepository implements IUserRepository {
       include: {
         receivedMessages: { select: { id: true } },
         belongOrgs: { select: { id: true } },
-        belongSecureBases: { select: { id: true } },
+        belongBases: { select: { id: true } },
       },
     });
     if (prismaUser === null) return undefined;

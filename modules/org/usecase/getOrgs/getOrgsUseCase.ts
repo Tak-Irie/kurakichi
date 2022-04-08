@@ -1,19 +1,24 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
   Result,
   StoreConnectionError,
   UnexpectedError,
-} from '../../../shared';
-import { IOrgRepo } from '../../domain';
-import { createDTOOrgsFromDomain, DTOOrg } from '../DTOOrg';
+} from "../../../shared";
+import { IOrgRepo } from "../../domain";
+import { createDTOOrgsFromDomain, DTOOrg } from "../DTOOrg";
 // import { SomeError } from './getOrgError';
 
-type GetOrgsResponse = Either<UnexpectedError | StoreConnectionError, Result<DTOOrg[]>>;
+type GetOrgsResponse = Either<
+  UnexpectedError | StoreConnectionError,
+  Result<DTOOrg[]>
+>;
 
-export class GetOrgsUseCase implements IUseCase<unknown, Promise<GetOrgsResponse>> {
+export class GetOrgsUsecase
+  implements IUsecase<unknown, Promise<GetOrgsResponse>>
+{
   constructor(private OrgsRepo: IOrgRepo) {
     this.OrgsRepo = OrgsRepo;
   }

@@ -1,26 +1,26 @@
-import { Result } from '../../../shared';
-import { IUseCaseError } from '../../../shared';
+import { Result } from "../../../shared";
+import { IIUsecaseError } from "../../../shared";
 
-export class NotFoundUserError extends Result<IUseCaseError> {
+export class NotFoundUserError extends Result<IIUsecaseError> {
   constructor(error?: Error) {
     super(false, `申請したユーザーが見つかりませんでした`, error);
   }
 }
 
-export class NotFoundOrgError extends Result<IUseCaseError> {
+export class NotFoundOrgError extends Result<IIUsecaseError> {
   constructor(error?: Error) {
     super(false, `申請された団体が見つかりませんでした`, error);
   }
 }
 
-export class NotAuthorizedError extends Result<IUseCaseError> {
+export class NotAuthorizedError extends Result<IIUsecaseError> {
   constructor(error?: Error) {
     super(false, `申請を許可する権限が有りません`, error);
   }
 }
 
-export class AlreadyUserIsMemberError extends Result<IUseCaseError> {
+export class AlreadyUserIsMemberError extends Result<IIUsecaseError> {
   constructor(error?: Error) {
-    super(false, '申請したユーザーは既に団体に所属しています', error);
+    super(false, "申請したユーザーは既に団体に所属しています", error);
   }
 }

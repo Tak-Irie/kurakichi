@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -30,8 +30,8 @@ type UpdateUserResponse = Either<
   Result<DTOUser>
 >;
 
-export class UpdateUserUseCase
-  implements IUseCase<UpdateUserArg, Promise<UpdateUserResponse>>
+export class UpdateUserUsecase
+  implements IUsecase<UpdateUserArg, Promise<UpdateUserResponse>>
 {
   constructor(private UserRepo: IUserRepository) {
     this.UserRepo = UserRepo;

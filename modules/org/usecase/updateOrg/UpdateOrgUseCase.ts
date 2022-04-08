@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -9,10 +9,10 @@ import {
   InvalidInputValueError,
   NotExistError,
   UniqueEntityId,
-} from '../../../shared';
-import { IOrgRepo, Org } from '../../domain';
-import { NotAuthorizedError } from './UpdateOrgError';
-import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
+} from "../../../shared";
+import { IOrgRepo, Org } from "../../domain";
+import { NotAuthorizedError } from "./UpdateOrgError";
+import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 
 type UpdateOrgArg = {
   requestUserId: string;
@@ -37,13 +37,15 @@ type UpdateOrgResponse = Either<
   Result<DTOOrg>
 >;
 
-export class UpdateOrgUseCase implements IUseCase<UpdateOrgArg, Promise<UpdateOrgResponse>> {
+export class UpdateOrgUsecase
+  implements IUsecase<UpdateOrgArg, Promise<UpdateOrgResponse>>
+{
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
   public async execute(arg: UpdateOrgArg): Promise<UpdateOrgResponse> {
     try {
-      console.log('updateOrgArg:', arg);
+      console.log("updateOrgArg:", arg);
       const orgIdOrError = UniqueEntityId.reconstruct(arg.orgId);
       if (orgIdOrError.isFailure)
         return left(new InvalidInputValueError(orgIdOrError.getErrorValue()));
@@ -55,21 +57,26 @@ export class UpdateOrgUseCase implements IUseCase<UpdateOrgArg, Promise<UpdateOr
       // TODO:impl auth sys of updating org stats
       const invalidUser = await this.OrgRepo.confirmMemberExistence(
         orgIdOrError.getValue(),
-        userIdOrError.getValue(),
+        userIdOrError.getValue()
       );
       if (invalidUser == false) return left(new NotAuthorizedError());
 
       const currentOrg = await this.OrgRepo.getOrgById(orgIdOrError.getValue());
-      if (currentOrg == false) return left(new NotExistError('団体が存在しません'));
+      if (currentOrg == false)
+        return left(new NotExistError("団体が存在しません"));
 
       delete arg.orgId;
       delete arg.requestUserId;
       const validatedProps = Org.validateProps({ ...arg });
       const failProp = Object.values(validatedProps).filter(
-        (resultProp) => resultProp.isFailure === true,
+        (resultProp) => resultProp.isFailure === true
       );
       if (failProp[0]) {
-        return left(new InvalidInputValueError(failProp.map((prop) => prop.getErrorValue())));
+        return left(
+          new InvalidInputValueError(
+            failProp.map((prop) => prop.getErrorValue())
+          )
+        );
       }
 
       const updatedOrg = Org.updateProps(currentOrg, {
@@ -89,7 +96,8 @@ export class UpdateOrgUseCase implements IUseCase<UpdateOrgArg, Promise<UpdateOr
       const dtoOrg = createDTOOrgFromDomain(dbResult);
       return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
-      if (err === Error('データベースエラー')) return left(new StoreConnectionError());
+      if (err === Error("データベースエラー"))
+        return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

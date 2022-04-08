@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -7,15 +7,15 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
-} from '../../../shared';
-import { IOrgRepo, Org } from '../../domain';
-import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
+} from "../../../shared";
+import { IOrgRepo, Org } from "../../domain";
+import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 import {
   NotAuthorizedError,
   NotFoundUserError,
   NotFoundOrgError,
   AlreadyUserIsMemberError,
-} from './acceptJoinOrgError';
+} from "./acceptJoinOrgError";
 
 type AcceptJoinOrgArg = {
   requestedOrgId: string;
@@ -34,8 +34,8 @@ type AcceptJoinOrgResponse = Either<
 >;
 
 // FIXME: add auth to accept feature
-export class AcceptJoinOrgUseCase
-  implements IUseCase<AcceptJoinOrgArg, Promise<AcceptJoinOrgResponse>>
+export class AcceptJoinOrgUsecase
+  implements IUsecase<AcceptJoinOrgArg, Promise<AcceptJoinOrgResponse>>
 {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
@@ -43,7 +43,7 @@ export class AcceptJoinOrgUseCase
   public async execute(req: AcceptJoinOrgArg): Promise<AcceptJoinOrgResponse> {
     try {
       const requestedOrg = await this.OrgRepo.getOrgById(
-        UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
+        UniqueEntityId.reconstruct(req.requestedOrgId).getValue()
       );
       if (requestedOrg == false) return left(new NotFoundOrgError());
 
@@ -51,10 +51,10 @@ export class AcceptJoinOrgUseCase
       //   'requestedOrg:',
       //   requestedOrg.getMembers().map((member) => member.getId()),
       // );
-      console.log('orgId:', req.requestedOrgId);
-      console.log('joinerId:', req.requestUserId);
+      console.log("orgId:", req.requestedOrgId);
+      console.log("joinerId:", req.requestUserId);
       const isBelonged = requestedOrg.getMembers().some(
-        (member) => member === req.requestUserId,
+        (member) => member === req.requestUserId
         // console.log('member:', member);
         // console.log('requester', req.requestUserId);
       );
@@ -63,7 +63,7 @@ export class AcceptJoinOrgUseCase
 
       const registeredResult = await this.OrgRepo.acceptJoinOrg(
         UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
-        UniqueEntityId.reconstruct(req.requestUserId).getValue(),
+        UniqueEntityId.reconstruct(req.requestUserId).getValue()
       );
       if (registeredResult == false) return left(new StoreConnectionError());
 

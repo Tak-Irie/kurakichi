@@ -1,7 +1,7 @@
 import { Either, left, Result, right } from "../../../shared/core";
 import { UniqueEntityId } from "../../../shared/domain";
-import { IUseCase } from "../../../shared/usecase";
-import { UnexpectedError } from "../../../shared/usecase/UnexpectedError";
+import { IUsecase } from "../../../shared/Usecase";
+import { UnexpectedError } from "../../../shared/Usecase/UnexpectedError";
 import { IUserRepository } from "../../domain/IUserRepository";
 import { UserNotFoundOrDeletedError } from "./LogoutUserErrors";
 
@@ -14,8 +14,8 @@ type LogoutArg = {
   userId: string;
 };
 
-export class LogoutUserUseCase
-  implements IUseCase<LogoutArg, Promise<LogoutUserResponse>>
+export class LogoutUserUsecase
+  implements IUsecase<LogoutArg, Promise<LogoutUserResponse>>
 {
   private userRepo: IUserRepository;
 

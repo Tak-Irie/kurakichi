@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -9,28 +9,35 @@ import {
   InvalidInputValueError,
   NotExistError,
   UniqueEntityId,
-} from '../../../shared';
-import { IInquiryRepo } from '../../domain';
-import { InquiryStatus } from '../../domain/InquiryStatus';
-import { DTOInquiry, createDTOInquiryFromDomain } from '../DTOInquiry';
+} from "../../../shared";
+import { IInquiryRepo } from "../../domain";
+import { InquiryStatus } from "../../domain/InquiryStatus";
+import { DTOInquiry, createDTOInquiryFromDomain } from "../DTOInquiry";
 
 type UpdateInquiryStatusArg = { inquiryId: string; inquiryStatus: string };
 
 type UpdateInquiryStatusResponse = Either<
-  NotExistError | InvalidInputValueError | UnexpectedError | StoreConnectionError,
+  | NotExistError
+  | InvalidInputValueError
+  | UnexpectedError
+  | StoreConnectionError,
   Result<DTOInquiry>
 >;
 
-export class UpdateInquiryStatusUseCase
-  implements IUseCase<UpdateInquiryStatusArg, Promise<UpdateInquiryStatusResponse>>
+export class UpdateInquiryStatusUsecase
+  implements
+    IUsecase<UpdateInquiryStatusArg, Promise<UpdateInquiryStatusResponse>>
 {
   constructor(private InquiryRepo: IInquiryRepo) {
     this.InquiryRepo = InquiryRepo;
   }
-  public async execute(arg: UpdateInquiryStatusArg): Promise<UpdateInquiryStatusResponse> {
+  public async execute(
+    arg: UpdateInquiryStatusArg
+  ): Promise<UpdateInquiryStatusResponse> {
     try {
       const idOrError = UniqueEntityId.reconstruct(arg.inquiryId);
-      if (idOrError.isFailure) return left(new InvalidInputValueError(idOrError.getErrorValue()));
+      if (idOrError.isFailure)
+        return left(new InvalidInputValueError(idOrError.getErrorValue()));
 
       const statusOrError = InquiryStatus._create(arg.inquiryStatus);
       if (statusOrError.isFailure)
@@ -38,7 +45,7 @@ export class UpdateInquiryStatusUseCase
 
       const dbResult = await this.InquiryRepo.updateInquiryStatus(
         idOrError.getValue(),
-        statusOrError.getValue(),
+        statusOrError.getValue()
       );
 
       const dtoInquiry = createDTOInquiryFromDomain(dbResult);
@@ -46,7 +53,8 @@ export class UpdateInquiryStatusUseCase
 
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
-      if (err === Error('データベースエラー')) return left(new StoreConnectionError());
+      if (err === Error("データベースエラー"))
+        return left(new StoreConnectionError());
       return left(new UnexpectedError(err));
     }
   }

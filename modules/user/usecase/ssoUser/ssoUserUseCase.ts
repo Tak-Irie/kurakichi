@@ -1,8 +1,8 @@
 import { Either, left, Result, right } from "../../../shared/core";
 import { UniqueEntityId } from "../../../shared/domain";
-import { IUseCase, StoreConnectionError } from "../../../shared/useCase";
-import { InvalidInputValueError } from "../../../shared/usecase/InvalidInputValueError";
-import { UnexpectedError } from "../../../shared/usecase/UnexpectedError";
+import { IUsecase, StoreConnectionError } from "../../../shared/Usecase";
+import { InvalidInputValueError } from "../../../shared/Usecase/InvalidInputValueError";
+import { UnexpectedError } from "../../../shared/Usecase/UnexpectedError";
 import { User, UserEmail, UserName, IUserRepository } from "../../domain";
 import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
 
@@ -19,8 +19,8 @@ type RegisterUserResponse = Either<
   Result<DTOUser>
 >;
 
-export class SsoUserUseCase
-  implements IUseCase<SsoUserArgs, Promise<RegisterUserResponse>>
+export class SsoUserUsecase
+  implements IUsecase<SsoUserArgs, Promise<RegisterUserResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;

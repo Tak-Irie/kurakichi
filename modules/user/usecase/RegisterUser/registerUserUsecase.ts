@@ -1,7 +1,7 @@
 import {
   Either,
   InvalidInputValueError,
-  IUseCase,
+  IUsecase,
   left,
   Result,
   right,
@@ -35,8 +35,8 @@ type RegisterUserResponse = Either<
   Result<DTOUser>
 >;
 
-export class RegisterUserUseCase
-  implements IUseCase<RegisterUserArg, Promise<RegisterUserResponse>>
+export class RegisterUserUsecase
+  implements IUsecase<RegisterUserArg, Promise<RegisterUserResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;

@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -7,10 +7,10 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
-} from '../../../shared';
-import { IInquiryRepo } from '../../domain';
-import { createDTOInquiryFromDomain, DTOInquiry } from '../DTOInquiry';
-import { InquiryNotExistError } from './getInquiryError';
+} from "../../../shared";
+import { IInquiryRepo } from "../../domain";
+import { createDTOInquiryFromDomain, DTOInquiry } from "../DTOInquiry";
+import { InquiryNotExistError } from "./getInquiryError";
 
 type InquiryArg = { inquiryId: string };
 
@@ -19,7 +19,9 @@ type GetInquiryResponse = Either<
   Result<DTOInquiry>
 >;
 
-export class GetInquiryUseCase implements IUseCase<InquiryArg, Promise<GetInquiryResponse>> {
+export class GetInquiryUsecase
+  implements IUsecase<InquiryArg, Promise<GetInquiryResponse>>
+{
   constructor(private InquiryRepo: IInquiryRepo) {
     this.InquiryRepo = InquiryRepo;
   }

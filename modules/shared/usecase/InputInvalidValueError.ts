@@ -1,7 +1,7 @@
 import { Result } from "../core/Result";
-import { UseCaseError } from "./UseCaseError";
+import { IUsecaseError } from ".";
 
-export class InputInvalidValueError extends Result<UseCaseError> {
+export class InvalidInputValueError extends Result<IUsecaseError> {
   public constructor(message: string | string[], error: Error | "NOTHING") {
     if (Array.isArray(message)) {
       message = message.filter(Boolean).join("\n");

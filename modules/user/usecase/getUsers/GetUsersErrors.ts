@@ -1,7 +1,7 @@
-import { IUseCaseError, Result } from '../../../shared';
+import { IIUsecaseError, Result } from "../../../shared";
 
-export class UsersNotFoundError extends Result<IUseCaseError> {
+export class UsersNotFoundError extends Result<IIUsecaseError> {
   constructor() {
-    super(false, 'ユーザーが登録されていません');
+    super(false, "ユーザーが登録されていません");
   }
 }

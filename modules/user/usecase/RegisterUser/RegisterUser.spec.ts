@@ -1,12 +1,12 @@
-import { RegisterUserUseCase } from "./RegisterUserUseCase";
+import { RegisterUserUsecase } from "./RegisterUserUsecase";
 import { createMockValidUser, MockUserRepo } from "../../testHelper";
 
 describe("ユーザー登録テスト", () => {
   const repo = new MockUserRepo();
-  const registerUserUseCase = new RegisterUserUseCase(repo);
+  const registerUserUsecase = new RegisterUserUsecase(repo);
   test("登録成功", async (done) => {
     const validUser = await createMockValidUser();
-    const result = await registerUserUseCase.execute({
+    const result = await registerUserUsecase.execute({
       email: validUser.getEmail(),
       password: validUser.getPassword(),
     });
@@ -20,7 +20,7 @@ describe("ユーザー登録テスト", () => {
       email: "valid@test.com",
       password: "validPassword",
     };
-    const result = await registerUserUseCase.execute(invalidNameMock);
+    const result = await registerUserUsecase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe("ユーザー名は最小2文字です");
@@ -32,7 +32,7 @@ describe("ユーザー登録テスト", () => {
       email: "valid@test.com",
       password: "validPassword",
     };
-    const result = await registerUserUseCase.execute(invalidNameMock);
+    const result = await registerUserUsecase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe("ユーザー名は最大20文字です");
@@ -44,7 +44,7 @@ describe("ユーザー登録テスト", () => {
       email: "invalid",
       password: "validPassword",
     };
-    const result = await registerUserUseCase.execute(invalidNameMock);
+    const result = await registerUserUsecase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe(
@@ -58,7 +58,7 @@ describe("ユーザー登録テスト", () => {
       email: "valid@test.com",
       password: "invalid",
     };
-    const result = await registerUserUseCase.execute(invalidNameMock);
+    const result = await registerUserUsecase.execute(invalidNameMock);
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe(
@@ -72,7 +72,7 @@ describe("ユーザー登録テスト", () => {
       email: "dupulicate@example.com",
       password: "validPassword",
     };
-    const result = await registerUserUseCase.execute(invalidEmailMock);
+    const result = await registerUserUsecase.execute(invalidEmailMock);
 
     console.log(":", result.isLeft());
     expect(result.isLeft()).toBeTruthy();

@@ -1,20 +1,23 @@
-import { Result } from '../../../shared';
-import { IUseCaseError } from '../../../shared/useCase';
+import { Result } from "../../../shared";
+import { IIUsecaseError } from "../../../shared/usecase";
 
-export class IncorrectPasswordOrUserNotExist extends Result<IUseCaseError> {
+export class IncorrectPasswordOrUserNotExist extends Result<IIUsecaseError> {
   constructor() {
-    super(false, 'アカウントが存在しないか、パスワードが正しくありません');
+    super(false, "アカウントが存在しないか、パスワードが正しくありません");
   }
 }
 
-export class InvalidEmail extends Result<IUseCaseError> {
+export class InvalidEmail extends Result<IIUsecaseError> {
   constructor() {
-    super(false, 'アカウントが存在しないか、パスワードが正しくありません');
+    super(false, "アカウントが存在しないか、パスワードが正しくありません");
   }
 }
 
-export class SsoUser extends Result<IUseCaseError> {
+export class SsoUser extends Result<IIUsecaseError> {
   constructor() {
-    super(false, 'ソーシャルログインを利用しています。そちらからログインして下さい');
+    super(
+      false,
+      "ソーシャルログインを利用しています。そちらからログインして下さい"
+    );
   }
 }

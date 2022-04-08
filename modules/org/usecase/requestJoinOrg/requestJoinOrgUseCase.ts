@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -7,20 +7,23 @@ import {
   StoreConnectionError,
   UnexpectedError,
   UniqueEntityId,
-} from '../../../shared';
-import { IOrgRepo, Org } from '../../domain';
-import { createDTOOrgFromDomain, DTOOrg } from '../DTOOrg';
-import { NotAcceptJoinError, NotFoundOrgError } from './requestJoinOrgError';
+} from "../../../shared";
+import { IOrgRepo, Org } from "../../domain";
+import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
+import { NotAcceptJoinError, NotFoundOrgError } from "./requestJoinOrgError";
 
 type JoinOrgArg = { requestUserId: string; requestedOrgId: string };
 
 type RequestJoinOrgResponse = Either<
-  NotAcceptJoinError | NotFoundOrgError | UnexpectedError | StoreConnectionError,
+  | NotAcceptJoinError
+  | NotFoundOrgError
+  | UnexpectedError
+  | StoreConnectionError,
   Result<DTOOrg>
 >;
 
-export class RequestJoinOrgUseCase
-  implements IUseCase<JoinOrgArg, Promise<RequestJoinOrgResponse>>
+export class RequestJoinOrgUsecase
+  implements IUsecase<JoinOrgArg, Promise<RequestJoinOrgResponse>>
 {
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
@@ -32,7 +35,7 @@ export class RequestJoinOrgUseCase
 
       const dbResult = await this.OrgRepo.requestJoinOrg(
         requestUserId.getValue(),
-        requestedOrgId.getValue(),
+        requestedOrgId.getValue()
       );
       if (dbResult == false) return left(new StoreConnectionError());
 

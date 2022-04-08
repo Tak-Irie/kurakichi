@@ -1,6 +1,6 @@
 import {
   Either,
-  IUseCase,
+  IUsecase,
   left,
   Result,
   right,
@@ -28,8 +28,8 @@ type LoginUserArg = {
   password: string;
 };
 
-export class LoginUserUseCase
-  implements IUseCase<LoginUserArg, Promise<LoginUserResponse>>
+export class LoginUserUsecase
+  implements IUsecase<LoginUserArg, Promise<LoginUserResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;

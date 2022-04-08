@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -30,8 +30,8 @@ type ReplyMessageResponse = Either<
   Result<DTOMessage>
 >;
 
-export class ReplyMessageUseCase
-  implements IUseCase<ReplyMessageArg, Promise<ReplyMessageResponse>>
+export class ReplyMessageUsecase
+  implements IUsecase<ReplyMessageArg, Promise<ReplyMessageResponse>>
 {
   constructor(private MessageRepo: IMessageRepo) {
     this.MessageRepo = MessageRepo;

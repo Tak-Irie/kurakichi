@@ -1,7 +1,7 @@
-import { UseCaseError } from "./UseCaseError";
+import { IUsecaseError } from ".";
 import { Result } from "../core/Result";
 
-export class StoreConnectionError extends Result<UseCaseError> {
+export class StoreConnectionError extends Result<IUsecaseError> {
   public constructor(error: Error | "NOTHING") {
     super(
       false,

@@ -1,2 +1,2 @@
 export * from "./domain/User";
-export * from "./usecase";
+export * from "./Usecase";

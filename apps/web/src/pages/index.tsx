@@ -56,7 +56,7 @@ const Index: NextPage = () => {
         {/* <ArticlesWelfareGuide /> */}
         <div></div>
       </div>
-      {/* <UseCasePresenter /> */}
+      {/* <UsecasePresenter /> */}
     </div>
   );
 };

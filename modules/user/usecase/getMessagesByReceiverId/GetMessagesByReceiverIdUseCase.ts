@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -19,9 +19,9 @@ type GetMessagesByReceiverIdResponse = Either<
   Result<DTOMessage[]>
 >;
 
-export class GetMessagesByReceiverIdUseCase
+export class GetMessagesByReceiverIdUsecase
   implements
-    IUseCase<
+    IUsecase<
       GetMessagesByReceiverIdArg,
       Promise<GetMessagesByReceiverIdResponse>
     >

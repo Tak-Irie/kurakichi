@@ -1,5 +1,5 @@
 import {
-  IUseCase,
+  IUsecase,
   Either,
   left,
   right,
@@ -23,8 +23,8 @@ type GetUsersByOrgIdResponse = Either<
   Result<DTOUser[]>
 >;
 
-export class GetUsersByOrgIdUseCase
-  implements IUseCase<UsersByOrgIdArg, Promise<GetUsersByOrgIdResponse>>
+export class GetUsersByOrgIdUsecase
+  implements IUsecase<UsersByOrgIdArg, Promise<GetUsersByOrgIdResponse>>
 {
   constructor(private IUserRepo: IUserRepository) {
     this.IUserRepo = IUserRepo;

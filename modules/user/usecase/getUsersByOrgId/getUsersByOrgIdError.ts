@@ -1,7 +1,7 @@
-import { Result } from '../../../shared';
-import { IUseCaseError } from '../../../shared';
+import { Result } from "../../../shared";
+import { IIUsecaseError } from "../../../shared";
 
-export class NotFoundOrgError extends Result<IUseCaseError> {
+export class NotFoundOrgError extends Result<IIUsecaseError> {
   constructor(error?: Error) {
     super(false, `指定された団体が存在していません`, error);
   }

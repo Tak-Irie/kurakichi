@@ -8,7 +8,7 @@ import {
 } from "../util/Constants";
 import { createGoogleClient } from "../util/createOidcClient";
 import { redis } from "../util/createRedis";
-import { useSsoUserUseCase } from "@kurakichi/modules";
+import { useSsoUserUsecase } from "@kurakichi/modules";
 
 const googleRouter = Router();
 
@@ -56,7 +56,7 @@ googleRouter.get("/redirect", async (req, res) => {
 
     console.log("userInfo:", userInfo);
 
-    const result = await useSsoUserUseCase.execute({
+    const result = await useSsoUserUsecase.execute({
       ssoSub: userInfo.sub,
       email: userInfo.email as string,
       avatar: userInfo.picture,

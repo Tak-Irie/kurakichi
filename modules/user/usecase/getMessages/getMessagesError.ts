@@ -1,7 +1,7 @@
-import { Result } from '../../../shared';
-import { IUseCaseError } from '../../../shared';
+import { Result } from "../../../shared";
+import { IIUsecaseError } from "../../../shared";
 
-export class NotFoundMessagesError extends Result<IUseCaseError> {
+export class NotFoundMessagesError extends Result<IIUsecaseError> {
   constructor(some?: unknown, error?: Error) {
     super(false, `メッセージがありません`, error);
   }

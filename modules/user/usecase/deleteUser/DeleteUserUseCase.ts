@@ -1,6 +1,6 @@
 import {
   Either,
-  IUseCase,
+  IUsecase,
   left,
   Result,
   right,
@@ -8,7 +8,7 @@ import {
   UnexpectedError,
   UniqueEntityId,
 } from "../../../shared";
-import { IUserRepository, User } from "../../../user copy/domain";
+import { IUserRepository, User } from "../../domain";
 import { UserNotExistsOrDeletedError } from "./DeleteUserError";
 
 type DeleteUserArg = {
@@ -23,8 +23,8 @@ type DeleteUserResponse = Either<
   Result<void>
 >;
 
-export class DeleteUserUseCase
-  implements IUseCase<DeleteUserArg, Promise<DeleteUserResponse>>
+export class DeleteUserUsecase
+  implements IUsecase<DeleteUserArg, Promise<DeleteUserResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;

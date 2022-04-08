@@ -1,7 +1,7 @@
 import { Result } from "../core";
-import { UseCaseError } from "./UseCaseError";
+import { IUsecaseError } from ".";
 
-export class UnexpectedError extends Result<UseCaseError> {
+export class UnexpectedError extends Result<IUsecaseError> {
   public constructor(error?: Error) {
     super(
       false,

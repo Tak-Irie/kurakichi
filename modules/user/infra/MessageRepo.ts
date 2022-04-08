@@ -66,7 +66,7 @@ export class MessageRepo implements IMessageRepo {
     }
   }
 
-  async getMessageTreeById(treeId: UniqueEntityId): Promise<Message[]> {
+  async getMessageTreeById(treeId: UniqueEntityId): Promise<Message[] | false> {
     try {
       // console.log('terrId:', treeId);
       const messages = await this.prisma.messageTree.findUnique({
@@ -74,6 +74,7 @@ export class MessageRepo implements IMessageRepo {
         include: { messages: true },
       });
       // console.log('messages:', messages);
+      if (messages === null) return false;
 
       const domainMessage = MessageMapper.treeToDomain(messages);
       return domainMessage;
