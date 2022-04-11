@@ -1,5 +1,7 @@
 import { ulid } from "ulid";
 import { v4 as uuidV4 } from "uuid";
+import { Guard, Result } from "../core";
+import { ULIDRegExp } from "../util";
 
 import { ValueObject } from "./ValueObject";
 
@@ -10,16 +12,28 @@ export class UniqueEntityId extends ValueObject<UniqueEntityIdProps> {
   private constructor(props: UniqueEntityIdProps) {
     super(props);
   }
-  static createULID() {
+  public static createULID() {
     return new UniqueEntityId({ id: ulid() });
   }
-  static createUUIDv4() {
+  public static createUUIDv4() {
     return new UniqueEntityId({ id: uuidV4() });
   }
 
   public getId() {
     return this.props.id;
   }
+
+  public static createFromArg(props: UniqueEntityIdProps) {
+    const length = Guard.againstAtMost(26, props.id);
+    if (length.succeeded === false) {
+      return false;
+    }
+    if (ULIDRegExp.test(props.id) === false) {
+      return false;
+    }
+    return new UniqueEntityId(props);
+  }
+
   public static restoreFromRepo(props: UniqueEntityIdProps) {
     return new UniqueEntityId(props);
   }

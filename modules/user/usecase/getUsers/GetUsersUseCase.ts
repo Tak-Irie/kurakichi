@@ -1,12 +1,6 @@
-import {
-  Either,
-  IUsecase,
-  left,
-  Result,
-  right,
-  UnexpectedError,
-} from "../../../shared";
-import { IUserRepository } from "../../../user copy/domain";
+import { Either, left, Result, right } from "../../../shared/core";
+import { IUsecase, UnexpectedError } from "../../../shared/usecase";
+import { IUserRepository } from "../../domain";
 import { createDTOUserFromDomain, DTOUser } from "../DTOUser";
 import { UsersNotFoundError } from "./GetUsersErrors";
 
@@ -26,13 +20,13 @@ export class GetUsersUsecase
     try {
       const dbUsers = await this.userRepository.getUsers();
 
-      if (dbUsers == false) return left(new UsersNotFoundError());
+      if (dbUsers == false) return left(new UsersNotFoundError(""));
 
       const dtoUsers = dbUsers.map((user) => createDTOUserFromDomain(user));
 
       return right(Result.success<DTOUser[]>(dtoUsers));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

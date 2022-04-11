@@ -1,9 +1,13 @@
 import { Either, left, Result, right } from "../../../shared/core";
 import { UniqueEntityId } from "../../../shared/domain";
-import { IUsecase, StoreConnectionError } from "../../../shared/Usecase";
-import { InvalidInputValueError } from "../../../shared/Usecase/InvalidInputValueError";
-import { UnexpectedError } from "../../../shared/Usecase/UnexpectedError";
+import {
+  InvalidInputValueError,
+  IUsecase,
+  StoreConnectionError,
+  UnexpectedError,
+} from "../../../shared/usecase";
 import { User, UserEmail, UserName, IUserRepository } from "../../domain";
+
 import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
 
 type SsoUserArgs = {
@@ -44,7 +48,7 @@ export class SsoUserUsecase
       if (verifiedResult[0].isFailure) {
         const message = verifiedResult.map((result) => result.getErrorValue());
 
-        return left(new InvalidInputValueError(message));
+        return left(new InvalidInputValueError(message, ""));
       }
 
       const email = emailOrError.getValue();
@@ -62,21 +66,21 @@ export class SsoUserUsecase
         email,
         userName,
         ssoSub: arg.ssoSub,
-        avatar: arg.avatar ? arg.avatar : "NOTHING",
+        avatar: arg.avatar ? arg.avatar : "",
       });
       // console.log('ssoUser:', ssoUser);
 
       const dbResult = await this.userRepository.registerUser(ssoUser);
 
       if (dbResult === undefined) {
-        return left(new StoreConnectionError("NOTHING"));
+        return left(new StoreConnectionError(""));
       }
       const dtoUser = createDTOUserFromDomain(dbResult);
 
       return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
       console.error("err:", err);
-      return left(new UnexpectedError());
+      return left(new UnexpectedError(""));
     }
   }
 }

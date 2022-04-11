@@ -1,13 +1,11 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IOrgRepo, Org } from "../../domain";
 import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 import {
@@ -18,8 +16,8 @@ import {
 } from "./acceptJoinOrgError";
 
 type AcceptJoinOrgArg = {
-  requestedOrgId: string;
-  requestUserId: string;
+  orgId: string;
+  userId: string;
   // acceptorMemberId: string;
 };
 
@@ -40,38 +38,39 @@ export class AcceptJoinOrgUsecase
   constructor(private OrgRepo: IOrgRepo) {
     this.OrgRepo = OrgRepo;
   }
-  public async execute(req: AcceptJoinOrgArg): Promise<AcceptJoinOrgResponse> {
+  public async execute(arg: AcceptJoinOrgArg): Promise<AcceptJoinOrgResponse> {
     try {
-      const requestedOrg = await this.OrgRepo.getOrgById(
-        UniqueEntityId.reconstruct(req.requestedOrgId).getValue()
-      );
-      if (requestedOrg == false) return left(new NotFoundOrgError());
+      const isId = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
+
+      const requestedOrg = await this.OrgRepo.getOrgById(isId);
+      if (requestedOrg == false) return left(new NotFoundOrgError(""));
 
       // console.log(
       //   'requestedOrg:',
       //   requestedOrg.getMembers().map((member) => member.getId()),
       // );
-      console.log("orgId:", req.requestedOrgId);
-      console.log("joinerId:", req.requestUserId);
+      console.log("orgId:", arg.orgId);
+      console.log("joinerId:", arg.userId);
       const isBelonged = requestedOrg.getMembers().some(
-        (member) => member === req.requestUserId
+        (member) => member === arg.userId
         // console.log('member:', member);
-        // console.log('requester', req.requestUserId);
+        // console.log('requester', arg.userId);
       );
       // console.log('be:', isBelonged);
-      if (isBelonged) return left(new AlreadyUserIsMemberError());
+      if (isBelonged) return left(new AlreadyUserIsMemberError(""));
 
       const registeredResult = await this.OrgRepo.acceptJoinOrg(
-        UniqueEntityId.reconstruct(req.requestedOrgId).getValue(),
-        UniqueEntityId.reconstruct(req.requestUserId).getValue()
+        UniqueEntityId.restoreFromRepo({ id: arg.orgId }),
+        UniqueEntityId.restoreFromRepo({ id: arg.userId })
       );
-      if (registeredResult == false) return left(new StoreConnectionError());
+      if (registeredResult == false) return left(new StoreConnectionError(""));
 
       const dtoOrg = createDTOOrgFromDomain(registeredResult);
 
       return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

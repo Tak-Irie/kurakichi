@@ -34,7 +34,7 @@ model Organization {
   email            String
   description      String
   phoneNumber      String
-  location         String
+  address          String
   latitude         Float
   longitude        Float
   avatar           String

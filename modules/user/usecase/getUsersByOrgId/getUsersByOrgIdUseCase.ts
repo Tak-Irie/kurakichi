@@ -1,15 +1,12 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IUserRepository } from "../../../user copy/domain";
+} from "../../../shared/usecase";
+import { IUserRepository } from "../../domain";
 import { createDTOUserArrayFromDomain, DTOUser } from "../DTOUser";
 import { NotFoundOrgError } from "./getUsersByOrgIdError";
 
@@ -32,20 +29,20 @@ export class GetUsersByOrgIdUsecase
   public async execute(arg: UsersByOrgIdArg): Promise<GetUsersByOrgIdResponse> {
     try {
       // console.log('arg:', arg);
-      const orgIdOrError = UniqueEntityId.reconstruct(arg.orgId);
-      if (orgIdOrError.isFailure)
-        return left(new InvalidInputValueError(orgIdOrError.getErrorValue()));
+      const orgIdOrError = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (orgIdOrError === false)
+        return left(
+          new InvalidInputValueError("IDの形式が正しく有りません", "")
+        );
 
-      const dbResult = await this.IUserRepo.getUsersByOrgId(
-        orgIdOrError.getValue()
-      );
-      if (dbResult == false) return left(new NotFoundOrgError());
+      const dbResult = await this.IUserRepo.getUsersByOrgId(orgIdOrError);
+      if (dbResult == false) return left(new NotFoundOrgError(""));
       // console.log('dbResult:', dbResult);
 
       const dtoUsers = createDTOUserArrayFromDomain(dbResult);
       return right(Result.success<DTOUser[]>(dtoUsers));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

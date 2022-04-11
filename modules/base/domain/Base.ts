@@ -24,7 +24,7 @@ export class Base extends AggregateRoot<BaseProps> {
     return this.props.id.getId();
   }
 
-  public getRoomOwner(): UniqueEntityId {
+  public getBaseOwner(): UniqueEntityId {
     return this.props.baseOwner;
   }
 

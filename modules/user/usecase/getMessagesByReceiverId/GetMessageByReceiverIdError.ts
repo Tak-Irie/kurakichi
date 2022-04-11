@@ -1,9 +1,8 @@
-import { Result } from "../../../shared";
-import { IIUsecaseError } from "../../../shared";
+import { Result } from "../../../shared/core";
+import { IUsecaseError } from "../../../shared/usecase";
 
-// no unique err
-export class _ extends Result<IIUsecaseError> {
-  constructor(some: unknown, error?: Error) {
-    super(false, `some message`, error);
+export class NotExistsMessage extends Result<IUsecaseError> {
+  constructor(error: Error | "") {
+    super(false, "メッセージがありません", error);
   }
 }

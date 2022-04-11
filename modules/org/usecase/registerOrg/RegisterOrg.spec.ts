@@ -1,22 +1,22 @@
-describe('団体登録テスト', () => {
+describe("団体登録テスト", () => {
   const org = undefined;
-  test('成功', () => {
+  test("成功", () => {
     expect(org).toBeFalsy();
   });
-  test('失敗:登録権限がない', () => {
+  test("失敗:登録権限がない", () => {
     expect(org).toBeFalsy();
   });
 
-  test('失敗:nameが登録されていない', () => {
+  test("失敗:nameが登録されていない", () => {
     expect(org).toBeFalsy();
   });
-  test('失敗:nameが重複している', () => {
+  test("失敗:nameが重複している", () => {
     expect(org).toBeFalsy();
   });
-  test('失敗:locationが登録されていない', () => {
+  test("失敗:addressが登録されていない", () => {
     expect(org).toBeFalsy();
   });
-  test('失敗:locationがバリデーションをパスしない', () => {
+  test("失敗:addressがバリデーションをパスしない", () => {
     expect(org).toBeFalsy();
   });
 });

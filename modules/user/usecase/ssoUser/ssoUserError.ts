@@ -1,7 +1,12 @@
-import { Result, IIUsecaseError } from "../../../shared";
+import { Nothing, Result } from "../../../shared/core";
+import { IUsecaseError } from "../../../shared/usecase";
 
-export class EmailAlreadyExistsError extends Result<IIUsecaseError> {
-  constructor(email: string, error?: Error) {
-    super(false, `こちらのEmail"${email}"は既に登録されています`, error);
+export class EmailAlreadyExistsError extends Result<IUsecaseError> {
+  constructor(error: Error | Nothing) {
+    super(
+      false,
+      `こちらのEmailは既に登録されているか\n正しい形式を満たしていません`,
+      error
+    );
   }
 }

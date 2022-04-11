@@ -1,14 +1,11 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo, Inquiry } from "../../domain";
 import {
   InquiryCategory,
@@ -62,23 +59,31 @@ export class RegisterInquiryUsecase
         return left(
           new InvalidInputValueError(
             verifiedResult.map((result) => {
-              if (result.isFailure) {
-                return result.getErrorValue();
-              }
-              return undefined;
-            })
+              return result.getErrorValue();
+            }),
+            ""
           )
         );
+
+      const isReceiver = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (isReceiver === false)
+        return left(new InvalidInputValueError("wip", ""));
+      const isSender = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (isSender === false)
+        return left(new InvalidInputValueError("wip", ""));
+      const isOrg = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (isOrg === false) return left(new InvalidInputValueError("wip", ""));
 
       const inquiryOrError = Inquiry.create({
         category: categoryOrError.getValue(),
         status: statusOrError.getValue(),
         content: contentOrError.getValue(),
-        receiver: UniqueEntityId.reconstruct(receiverId).getValue(),
-        sender: UniqueEntityId.reconstruct(senderId).getValue(),
-        orgId: UniqueEntityId.reconstruct(orgId).getValue(),
+        receiver: isReceiver,
+        sender: isSender,
+        orgId: isOrg,
       });
 
+      // FIXME:error handling
       const dbResult = await this.InquiryRepo.registerInquiry(
         inquiryOrError.getValue()
       );
@@ -87,8 +92,8 @@ export class RegisterInquiryUsecase
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
       if (err === Error("データベースエラー"))
-        return left(new StoreConnectionError());
-      return left(new UnexpectedError(err));
+        return left(new StoreConnectionError(""));
+      return left(new UnexpectedError(""));
     }
   }
 }

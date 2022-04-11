@@ -8,7 +8,7 @@ interface AddressData {
   address4: string;
 }
 
-interface LocationResponse {
+interface AddressResponse {
   code: string;
   data: {
     en: AddressData;
@@ -47,9 +47,9 @@ export const fetchAddressByPostcode = async (
   if (response.ok === false) {
     return "存在しない郵便番号です";
   }
-  const locationData = (await response.json()) as LocationResponse;
+  const addressData = (await response.json()) as AddressResponse;
 
-  const ja = locationData.data[0].ja;
+  const ja = addressData.data[0].ja;
   const concatenated = ja.prefecture.concat(
     "",
     ja.address1,
@@ -61,10 +61,10 @@ export const fetchAddressByPostcode = async (
   return concatenated;
 };
 
-const isLocation = (json: unknown): false | LocationResponse => {
+const isAddress = (json: unknown): false | AddressResponse => {
   if (typeof json === "object" && json !== null) {
     if ("code" in json) {
-      return json as LocationResponse;
+      return json as AddressResponse;
     }
   }
   return false;

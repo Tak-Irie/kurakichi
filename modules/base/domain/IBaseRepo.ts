@@ -2,6 +2,6 @@ import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
 import { Base } from "./Base";
 
 export interface IBaseRepo {
-  getSecureBase(baseId: UniqueEntityId): Promise<Base | false>;
-  registerSecureBase(secureBase: Base): Promise<Base | false>;
+  getBase(baseId: UniqueEntityId): Promise<Base | false>;
+  registerBase(base: Base): Promise<Base | false>;
 }

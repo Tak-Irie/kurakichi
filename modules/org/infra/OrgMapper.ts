@@ -1,6 +1,6 @@
-import { getIdFromObjectInArray } from '@kurakichi/node-util';
-import { Organization as StoredOrg } from '@prisma/client';
-import { Org } from '../domain';
+import { Organization as StoredOrg } from "@prisma/client";
+import { getIdFromObjectInArray } from "../../shared/util";
+import { Org } from "../domain";
 
 type StoredOrgRelation = StoredOrg & {
   members?: { id: string }[];
@@ -33,7 +33,7 @@ export class OrgMapper {
       email,
       homePage,
       image,
-      location,
+      address,
       latitude,
       longitude,
       name,
@@ -49,7 +49,7 @@ export class OrgMapper {
       email: email.getValue(),
       homePage: homePage.getURL(),
       image: image.getURL(),
-      location: location.getValue(),
+      address: address.getValue(),
       latitude: latitude.getValue(),
       longitude: longitude.getValue(),
       name: name.getValue(),

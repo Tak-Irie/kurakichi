@@ -1,21 +1,18 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
-  Either,
   InvalidInputValueError,
   IUsecase,
-  left,
-  Result,
-  right,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import {
   IUserRepository,
   User,
   UserEmail,
   UserName,
   UserPassword,
-} from "../../../user copy/domain";
+} from "../../domain";
 import { createDTOUserFromDomain, DTOUser } from "../DTOUser";
 import { EmailAlreadyExistsError } from "./RegisterUserError";
 
@@ -23,8 +20,6 @@ type RegisterUserArg = {
   email: string;
   password: string;
 };
-
-type UserTypes = UserEmail | UserName | UserPassword;
 
 type RegisterUserResponse = Either<
   | InvalidInputValueError
@@ -34,6 +29,8 @@ type RegisterUserResponse = Either<
   | Result<UserTypes>,
   Result<DTOUser>
 >;
+
+type UserTypes = UserEmail | UserName | UserPassword;
 
 export class RegisterUserUsecase
   implements IUsecase<RegisterUserArg, Promise<RegisterUserResponse>>
@@ -70,11 +67,9 @@ export class RegisterUserUsecase
         return left(
           new InvalidInputValueError(
             verifiedResult.map((result) => {
-              if (result.isFailure) {
-                return result.getErrorValue();
-              }
-              return undefined;
-            })
+              return result.getErrorValue();
+            }),
+            ""
           )
         );
       }
@@ -87,10 +82,10 @@ export class RegisterUserUsecase
         await this.userRepository.confirmExistence(email);
 
       if (userEmailAlreadyRegistered) {
-        return left(new EmailAlreadyExistsError(email.props.email));
+        return left(new EmailAlreadyExistsError(""));
       }
       const user = User.create({
-        id: UniqueEntityId.create(),
+        id: UniqueEntityId.createULID(),
         email,
         password,
         userName,
@@ -99,7 +94,7 @@ export class RegisterUserUsecase
 
       const result = await this.userRepository.registerUser(user);
       if (result === undefined) {
-        return left(new StoreConnectionError());
+        return left(new StoreConnectionError(""));
       }
       // console.log('registeredResult:', result);
 
@@ -108,7 +103,7 @@ export class RegisterUserUsecase
 
       return right(Result.success<DTOUser>(userDTO));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

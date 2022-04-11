@@ -17,7 +17,7 @@ type Mutation {
   acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
   registerOrg(
     email: String!
-    location: String!
+    address: String!
     name: String!
     phoneNumber: String!
   ): OrgPayload
@@ -46,7 +46,7 @@ type Org implements Node {
   image: String
   inquiries: [Inquiry]
   latitude: Float
-  location: String
+  address: String
   longitude: Float
   members: [User]
   orgName: String
@@ -65,7 +65,7 @@ input OrgUpdateInput {
   description: String
   email: String
   homePage: String
-  location: String
+  address: String
   orgName: String
   phoneNumber: String
 }

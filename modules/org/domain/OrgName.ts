@@ -1,7 +1,6 @@
-import { ValueObject } from '../../shared/domain/ValueObject';
-import { Result } from '../../shared/Result';
-import { Guard } from '../../shared/Guard';
-import { Validation } from '../../shared/Validation';
+import { Guard, Result } from "../../shared/core";
+import { Validation } from "../../shared/core/Validation";
+import { ValueObject } from "../../shared/domain/ValueObject";
 
 type OrgNameProps = {
   name: string;
@@ -20,21 +19,24 @@ export class OrgName extends ValueObject<OrgNameProps> {
   }
 
   public static create(props: OrgNameProps): Result<OrgName> {
-    const result = Guard.falsyCheck({
-      argument: props.name,
-      argumentName: 'name',
-    });
+    const result = Guard.againstNullOrUndefined(props.name, "name");
     if (!result.succeeded) {
       return Result.fail<OrgName>(result.message);
     }
-    const greaterEnough = Validation.valueGreaterThanLimit(this.MIN_LENGTH, props.name);
+    const greaterEnough = Validation.valueGreaterThanLimit(
+      this.MIN_LENGTH,
+      props.name
+    );
     if (!greaterEnough) {
-      return Result.fail<OrgName>('組織名は最小2文字です');
+      return Result.fail<OrgName>("組織名は最小2文字です");
     }
 
-    const lessEnough = Validation.valueLessThanLimit(this.MAX_LENGTH, props.name);
+    const lessEnough = Validation.valueLessThanLimit(
+      this.MAX_LENGTH,
+      props.name
+    );
     if (!lessEnough) {
-      return Result.fail<OrgName>('組織名は最大30文字です');
+      return Result.fail<OrgName>("組織名は最大30文字です");
     }
 
     return Result.success<OrgName>(new OrgName(props));

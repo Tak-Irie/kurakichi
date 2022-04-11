@@ -1,13 +1,14 @@
+export type PropInResult<TYPE> = { [PROP in keyof TYPE]: Result<TYPE[PROP]> };
 export class Result<T> {
   public isSuccess: boolean;
   public isFailure: boolean;
-  public error: T | string | "NOTHING";
-  private _value: T | "NOTHING";
+  public error: T | string | "";
+  private _value: T | "";
 
   public constructor(
     isSuccess: boolean,
-    error: T | string | "NOTHING",
-    value: T | "NOTHING"
+    error: T | string | "",
+    value: T | ""
   ) {
     if (isSuccess && error) {
       throw new Error(
@@ -51,7 +52,7 @@ export class Result<T> {
   }
 
   public static fail<U>(error: string): Result<U> {
-    return new Result<U>(false, error, "NOTHING");
+    return new Result<U>(false, error, "");
   }
 
   public static verifyResult<U>(result: Result<U>): Result<U> {

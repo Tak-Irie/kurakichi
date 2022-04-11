@@ -1,34 +1,36 @@
+import { Either, left, Result, right } from "../../../shared/core";
 import {
+  Address,
+  Email,
+  Geocode,
+  PhoneNumber,
+  UniqueEntityId,
+} from "../../../shared/domain";
+import { GoogleMapAPI } from "../../../shared/infra";
+import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-  InvalidInputValueError,
-  Geocode,
-} from "../../../shared";
-import { IOrgRepo, Org } from "../../domain";
+} from "../../../shared/usecase";
+import { IOrgRepo, Org, OrgName } from "../../domain";
 import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 import {
   AlreadyRegisteredNameError,
-  LocationNotExistError,
+  AddressNotExistError,
 } from "./registerOrgError";
-import { GoogleMapAPIService } from "../../../services";
 
 type RegisterOrgArg = {
   adminId: string;
   name: string;
-  location: string;
+  address: string;
   phoneNumber: string;
   email: string;
 };
 
 type RegisterOrgResponse = Either<
   | InvalidInputValueError
-  | LocationNotExistError
+  | AddressNotExistError
   | AlreadyRegisteredNameError
   | UnexpectedError
   | StoreConnectionError,
@@ -43,54 +45,63 @@ export class RegisterOrgUsecase
   }
   public async execute(arg: RegisterOrgArg): Promise<RegisterOrgResponse> {
     try {
-      // console.log('registerOrgArg:', arg);
-      const validatedProps = Org.validateProps({ ...arg });
-      const failProp = Object.values(validatedProps).filter(
-        (resultProp) => resultProp.isFailure === true
-      );
-      // console.log('failProp:', failProp);
-      if (failProp[0]) {
-        return left(
-          new InvalidInputValueError(
-            failProp.map((prop) => prop.getErrorValue())
-          )
-        );
-      }
+      const { address, adminId, email, name, phoneNumber } = arg;
 
-      const geocode = await GoogleMapAPIService.getGeoCodeByAddress(
-        validatedProps.location.getValue().getValue()
+      // TODO:unify them
+      const isId = UniqueEntityId.createFromArg({ id: adminId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
+
+      const isName = OrgName.create({ name });
+      if (isName.isFailure)
+        return left(new InvalidInputValueError(isName.getErrorValue(), ""));
+
+      const isPhoneNumber = PhoneNumber.create({ phoneNumber });
+      if (isPhoneNumber.isFailure)
+        return left(
+          new InvalidInputValueError(isPhoneNumber.getErrorValue(), "")
+        );
+
+      const isEmail = Email.create({ email });
+      if (isEmail.isFailure)
+        return left(new InvalidInputValueError(isEmail.getErrorValue(), ""));
+
+      const isAddress = Address.create({ address });
+      if (isAddress.isFailure)
+        return left(new InvalidInputValueError(isAddress.getErrorValue(), ""));
+
+      const duplicateCheck = await this.OrgRepo.confirmOrgByName(
+        isName.getValue()
       );
-      if (geocode === false) return left(new LocationNotExistError());
+      if (duplicateCheck) return left(new AlreadyRegisteredNameError(""));
+
+      const geocode = await GoogleMapAPI.getGeoCodeByAddress(
+        isAddress.getValue()
+      );
+      if (geocode === false) return left(new AddressNotExistError(""));
 
       const lat = Geocode.create({ code: geocode.lat });
       const lng = Geocode.create({ code: geocode.lng });
       if (lat.isFailure || lng.isFailure)
-        return left(new LocationNotExistError());
+        return left(new AddressNotExistError(""));
 
-      const duplicateCheck = await this.OrgRepo.confirmOrgByName(
-        validatedProps.name.getValue()
-      );
-      if (duplicateCheck) return left(new AlreadyRegisteredNameError());
-
-      const orgOrError = Org.create({
-        id: UniqueEntityId.create(),
-        adminId: validatedProps.adminId.getValue(),
-        name: validatedProps.name.getValue(),
-        email: validatedProps.email.getValue(),
-        location: validatedProps.location.getValue(),
+      const orgOrError = Org._create({
+        adminId: isId,
+        name: isName.getValue(),
+        email: isEmail.getValue(),
+        phoneNumber: isPhoneNumber.getValue(),
+        address: isAddress.getValue(),
         latitude: lat.getValue(),
         longitude: lng.getValue(),
-        phoneNumber: validatedProps.phoneNumber.getValue(),
       });
-      if (orgOrError.isFailure) return left(new UnexpectedError());
+      if (orgOrError.isFailure) return left(new UnexpectedError(""));
 
       const dbResult = await this.OrgRepo.registerOrg(orgOrError.getValue());
-      if (dbResult == false) return left(new StoreConnectionError());
+      if (dbResult == false) return left(new StoreConnectionError(""));
 
       const dtoOrg = createDTOOrgFromDomain(dbResult);
       return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

@@ -1,15 +1,12 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  NotExistError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo } from "../../domain";
 import { InquiryStatus } from "../../domain/InquiryStatus";
 import { DTOInquiry, createDTOInquiryFromDomain } from "../DTOInquiry";
@@ -35,16 +32,18 @@ export class UpdateInquiryStatusUsecase
     arg: UpdateInquiryStatusArg
   ): Promise<UpdateInquiryStatusResponse> {
     try {
-      const idOrError = UniqueEntityId.reconstruct(arg.inquiryId);
-      if (idOrError.isFailure)
-        return left(new InvalidInputValueError(idOrError.getErrorValue()));
+      const isInquiryId = UniqueEntityId.createFromArg({ id: arg.inquiryId });
+      if (isInquiryId === false)
+        return left(new InvalidInputValueError("wip", ""));
 
       const statusOrError = InquiryStatus._create(arg.inquiryStatus);
       if (statusOrError.isFailure)
-        return left(new InvalidInputValueError(statusOrError.getErrorValue()));
+        return left(
+          new InvalidInputValueError(statusOrError.getErrorValue(), "")
+        );
 
       const dbResult = await this.InquiryRepo.updateInquiryStatus(
-        idOrError.getValue(),
+        isInquiryId,
         statusOrError.getValue()
       );
 
@@ -54,8 +53,8 @@ export class UpdateInquiryStatusUsecase
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
       if (err === Error("データベースエラー"))
-        return left(new StoreConnectionError());
-      return left(new UnexpectedError(err));
+        return left(new StoreConnectionError(""));
+      return left(new UnexpectedError(""));
     }
   }
 }

@@ -1,21 +1,19 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo } from "../../domain";
 import { createDTOInquiryFromDomain, DTOInquiry } from "../DTOInquiry";
-import { InquiryNotExistError } from "./getInquiryError";
 
 type InquiryArg = { inquiryId: string };
 
 type GetInquiryResponse = Either<
-  InquiryNotExistError | UnexpectedError | StoreConnectionError,
+  NotExistError | UnexpectedError | StoreConnectionError,
   Result<DTOInquiry>
 >;
 
@@ -27,15 +25,16 @@ export class GetInquiryUsecase
   }
   public async execute(arg: InquiryArg): Promise<GetInquiryResponse> {
     try {
-      const inquiryId = UniqueEntityId.reconstruct(arg.inquiryId);
+      const isId = UniqueEntityId.createFromArg({ id: arg.inquiryId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
 
-      const dbResult = await this.InquiryRepo.getInquiry(inquiryId.getValue());
-      if (dbResult == false) return left(new StoreConnectionError());
+      const dbResult = await this.InquiryRepo.getInquiry(isId);
+      if (dbResult == false) return left(new StoreConnectionError(""));
 
       const dtoInquiry = createDTOInquiryFromDomain(dbResult);
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

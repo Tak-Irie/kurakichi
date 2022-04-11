@@ -1,18 +1,19 @@
+import { Either, left, Nothing, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo } from "../../domain";
 import { createDTOInquiriesFromDomain, DTOInquiry } from "../DTOInquiry";
 
-type InquiriesArg = { orgId: string; limit: number; endCursor?: string };
+type InquiriesArg = {
+  orgId: string;
+  limit: number;
+  endCursor: string | Nothing;
+};
 
 type GetInquiriesResponse = Either<
   InvalidInputValueError | UnexpectedError | StoreConnectionError,
@@ -27,31 +28,28 @@ export class GetInquiriesUsecase
   }
   public async execute(arg: InquiriesArg): Promise<GetInquiriesResponse> {
     try {
-      let cursor: UniqueEntityId | undefined;
-      const idOrErr = UniqueEntityId.reconstruct(arg.orgId);
-      if (idOrErr.isFailure)
-        return left(new InvalidInputValueError(idOrErr.getErrorValue()));
+      let cursor: UniqueEntityId | Nothing = "";
+
+      const isId = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
 
       if (arg.endCursor) {
-        const endCursorOrErr = UniqueEntityId.reconstruct(arg.endCursor);
-        if (endCursorOrErr.isFailure)
-          return left(
-            new InvalidInputValueError(endCursorOrErr.getErrorValue())
-          );
-        cursor = endCursorOrErr.getValue();
+        const isId = UniqueEntityId.createFromArg({ id: arg.orgId });
+        if (isId === false) return left(new InvalidInputValueError("wip", ""));
+        cursor = isId;
       }
 
       const dbInquiries = await this.InquiriesRepo.getInquiriesByOrgId(
-        idOrErr.getValue(),
+        isId,
         arg.limit,
-        cursor
+        cursor ? cursor : ""
       );
       if (dbInquiries == false) return right(Result.success<DTOInquiry[]>([]));
 
       const dtoInquiries = createDTOInquiriesFromDomain(dbInquiries);
       return right(Result.success<DTOInquiry[]>(dtoInquiries));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

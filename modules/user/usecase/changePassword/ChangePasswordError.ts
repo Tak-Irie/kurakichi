@@ -3,7 +3,7 @@ import { IUsecaseError } from "../../../shared/usecase";
 
 export class InvalidPasswordError extends Result<IUsecaseError> {
   constructor() {
-    super(false, '入力された"現在のパスワード"が正しくありません', "NOTHING");
+    super(false, '入力された"現在のパスワード"が正しくありません', "");
   }
 }
 
@@ -12,7 +12,7 @@ export class SSOUserError extends Result<IUsecaseError> {
     super(
       false,
       `ソーシャルログインを利用されています。くらきち固有のパスワードは不要です。`,
-      "NOTHING"
+      ""
     );
   }
 }

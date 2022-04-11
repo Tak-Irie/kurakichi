@@ -1,22 +1,18 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-  InvalidInputValueError,
-} from "../../../shared";
+} from "../../../shared/usecase";
+import { IMessageRepo, Message, MessageContent } from "../../domain";
+import { MessageStatus } from "../../domain/MessageStatus";
 import {
-  IMessageRepo,
-  Message,
-  MessageContent,
-} from "../../../user copy/domain";
-import { MessageStatus } from "../../../user copy/domain/MessageStatus";
-import { createDTOMessageFromDomain, DTOMessage } from "../DTOMessage";
-import { ReceiverNotFoundError } from "./sendMessageError";
+  NotFoundReceiverError,
+  NotValidContentError,
+} from "./sendMessageError";
+import { DTOMessage, createDTOMessageFromDomain } from "../DTOMessage";
 
 type SendMessageArg = {
   textInput: string;
@@ -28,7 +24,8 @@ type MessageTypes = MessageContent | MessageStatus;
 
 type SendMessageResponse = Either<
   | InvalidInputValueError
-  | ReceiverNotFoundError
+  | NotFoundReceiverError
+  | NotValidContentError
   | UnexpectedError
   | StoreConnectionError,
   Result<DTOMessage>
@@ -51,21 +48,26 @@ export class SendMessageUsecase
         return left(
           new InvalidInputValueError(
             verifiedResults.map((result) => {
-              if (result.isFailure) {
-                return result.getErrorValue();
-              }
-              return undefined;
-            })
+              return result.getErrorValue();
+            }),
+            ""
           )
         );
 
+      const isSender = UniqueEntityId.createFromArg({ id: arg.senderId });
+      if (isSender === false)
+        return left(new InvalidInputValueError("wip", ""));
+      const isReceiver = UniqueEntityId.createFromArg({ id: arg.receiverId });
+      if (isReceiver === false)
+        return left(new InvalidInputValueError("wip", ""));
+
       const messageOrError = Message.create({
         content: contentOrError.getValue(),
-        sender: UniqueEntityId.reconstruct(arg.senderId).getValue(),
-        receiver: UniqueEntityId.reconstruct(arg.receiverId).getValue(),
+        sender: isSender,
+        receiver: isReceiver,
       });
       // TODO:need create error?
-      if (messageOrError.isFailure) return left(new UnexpectedError());
+      if (messageOrError.isFailure) return left(new UnexpectedError(""));
       // console.log('messOrErr:', messageOrError);
 
       const domainMessage = await this.Repo.registerMessage(

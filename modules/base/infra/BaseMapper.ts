@@ -3,16 +3,16 @@ import { UniqueEntityId } from "../../shared/domain";
 import { Base } from "../domain";
 
 type BaseRelations = StoredBase & {
-  members?: StoredUser[];
+  members: StoredUser[];
 };
 
-export class SecureBaseMapper {
+export class BaseMapper {
   public static ToDomain(storedBase: BaseRelations): Base {
     const domainRoom = Base.create({
-      id: UniqueEntityId.restoreFromRepo(storedBase.id),
-      baseOwner: UniqueEntityId.restoreFromRepo(storedBase.adminId),
+      id: UniqueEntityId.restoreFromRepo({ id: storedBase.id }),
+      baseOwner: UniqueEntityId.restoreFromRepo({ id: storedBase.adminId }),
       members: storedBase.members.map((member) =>
-        UniqueEntityId.restoreFromRepo(member.id).getValue()
+        UniqueEntityId.restoreFromRepo({ id: member.id })
       ),
     });
 

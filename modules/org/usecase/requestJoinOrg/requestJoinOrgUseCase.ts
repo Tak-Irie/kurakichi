@@ -1,14 +1,12 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IOrgRepo, Org } from "../../domain";
+} from "../../../shared/usecase";
+import { IOrgRepo } from "../../domain";
 import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 import { NotAcceptJoinError, NotFoundOrgError } from "./requestJoinOrgError";
 
@@ -30,20 +28,23 @@ export class RequestJoinOrgUsecase
   }
   public async execute(arg: JoinOrgArg): Promise<RequestJoinOrgResponse> {
     try {
-      const requestUserId = UniqueEntityId.reconstruct(arg.requestUserId);
-      const requestedOrgId = UniqueEntityId.reconstruct(arg.requestedOrgId);
+      const isUserId = UniqueEntityId.createFromArg({ id: arg.requestUserId });
+      if (isUserId === false)
+        return left(new InvalidInputValueError("wip", ""));
+      const isOrgId = UniqueEntityId.createFromArg({
+        id: arg.requestedOrgId,
+      });
+      if (isOrgId === false) return left(new InvalidInputValueError("wip", ""));
 
-      const dbResult = await this.OrgRepo.requestJoinOrg(
-        requestUserId.getValue(),
-        requestedOrgId.getValue()
-      );
-      if (dbResult == false) return left(new StoreConnectionError());
+      // TODO:Fix flow
+      const dbResult = await this.OrgRepo.requestJoinOrg(isUserId, isOrgId);
+      if (dbResult == false) return left(new StoreConnectionError(""));
 
       const dtoOrg = createDTOOrgFromDomain(dbResult);
 
       return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

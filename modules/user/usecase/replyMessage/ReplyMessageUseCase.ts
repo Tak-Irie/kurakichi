@@ -1,21 +1,14 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
-import {
-  IMessageRepo,
-  Message,
-  MessageContent,
-} from "../../../user copy/domain";
-import { MessageNotExistError } from "./ReplyMessageError";
+} from "../../../shared/usecase";
+import { IMessageRepo, Message, MessageContent } from "../../domain";
 import { DTOMessage, createDTOMessageFromDomain } from "../DTOMessage";
+import { MessageNotExistError } from "./ReplyMessageError";
 
 type ReplyMessageArg = {
   replyTargetId: string;
@@ -39,20 +32,19 @@ export class ReplyMessageUsecase
   public async execute(arg: ReplyMessageArg): Promise<ReplyMessageResponse> {
     try {
       // console.log('arg:', arg);
-      const replyTargetIdOrErr = UniqueEntityId.reconstruct(arg.replyTargetId);
-      if (replyTargetIdOrErr.isFailure)
-        return left(
-          new InvalidInputValueError(replyTargetIdOrErr.getErrorValue())
-        );
+      const replyTargetIdOrErr = UniqueEntityId.createFromArg({
+        id: arg.replyTargetId,
+      });
+      if (replyTargetIdOrErr === false)
+        return left(new InvalidInputValueError("wip", ""));
 
-      const replyTarget = await this.MessageRepo.getMessage(
-        replyTargetIdOrErr.getValue()
-      );
-      if (replyTarget == false) return left(new MessageNotExistError());
+      const replyTarget = await this.MessageRepo.getMessage(replyTargetIdOrErr);
+
+      if (replyTarget == false) return left(new MessageNotExistError(""));
 
       const contentOrError = MessageContent.create({ text: arg.content });
       if (contentOrError.isFailure)
-        return left(new InvalidInputValueError("不正な内容です"));
+        return left(new InvalidInputValueError("不正な内容です", ""));
 
       const reply = Message.createReply(replyTarget, contentOrError.getValue());
       // console.log('newRes:', newRes);
@@ -63,8 +55,8 @@ export class ReplyMessageUsecase
       return right(Result.success<DTOMessage>(dtoMessage));
     } catch (err) {
       if (err == Error("データベースエラー"))
-        return left(new StoreConnectionError());
-      return left(new UnexpectedError(err));
+        return left(new StoreConnectionError(""));
+      return left(new UnexpectedError(""));
     }
   }
 }

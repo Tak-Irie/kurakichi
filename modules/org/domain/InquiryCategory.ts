@@ -1,7 +1,12 @@
-import { Result } from '../../shared/Result';
-import { ValueObject } from '../../shared/domain/ValueObject';
+import { Result } from "../../shared/core";
+import { ValueObject } from "../../shared/domain/ValueObject";
 
-export type InquiryCategoryUnion = 'COUNSEL' | 'INQUIRY' | 'CONTACT' | 'APPLICATION' | 'OTHERS';
+export type InquiryCategoryUnion =
+  | "COUNSEL"
+  | "INQUIRY"
+  | "CONTACT"
+  | "APPLICATION"
+  | "OTHERS";
 
 type InquiryCategoryProps = {
   type: InquiryCategoryUnion;
@@ -21,7 +26,9 @@ export class InquiryCategory extends ValueObject<InquiryCategoryProps> {
     });
     return Result.success<InquiryCategory>(inquiryCategory);
   }
-  public static restoreFromRepo(category: InquiryCategoryUnion): InquiryCategory {
+  public static restoreFromRepo(
+    category: InquiryCategoryUnion
+  ): InquiryCategory {
     return new InquiryCategory({ type: category });
   }
 }

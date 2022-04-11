@@ -1,6 +1,6 @@
-import { Entity } from '../../shared';
-import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
-import { Result } from '../../shared/Result';
+import { Result } from "../../shared/core";
+import { Entity } from "../../shared/domain";
+import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
 
 interface ArticleProps {
   id: UniqueEntityId;
@@ -32,7 +32,7 @@ export class Article extends Entity<ArticleProps> {
   public static restoreFromRepo(storedArticle: ArticlePrimitive): Article {
     const { id, image, text } = storedArticle;
     return new Article({
-      id: UniqueEntityId.restoreFromRepo(id),
+      id: UniqueEntityId.restoreFromRepo({ id }),
       image,
       text,
     });

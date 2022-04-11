@@ -1,6 +1,6 @@
-import { Result } from "../../shared copy/Result";
-import { ValueObject } from "../../shared copy/domain/ValueObject";
 import validator from "validator";
+import { Result } from "../core";
+import { ValueObject } from "./ValueObject";
 
 export type EmailProps = {
   email: string;

@@ -1,48 +1,47 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UserNotFoundError } from "./GetUserByIdErrors";
+
+import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
 import {
-  Either,
   InvalidInputValueError,
   IUsecase,
-  left,
-  Result,
-  right,
   UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IUserRepository } from "../../../user copy/domain";
-import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
-import * as GetUserByIdErrors from "./GetUserByIdErrors";
+} from "../../../shared/usecase";
+import { IUserRepository } from "../../domain";
+import { UniqueEntityId } from "../../../shared/domain";
 
 type GetUserByIdResponse = Either<
-  | GetUserByIdErrors.UserNotFoundError
-  | UnexpectedError
-  | InvalidInputValueError,
+  UserNotFoundError | UnexpectedError | InvalidInputValueError,
   Result<DTOUser>
 >;
 
+type GetUserByIdArg = {
+  id: string;
+};
+
 export class GetUserByIdUsecase
-  implements IUsecase<string, Promise<GetUserByIdResponse>>
+  implements IUsecase<GetUserByIdArg, Promise<GetUserByIdResponse>>
 {
   constructor(private userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
-  public async execute(userId: string): Promise<GetUserByIdResponse> {
+  public async execute(arg: GetUserByIdArg): Promise<GetUserByIdResponse> {
     try {
-      const idOrErr = UniqueEntityId.reconstruct(userId);
-      if (idOrErr.isFailure)
-        return left(new InvalidInputValueError(idOrErr.getErrorValue()));
+      const idOrErr = UniqueEntityId.createFromArg(arg);
+      if (idOrErr === false) {
+        return left(
+          new InvalidInputValueError("正しい形式で入力されていません", "")
+        );
+      }
+      const dbResult = await this.userRepository.getUserByUserId(idOrErr);
 
-      const dbResult = await this.userRepository.getUserByUserId(
-        UniqueEntityId.reconstruct(userId).getValue()
-      );
-
-      if (dbResult === undefined)
-        return left(new GetUserByIdErrors.UserNotFoundError(userId));
+      if (dbResult === undefined) return left(new UserNotFoundError(""));
 
       const dtoUser = createDTOUserFromDomain(dbResult);
       return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
-      return left(new UnexpectedError());
+      return left(new UnexpectedError(""));
     }
   }
 }

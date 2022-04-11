@@ -1,0 +1,1 @@
+ALTER TABLE "Organization" RENAME COLUMN "location" TO "address";

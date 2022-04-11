@@ -2,26 +2,27 @@ import { PrismaClient } from "@prisma/client";
 import { UniqueEntityId } from "../../shared/domain";
 import { Base } from "../domain/Base";
 import { IBaseRepo } from "../domain/IBaseRepo";
-import { SecureBaseMapper } from "./BaseMapper";
+import { BaseMapper } from "./BaseMapper";
 
 export class BaseRepo implements IBaseRepo {
   private prisma: PrismaClient;
   constructor() {
     this.prisma = new PrismaClient();
   }
-  async getSecureBase(baseId: UniqueEntityId): Promise<Base | false> {
-    const dbResult = await this.prisma.secureBase.findUnique({
+  async getBase(baseId: UniqueEntityId): Promise<Base | false> {
+    const dbResult = await this.prisma.base.findUnique({
       where: { id: baseId.getId() },
       include: { members: true },
     });
     if (dbResult == undefined) return false;
-    return SecureBaseMapper.ToDomain(dbResult);
+    return BaseMapper.ToDomain(dbResult);
   }
-  async registerSecureBase(secureBase: Base): Promise<Base | false> {
-    const baseId = secureBase.getId();
-    const adminId = secureBase.getRoomOwner().getId();
+
+  async registerBase(base: Base): Promise<Base | false> {
+    const baseId = base.getId();
+    const adminId = base.getBaseOwner().getId();
     const dbResult = await this.prisma.$transaction([
-      this.prisma.secureBase.create({
+      this.prisma.base.create({
         data: {
           id: baseId,
           admin: { connect: { id: adminId } },
@@ -29,12 +30,12 @@ export class BaseRepo implements IBaseRepo {
       }),
       this.prisma.user.update({
         where: { id: adminId },
-        data: { belongSecureBases: { connect: { id: baseId } } },
+        data: { belongBases: { connect: { id: baseId } } },
       }),
     ]);
 
     if (dbResult == undefined) return false;
 
-    return secureBase;
+    return base;
   }
 }

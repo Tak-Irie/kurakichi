@@ -1,15 +1,12 @@
+import { Either, left, Nothing, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  NotExistError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IOrgRepo, Org } from "../../domain";
 import { NotAuthorizedError } from "./UpdateOrgError";
 import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
@@ -17,15 +14,15 @@ import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 type UpdateOrgArg = {
   requestUserId: string;
   orgId: string;
-  name?: string;
-  email?: string;
-  phoneNumber?: string;
-  location?: string;
-  description?: string;
-  adminId?: string;
-  avatar?: string;
-  image?: string;
-  homePage?: string;
+  name: string | Nothing;
+  email: string | Nothing;
+  phoneNumber: string | Nothing;
+  address: string | Nothing;
+  description: string | Nothing;
+  adminId: string | Nothing;
+  avatar: string | Nothing;
+  image: string | Nothing;
+  homePage: string | Nothing;
 };
 
 type UpdateOrgResponse = Either<
@@ -45,28 +42,29 @@ export class UpdateOrgUsecase
   }
   public async execute(arg: UpdateOrgArg): Promise<UpdateOrgResponse> {
     try {
-      console.log("updateOrgArg:", arg);
-      const orgIdOrError = UniqueEntityId.reconstruct(arg.orgId);
-      if (orgIdOrError.isFailure)
-        return left(new InvalidInputValueError(orgIdOrError.getErrorValue()));
+      const orgIdOrError = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (orgIdOrError === false)
+        return left(new InvalidInputValueError("wip", ""));
 
-      const userIdOrError = UniqueEntityId.reconstruct(arg.requestUserId);
-      if (userIdOrError.isFailure)
-        return left(new InvalidInputValueError(userIdOrError.getErrorValue()));
+      const userIdOrError = UniqueEntityId.createFromArg({
+        id: arg.requestUserId,
+      });
+      if (userIdOrError === false)
+        return left(new InvalidInputValueError("wip", ""));
 
       // TODO:impl auth sys of updating org stats
-      const invalidUser = await this.OrgRepo.confirmMemberExistence(
-        orgIdOrError.getValue(),
-        userIdOrError.getValue()
+      const isValid = await this.OrgRepo.confirmMemberExistence(
+        orgIdOrError,
+        userIdOrError
       );
-      if (invalidUser == false) return left(new NotAuthorizedError());
+      if (isValid == false) return left(new NotAuthorizedError(""));
 
-      const currentOrg = await this.OrgRepo.getOrgById(orgIdOrError.getValue());
+      const currentOrg = await this.OrgRepo.getOrgById(orgIdOrError);
       if (currentOrg == false)
-        return left(new NotExistError("団体が存在しません"));
+        return left(new NotExistError("団体が存在しません", ""));
 
-      delete arg.orgId;
-      delete arg.requestUserId;
+      // delete arg.orgId;
+      // delete arg.requestUserId;
       const validatedProps = Org.validateProps({ ...arg });
       const failProp = Object.values(validatedProps).filter(
         (resultProp) => resultProp.isFailure === true
@@ -74,7 +72,8 @@ export class UpdateOrgUsecase
       if (failProp[0]) {
         return left(
           new InvalidInputValueError(
-            failProp.map((prop) => prop.getErrorValue())
+            failProp.map((prop) => prop.getErrorValue()),
+            ""
           )
         );
       }
@@ -86,7 +85,7 @@ export class UpdateOrgUsecase
         email: validatedProps.email?.getValue() || undefined,
         homePage: validatedProps.homePage?.getValue() || undefined,
         image: validatedProps.image?.getValue() || undefined,
-        location: validatedProps.location?.getValue() || undefined,
+        address: validatedProps.address?.getValue() || undefined,
         name: validatedProps.name?.getValue() || undefined,
         phoneNumber: validatedProps.phoneNumber?.getValue() || undefined,
       });
@@ -97,8 +96,8 @@ export class UpdateOrgUsecase
       return right(Result.success<DTOOrg>(dtoOrg));
     } catch (err) {
       if (err === Error("データベースエラー"))
-        return left(new StoreConnectionError());
-      return left(new UnexpectedError(err));
+        return left(new StoreConnectionError(""));
+      return left(new UnexpectedError(""));
     }
   }
 }

@@ -1,17 +1,14 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IUserRepository } from "../../../user copy/domain";
+} from "../../../shared/usecase";
+import { IUserRepository } from "../../domain";
 import { createDTOUserFromDomain, DTOUser } from "../DTOUser";
-import { UserNotExistError } from "./updateUserError";
+import { NotFoundUserError } from "./updateUserError";
 
 type UpdateUserArg = {
   userId: string;
@@ -24,7 +21,7 @@ type UpdateUserArg = {
 
 type UpdateUserResponse = Either<
   | InvalidInputValueError
-  | UserNotExistError
+  | NotFoundUserError
   | UnexpectedError
   | StoreConnectionError,
   Result<DTOUser>
@@ -39,30 +36,31 @@ export class UpdateUserUsecase
   public async execute(arg: UpdateUserArg): Promise<UpdateUserResponse> {
     const { userId, avatar, description, email, image, userName } = arg;
     try {
-      const idOrError = UniqueEntityId.reconstruct(userId);
-      if (idOrError.isFailure)
-        return left(new InvalidInputValueError(idOrError.getErrorValue()));
+      const idOrError = UniqueEntityId.createFromArg({ id: userId });
+      if (idOrError === false)
+        return left(
+          new InvalidInputValueError("IDの形式が正しく有りません", "")
+        );
 
-      const storedUser = await this.UserRepo.getUserByUserId(
-        idOrError.getValue()
-      );
-      if (storedUser == undefined) return left(new UserNotExistError());
+      const storedUser = await this.UserRepo.getUserByUserId(idOrError);
+      if (storedUser == undefined) return left(new NotFoundUserError(""));
 
       // console.log('beforeChange:', storedUser);
 
       if (email) {
         const result = storedUser.updateEmail(email);
         if (typeof result == "string")
-          return left(new InvalidInputValueError(result));
+          return left(
+            new InvalidInputValueError("正しい形式を満たしていません", "")
+          );
       }
 
       if (userName) {
         const result = storedUser.updateUserName(userName);
         if (typeof result == "string")
-          return left(new InvalidInputValueError(result));
+          return left(new InvalidInputValueError(result, ""));
       }
 
-      // FIXME:create service class is better, don't you think?
       // TODO:const avatarOrError = UserAvatar.create(avatar)
       // if(avatarOrError) return left(new InvalidInputValueError(AvatarOrError.getErrorValue()))
       // do same approach to them all
@@ -80,13 +78,13 @@ export class UpdateUserUsecase
 
       // console.log('afterChange:', storedUser);
       const dbResult = await this.UserRepo.updateUser(storedUser);
-      if (dbResult == false) return left(new StoreConnectionError());
+      if (dbResult == false) return left(new StoreConnectionError(""));
 
       const userDTO = createDTOUserFromDomain(dbResult);
 
       return right(Result.success<DTOUser>(userDTO));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

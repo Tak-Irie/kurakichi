@@ -1,4 +1,4 @@
-import { Org } from '../domain';
+import { Org } from "../domain";
 
 export type DTOOrg = {
   id: string;
@@ -9,7 +9,7 @@ export type DTOOrg = {
   homePage: string;
   image: string;
   inquiries: string[];
-  location: string;
+  address: string;
   latitude: number;
   longitude: number;
   members: string[];
@@ -32,7 +32,7 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
     homePage,
     image,
     inquiries,
-    location,
+    address,
     latitude,
     longitude,
     members,
@@ -42,13 +42,13 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
   return {
     id: id.getId(),
     adminId: adminId.getId(),
-    avatar: avatar.getURL(),
-    description: description.getContent(),
+    avatar: avatar ? avatar.getURL() : "",
+    description: description ? description.getContent() : "",
     email: email.getValue(),
-    homePage: homePage.getURL(),
-    image: image.getURL(),
+    homePage: homePage ? homePage.getURL() : "",
+    image: image ? image.getURL() : "",
     inquiries: inquiries.map((inquiry) => inquiry.getId()),
-    location: location.getValue(),
+    address: address.getValue(),
     latitude: latitude.getValue(),
     longitude: longitude.getValue(),
     members: members.map((member) => member.getId()),

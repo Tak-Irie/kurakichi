@@ -1,7 +1,7 @@
-import { Result } from '../../shared/Result';
-import { ValueObject } from '../../shared/domain/ValueObject';
+import { Result } from "../../shared/core";
+import { ValueObject } from "../../shared/domain/ValueObject";
 
-export type InquiryStatusUnion = 'DONE' | 'WORKING' | 'UNREAD' | 'DRAFT';
+export type InquiryStatusUnion = "DONE" | "WORKING" | "UNREAD" | "DRAFT";
 
 type InquiryStatusProps = {
   status: InquiryStatusUnion;
@@ -26,17 +26,17 @@ export class InquiryStatus extends ValueObject<InquiryStatusProps> {
   public static _create(status: string): Result<InquiryStatus> {
     let _status: InquiryStatus | undefined;
     switch (status) {
-      case 'DONE':
-        _status = new InquiryStatus({ status: 'DONE' });
+      case "DONE":
+        _status = new InquiryStatus({ status: "DONE" });
         break;
-      case 'WORKING':
-        _status = new InquiryStatus({ status: 'WORKING' });
+      case "WORKING":
+        _status = new InquiryStatus({ status: "WORKING" });
         break;
-      case 'UNREAD':
-        _status = new InquiryStatus({ status: 'UNREAD' });
+      case "UNREAD":
+        _status = new InquiryStatus({ status: "UNREAD" });
         break;
-      case 'DRAFT':
-        _status = new InquiryStatus({ status: 'DRAFT' });
+      case "DRAFT":
+        _status = new InquiryStatus({ status: "DRAFT" });
         break;
       default:
         _status = undefined;

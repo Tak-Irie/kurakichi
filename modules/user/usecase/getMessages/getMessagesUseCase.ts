@@ -1,14 +1,12 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IMessageRepo } from "../../../user copy/domain";
+} from "../../../shared/usecase";
+import { IMessageRepo } from "../../domain";
 import { createDTOMessagesFromDomain, DTOMessage } from "../DTOMessage";
 import { NotFoundMessagesError } from "./getMessagesError";
 
@@ -27,16 +25,17 @@ export class GetMessagesUsecase
   }
   public async execute(arg: MessagesArg): Promise<GetMessagesResponse> {
     try {
-      const domainMessages = await this.MessagesRepo.getMessages(
-        UniqueEntityId.reconstruct(arg.userId).getValue()
-      );
-      if (domainMessages == false) return left(new NotFoundMessagesError());
+      const isId = UniqueEntityId.createFromArg({ id: arg.userId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
+
+      const domainMessages = await this.MessagesRepo.getMessages(isId);
+      if (domainMessages == false) return left(new NotFoundMessagesError(""));
 
       const dtoMessages = createDTOMessagesFromDomain(domainMessages);
 
       return right(Result.success<DTOMessage[]>(dtoMessages));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

@@ -1,13 +1,8 @@
-import { Result } from "../../../shared";
-import { IIUsecaseError } from "../../../shared";
+import { Nothing, Result } from "../../../shared/core";
+import { IUsecaseError } from "../../../shared/usecase";
 
-export class InvalidInputValueError extends Result<IIUsecaseError> {
-  constructor(error?: Error) {
-    super(false, `入力された値が不正です`, error);
-  }
-}
-export class UserNotExistError extends Result<IIUsecaseError> {
-  constructor(error?: Error) {
+export class NotFoundUserError extends Result<IUsecaseError> {
+  constructor(error: Error | Nothing) {
     super(false, `ユーザーが存在しません`, error);
   }
 }

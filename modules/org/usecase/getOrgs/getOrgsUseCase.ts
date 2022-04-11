@@ -1,12 +1,9 @@
+import { Either, left, Result, right } from "../../../shared/core";
 import {
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IOrgRepo } from "../../domain";
 import { createDTOOrgsFromDomain, DTOOrg } from "../DTOOrg";
 // import { SomeError } from './getOrgError';
@@ -31,7 +28,7 @@ export class GetOrgsUsecase
 
       return right(Result.success<DTOOrg[]>(dtoOrgs));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

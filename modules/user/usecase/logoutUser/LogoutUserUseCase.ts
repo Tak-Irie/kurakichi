@@ -1,12 +1,12 @@
 import { Either, left, Result, right } from "../../../shared/core";
 import { UniqueEntityId } from "../../../shared/domain";
-import { IUsecase } from "../../../shared/Usecase";
-import { UnexpectedError } from "../../../shared/Usecase/UnexpectedError";
+import { IUsecase } from "../../../shared/usecase";
+import { UnexpectedError } from "../../../shared/usecase/UnexpectedError";
 import { IUserRepository } from "../../domain/IUserRepository";
-import { UserNotFoundOrDeletedError } from "./LogoutUserErrors";
+import { NotFoundUserError } from "./LogoutUserErrors";
 
 type LogoutUserResponse = Either<
-  UserNotFoundOrDeletedError | UnexpectedError,
+  NotFoundUserError | UnexpectedError,
   Result<void>
 >;
 
@@ -32,12 +32,12 @@ export class LogoutUserUsecase
       );
 
       if (user === undefined) {
-        return left(new UserNotFoundOrDeletedError());
+        return left(new NotFoundUserError(""));
       }
       // TODO: OIDCとRedisを組み込んだAuthサービスをつくる
       return right(Result.success<void>(undefined));
     } catch (err) {
-      return left(new UnexpectedError());
+      return left(new UnexpectedError(""));
     }
   }
 }

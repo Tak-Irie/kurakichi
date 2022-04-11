@@ -1,5 +1,6 @@
-import { Result } from "../../shared copy/Result";
-import { ValueObject } from "../../shared copy/domain/ValueObject";
+import { Result } from "../core";
+import { GeoCodeRegExp } from "../util";
+import { ValueObject } from "./ValueObject";
 
 type GeocodeProps = { code: number };
 
@@ -13,7 +14,7 @@ export class Geocode extends ValueObject<GeocodeProps> {
   public static create(props: GeocodeProps): Result<Geocode> {
     const isValid = Geocode.validateProps(props);
     if (isValid === false) {
-      return Result.fail<Geocode>("ジオコード:形式が正しく有りません");
+      return Result.fail<Geocode>("座標形式が正しく有りません");
     }
     const geocode = new Geocode({
       ...props,
@@ -22,8 +23,7 @@ export class Geocode extends ValueObject<GeocodeProps> {
   }
 
   private static validateProps(props: GeocodeProps): boolean {
-    const geoRegExp = /^[0-9]*\.[0-9]*/;
-    const result = geoRegExp.test(props.code.toString());
+    const result = GeoCodeRegExp.test(props.code.toString());
     return result;
   }
 

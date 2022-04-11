@@ -1,14 +1,7 @@
-import {
-  Either,
-  IUsecase,
-  left,
-  Result,
-  right,
-  UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
-import { RedisAuthService, SendGridMailerService } from "../../../services";
-import { IUserRepository, UserEmail } from "../../../user copy/domain";
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
+import { IUsecase, UnexpectedError } from "../../../shared/usecase";
+import { IUserRepository, UserEmail } from "../../domain";
 import { InvalidEmailError } from "./ForgotPasswordError";
 
 type ForgetPasswordResponse = Either<
@@ -35,7 +28,7 @@ export class ForgotPasswordUsecase
 
       if (result === undefined) return right(Result.success<true>(true));
 
-      const token = UniqueEntityId.create().getId();
+      const token = UniqueEntityId.createULID().getId();
 
       const stored = await RedisAuthService.storePasswordToken(
         result.getId(),

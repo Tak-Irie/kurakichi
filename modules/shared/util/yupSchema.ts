@@ -64,7 +64,7 @@ export const yupRegisterOrg = yup.object().shape({
     .required("入力必須項目です")
     .min(7, "7桁以上を入力して下さい")
     .max(8, "8桁以下を入力して下さい"),
-  orgLocation: yup.string(),
-  orgLocationDetail: yup.string(),
+  orgAddress: yup.string(),
+  orgAddressDetail: yup.string(),
   orgPhoneNumber: yup.string().required("入力必須項目です"),
 });

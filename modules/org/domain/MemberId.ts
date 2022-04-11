@@ -1,4 +1,5 @@
-import { Entity, Result, UniqueEntityId } from '../../shared';
+import { Result } from "../../shared/core";
+import { Entity, UniqueEntityId } from "../../shared/domain";
 
 export class MemberId extends Entity<unknown> {
   private constructor(id?: UniqueEntityId) {

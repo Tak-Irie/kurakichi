@@ -1,22 +1,19 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IOrgRepo } from "../../domain";
-import { NotFoundOrgError } from "./getOrgsByMemberIdError";
 import { DTOOrg, createDTOOrgsFromDomain } from "../DTOOrg";
 
 type GetOrgByMemberIdArg = { memberId: string };
 
 type GetOrgsByMemberIdResponse = Either<
-  | NotFoundOrgError
+  | NotExistError
   | InvalidInputValueError
   | UnexpectedError
   | StoreConnectionError,
@@ -33,13 +30,10 @@ export class GetOrgsByMemberIdUsecase
     arg: GetOrgByMemberIdArg
   ): Promise<GetOrgsByMemberIdResponse> {
     try {
-      const idOrError = UniqueEntityId.reconstruct(arg.memberId);
-      if (idOrError.isFailure)
-        return left(new InvalidInputValueError(idOrError.getErrorValue()));
+      const isId = UniqueEntityId.createFromArg({ id: arg.memberId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
 
-      const dbResult = await this.OrgRepo.getOrgsByMemberId(
-        idOrError.getValue()
-      );
+      const dbResult = await this.OrgRepo.getOrgsByMemberId(isId);
       if (dbResult == false) return right(Result.success<DTOOrg[]>([]));
       // console.log('dbResult:', dbResult);
 
@@ -48,7 +42,7 @@ export class GetOrgsByMemberIdUsecase
 
       return right(Result.success<DTOOrg[]>(dtoOrgs));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

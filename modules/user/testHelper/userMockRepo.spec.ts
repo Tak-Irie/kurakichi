@@ -12,7 +12,7 @@ export const MockUserRepo = jest
   .mockImplementation(() => ({
     confirmExistence: async (userEmail: UserEmail): Promise<boolean> => {
       if (userEmail.props.email === "dupulicated@example.com") return true;
-      await Promise.resolve("nothing");
+      await Promise.resolve("");
 
       return false;
     },

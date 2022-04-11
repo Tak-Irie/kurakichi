@@ -1,13 +1,5 @@
-import {
-  Either,
-  IUsecase,
-  left,
-  Result,
-  right,
-  StoreConnectionError,
-  UnexpectedError,
-  UniqueEntityId,
-} from "../../../shared";
+import { Either, Result } from "../../../shared/core";
+import { StoreConnectionError, UnexpectedError } from "../../../shared/usecase";
 import { IUserRepository, User } from "../../domain";
 import { UserNotExistsOrDeletedError } from "./DeleteUserError";
 

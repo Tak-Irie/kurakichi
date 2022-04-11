@@ -1,40 +1,48 @@
+import { OrgDescription, OrgName } from ".";
+import { Nothing, PropInResult, Result } from "../../shared/core";
 import {
-  Result,
-  Email,
-  ValidURL,
-  UniqueEntityId,
   AggregateRoot,
-  PhoneNumber,
-  Location,
-  PropPrimitives,
-  PropInResult,
+  Email,
   Geocode,
-} from '../../shared';
-import { OrgDescription } from './OrgDescription';
-import { OrgName } from './OrgName';
+  PhoneNumber,
+  PropPrimitives,
+  UniqueEntityId,
+  ValidURL,
+  Address,
+} from "../../shared/domain";
 
 export interface OrgProps {
   id: UniqueEntityId;
   name: OrgName;
   email: Email;
   phoneNumber: PhoneNumber;
-  location: Location;
+  address: Address;
   latitude: Geocode;
   longitude: Geocode;
-  description: OrgDescription;
+  description: OrgDescription | Nothing;
   adminId: UniqueEntityId;
-  avatar: ValidURL;
-  image: ValidURL;
-  homePage: ValidURL;
+  avatar: ValidURL | Nothing;
+  image: ValidURL | Nothing;
+  homePage: ValidURL | Nothing;
   members: UniqueEntityId[];
   inquiries: UniqueEntityId[];
 }
+
+type CreateArg = {
+  adminId: UniqueEntityId;
+  name: OrgName;
+  address: Address;
+  phoneNumber: PhoneNumber;
+  email: Email;
+  latitude: Geocode;
+  longitude: Geocode;
+};
 
 export type OrgPropInResult = PropInResult<Partial<OrgProps>>;
 
 type OrgPropPrimitives = PropPrimitives<
   OrgProps,
-  'latitude' | 'longitude' | 'members' | 'inquiries'
+  "latitude" | "longitude" | "members" | "inquiries"
 > & {
   latitude: number;
   longitude: number;
@@ -43,26 +51,26 @@ type OrgPropPrimitives = PropPrimitives<
 };
 
 type OrgInitialCreate =
-  | 'id'
-  | 'name'
-  | 'email'
-  | 'phoneNumber'
-  | 'location'
-  | 'latitude'
-  | 'longitude'
-  | 'adminId';
+  | "id"
+  | "name"
+  | "email"
+  | "phoneNumber"
+  | "address"
+  | "latitude"
+  | "longitude"
+  | "adminId";
 type OrgUpdatable =
-  | 'name'
-  | 'email'
-  | 'phoneNumber'
-  | 'location'
-  | 'latitude'
-  | 'longitude'
-  | 'description'
-  | 'adminId'
-  | 'avatar'
-  | 'image'
-  | 'homePage';
+  | "name"
+  | "email"
+  | "phoneNumber"
+  | "address"
+  | "latitude"
+  | "longitude"
+  | "description"
+  | "adminId"
+  | "avatar"
+  | "image"
+  | "homePage";
 
 type OrgValidatorArg = Partial<Pick<OrgPropPrimitives, OrgUpdatable>>;
 
@@ -84,8 +92,8 @@ export class Org extends AggregateRoot<OrgProps> {
     return this.props.name.getValue();
   }
 
-  public getOrgLocation(): string {
-    return this.props.location.getValue();
+  public getOrgAddress(): string {
+    return this.props.address.getValue();
   }
 
   public getEmail(): string {
@@ -97,21 +105,52 @@ export class Org extends AggregateRoot<OrgProps> {
     return ids.map((id) => id.getId());
   }
 
+  public static _create(arg: CreateArg) {
+    const { address, adminId, email, name, phoneNumber, latitude, longitude } =
+      arg;
+    const org = new Org({
+      id: UniqueEntityId.createULID(),
+      adminId,
+      name,
+      phoneNumber,
+      email,
+      address,
+      latitude,
+      longitude,
+      avatar: "",
+      description: "",
+      homePage: "",
+      image: "",
+      inquiries: [],
+      members: [adminId],
+    });
+    return Result.success<Org>(org);
+  }
+
   public static create(props: Pick<OrgProps, OrgInitialCreate>): Result<Org> {
-    const { adminId, email, id, location, name, phoneNumber, latitude, longitude } = props;
+    const {
+      adminId,
+      email,
+      id,
+      address,
+      name,
+      phoneNumber,
+      latitude,
+      longitude,
+    } = props;
     const organization = new Org({
       id,
       name,
       email,
-      location,
+      address,
       latitude,
       longitude,
       phoneNumber,
       adminId,
-      description: OrgDescription.create({ content: 'UNKNOWN' }).getValue(),
-      avatar: ValidURL.create({ url: 'UNKNOWN' }).getValue(),
-      homePage: ValidURL.create({ url: 'UNKNOWN' }).getValue(),
-      image: ValidURL.create({ url: 'UNKNOWN' }).getValue(),
+      description: OrgDescription.create({ content: "UNKNOWN" }).getValue(),
+      avatar: ValidURL.create({ url: "UNKNOWN" }).getValue(),
+      homePage: ValidURL.create({ url: "UNKNOWN" }).getValue(),
+      image: ValidURL.create({ url: "UNKNOWN" }).getValue(),
       members: [adminId],
       inquiries: [],
     });
@@ -129,7 +168,7 @@ export class Org extends AggregateRoot<OrgProps> {
       id,
       image,
       inquiries,
-      location,
+      address,
       latitude,
       longitude,
       members,
@@ -137,18 +176,26 @@ export class Org extends AggregateRoot<OrgProps> {
       phoneNumber,
     } = storedOrg;
     const org = new Org({
-      adminId: UniqueEntityId.restoreFromRepo(adminId),
+      adminId: UniqueEntityId.restoreFromRepo({ id: adminId }),
       avatar: ValidURL.restoreFromRepo(avatar),
       email: Email.restoreFromRepo(email),
       description: OrgDescription.restoreFromRepo(description),
       homePage: ValidURL.restoreFromRepo(homePage),
-      id: UniqueEntityId.restoreFromRepo(id),
+      id: UniqueEntityId.restoreFromRepo({ id }),
       image: ValidURL.restoreFromRepo(image),
-      inquiries: UniqueEntityId.restoreArrayFromRepo(inquiries),
-      location: Location.restoreFromRepo({ location }),
+      inquiries: UniqueEntityId.restoreArrayFromRepo(
+        inquiries.map((inq) => {
+          return { id: inq };
+        })
+      ),
+      address: Address.restoreFromRepo({ address }),
       latitude: Geocode.restoreFromRepo(latitude),
       longitude: Geocode.restoreFromRepo(longitude),
-      members: UniqueEntityId.restoreArrayFromRepo(members),
+      members: UniqueEntityId.restoreArrayFromRepo(
+        members.map((mem) => {
+          return { id: mem };
+        })
+      ),
       name: OrgName.restoreFromRepo(name),
       phoneNumber: PhoneNumber.restoreFromRepo(phoneNumber),
     });
@@ -156,7 +203,10 @@ export class Org extends AggregateRoot<OrgProps> {
     return org;
   }
 
-  public static updateProps(currentOrg: Org, newProps: Partial<Pick<OrgProps, OrgUpdatable>>): Org {
+  public static updateProps(
+    currentOrg: Org,
+    newProps: Partial<Pick<OrgProps, OrgUpdatable>>
+  ): Org {
     const {
       adminId,
       avatar,
@@ -164,7 +214,7 @@ export class Org extends AggregateRoot<OrgProps> {
       email,
       homePage,
       image,
-      location,
+      address,
       latitude,
       longitude,
       name,
@@ -179,7 +229,7 @@ export class Org extends AggregateRoot<OrgProps> {
       email: prevEmail,
       homePage: prevHomePage,
       image: prevImg,
-      location: prevLocation,
+      address: prevAddress,
       latitude: prevLatitude,
       longitude: prevLongitude,
       adminId: prevAdmin,
@@ -194,7 +244,7 @@ export class Org extends AggregateRoot<OrgProps> {
       email: email ? email : prevEmail,
       homePage: homePage ? homePage : prevHomePage,
       image: image ? image : prevImg,
-      location: location ? location : prevLocation,
+      address: address ? address : prevAddress,
       latitude: latitude ? latitude : prevLatitude,
       longitude: longitude ? longitude : prevLongitude,
       name: name ? name : prevName,
@@ -213,12 +263,26 @@ export class Org extends AggregateRoot<OrgProps> {
     // console.log('validatePropsArg:', props);
     const results: OrgPropInResult = {};
 
-    const { adminId, description, email, homePage, location, name, phoneNumber, avatar, image } =
-      props;
+    const {
+      adminId,
+      description,
+      email,
+      homePage,
+      address,
+      name,
+      phoneNumber,
+      avatar,
+      image,
+    } = props;
 
     // console.log('adminId:', adminId);
     if (adminId) {
-      results.adminId = UniqueEntityId.reconstruct(adminId);
+      const isId = UniqueEntityId.createFromArg({ id: adminId });
+      if (isId === false) {
+        // FIXME:temp
+        throw new Error();
+      }
+      results.adminId = Result.success<UniqueEntityId>(isId);
     }
     // console.log('result.adminId:', results.adminId);
     if (description) {
@@ -230,8 +294,8 @@ export class Org extends AggregateRoot<OrgProps> {
     if (homePage) {
       results.homePage = ValidURL.create({ url: homePage });
     }
-    if (location) {
-      results.location = Location.create({ location });
+    if (address) {
+      results.address = Address.create({ address });
     }
     if (name) {
       results.name = OrgName.create({ name });

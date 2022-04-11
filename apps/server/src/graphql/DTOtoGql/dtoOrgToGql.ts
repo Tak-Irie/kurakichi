@@ -12,7 +12,7 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): NexusGenFieldTypes["Org"] => {
     id,
     image,
     inquiries,
-    location,
+    address,
     latitude,
     longitude,
     members,
@@ -23,7 +23,7 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): NexusGenFieldTypes["Org"] => {
   return {
     id,
     orgName: name,
-    location,
+    address,
     latitude,
     longitude,
     email,

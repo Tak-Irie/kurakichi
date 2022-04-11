@@ -23,7 +23,7 @@ const Index: NextPage = () => {
               <LoadingSpinner />
             ) : (
               <MapViewer
-                center={isLocation}
+                center={isAddress}
                 mapContainerCSS={{ height: '50vh', width: 'auto' }}
                 orgs={data.getOrgs.orgs}
                 zoomLevel={13}
@@ -33,8 +33,8 @@ const Index: NextPage = () => {
           <div className='col-span-2 ml-10 space-y-10 flex flex-col'>
             <div>placer</div>
 
-            {/* <GeocodeByBrowserButton dispatcher={setIsLocation} buttonLabel="位置情報から検索" />
-            <GeocodeByPostcodeForm dispatcher={setIsLocation} buttonLabel="郵便番号から検索" />
+            {/* <GeocodeByBrowserButton dispatcher={setIsAddress} buttonLabel="位置情報から検索" />
+            <GeocodeByPostcodeForm dispatcher={setIsAddress} buttonLabel="郵便番号から検索" />
             <SearchOrgByPrefForm />
             <SearchOrgByServiceForm /> */}
           </div>

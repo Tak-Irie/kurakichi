@@ -1,16 +1,13 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo, Inquiry, InquiryContent } from "../../domain";
-import { InquiryNotExistError } from "./ReplyInquiryError";
 import { DTOInquiry, createDTOInquiryFromDomain } from "../DTOInquiry";
 
 type ReplyInquiryArg = {
@@ -20,7 +17,7 @@ type ReplyInquiryArg = {
 };
 
 type ReplyInquiryResponse = Either<
-  | InquiryNotExistError
+  | NotExistError
   | InvalidInputValueError
   | UnexpectedError
   | StoreConnectionError,
@@ -36,29 +33,30 @@ export class ReplyInquiryUsecase
   public async execute(arg: ReplyInquiryArg): Promise<ReplyInquiryResponse> {
     try {
       // console.log('arg:', arg);
-      const replyTargetIdOrErr = UniqueEntityId.reconstruct(arg.replyTargetId);
-      if (replyTargetIdOrErr.isFailure)
-        return left(
-          new InvalidInputValueError(replyTargetIdOrErr.getErrorValue())
-        );
+      const isTargetId = UniqueEntityId.createFromArg({
+        id: arg.replyTargetId,
+      });
+      if (isTargetId === false)
+        return left(new InvalidInputValueError("wip", ""));
 
-      const senderIdOrErr = UniqueEntityId.reconstruct(arg.senderId);
-      if (senderIdOrErr.isFailure)
-        return left(new InvalidInputValueError(senderIdOrErr.getErrorValue()));
+      const isSenderId = UniqueEntityId.createFromArg({
+        id: arg.replyTargetId,
+      });
+      if (isSenderId === false)
+        return left(new InvalidInputValueError("wip", ""));
 
-      const replyTarget = await this.InquiryRepo.getInquiry(
-        replyTargetIdOrErr.getValue()
-      );
-      if (replyTarget == false) return left(new InquiryNotExistError());
+      const replyTarget = await this.InquiryRepo.getInquiry(isTargetId);
+      if (replyTarget == false)
+        return left(new NotExistError("問い合わせが存在しません", ""));
 
       const contentOrError = InquiryContent.create({ text: arg.content });
       if (contentOrError.isFailure)
-        return left(new InvalidInputValueError("不正な内容です"));
+        return left(new InvalidInputValueError("不正な内容です", ""));
 
       const reply = Inquiry.createReply(
         replyTarget,
         contentOrError.getValue(),
-        senderIdOrErr.getValue()
+        isSenderId
       );
       // console.log('replyInq:', reply);
 
@@ -70,8 +68,8 @@ export class ReplyInquiryUsecase
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
       if (err == Error("データベースエラー"))
-        return left(new StoreConnectionError());
-      return left(new UnexpectedError(err));
+        return left(new StoreConnectionError(""));
+      return left(new UnexpectedError(""));
     }
   }
 }

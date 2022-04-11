@@ -1,15 +1,12 @@
+import { Either, left, Nothing, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  NotExistError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo } from "../../domain";
 import { InquiryStatus, InquiryStatusUnion } from "../../domain/InquiryStatus";
 import { DTOInquiry, createDTOInquiriesFromDomain } from "../DTOInquiry";
@@ -44,41 +41,40 @@ export class GetInquiriesWithStatusByOrgIdUsecase
   ): Promise<GetInquiriesWithUnreadByOrgIdResponse> {
     try {
       // console.log('args:', arg);
-      let cursor: UniqueEntityId | undefined;
+      let cursor: UniqueEntityId | Nothing = "";
 
-      const idOrErr = UniqueEntityId.reconstruct(arg.orgId);
-      if (idOrErr.isFailure)
-        return left(new InvalidInputValueError(idOrErr.getErrorValue()));
+      const idOrErr = UniqueEntityId.createFromArg({ id: arg.orgId });
+      if (idOrErr === false) return left(new InvalidInputValueError("wip", ""));
 
       const statusOrErr = InquiryStatus.create({ status: arg.status });
       if (statusOrErr.isFailure)
-        return left(new InvalidInputValueError(statusOrErr.getErrorValue()));
+        return left(new InvalidInputValueError("wip", ""));
 
       if (arg.endCursor) {
-        const endCursorOrErr = UniqueEntityId.reconstruct(arg.endCursor);
-        if (endCursorOrErr.isFailure)
-          return left(
-            new InvalidInputValueError(endCursorOrErr.getErrorValue())
-          );
-        cursor = endCursorOrErr.getValue();
+        const endCursorOrErr = UniqueEntityId.createFromArg({
+          id: arg.endCursor,
+        });
+        if (endCursorOrErr === false)
+          return left(new InvalidInputValueError("wip", ""));
+        cursor = endCursorOrErr;
       }
 
       // console.log('statusOrErr:', statusOrErr.getValue());
 
       const dbResult = await this.InquiryRepo.getInquiriesWithStatusByOrgId(
-        idOrErr.getValue(),
+        idOrErr,
         statusOrErr.getValue(),
         arg.limit,
-        cursor
+        cursor ? cursor : ""
       );
       if (dbResult == false)
-        return left(new NotExistError("該当メッセージはありません"));
+        return left(new NotExistError("該当メッセージはありません", ""));
 
       const dtoInquiries = createDTOInquiriesFromDomain(dbResult);
       // console.log('dtoInquiriesInUC:', dtoInquiries);
       return right(Result.success<DTOInquiry[]>(dtoInquiries));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

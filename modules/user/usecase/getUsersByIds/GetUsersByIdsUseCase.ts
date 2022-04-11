@@ -1,17 +1,14 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  UniqueEntityId,
-} from "../../../shared";
-import { IUserRepository } from "../../../user copy/domain";
+} from "../../../shared/usecase";
+import { IUserRepository } from "../../domain";
+import { createDTOUserArrayFromDomain, DTOUser } from "../DTOUser";
 import { UsersNotExistsError } from "./GetUsersByIdsError";
-import { DTOUser, createDTOUserArrayFromDomain } from "../DTOUser";
 
 type GetUsersByIdsArg = { ids: string[] };
 
@@ -31,20 +28,22 @@ export class GetUsersByIdsUsecase
   }
   public async execute(arg: GetUsersByIdsArg): Promise<GetUsersByIdsResponse> {
     try {
-      const ids = arg.ids.map((id) => UniqueEntityId.reconstruct(id));
-      if (ids.find((id) => id.isFailure)) {
-        return left(new InvalidInputValueError("IDの形式が正しく有りません"));
+      const ids = arg.ids.map((id) => UniqueEntityId.createFromArg({ id }));
+      if (ids.find((id) => id === false)) {
+        return left(
+          new InvalidInputValueError("IDの形式が正しく有りません", "")
+        );
       }
 
       const dbResult = await this.UsersRepo.getUsersByIds(
-        ids.map((id) => id.getValue())
+        ids as UniqueEntityId[]
       );
-      if (dbResult == false) return left(new UsersNotExistsError());
+      if (dbResult == false) return left(new UsersNotExistsError(""));
 
       const dtoUsers = createDTOUserArrayFromDomain(dbResult);
       return right(Result.success<DTOUser[]>(dtoUsers));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

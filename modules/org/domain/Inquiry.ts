@@ -1,9 +1,10 @@
-import { Entity, UnixTime } from '../../shared';
-import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
-import { Result } from '../../shared/Result';
-import { InquiryCategory, InquiryCategoryUnion } from './InquiryCategory';
-import { InquiryContent } from './InquiryContent';
-import { InquiryStatus, InquiryStatusUnion } from './InquiryStatus';
+import { Result } from "../../shared/core";
+import { Entity } from "../../shared/domain";
+import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
+import { UnixTime } from "../../shared/domain/UnixTime";
+import { InquiryCategory, InquiryCategoryUnion } from "./InquiryCategory";
+import { InquiryContent } from "./InquiryContent";
+import { InquiryStatus, InquiryStatusUnion } from "./InquiryStatus";
 
 interface InquiryProps {
   id: UniqueEntityId;
@@ -57,12 +58,14 @@ export class Inquiry extends Entity<InquiryProps> {
     return this.getProps().orgId.getId();
   }
 
-  public static create(props: Omit<InquiryProps, 'id' | 'sentAt' | 'treeId'>): Result<Inquiry> {
+  public static create(
+    props: Omit<InquiryProps, "id" | "sentAt" | "treeId">
+  ): Result<Inquiry> {
     const inquiry = new Inquiry({
       ...props,
-      id: UniqueEntityId.create(),
+      id: UniqueEntityId.createULID(),
       sentAt: UnixTime.create().getValue(),
-      treeId: UniqueEntityId.create(),
+      treeId: UniqueEntityId.createULID(),
     });
     // Inquiry.addDomainEvent(new _EntityCreated(Inquiry));
     return Result.success<Inquiry>(inquiry);
@@ -71,16 +74,22 @@ export class Inquiry extends Entity<InquiryProps> {
   public static createReply(
     replyTarget: Inquiry,
     replyContent: InquiryContent,
-    sender: UniqueEntityId,
+    sender: UniqueEntityId
   ): Result<Inquiry> {
-    const { receiver, sender: _sender, treeId, category, orgId } = replyTarget.getProps();
+    const {
+      receiver,
+      sender: _sender,
+      treeId,
+      category,
+      orgId,
+    } = replyTarget.getProps();
     const inquiry = new Inquiry({
-      id: UniqueEntityId.create(),
+      id: UniqueEntityId.createULID(),
       category,
       content: replyContent,
       receiver: _sender,
       sender: sender,
-      status: InquiryStatus.create({ status: 'UNREAD' }).getValue(),
+      status: InquiryStatus.create({ status: "UNREAD" }).getValue(),
       sentAt: UnixTime.create().getValue(),
       orgId,
       treeId,
@@ -90,17 +99,27 @@ export class Inquiry extends Entity<InquiryProps> {
   }
 
   public static restoreFromRepo(props: InquiryPrimitive): Inquiry {
-    const { category, content, id, receiver, sender, status, sentAt, treeId, orgId } = props;
+    const {
+      category,
+      content,
+      id,
+      receiver,
+      sender,
+      status,
+      sentAt,
+      treeId,
+      orgId,
+    } = props;
     return new Inquiry({
-      id: UniqueEntityId.restoreFromRepo(id),
+      id: UniqueEntityId.restoreFromRepo({ id }),
       category: InquiryCategory.restoreFromRepo(category),
       content: InquiryContent.restoreFromRepo(content),
       status: InquiryStatus.restoreFromRepo(status),
-      receiver: UniqueEntityId.restoreFromRepo(receiver),
-      sender: UniqueEntityId.restoreFromRepo(sender),
+      receiver: UniqueEntityId.restoreFromRepo({ id: receiver }),
+      sender: UniqueEntityId.restoreFromRepo({ id: sender }),
       sentAt: UnixTime.restoreFromRepo(sentAt),
-      treeId: UniqueEntityId.restoreFromRepo(treeId),
-      orgId: UniqueEntityId.restoreFromRepo(orgId),
+      treeId: UniqueEntityId.restoreFromRepo({ id: treeId }),
+      orgId: UniqueEntityId.restoreFromRepo({ id: orgId }),
     });
   }
 }

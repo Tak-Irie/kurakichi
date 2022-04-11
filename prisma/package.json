@@ -5,6 +5,7 @@
   "license": "Apache License 2.0",
   "scripts": {
     "migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
+    "migrate-create": "prisma migrate dev --create-only --schema=./src/prisma/schema.prisma",
     "generate": "prisma generate --schema=./src/prisma/schema.prisma",
     "seed": "ts-node-dev ./src/prisma/seed.ts"
   },

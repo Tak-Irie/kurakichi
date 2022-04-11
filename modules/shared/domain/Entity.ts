@@ -4,6 +4,10 @@ const isEntity = (v: unknown): v is Entity<unknown> => {
   return v instanceof Entity;
 };
 
+export type PropPrimitives<TYPE, PROP extends keyof TYPE> = {
+  [KEY in keyof Omit<TYPE, PROP>]: string;
+};
+
 export abstract class Entity<T> {
   protected readonly _id: UniqueEntityId;
   public readonly props: T;

@@ -1,8 +1,8 @@
-import { Result } from "../../../shared";
-import { IIUsecaseError } from "../../../shared";
+import { Result } from "../../../shared/core";
+import { IUsecaseError } from "../../../shared/usecase";
 
-export class UsersNotExistsError extends Result<IIUsecaseError> {
-  constructor(error?: Error) {
+export class UsersNotExistsError extends Result<IUsecaseError> {
+  constructor(error: Error | "") {
     super(false, `ユーザーが見つかりませんでした`, error);
   }
 }

@@ -1,25 +1,22 @@
+import { Either, left, Result, right } from "../../../shared/core";
 import {
-  Either,
+  InvalidInputValueError,
   IUsecase,
-  left,
-  Result,
-  right,
   UnexpectedError,
-} from "../../../shared";
-import {
-  IUserRepository,
-  UserEmail,
-  UserPassword,
-} from "../../../user copy/domain";
+} from "../../../shared/usecase";
+import { IUserRepository, UserEmail, UserPassword } from "../../domain";
 import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
 import {
-  IncorrectPasswordOrUserNotExist,
-  InvalidEmail,
-  SsoUser,
+  NotCorrectPasswordOrNotFoundUser,
+  NotFoundEmailError,
+  YouAreSsoUserError,
 } from "./LoginUserError";
 
 type LoginUserResponse = Either<
-  IncorrectPasswordOrUserNotExist | InvalidEmail | SsoUser | UnexpectedError,
+  | NotCorrectPasswordOrNotFoundUser
+  | NotFoundEmailError
+  | YouAreSsoUserError
+  | UnexpectedError,
   Result<DTOUser>
 >;
 
@@ -38,26 +35,27 @@ export class LoginUserUsecase
   public async execute(arg: LoginUserArg): Promise<LoginUserResponse> {
     try {
       const email = UserEmail.create({ email: arg.email });
-      if (email.isFailure) return left(new InvalidEmail());
+      if (email.isFailure)
+        return left(new InvalidInputValueError(email.getErrorValue(), ""));
 
       const dbUser = await this.userRepository.getUserByEmail(email.getValue());
-      if (dbUser === undefined)
-        return left(new IncorrectPasswordOrUserNotExist());
+      if (dbUser === undefined) return left(new NotFoundEmailError(""));
 
       const storedPass = dbUser.getPassword();
-      if (storedPass === undefined) return left(new SsoUser());
+      if (storedPass === undefined) return left(new YouAreSsoUserError(""));
 
       const passwordVerified = await UserPassword.verifyPassword(
         arg.password,
         storedPass
       );
-      if (!passwordVerified) return left(new IncorrectPasswordOrUserNotExist());
+      if (!passwordVerified)
+        return left(new NotCorrectPasswordOrNotFoundUser(""));
 
       const dtoUser = createDTOUserFromDomain(dbUser);
 
       return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
-      return left(new UnexpectedError());
+      return left(new UnexpectedError(""));
     }
   }
 }

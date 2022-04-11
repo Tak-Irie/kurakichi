@@ -1,15 +1,12 @@
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
+  InvalidInputValueError,
   IUsecase,
-  Either,
-  left,
-  right,
-  Result,
+  NotExistError,
   StoreConnectionError,
   UnexpectedError,
-  InvalidInputValueError,
-  NotExistError,
-  UniqueEntityId,
-} from "../../../shared";
+} from "../../../shared/usecase";
 import { IInquiryRepo, IOrgRepo } from "../../domain";
 import { NotAppropriateUserError } from "./GetInquiriesByTreeIdError";
 import { createDTOInquiriesFromDomain, DTOInquiry } from "../DTOInquiry";
@@ -37,33 +34,37 @@ export class GetInquiriesByTreeIdUsecase
     arg: GetInquiriesByTreeIdArg
   ): Promise<GetInquiriesByTreeIdResponse> {
     try {
-      const treeIdOrError = UniqueEntityId.reconstruct(arg.treeId);
-      if (treeIdOrError.isFailure)
-        return left(new InvalidInputValueError(treeIdOrError.getErrorValue()));
+      const treeIdOrError = UniqueEntityId.createFromArg({ id: arg.treeId });
+      if (treeIdOrError === false)
+        return left(new InvalidInputValueError("wip", ""));
 
-      const userIdOrError = UniqueEntityId.reconstruct(arg.requestUserId);
-      if (userIdOrError.isFailure)
-        return left(new InvalidInputValueError(userIdOrError.getErrorValue()));
+      const userIdOrError = UniqueEntityId.createFromArg({
+        id: arg.requestUserId,
+      });
+      if (userIdOrError === false)
+        return left(new InvalidInputValueError("wip", ""));
 
       const dbInquiries = await this.InquiryRepo.getInquiryTreeById(
-        treeIdOrError.getValue()
+        treeIdOrError
       );
       if (dbInquiries == false)
-        return left(new NotExistError("お問い合わせが存在しません"));
+        return left(new NotExistError("お問い合わせが存在しません", ""));
 
-      const orgId = UniqueEntityId.restoreFromRepo(
-        dbInquiries[0].getReceivedOrg()
-      );
+      const orgId = UniqueEntityId.restoreFromRepo({
+        id: dbInquiries[0].getReceivedOrg(),
+      });
+
+      // FIXME:
       const valid = await this.OrgRepo.confirmMemberExistence(
         orgId,
-        userIdOrError.getValue()
+        userIdOrError
       );
-      if (valid == false) return left(new NotAppropriateUserError());
+      if (valid == false) return left(new NotAppropriateUserError(""));
 
       const dtoInquiries = createDTOInquiriesFromDomain(dbInquiries);
       return right(Result.success<DTOInquiry[]>(dtoInquiries));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

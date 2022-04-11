@@ -1,7 +1,7 @@
-import { Entity } from '../../shared';
-import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
-import { Result } from '../../shared/Result';
-import { UserEmail, UserName } from '../../user';
+import { Result } from "../../shared/core";
+import { Entity } from "../../shared/domain";
+import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
+import { UserEmail, UserName } from "../../user/domain";
 
 // FIXME:Don't use User VO
 interface MemberProps {
@@ -41,7 +41,7 @@ export class Member extends Entity<MemberProps> {
   public static restoreFromRepo(member: MemberPrimitive): Member {
     const { email, id, memberName } = member;
     return new Member({
-      id: UniqueEntityId.restoreFromRepo(id),
+      id: UniqueEntityId.restoreFromRepo({ id }),
       email: UserEmail.restoreFromRepo(email),
       memberName: UserName.restoreFromRepo(memberName),
     });

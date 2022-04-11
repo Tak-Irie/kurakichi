@@ -6,7 +6,7 @@ export type DTOBase = {
   members: string[];
 };
 
-export const createDTOSecureBaseFromDomain = (base: Base): DTOBase => {
+export const createDTOBaseFromDomain = (base: Base): DTOBase => {
   const { id, baseOwner, members } = base.getProps();
   return {
     id: id.getId(),

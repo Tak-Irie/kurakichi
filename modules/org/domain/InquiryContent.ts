@@ -1,5 +1,5 @@
-import { Result } from '../../shared/Result';
-import { ValueObject } from '../../shared/domain/ValueObject';
+import { Result } from "../../shared/core";
+import { ValueObject } from "../../shared/domain/ValueObject";
 
 type InquiryContentProps = { text: string };
 

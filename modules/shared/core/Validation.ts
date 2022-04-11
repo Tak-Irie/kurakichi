@@ -17,8 +17,8 @@ export class Validation {
   }
 
   public static sanitizeText(unidentifiedText: string): string {
-    const { window } = new JSDOM("<!DOCTYPE html>");
-    const domPurify = DOMPurify(window);
+    // const { window } = new JSDOM("<!DOCTYPE html>");
+    const domPurify = DOMPurify();
     return domPurify.sanitize(unidentifiedText);
   }
 }
