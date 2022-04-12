@@ -1,7 +1,9 @@
-import { Either, Result } from "../../../shared/core";
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
 import {
   InvalidInputValueError,
   IUsecase,
+  StoreConnectionError,
   UnexpectedError,
 } from "../../../shared/usecase";
 import { IUserRepository, UserPassword } from "../../domain";
@@ -36,33 +38,33 @@ export class ChangePasswordUsecase
         isHashed: false,
       });
       if (newPass.isFailure)
-        return left(new InvalidInputValueError(newPass.getErrorValue()));
+        return left(new InvalidInputValueError(newPass.getErrorValue(), ""));
 
-      const id = UniqueEntityId.reconstruct(req.userId);
-      const foundUser = await this.userRepository.getUserByUserId(
-        id.getValue()
-      );
-      if (foundUser === undefined) return left(new StoreConnectionError());
+      const isId = UniqueEntityId.createFromArg({ id: req.userId });
+      if (isId === false) return left(new InvalidInputValueError("wip", ""));
+
+      const foundUser = await this.userRepository.getUserByUserId(isId);
+      if (foundUser === undefined) return left(new StoreConnectionError(""));
 
       const storedPass = foundUser.getPassword();
       if (storedPass === "IT_IS_SSO_USER") return left(new SSOUserError());
-      if (storedPass === undefined) return left(new UnexpectedError());
+      if (storedPass === undefined) return left(new UnexpectedError(""));
 
-      const passVerified = await UserPassword.verifyPassword(
+      const verifiedPass = await UserPassword.verifyPassword(
         req.currentPass,
         storedPass
       );
-      if (passVerified === false) return left(new InvalidPasswordError());
+      if (verifiedPass === false) return left(new InvalidPasswordError());
 
       const passChanged = await this.userRepository.changeUserPassword(
-        id.getValue(),
+        isId,
         newPass.getValue()
       );
-      if (passChanged == false) return left(new StoreConnectionError());
+      if (passChanged == false) return left(new StoreConnectionError(""));
 
       return right(Result.success<boolean>(true));
     } catch (err) {
-      return left(new UnexpectedError());
+      return left(new UnexpectedError(""));
     }
   }
 }

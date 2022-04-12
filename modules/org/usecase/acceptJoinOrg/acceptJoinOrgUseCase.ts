@@ -13,7 +13,7 @@ import {
   NotFoundUserError,
   NotFoundOrgError,
   AlreadyUserIsMemberError,
-} from "./acceptJoinOrgError";
+} from "./AcceptJoinOrgError";
 
 type AcceptJoinOrgArg = {
   orgId: string;

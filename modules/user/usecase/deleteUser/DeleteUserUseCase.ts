@@ -1,5 +1,11 @@
-import { Either, Result } from "../../../shared/core";
-import { StoreConnectionError, UnexpectedError } from "../../../shared/usecase";
+import { Either, left, Result, right } from "../../../shared/core";
+import { UniqueEntityId } from "../../../shared/domain";
+import {
+  InvalidInputValueError,
+  IUsecase,
+  StoreConnectionError,
+  UnexpectedError,
+} from "../../../shared/usecase";
 import { IUserRepository, User } from "../../domain";
 import { UserNotExistsOrDeletedError } from "./DeleteUserError";
 
@@ -24,19 +30,20 @@ export class DeleteUserUsecase
 
   public async execute(request: DeleteUserArg): Promise<DeleteUserResponse> {
     try {
-      const userId = UniqueEntityId.reconstruct(request.userId);
-      const result = await this.userRepository.deleteUser(userId.getValue());
+      const userId = UniqueEntityId.createFromArg({ id: request.userId });
+      if (userId === false) return left(new InvalidInputValueError("wip", ""));
 
+      const result = await this.userRepository.deleteUser(userId);
       if (result === undefined) {
-        return left(new StoreConnectionError());
+        return left(new StoreConnectionError(""));
       }
       if (result === false) {
-        return left(new UserNotExistsOrDeletedError());
+        return left(new UserNotExistsOrDeletedError(""));
       }
 
-      return right(Result.success<void>());
+      return right(Result.success<void>(undefined));
     } catch (err) {
-      return left(new UnexpectedError(err));
+      return left(new UnexpectedError(""));
     }
   }
 }

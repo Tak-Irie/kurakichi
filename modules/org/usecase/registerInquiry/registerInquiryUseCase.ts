@@ -14,7 +14,7 @@ import {
 import { InquiryContent } from "../../domain/InquiryContent";
 import { InquiryStatusUnion, InquiryStatus } from "../../domain/InquiryStatus";
 import { createDTOInquiryFromDomain, DTOInquiry } from "../DTOInquiry";
-import { ReceiverNotExistError } from "./registerInquiryError";
+import { ReceiverNotExistError } from "./RegisterInquiryError";
 
 type InquiryArg = {
   category: InquiryCategoryUnion;

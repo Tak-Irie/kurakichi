@@ -1,3 +1,3 @@
 export * from "./domain";
 export * from "./infra";
-export * from "./Usecase";
+export * from "./usecase";

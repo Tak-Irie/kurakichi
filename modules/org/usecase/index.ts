@@ -1,21 +1,21 @@
 import { OrgRepo } from "../infra/OrgRepo";
 import { InquiryRepo } from "../infra/InquiryRepo";
 
-import { RegisterOrgUsecase } from "./registerOrg/RegisterOrgUsecase";
-import { GetOrgsUsecase } from "./getOrgs/getOrgsUsecase";
-import { GetOrgUsecase } from "./getOrg/getOrgUsecase";
-import { AcceptJoinOrgUsecase } from "./acceptJoinOrg/acceptJoinOrgUsecase";
-import { RequestJoinOrgUsecase } from "./requestJoinOrg/requestJoinOrgUsecase";
-import { GetOrgsByMemberIdUsecase } from "./getOrgsByMemberId/GetOrgsByMemberIdUsecase";
-import { UpdateOrgUsecase } from "./updateOrg/UpdateOrgUsecase";
+import { RegisterOrgUsecase } from "./RegisterOrg/RegisterOrgUseCase";
+import { GetOrgsUsecase } from "./GetOrgs/GetOrgsUseCase";
+import { GetOrgUsecase } from "./GetOrg/GetOrgUseCase";
+import { AcceptJoinOrgUsecase } from "./AcceptJoinOrg/AcceptJoinOrgUseCase";
+import { RequestJoinOrgUsecase } from "./RequestJoinOrg/RequestJoinOrgUseCase";
+import { GetOrgsByMemberIdUsecase } from "./GetOrgsByMemberId/GetOrgsByMemberIdUseCase";
+import { UpdateOrgUsecase } from "./UpdateOrg/UpdateOrgUseCase";
 
-import { GetInquiryUsecase } from "./getInquiry/getInquiryUsecase";
-import { GetInquiriesUsecase } from "./getInquiries/getInquiriesUsecase";
-import { GetInquiriesByTreeIdUsecase } from "./getInquiriesByTreeId/GetInquiriesByTreeIdUsecase";
-import { RegisterInquiryUsecase } from "./registerInquiry/registerInquiryUsecase";
-import { GetInquiriesWithStatusByOrgIdUsecase } from "./getInquiriesWithStatusByOrgId/GetInquiriesWithStatusByOrgIdUsecase";
-import { ReplyInquiryUsecase } from "./replyInquiry/ReplyInquiryUsecase";
-import { UpdateInquiryStatusUsecase } from "./updateInquiryStatus/UpdateInquiryStatusUsecase";
+import { GetInquiryUsecase } from "./GetInquiry/GetInquiryUseCase";
+import { GetInquiriesUsecase } from "./GetInquiries/GetInquiriesUseCase";
+import { GetInquiriesByTreeIdUsecase } from "./GetInquiriesByTreeId/GetInquiriesByTreeIdUseCase";
+import { RegisterInquiryUsecase } from "./RegisterInquiry/RegisterInquiryUseCase";
+import { GetInquiriesWithStatusByOrgIdUsecase } from "./GetInquiriesWithStatusByOrgId/GetInquiriesWithStatusByOrgIdUseCase";
+import { ReplyInquiryUsecase } from "./ReplyInquiry/ReplyInquiryUseCase";
+import { UpdateInquiryStatusUsecase } from "./UpdateInquiryStatus/UpdateInquiryStatusUseCase";
 
 const orgRepo = new OrgRepo();
 const inquiryRepo = new InquiryRepo();

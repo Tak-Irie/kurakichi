@@ -1,5 +1,5 @@
 import { BaseRepo } from "../infra";
-import { CreateBaseUsecase } from "./createBase/createBaseUsecase";
+import { CreateBaseUsecase } from "./CreateBase/CreateBaseUsecase";
 
 const baseRepo = new BaseRepo();
 

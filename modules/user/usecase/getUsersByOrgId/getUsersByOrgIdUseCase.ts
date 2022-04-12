@@ -8,7 +8,7 @@ import {
 } from "../../../shared/usecase";
 import { IUserRepository } from "../../domain";
 import { createDTOUserArrayFromDomain, DTOUser } from "../DTOUser";
-import { NotFoundOrgError } from "./getUsersByOrgIdError";
+import { NotFoundOrgError } from "./GetUsersByOrgIdError";
 
 type UsersByOrgIdArg = { orgId: string };
 

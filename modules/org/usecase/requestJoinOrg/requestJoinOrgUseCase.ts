@@ -8,7 +8,7 @@ import {
 } from "../../../shared/usecase";
 import { IOrgRepo } from "../../domain";
 import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
-import { NotAcceptJoinError, NotFoundOrgError } from "./requestJoinOrgError";
+import { NotAcceptJoinError, NotFoundOrgError } from "./RequestJoinOrgError";
 
 type JoinOrgArg = { requestUserId: string; requestedOrgId: string };
 

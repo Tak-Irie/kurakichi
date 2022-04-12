@@ -1,10 +1,10 @@
-import { RegisterUserUsecase } from "./RegisterUserUsecase";
 import { createMockValidUser, MockUserRepo } from "../../testHelper";
+import { RegisterUserUsecase } from "./RegisterUserUseCase";
 
 describe("ユーザー登録テスト", () => {
   const repo = new MockUserRepo();
   const registerUserUsecase = new RegisterUserUsecase(repo);
-  test("登録成功", async (done) => {
+  test("登録成功", async () => {
     const validUser = await createMockValidUser();
     const result = await registerUserUsecase.execute({
       email: validUser.getEmail(),
@@ -12,9 +12,8 @@ describe("ユーザー登録テスト", () => {
     });
 
     expect(result.isRight()).toBeTruthy();
-    done();
   });
-  test("短すぎる名前により登録失敗", async (done) => {
+  test("短すぎる名前により登録失敗", async () => {
     const invalidNameMock = {
       userName: "f",
       email: "valid@test.com",
@@ -24,9 +23,8 @@ describe("ユーザー登録テスト", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe("ユーザー名は最小2文字です");
-    done();
   });
-  test("長過ぎる名前により登録失敗", async (done) => {
+  test("長過ぎる名前により登録失敗", async () => {
     const invalidNameMock = {
       userName: "YourNameIsSoLongPleaseChangeThis",
       email: "valid@test.com",
@@ -36,9 +34,8 @@ describe("ユーザー登録テスト", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value.getErrorValue()).toBe("ユーザー名は最大20文字です");
-    done();
   });
-  test("不正なメールアドレスにより登録失敗", async (done) => {
+  test("不正なメールアドレスにより登録失敗", async () => {
     const invalidNameMock = {
       userName: "validName",
       email: "invalid",
@@ -50,9 +47,8 @@ describe("ユーザー登録テスト", () => {
     expect(result.value.getErrorValue()).toBe(
       "メールアドレスに使用できない文字が含まれています"
     );
-    done();
   });
-  test("不正なパスワードにより登録失敗", async (done) => {
+  test("不正なパスワードにより登録失敗", async () => {
     const invalidNameMock = {
       userName: "validName",
       email: "valid@test.com",
@@ -64,9 +60,8 @@ describe("ユーザー登録テスト", () => {
     expect(result.value.getErrorValue()).toBe(
       "パスワードは8文字以上に設定してください"
     );
-    done();
   });
-  test("メールアドレスの重複により登録失敗", async (done) => {
+  test("メールアドレスの重複により登録失敗", async () => {
     const invalidEmailMock = {
       userName: "validName",
       email: "dupulicate@example.com",
@@ -79,6 +74,5 @@ describe("ユーザー登録テスト", () => {
     expect(result.value.getErrorValue()).toBe(
       'こちらのEmail"dupulicate@example.com"は既に登録されています'
     );
-    done();
   });
 });

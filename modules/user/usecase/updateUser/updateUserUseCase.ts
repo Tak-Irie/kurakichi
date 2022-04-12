@@ -8,7 +8,7 @@ import {
 } from "../../../shared/usecase";
 import { IUserRepository } from "../../domain";
 import { createDTOUserFromDomain, DTOUser } from "../DTOUser";
-import { NotFoundUserError } from "./updateUserError";
+import { NotFoundUserError } from "./UpdateUserError";
 
 type UpdateUserArg = {
   userId: string;

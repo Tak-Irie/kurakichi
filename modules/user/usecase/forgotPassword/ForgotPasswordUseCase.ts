@@ -1,5 +1,6 @@
 import { Either, left, Result, right } from "../../../shared/core";
 import { UniqueEntityId } from "../../../shared/domain";
+import { RedisAuthAPI, SendGridAPI } from "../../../shared/infra";
 import { IUsecase, UnexpectedError } from "../../../shared/usecase";
 import { IUserRepository, UserEmail } from "../../domain";
 import { InvalidEmailError } from "./ForgotPasswordError";
@@ -19,7 +20,7 @@ export class ForgotPasswordUsecase
   public async execute(email: string): Promise<ForgetPasswordResponse> {
     const userEmail = UserEmail.create({ email });
 
-    if (userEmail.isFailure) return left(new InvalidEmailError());
+    if (userEmail.isFailure) return left(new InvalidEmailError(""));
 
     try {
       const result = await this.userRepository.getUserByEmail(
@@ -30,20 +31,20 @@ export class ForgotPasswordUsecase
 
       const token = UniqueEntityId.createULID().getId();
 
-      const stored = await RedisAuthService.storePasswordToken(
+      const stored = await RedisAuthAPI.storePasswordToken(
         result.getId(),
         token
       );
 
       // TODO: should be storeConnectionError, make this err for redis later
-      if (stored === false) return left(new UnexpectedError());
+      if (stored === false) return left(new UnexpectedError(""));
 
       // TODO:implement interface?
-      await SendGridMailerService.sendMail(result.getEmail(), token);
+      await SendGridAPI.sendMail(result.getEmail(), token);
 
       return right(Result.success<true>(true));
     } catch (err) {
-      return left(new UnexpectedError());
+      return left(new UnexpectedError(""));
     }
   }
 }

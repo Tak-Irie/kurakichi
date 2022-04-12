@@ -18,7 +18,7 @@ import { createDTOOrgFromDomain, DTOOrg } from "../DTOOrg";
 import {
   AlreadyRegisteredNameError,
   AddressNotExistError,
-} from "./registerOrgError";
+} from "./RegisterOrgError";
 
 type RegisterOrgArg = {
   adminId: string;

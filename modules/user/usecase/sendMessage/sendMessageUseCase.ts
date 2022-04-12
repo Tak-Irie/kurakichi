@@ -11,7 +11,7 @@ import { MessageStatus } from "../../domain/MessageStatus";
 import {
   NotFoundReceiverError,
   NotValidContentError,
-} from "./sendMessageError";
+} from "./SendMessageError";
 import { DTOMessage, createDTOMessageFromDomain } from "../DTOMessage";
 
 type SendMessageArg = {
@@ -78,10 +78,10 @@ export class SendMessageUsecase
       const dtoMessage = createDTOMessageFromDomain(domainMessage);
 
       return right(Result.success<DTOMessage>(dtoMessage));
-    } catch (err) {
+    } catch (err: any) {
       if (err.message === "データベースエラー")
-        return left(new StoreConnectionError());
-      return left(new UnexpectedError(err));
+        return left(new StoreConnectionError(""));
+      return left(new UnexpectedError(""));
     }
   }
 }

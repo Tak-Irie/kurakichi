@@ -8,7 +8,7 @@ import {
 } from "../../../shared/usecase";
 import { IMessageRepo } from "../../domain";
 import { createDTOMessagesFromDomain, DTOMessage } from "../DTOMessage";
-import { NotFoundMessagesError } from "./getMessagesError";
+import { NotFoundMessagesError } from "./GetMessagesError";
 
 type MessagesArg = { userId: string };
 
