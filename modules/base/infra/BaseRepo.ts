@@ -12,7 +12,7 @@ export class BaseRepo implements IBaseRepo {
   async getBase(baseId: UniqueEntityId): Promise<Base | false> {
     const dbResult = await this.prisma.base.findUnique({
       where: { id: baseId.getId() },
-      include: { members: true },
+      include: { fellows: true },
     });
     if (dbResult == undefined) return false;
     return BaseMapper.ToDomain(dbResult);

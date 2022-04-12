@@ -23,7 +23,7 @@ model User {
   belongOrgs        Organization[] @relation("orgMember")
   requestJoinOrgs   Organization[] @relation("requestedMember")
   manageBases       Base[]         @relation("baseAdmin")
-  belongBases       Base[]         @relation("baseMember")
+  belongBases       Base[]         @relation("baseFellow")
   sentInquiries     Inquiry[]      @relation("sentInquiry")
   receivedInquiries Inquiry[]      @relation("receivedInquiry")
 }
@@ -91,7 +91,7 @@ model Base {
   id      String  @id
   adminId String
   admin   User    @relation("baseAdmin", fields: [adminId], references: [id])
-  members User[]  @relation("baseMember")
+  fellows User[]  @relation("baseFellow")
   karte   Karte?
   dialog  Dialog?
 }

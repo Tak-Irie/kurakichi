@@ -1,4 +1,4 @@
-import { MyContext } from "./Context";
+import { MyContext } from "../types.";
 
 type NotAuthErr = {
   error: {

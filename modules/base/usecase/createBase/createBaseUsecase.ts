@@ -34,7 +34,7 @@ export class CreateBaseUsecase
       const base = Base.create({
         id: UniqueEntityId.createULID(),
         baseOwner: isId,
-        members: [isId],
+        fellows: [isId],
       });
 
       const dbResult = await this.BaseRepo.registerBase(base.getValue());

@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 interface AddressData {
   prefecture: string;
   address1: string;

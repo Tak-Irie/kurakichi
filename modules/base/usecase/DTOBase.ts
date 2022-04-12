@@ -3,14 +3,14 @@ import { Base } from "../domain";
 export type DTOBase = {
   id: string;
   baseOwner: string;
-  members: string[];
+  fellows: string[];
 };
 
 export const createDTOBaseFromDomain = (base: Base): DTOBase => {
-  const { id, baseOwner, members } = base.getProps();
+  const { id, baseOwner, fellows } = base.getProps();
   return {
     id: id.getId(),
     baseOwner: baseOwner.getId(),
-    members: members.map((member) => member.getId()),
+    fellows: fellows.map((member) => member.getId()),
   };
 };

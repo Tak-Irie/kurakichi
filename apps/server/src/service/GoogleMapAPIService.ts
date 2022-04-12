@@ -26,7 +26,7 @@ export class GoogleMapAPIService {
     if (response.status != 200) {
       return false;
     }
-    const data = response.data.results[0].geometry.address;
+    const data = response.data.results[0].geometry.location;
     // console.log('data:', data);
     return { lat: data.lat, lng: data.lng };
   }
@@ -46,7 +46,7 @@ export class GoogleMapAPIService {
     if (response.status != 200) {
       return false;
     }
-    const data = response.data.results[0].geometry.address;
+    const data = response.data.results[0].geometry.location;
     // console.log('data:', data);
     return { lat: data.lat, lng: data.lng };
   }

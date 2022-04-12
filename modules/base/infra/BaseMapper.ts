@@ -3,7 +3,7 @@ import { UniqueEntityId } from "../../shared/domain";
 import { Base } from "../domain";
 
 type BaseRelations = StoredBase & {
-  members: StoredUser[];
+  fellows: StoredUser[];
 };
 
 export class BaseMapper {
@@ -11,7 +11,7 @@ export class BaseMapper {
     const domainRoom = Base.create({
       id: UniqueEntityId.restoreFromRepo({ id: storedBase.id }),
       baseOwner: UniqueEntityId.restoreFromRepo({ id: storedBase.adminId }),
-      members: storedBase.members.map((member) =>
+      fellows: storedBase.fellows.map((member) =>
         UniqueEntityId.restoreFromRepo({ id: member.id })
       ),
     });

@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Session, SessionData } from "express-session";
 
-declare module "express-session" {
+declare module "@types/express-session" {
   interface SessionData {
     userId: string;
     authSession: string;
   }
 }
 
-declare module "express-serve-static-core" {
+declare module "@types/express-serve-static-core" {
   interface Request {
     session: Session & Partial<SessionData>;
   }

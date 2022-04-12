@@ -4,6 +4,7 @@
   "main": "index.ts",
   "license": "Apache License 2.0",
   "dependencies": {
+    "@kurakichi/prisma": "^0.0.1",
     "argon2": "^0.28.4",
     "dompurify": "^2.3.6",
     "jsdom": "^19.0.0",

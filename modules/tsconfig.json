@@ -9,4 +9,9 @@
   "exclude": [
     "node_modules"
   ],
+  "references": [
+    {
+      "path": "../prisma"
+    }
+  ]
 }

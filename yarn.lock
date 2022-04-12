@@ -1707,6 +1707,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@kurakichi/modules@workspace:modules"
   dependencies:
+    "@kurakichi/prisma": ^0.0.1
     argon2: ^0.28.4
     dompurify: ^2.3.6
     jsdom: ^19.0.0
@@ -1718,7 +1719,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurakichi/prisma@workspace:prisma":
+"@kurakichi/prisma@^0.0.1, @kurakichi/prisma@workspace:prisma":
   version: 0.0.0-use.local
   resolution: "@kurakichi/prisma@workspace:prisma"
   dependencies:

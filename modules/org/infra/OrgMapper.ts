@@ -44,16 +44,16 @@ export class OrgMapper {
     return {
       id: id.getId(),
       adminId: adminId.getId(),
-      avatar: avatar.getURL(),
-      description: description.getContent(),
       email: email.getValue(),
-      homePage: homePage.getURL(),
-      image: image.getURL(),
       address: address.getValue(),
       latitude: latitude.getValue(),
       longitude: longitude.getValue(),
       name: name.getValue(),
       phoneNumber: phoneNumber.getValue(),
+      avatar: avatar ? avatar.getURL() : "",
+      description: description ? description.getContent() : "",
+      homePage: homePage ? homePage.getURL() : "",
+      image: image ? image.getURL() : "",
     };
   }
 }

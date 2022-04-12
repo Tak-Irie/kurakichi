@@ -5,13 +5,13 @@ import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
 interface BaseProps {
   id: UniqueEntityId;
   baseOwner: UniqueEntityId;
-  members: UniqueEntityId[];
+  fellows: UniqueEntityId[];
 }
 
 type BaseRaw = {
   id: string;
   baseOwner: string;
-  members: string[];
+  fellows: string[];
 };
 
 export class Base extends AggregateRoot<BaseProps> {
@@ -28,8 +28,8 @@ export class Base extends AggregateRoot<BaseProps> {
     return this.props.baseOwner;
   }
 
-  public getMembers(): UniqueEntityId[] {
-    return this.props.members;
+  public getFellows(): UniqueEntityId[] {
+    return this.props.fellows;
   }
 
   public static create(props: BaseProps): Result<Base> {
@@ -45,8 +45,8 @@ export class Base extends AggregateRoot<BaseProps> {
     return new Base({
       id: UniqueEntityId.restoreFromRepo({ id: secureBase.id }),
       baseOwner: UniqueEntityId.restoreFromRepo({ id: secureBase.baseOwner }),
-      members: UniqueEntityId.restoreArrayFromRepo(
-        secureBase.members.map((id) => {
+      fellows: UniqueEntityId.restoreArrayFromRepo(
+        secureBase.fellows.map((id) => {
           return { id };
         })
       ),
