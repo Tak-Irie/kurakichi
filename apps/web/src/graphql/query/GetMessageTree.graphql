@@ -1,0 +1,26 @@
+query GetMessagesByTreeId($treeId: String!) {
+  getMessagesByTreeId(treeId: $treeId) {
+    messageTree {
+      id
+      treedMessage {
+        id
+        content
+        sentAt
+        messageStatus
+        sender {
+          id
+          name
+          avatar
+          description
+          role
+        }
+        receiver {
+          id
+        }
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

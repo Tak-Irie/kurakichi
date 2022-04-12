@@ -16,7 +16,7 @@ type DialogPayload {
 type Base implements Node {
   baseOwner: User
   id: ID!
-  members: [User]
+  fellows: [User]
 }
 
 type BasePayload {

@@ -1,0 +1,10 @@
+query GetUsers {
+  getUsers {
+    users {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

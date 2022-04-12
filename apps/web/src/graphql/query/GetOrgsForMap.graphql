@@ -1,0 +1,15 @@
+query GetOrgsForMap {
+  getOrgs {
+    orgs {
+      id
+      orgName
+      latitude
+      longitude
+      address
+      description
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

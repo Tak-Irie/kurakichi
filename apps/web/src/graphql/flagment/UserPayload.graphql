@@ -1,0 +1,19 @@
+fragment UserPayload on User {
+  id
+  email
+  name
+  description
+  avatar
+  role
+  belongOrgs {
+    id
+    orgName
+  }
+  belongBases {
+    id
+    baseOwner {
+      id
+      name
+    }
+  }
+}

@@ -1,0 +1,6 @@
+fragment InquiryTreePayload on InquiryTree {
+  id
+  treedInquiry {
+    id
+  }
+}

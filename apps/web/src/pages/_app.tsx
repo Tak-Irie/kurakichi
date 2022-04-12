@@ -7,7 +7,7 @@ import "../../globals.css";
 
 import { AuthContext } from "..";
 import { apolloClient } from "../util/createApolloClient";
-import { Layout } from "../components/presentational/templates";
+import { Layout } from "../components/presentational/_templates";
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const [authStatus, setAuthStatus] = useState<boolean>(false);

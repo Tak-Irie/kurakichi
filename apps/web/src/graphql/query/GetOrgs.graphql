@@ -1,0 +1,10 @@
+query GetOrgs {
+  getOrgs {
+    orgs {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

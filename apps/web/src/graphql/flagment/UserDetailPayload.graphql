@@ -1,0 +1,17 @@
+fragment UserDetailPayload on User {
+  id
+  email
+  name
+  description
+  avatar
+  role
+  belongOrgs {
+    ...OrgPayload
+  }
+  belongBases {
+    ...BasePayload
+  }
+  messages {
+    ...MessagePayload
+  }
+}

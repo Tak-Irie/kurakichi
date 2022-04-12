@@ -1,5 +1,5 @@
-import { ReactElement, VFC } from "react";
-import Link from "next/link";
+import { ReactElement, VFC } from 'react';
+import Link from 'next/link';
 
 type LinkNextjsProps = {
   url: string;
@@ -18,7 +18,7 @@ export const LinkNextjs: VFC<LinkNextjsProps> = ({
   as,
   url,
   labelOrElement,
-  overwriteCSS = "inline-flex items-center",
+  overwriteCSS = 'inline-flex items-center',
   ariaLabel,
   ariaRole,
   onClick,
@@ -26,12 +26,13 @@ export const LinkNextjs: VFC<LinkNextjsProps> = ({
   return (
     <Link href={url} as={as} passHref>
       <a
-        href='replace'
+        href="replace"
         className={overwriteCSS}
         aria-label={ariaLabel}
         title={ariaLabel}
         role={ariaRole}
-        onClick={onClick}>
+        onClick={onClick}
+      >
         {labelOrElement}
       </a>
     </Link>

@@ -1,0 +1,23 @@
+query GetInquiriesByTreeIdAndCookie($treeId: String!) {
+  getInquiriesByTreeIdAndCookie(treeId: $treeId) {
+    inquiryTree {
+      id
+      treedInquiry {
+        id
+        content
+        sentAt
+        inquiryStatus
+        category
+        sender {
+          id
+          name
+          avatar
+          description
+        }
+      }
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

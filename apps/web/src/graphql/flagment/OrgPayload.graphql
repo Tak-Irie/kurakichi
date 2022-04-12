@@ -1,0 +1,22 @@
+fragment OrgPayload on Org {
+  id
+  orgName
+  address
+  latitude
+  longitude
+  email
+  phoneNumber
+  image
+  avatar
+  description
+  homePage
+  members {
+    id
+    name
+    avatar
+    description
+  }
+  inquiries {
+    id
+  }
+}

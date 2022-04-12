@@ -1,0 +1,20 @@
+mutation RegisterOrg(
+  $orgName: String!
+  $orgEmail: String!
+  $orgPhoneNumber: String!
+  $orgLocation: String!
+) {
+  registerOrg(
+    name: $orgName
+    email: $orgEmail
+    phoneNumber: $orgPhoneNumber
+    address: $orgLocation
+  ) {
+    org {
+      ...OrgPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

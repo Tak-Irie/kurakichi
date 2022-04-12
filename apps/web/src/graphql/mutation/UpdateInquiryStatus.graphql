@@ -1,0 +1,10 @@
+mutation UpdateInquiryStatus($inquiryStatus: InquiryStatus!, $inquiryId: String!) {
+  updateInquiryStatus(inquiryStatus: $inquiryStatus, inquiryId: $inquiryId) {
+    inquiry {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

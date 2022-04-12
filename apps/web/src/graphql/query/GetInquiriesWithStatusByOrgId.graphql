@@ -1,0 +1,18 @@
+query getInquiriesWithStatus(
+  $orgId: String!
+  $status: InquiryStatus
+  $limit: Int!
+  $endCursor: String
+) {
+  getInquiriesWithStatus(orgId: $orgId, status: $status, limit: $limit, endCursor: $endCursor) {
+    inquiries {
+      ...InquiryPayload
+    }
+    pageInfo {
+      ...PageInfoPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

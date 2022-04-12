@@ -1,0 +1,9 @@
+fragment BasePayload on Base {
+  id
+  baseOwner {
+    id
+  }
+  fellows {
+    id
+  }
+}

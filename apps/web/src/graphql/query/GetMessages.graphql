@@ -1,0 +1,10 @@
+query GetMessagesByCookie {
+  getMessagesByCookie {
+    messages {
+      ...MessagePayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

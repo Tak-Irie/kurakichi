@@ -1,0 +1,10 @@
+query GetUserByCookie {
+  getUserByCookie {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

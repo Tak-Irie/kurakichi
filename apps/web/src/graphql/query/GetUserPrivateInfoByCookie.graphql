@@ -1,0 +1,10 @@
+query GetUserPrivateInfoByCookie {
+  getUserByCookie {
+    user {
+      ...UserDetailPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
-import { TextH2, LoadingSpinner } from "../components/presentational/atoms";
-import { HelperPop } from "../components/presentational/molecules";
+import { TextH2, LoadingSpinner } from "../components/presentational/_atoms";
+import { HelperPop } from "../components/presentational/_molecules";
 
 const Index: NextPage = () => {
   return (

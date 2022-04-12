@@ -1,0 +1,7 @@
+fragment DialogPayload on Dialog {
+  id
+  dialogContent
+  base {
+    id
+  }
+}

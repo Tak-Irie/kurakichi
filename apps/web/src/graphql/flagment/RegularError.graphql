@@ -1,0 +1,4 @@
+fragment RegularError on RegularError {
+  message
+  invalidField
+}

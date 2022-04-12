@@ -1,0 +1,15 @@
+fragment InquiryPayload on Inquiry {
+  id
+  content
+  sentAt
+  category
+  inquiryStatus
+  sender {
+    id
+    avatar
+    name
+  }
+  tree {
+    id
+  }
+}

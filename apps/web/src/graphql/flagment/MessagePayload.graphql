@@ -1,0 +1,15 @@
+fragment MessagePayload on Message {
+  id
+  content
+  messageStatus
+  sentAt
+  receiver {
+    id
+  }
+  sender {
+    ...UserPayload
+  }
+  tree {
+    ...MessageTreePayload
+  }
+}

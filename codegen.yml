@@ -8,8 +8,8 @@ generates:
     plugins:
       - typescript
       - typescript-resolvers
-  ./apps/web/src/generated/graphql.tsx:
-    # documents: "./apps/web/src/graphql/**/*.graphql"
+  ./apps/web/src/graphql/generated/graphql.ts:
+    documents: "./apps/web/src/graphql/**/*.graphql"
     plugins:
       - typescript
       - typescript-operations

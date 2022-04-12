@@ -1,0 +1,20 @@
+mutation UpdateUser(
+  $name: String
+  $email: String
+  $description: String
+  $avatar: String
+) {
+  updateUser(
+    name: $name
+    email: $email
+    description: $description
+    avatar: $avatar
+  ) {
+    user {
+      ...UserPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}

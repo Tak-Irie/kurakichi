@@ -1,0 +1,10 @@
+mutation replyInquiry($content: String!, $targetId: String!) {
+  replyInquiry(content: $content, replyTargetId: $targetId) {
+    inquiry {
+      ...InquiryPayload
+    }
+    error {
+      ...RegularError
+    }
+  }
+}
