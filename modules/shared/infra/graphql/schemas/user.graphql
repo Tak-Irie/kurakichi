@@ -1,46 +1,12 @@
-type Query {
-  getUserByCookie: UserPayload
-  getUserById(userId: String!): UserPayload
-  getUserByIdWithOrg(userId: String!): UserPayload
-  getUsers: UserPayload!
-  getMessagesByCookie: MessagePayload
-  getMessagesByTreeId(treeId: String!): MessagePayload
-}
-
-type Mutation {
-  registerUser(input: registerUserInput!): RegisterUserPayload!
-  replyMessage(content: String!, replyTargetId: String!): MessagePayload
-  sendMessage(receiverId: String!, textInput: String!): MessagePayload
-  updateUser(
-    avatar: String
-    description: String
-    email: String
-    image: String
-    userName: String
-  ): UserPayload
-  changePassword(currentPass: String!, newPass: String!): RegularPayload
-  deleteUser: RegularPayload
-  forgetPassword(email: String!): RegularPayload
-  login(email: String!, password: String!): UserPayload
-  logout: RegularPayload
-}
-
 type User implements Node {
   id: ID!
   name: String!
   email: String!
-  avatar: String
   selfIntro: String
-  description: String
-  heroImage: String
-  belongOrgs: [Org!]
-  belongBases: [Base!]
-  messages: [Message!]
+  avatarUrl: String
+  heroImageUrl: String
   role: UserRole
-}
-
-type Message implements Node {
-  id: ID!
+  messages: MessageConnection
 }
 
 enum UserRole {
@@ -49,47 +15,101 @@ enum UserRole {
   EXPERT
 }
 
+type MessageConnection {
+  edges: [MessageEdges]
+  pageInfo: PageInfo!
+}
+
+type MessageEdges {
+  cursor: String!
+  node: Message
+}
+
+type Message implements Node {
+  id: ID!
+  content: String!
+  status: MessageStatus
+  sentAt: String
+  sender: User
+  receiver: User
+}
+
+enum MessageStatus {
+  SENT
+  READ
+  UNREAD
+  DRAFT
+}
+
+type MessageTree implements Node {
+  id: ID!
+  leaves: MessageLeafConnection
+}
+
+type MessageLeafConnection {
+  edges: [MessageLeafEdges]
+  pageInfo: PageInfo!
+}
+
+type MessageLeafEdges {
+  cursor: String!
+  node: Message
+  isRoot: Boolean!
+}
+
+type Query {
+  getUserByCookie: UserPayload
+  getUserById(userId: String!): UserPayload
+  getUsers: UsersPayload
+  getMessagesByCookie: MessagePayload
+  getMessagesByTreeId(id: String!): MessageTreePayload
+}
+
+type Mutation {
+  registerUser(input: registerUserInput!): UserPayload
+  replyMessage(content: String!, replyTargetId: String!): MessagePayload
+  updateUser(input: updateUserInput!): UserPayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  deleteUser: BoolPayload
+  forgetPassword(email: String!): BoolPayload
+  login(email: String!, password: String!): UserPayload
+  logout: BoolPayload
+}
+
+type UserPayload {
+  user: User
+  errors: Errors
+}
+
+type UsersPayload {
+  users: [User!]
+  errors: Errors
+}
+
+type MessagePayload {
+  message: Message
+  errors: Errors
+}
+
+type MessageTreePayload {
+  messageTree: MessageTree
+  errors: Errors
+}
+
+type DeleteUserPayload {
+  result: Boolean!
+  errors: Errors
+}
+
 input registerUserInput {
   email: String!
   password: String!
 }
 
-type RegisterUserPayload {
-  user: User!
-}
-
-type MessagePayload {
-  error: RegularError
-  message: Message
-  messageTree: MessageTree
-  messages: [Message]
-  pageInfo: PageInfo
-}
-
-enum MessageStatus {
-  DRAFT
-  READ
-  UNREAD
-}
-
-type Message implements Node {
-  content: String
-  id: ID!
-  messageStatus: MessageStatus
-  receiver: User
-  sender: User
-  sentAt: String
-  tree: MessageTree
-}
-
-type MessageTree implements Node {
-  id: ID!
-  treedMessage: [Message]
-}
-
-type UserPayload {
-  error: RegularError
-  pageInfo: PageInfo
-  user: User
-  users: [User]
+input updateUserInput {
+  name: String
+  email: String
+  selfIntro: String
+  avatarUrl: String
+  heroImageUrl: String
 }

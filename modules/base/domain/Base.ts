@@ -1,10 +1,13 @@
-import { Result } from "../../shared/core";
+import { Nothing, Result } from "../../shared/core";
 import { AggregateRoot } from "../../shared/domain/AggregateRoot";
 import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
+import { Karte } from "./Karte";
 
 interface BaseProps {
   id: UniqueEntityId;
   baseOwner: UniqueEntityId;
+  karte: Karte | Nothing;
+  dialogs: UniqueEntityId[] | Nothing;
   fellows: UniqueEntityId[];
 }
 
@@ -50,6 +53,8 @@ export class Base extends AggregateRoot<BaseProps> {
           return { id };
         })
       ),
+      karte: "",
+      dialogs: "",
     });
   }
 }

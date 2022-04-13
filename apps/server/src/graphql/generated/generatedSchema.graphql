@@ -1,0 +1,366 @@
+type Address {
+  address: String
+  latitude: Float
+  longitude: Float
+}
+
+type ApplicationError {
+  message: String!
+}
+
+type Base implements Node {
+  dialogs: DialogConnection
+  fellowsConnection: FellowConnection
+  id: ID!
+  karte: Karte
+}
+
+type BasePayload {
+  base: Base
+  errors: Errors
+}
+
+type BoolPayload {
+  errors: Errors
+  message: String
+  result: Boolean!
+}
+
+type DeleteUserPayload {
+  errors: Errors
+  result: Boolean!
+}
+
+type Dialog implements Node {
+  content: String
+  id: ID!
+}
+
+type DialogConnection {
+  edges: [DialogEdges]
+  pageInfo: PageInfo!
+}
+
+type DialogEdges {
+  cursor: String!
+  node: Dialog
+}
+
+type DialogPayload {
+  dialog: [Dialog]
+  errors: Errors
+}
+
+type Errors {
+  applicationError: ApplicationError
+  userError: UserError
+}
+
+type FellowConnection {
+  edges: [FellowEdge]
+  pageInfo: PageInfo!
+}
+
+type FellowEdge {
+  cursor: String!
+  isBaseAdmin: Boolean!
+  node: User
+}
+
+type Hoge {
+  id: ID!
+}
+
+type InquiriesPayload {
+  errors: Errors
+  inquiries: InquiryConnection
+}
+
+type Inquiry implements Node {
+  category: InquiryCategory
+  content: String
+  id: ID!
+  inquiryStatus: InquiryStatus
+  receiver: Org
+  sender: User
+  sentAt: String
+}
+
+enum InquiryCategory {
+  APPLICATION
+  CONTACT
+  COUNSEL
+  INQUIRY
+  OTHERS
+}
+
+type InquiryConnection {
+  edges: [InquiryEdges]
+  pageInfo: PageInfo!
+}
+
+type InquiryEdges {
+  cursor: String!
+  node: Inquiry
+}
+
+type InquiryLeafConnection {
+  edges: [InquiryLeafEdges]
+  pageInfo: PageInfo!
+}
+
+type InquiryLeafEdges {
+  cursor: String!
+  isRoot: Boolean!
+  node: Inquiry
+}
+
+type InquiryPayload {
+  errors: Errors
+  inquiry: Inquiry
+}
+
+enum InquiryStatus {
+  DONE
+  DRAFT
+  UNREAD
+  WORKING
+}
+
+type InquiryTree implements Node {
+  id: ID!
+  leaves: InquiryLeafConnection
+}
+
+type InquiryTreePayload {
+  errors: Errors
+  inquiryTree: InquiryTree
+}
+
+type Karte implements Node {
+  id: ID!
+}
+
+type KartePayload {
+  errors: Errors
+  karte: Karte
+}
+
+type MemberConnection {
+  edges: [MemberEdges]
+  pageInfo: PageInfo!
+}
+
+type MemberEdges {
+  cursor: String!
+  isAdmin: Boolean!
+  node: User
+}
+
+type Message implements Node {
+  content: String!
+  id: ID!
+  receiver: User
+  sender: User
+  sentAt: String
+  status: MessageStatus
+}
+
+type MessageConnection {
+  edges: [MessageEdges]
+  pageInfo: PageInfo!
+}
+
+type MessageEdges {
+  cursor: String!
+  node: Message
+}
+
+type MessageLeafConnection {
+  edges: [MessageLeafEdges]
+  pageInfo: PageInfo!
+}
+
+type MessageLeafEdges {
+  cursor: String!
+  isRoot: Boolean!
+  node: Message
+}
+
+type MessagePayload {
+  errors: Errors
+  message: Message
+}
+
+enum MessageStatus {
+  DRAFT
+  READ
+  SENT
+  UNREAD
+}
+
+type MessageTree implements Node {
+  id: ID!
+  leaves: MessageLeafConnection
+}
+
+type MessageTreePayload {
+  errors: Errors
+  messageTree: MessageTree
+}
+
+type Mutation {
+  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
+  deleteUser: BoolPayload
+  forgetPassword(email: String!): BoolPayload
+  login(email: String!, password: String!): UserPayload
+  logout: BoolPayload
+  postDialog(content: String!, userId: String!): PostDialogPayload
+  registerOrg(input: RegisterOrgInput): OrgPayload
+  registerUser(input: registerUserInput!): UserPayload
+  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
+  replyMessage(content: String!, replyTargetId: String!): MessagePayload
+  requestJoinOrg(orgId: String!): OrgPayload
+  sendInquiry(input: SendInquiryInput): InquiryPayload
+  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  updateInquiryStatus(input: UpdateInquiryStatusInput): InquiryPayload
+  updateOrg(input: UpdateOrgInput): OrgPayload
+  updateUser(input: updateUserInput!): UserPayload
+}
+
+interface Node {
+  id: ID!
+}
+
+type Org implements Node {
+  address: Address
+  avatarUrl: String
+  description: String
+  email: String
+  heloImageUrl: String
+  homePage: String
+  id: ID!
+  inquiries: InquiryConnection
+  members: MemberConnection
+  name: String
+  phoneNumber: String
+}
+
+type OrgPayload {
+  errors: Errors
+  org: Org
+}
+
+type OrgsPayload {
+  errors: Errors
+  orgs: [Org]
+}
+
+type PageInfo {
+  endCursor: String
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  startCursor: String
+}
+
+type PostDialogPayload {
+  dialog: Dialog
+  errors: Errors
+}
+
+type Query {
+  getBase(id: String!): Base
+  getDialogsByBaseId(id: String!): [Dialog]
+  getInquiries: InquiriesPayload
+  getInquiriesByTreeId(id: String!): InquiryTreePayload
+  getInquiry(id: String!): InquiryPayload
+  getKarte(id: String!): Karte
+  getMessagesByCookie: MessagePayload
+  getMessagesByTreeId(id: String!): MessageTreePayload
+  getOrg(id: String!): OrgPayload
+  getOrgInfoByMemberCookie: OrgPayload
+  getOrgs: OrgsPayload
+  getUserByCookie: UserPayload
+  getUserById(userId: String!): UserPayload
+  getUsers: UsersPayload
+  hoge(id: ID!): Hoge
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]
+}
+
+input RegisterOrgInput {
+  address: String!
+  email: String!
+  name: String!
+  phoneNumber: String!
+}
+
+input SendInquiryInput {
+  category: InquiryCategory!
+  content: String!
+  orgId: ID!
+  userId: ID!
+}
+
+type Subscription {
+  dialogPosted: Dialog
+}
+
+input UpdateInquiryStatusInput {
+  id: ID!
+  inquiryStatus: InquiryStatus!
+}
+
+input UpdateOrgInput {
+  address: String
+  description: String
+  email: String
+  homePage: String
+  name: String
+  orgId: ID!
+  phoneNumber: String
+}
+
+type User implements Node {
+  avatarUrl: String
+  email: String!
+  heroImageUrl: String
+  id: ID!
+  messages: MessageConnection
+  name: String!
+  role: UserRole
+  selfIntro: String
+}
+
+type UserError {
+  message: String!
+}
+
+type UserPayload {
+  errors: Errors
+  user: User
+}
+
+enum UserRole {
+  CLIENT
+  EXPERT
+  VISITOR
+}
+
+type UsersPayload {
+  errors: Errors
+  users: [User!]
+}
+
+input registerUserInput {
+  email: String!
+  password: String!
+}
+
+input updateUserInput {
+  avatarUrl: String
+  email: String
+  heroImageUrl: String
+  name: String
+  selfIntro: String
+}

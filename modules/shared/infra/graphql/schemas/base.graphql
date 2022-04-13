@@ -1,29 +1,70 @@
-type Mutation {
-  postDialog(dialogContent: String!, id: String!): DialogPayload
+type Base implements Node {
+  id: ID!
+  karte: Karte
+  dialogs: DialogConnection
+  fellowsConnection: FellowConnection
+}
+
+type Karte implements Node {
+  id: ID!
 }
 
 type Dialog implements Node {
-  base: Base
-  dialogContent: String
   id: ID!
+  content: String
 }
 
-type DialogPayload {
-  dialog: [Dialog]
-  error: RegularError
+type DialogConnection {
+  edges: [DialogEdges]
+  pageInfo: PageInfo!
 }
 
-type Base implements Node {
-  baseOwner: User
-  id: ID!
-  fellows: [User]
+type DialogEdges {
+  cursor: String!
+  node: Dialog
 }
 
-type BasePayload {
-  error: RegularError
-  base: Base
+type FellowConnection {
+  edges: [FellowEdge]
+  pageInfo: PageInfo!
+}
+
+type FellowEdge {
+  cursor: String!
+  node: User
+  isBaseAdmin: Boolean!
+}
+
+type Query {
+  getBase(id: String!): Base
+  getKarte(id: String!): Karte
+  getDialogsByBaseId(id: String!): [Dialog]
+}
+
+type Mutation {
+  postDialog(content: String!, userId: String!): PostDialogPayload
 }
 
 type Subscription {
   dialogPosted: Dialog
+}
+
+type BasePayload {
+  base: Base
+  errors: Errors
+}
+
+type KartePayload {
+  karte: Karte
+  errors: Errors
+}
+
+type PostDialogPayload {
+  dialog: Dialog
+  errors: Errors
+}
+
+type DialogPayload {
+  dialog: [Dialog]
+  errors: Errors
 }

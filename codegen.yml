@@ -1,6 +1,6 @@
 schema: ./modules/shared/infra/graphql/schemas/*.graphql
 generates:
-  ./apps/server/src/graphql/generated/resolversTypes.ts:
+  ./apps/server/src/graphql/generated/generatedTypes.ts:
     config:
       useIndexSignature: true
       mappers:
@@ -8,14 +8,14 @@ generates:
     plugins:
       - typescript
       - typescript-resolvers
-  ./apps/web/src/graphql/generated/graphql.ts:
-    documents: "./apps/web/src/graphql/**/*.graphql"
-    plugins:
-      - typescript
-      - typescript-operations
-      - typescript-react-apollo
-    config:
-      withHooks: true
-  ./apps/server/src/graphql/generated/schema.graphql:
+  # ./apps/web/src/graphql/generated/graphql.ts:
+  #   documents: "./apps/web/src/graphql/**/*.graphql"
+  #   plugins:
+  #     - typescript
+  #     - typescript-operations
+  #     - typescript-react-apollo
+  #   config:
+  #     withHooks: true
+  ./apps/server/src/graphql/generated/generatedSchema.graphql:
     plugins:
       - schema-ast

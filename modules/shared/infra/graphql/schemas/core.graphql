@@ -1,0 +1,34 @@
+interface Node {
+  id: ID!
+}
+
+type Query {
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]
+}
+
+type PageInfo {
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type BoolPayload {
+  result: Boolean!
+  message: String
+  errors: Errors
+}
+
+type Errors {
+  userError: UserError
+  applicationError: ApplicationError
+}
+
+type UserError {
+  message: String!
+}
+
+type ApplicationError {
+  message: String!
+}

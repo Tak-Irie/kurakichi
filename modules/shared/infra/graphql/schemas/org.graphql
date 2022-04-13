@@ -1,90 +1,52 @@
-type Query {
-  getOrgPrivateInfoByIdAndCookie(orgId: String!): OrgPayload
-  getOrgPublicInfoById(orgId: String!): OrgPayload
-  getOrgs: OrgPayload
-  getOrgsByMemberCookie: OrgPayload
-  getInquiriesByTreeIdAndCookie(treeId: String!): InquiryPayload
-  getInquiriesWithStatus(
-    endCursor: String
-    limit: Int!
-    orgId: String!
-    status: InquiryStatus
-  ): InquiryPayload
-  getInquiry(inquiryId: String!): InquiryPayload
-}
-
-type Mutation {
-  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
-  registerOrg(
-    email: String!
-    address: String!
-    name: String!
-    phoneNumber: String!
-  ): OrgPayload
-  updateOrg(input: OrgUpdateInput, orgId: String!): OrgPayload
-  requestJoinOrg(orgId: String!): OrgPayload
-  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
-  sendInquiry(
-    category: InquiryCategory
-    orgId: String!
-    receiverId: String!
-    status: InquiryStatus
-    textInput: String!
-  ): InquiryPayload
-  updateInquiryStatus(
-    inquiryId: String!
-    inquiryStatus: InquiryStatus!
-  ): InquiryPayload
-}
-
 type Org implements Node {
-  avatar: String
-  description: String
-  email: String
-  homePage: String
   id: ID!
-  image: String
-  inquiries: [Inquiry]
+  name: String
+  email: String
+  description: String
+  address: Address
+  phoneNumber: String
+  homePage: String
+  avatarUrl: String
+  heloImageUrl: String
+  members: MemberConnection
+  inquiries: InquiryConnection
+}
+
+type Address {
+  address: String
   latitude: Float
-  address: String
   longitude: Float
-  members: [User]
-  orgName: String
-  phoneNumber: String
 }
 
-type OrgPayload {
-  error: RegularError
-  org: Org
-  orgs: [Org]
-  pageInfo: PageInfo
+type MemberConnection {
+  edges: [MemberEdges]
+  pageInfo: PageInfo!
 }
 
-input OrgUpdateInput {
-  adminId: String
-  description: String
-  email: String
-  homePage: String
-  address: String
-  orgName: String
-  phoneNumber: String
+type MemberEdges {
+  cursor: String!
+  node: User
+  isAdmin: Boolean!
 }
 
-type InquiryPayload {
-  error: RegularError
-  inquiries: [Inquiry]
-  inquiry: Inquiry
-  inquiryTree: InquiryTree
-  pageInfo: PageInfo
+type InquiryConnection {
+  edges: [InquiryEdges]
+  pageInfo: PageInfo!
 }
+
+type InquiryEdges {
+  cursor: String!
+  node: Inquiry
+}
+
 type Inquiry implements Node {
-  category: InquiryCategory
-  content: String
   id: ID!
-  inquiryStatus: InquiryStatus
+  content: String
   sender: User
+  receiver: Org
   sentAt: String
-  tree: InquiryTree
+  category: InquiryCategory
+  inquiryStatus: InquiryStatus
 }
 
 enum InquiryCategory {
@@ -94,13 +56,98 @@ enum InquiryCategory {
   INQUIRY
   OTHERS
 }
+
 enum InquiryStatus {
   DONE
   DRAFT
   UNREAD
   WORKING
 }
+
 type InquiryTree implements Node {
   id: ID!
-  treedInquiry: [Inquiry]
+  leaves: InquiryLeafConnection
+}
+
+type InquiryLeafConnection {
+  edges: [InquiryLeafEdges]
+  pageInfo: PageInfo!
+}
+
+type InquiryLeafEdges {
+  cursor: String!
+  node: Inquiry
+  isRoot: Boolean!
+}
+
+type Query {
+  getOrg(id: String!): OrgPayload
+  getOrgs: OrgsPayload
+  getOrgInfoByMemberCookie: OrgPayload
+  getInquiry(id: String!): InquiryPayload
+  getInquiries: InquiriesPayload
+  getInquiriesByTreeId(id: String!): InquiryTreePayload
+}
+
+type Mutation {
+  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
+  registerOrg(input: RegisterOrgInput): OrgPayload
+  updateOrg(input: UpdateOrgInput): OrgPayload
+  requestJoinOrg(orgId: String!): OrgPayload
+  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
+  sendInquiry(input: SendInquiryInput): InquiryPayload
+  updateInquiryStatus(input: UpdateInquiryStatusInput): InquiryPayload
+}
+
+input UpdateOrgInput {
+  orgId: ID!
+  name: String
+  email: String
+  address: String
+  phoneNumber: String
+  description: String
+  homePage: String
+}
+
+input RegisterOrgInput {
+  name: String!
+  email: String!
+  address: String!
+  phoneNumber: String!
+}
+
+input SendInquiryInput {
+  userId: ID!
+  orgId: ID!
+  category: InquiryCategory!
+  content: String!
+}
+
+input UpdateInquiryStatusInput {
+  id: ID!
+  inquiryStatus: InquiryStatus!
+}
+
+type OrgPayload {
+  org: Org
+  errors: Errors
+}
+type OrgsPayload {
+  orgs: [Org]
+  errors: Errors
+}
+
+type InquiryPayload {
+  inquiry: Inquiry
+  errors: Errors
+}
+
+type InquiriesPayload {
+  inquiries: InquiryConnection
+  errors: Errors
+}
+
+type InquiryTreePayload {
+  inquiryTree: InquiryTree
+  errors: Errors
 }
