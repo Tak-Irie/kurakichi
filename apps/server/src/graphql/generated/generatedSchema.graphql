@@ -10,7 +10,7 @@ type ApplicationError {
 
 type Base implements Node {
   dialogs: DialogConnection
-  fellowsConnection: FellowConnection
+  fellows: FellowConnection
   id: ID!
   karte: Karte
 }

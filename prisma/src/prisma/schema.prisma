@@ -119,7 +119,7 @@ model Article {
 }
 
 enum USER_ROLE {
-  USER
+  VISITOR
   EXPERT
   CLIENT
 }

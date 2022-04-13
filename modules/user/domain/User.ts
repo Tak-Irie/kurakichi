@@ -11,11 +11,11 @@ interface UserProps {
   description: string;
   avatar: string;
   image: string;
-  role: "USER" | "EXPERT" | "CLIENT";
+  role: "VISITOR" | "EXPERT" | "CLIENT";
   password: UserPassword;
   ssoSub: string;
   messages: UniqueEntityId[];
-  belongSecureBases: UniqueEntityId[];
+  belongBases: UniqueEntityId[];
   belongOrgs: UniqueEntityId[];
 }
 
@@ -28,10 +28,10 @@ type UserPrimitive = {
   image: string;
   password: string;
   ssoSub: string;
-  role: "USER" | "EXPERT" | "CLIENT";
+  role: "VISITOR" | "EXPERT" | "CLIENT";
   messages: string[];
   belongOrgs: string[];
-  belongSecureBases: string[];
+  belongBases: string[];
 };
 
 type UserInitialRegister = "id" | "userName" | "password" | "email";
@@ -70,9 +70,9 @@ export class User extends AggregateRoot<UserProps> {
       avatar: "UNKNOWN",
       description: "UNKNOWN",
       image: "UNKNOWN",
-      role: "USER",
+      role: "VISITOR",
       belongOrgs: [],
-      belongSecureBases: [],
+      belongBases: [],
       messages: [],
     });
 
@@ -91,9 +91,9 @@ export class User extends AggregateRoot<UserProps> {
       avatar: props.avatar || "UNKNOWN",
       description: "UNKNOWN",
       image: "UNKNOWN",
-      role: "USER",
+      role: "VISITOR",
       belongOrgs: [],
-      belongSecureBases: [],
+      belongBases: [],
       messages: [],
     });
     return user;
@@ -103,7 +103,7 @@ export class User extends AggregateRoot<UserProps> {
     const {
       avatar,
       belongOrgs,
-      belongSecureBases,
+      belongBases,
       description,
       email,
       id,
@@ -129,8 +129,8 @@ export class User extends AggregateRoot<UserProps> {
           return { id };
         })
       ),
-      belongSecureBases: UniqueEntityId.restoreArrayFromRepo(
-        belongSecureBases.map((id) => {
+      belongBases: UniqueEntityId.restoreArrayFromRepo(
+        belongBases.map((id) => {
           return { id };
         })
       ),

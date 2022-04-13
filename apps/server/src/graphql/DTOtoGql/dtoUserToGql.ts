@@ -1,12 +1,11 @@
-import { DTOUser } from '@kurakichi/domain';
-import { idsMapper } from '../../util/idMapper';
-import { NexusGenFieldTypes } from '../generated/nexus';
+import { DTOUser } from "@kurakichi/modules";
+import { User, UserRole } from "../generated/generatedTypes";
 
-export const dtoUserToGql = (user: DTOUser): NexusGenFieldTypes['User'] => {
+export const dtoUserToGql = (user: DTOUser): User => {
   const {
     avatar,
     belongOrgs,
-    belongSecureBases,
+    belongBases,
     description,
     email,
     id,
@@ -15,20 +14,32 @@ export const dtoUserToGql = (user: DTOUser): NexusGenFieldTypes['User'] => {
     role,
     userName,
   } = user;
+
+  const edges = messages.map((id) => {
+    return { cursor: id };
+  });
+
+  const _messages = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
+
   return {
-    avatar,
-    belongOrgs: idsMapper(belongOrgs),
-    belongSecureBases: idsMapper(belongSecureBases),
-    description,
-    email,
     id,
-    image,
-    messages: idsMapper(messages),
-    role,
-    userName,
+    name: userName,
+    email,
+    role:
+      role === "CLIENT"
+        ? UserRole["Client"]
+        : "EXPERT"
+        ? UserRole["Expert"]
+        : "VISITOR"
+        ? UserRole["Visitor"]
+        : undefined,
+    selfIntro: description,
+    avatarUrl: avatar,
+    heroImageUrl: image,
+    messages: _messages,
   };
 };
 
-export const dtoUsersToGql = (users: DTOUser[]): NexusGenFieldTypes['User'][] => {
+export const dtoUsersToGql = (users: DTOUser[]): User[] => {
   return users.map((user) => dtoUserToGql(user));
 };

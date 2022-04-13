@@ -30,7 +30,7 @@ export type ApplicationError = {
 export type Base = Node & {
   __typename?: 'Base';
   dialogs?: Maybe<DialogConnection>;
-  fellowsConnection?: Maybe<FellowConnection>;
+  fellows?: Maybe<FellowConnection>;
   id: Scalars['ID'];
   karte?: Maybe<Karte>;
 };
@@ -770,7 +770,7 @@ export type ApplicationErrorResolvers<ContextType = any, ParentType extends Reso
 
 export type BaseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Base'] = ResolversParentTypes['Base']> = ResolversObject<{
   dialogs?: Resolver<Maybe<ResolversTypes['DialogConnection']>, ParentType, ContextType>;
-  fellowsConnection?: Resolver<Maybe<ResolversTypes['FellowConnection']>, ParentType, ContextType>;
+  fellows?: Resolver<Maybe<ResolversTypes['FellowConnection']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   karte?: Resolver<Maybe<ResolversTypes['Karte']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

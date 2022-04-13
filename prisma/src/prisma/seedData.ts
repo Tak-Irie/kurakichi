@@ -17,7 +17,7 @@ export const users: User[] = [
     email: "example-admin@example.com",
     image: "UNKNOWN",
     password: "TEST_USER",
-    role: "USER",
+    role: "VISITOR",
     ssoSub: "IT_IS_KURAKICHI_ORIGINAL_USER",
   },
   {

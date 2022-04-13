@@ -1,1 +1,1 @@
-export * from "./userResolver";
+export * from "./UserResolver";

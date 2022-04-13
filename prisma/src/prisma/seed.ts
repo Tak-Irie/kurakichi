@@ -5,12 +5,11 @@ import { orgs, users } from "./seedData";
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log("setting seedData");
   for (const user of users) {
-    // console.log('user:', user);
     await prisma.user.create({ data: user });
   }
   for (const org of orgs) {
-    // console.log('org:', org);
     await prisma.organization.create({
       data: org,
       include: {
@@ -18,6 +17,7 @@ async function main() {
       },
     });
   }
+  console.log("done");
 }
 
 main()

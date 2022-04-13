@@ -2,7 +2,7 @@ type Base implements Node {
   id: ID!
   karte: Karte
   dialogs: DialogConnection
-  fellowsConnection: FellowConnection
+  fellows: FellowConnection
 }
 
 type Karte implements Node {

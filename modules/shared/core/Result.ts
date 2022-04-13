@@ -1,14 +1,16 @@
+import { Nothing } from "./Nothing";
+
 export type PropInResult<TYPE> = { [PROP in keyof TYPE]: Result<TYPE[PROP]> };
 export class Result<T> {
   public isSuccess: boolean;
   public isFailure: boolean;
-  public error: T | string | "";
-  private _value: T | "";
+  public error: T | string | Nothing;
+  private _value: T | Nothing;
 
   public constructor(
     isSuccess: boolean,
-    error: T | string | "",
-    value: T | ""
+    error: T | string | Nothing,
+    value: T | Nothing
   ) {
     if (isSuccess && error) {
       throw new Error(

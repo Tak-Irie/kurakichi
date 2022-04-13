@@ -7,10 +7,10 @@ export type DTOUser = {
   avatar: string;
   description: string;
   image: string;
-  role: "USER" | "EXPERT" | "CLIENT";
+  role: "VISITOR" | "EXPERT" | "CLIENT";
   messages: string[];
   belongOrgs: string[];
-  belongSecureBases: string[];
+  belongBases: string[];
 };
 
 export const createDTOUserFromDomain = (user: User): DTOUser => {
@@ -20,7 +20,7 @@ export const createDTOUserFromDomain = (user: User): DTOUser => {
     userName,
     avatar,
     belongOrgs,
-    belongSecureBases,
+    belongBases,
     description,
     image,
     messages,
@@ -36,7 +36,7 @@ export const createDTOUserFromDomain = (user: User): DTOUser => {
     role: role,
     messages: messages.map((message) => message.getId()),
     belongOrgs: belongOrgs.map((org) => org.getId()),
-    belongSecureBases: belongSecureBases.map((base) => base.getId()),
+    belongBases: belongBases.map((base) => base.getId()),
   };
 };
 
