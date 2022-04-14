@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Form, Input, Select } from '@next/ui';
 import { useForm } from 'react-hook-form';
 
 type MessageFormPros<T> = {
@@ -11,7 +10,7 @@ interface IFormProps {
   textArea: string;
 }
 
-export const MessageForm: FC<IFormProps> = <IFormProps extends any>(props) => {
+export const MessageForm: FC<IFormProps> = <IFormProps,>(props) => {
   const { register, handleSubmit } = useForm<IFormProps>();
 
   return (

@@ -1,4 +1,4 @@
-import { Nothing } from "./Nothing";
+import { Nothing } from './Nothing';
 
 export type PropInResult<TYPE> = { [PROP in keyof TYPE]: Result<TYPE[PROP]> };
 export class Result<T> {
@@ -10,16 +10,16 @@ export class Result<T> {
   public constructor(
     isSuccess: boolean,
     error: T | string | Nothing,
-    value: T | Nothing
+    value: T | Nothing,
   ) {
     if (isSuccess && error) {
       throw new Error(
-        "InvalidOperation: A result cannot be successful and contain an error"
+        'InvalidOperation: A result cannot be successful and contain an error',
       );
     }
     if (!isSuccess && !error) {
       throw new Error(
-        "InvalidOperation: A failing result needs to contain an error message"
+        'InvalidOperation: A failing result needs to contain an error message',
       );
     }
 
@@ -35,7 +35,7 @@ export class Result<T> {
     if (!this.isSuccess) {
       console.log(this.error);
       throw new Error(
-        "Can't get the value of an error result. Use 'errorValue' instead."
+        "Can't get the value of an error result. Use 'errorValue' instead.",
       );
     }
 
@@ -50,11 +50,11 @@ export class Result<T> {
   }
 
   public static success<U>(value: U): Result<U> {
-    return new Result<U>(true, "Success!", value);
+    return new Result<U>(true, 'Success!', value);
   }
 
   public static fail<U>(error: string): Result<U> {
-    return new Result<U>(false, error, "");
+    return new Result<U>(false, error, '');
   }
 
   public static verifyResult<U>(result: Result<U>): Result<U> {

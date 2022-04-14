@@ -1,10 +1,9 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import { OrgTemplate, ButtonWithIcon, IconsUsers } from '@next/ui';
-import { UpdateOrgProfileForm } from '@next/container';
-import { useGetOrgPrivateInfoByIdAndCookieQuery } from '@next/graphql';
+import { UpdateOrgProfileForm } from '../../../../components/container';
+import { ButtonWithIcon } from '../../../../components/presentational/atoms';
+import { OrgTemplate } from '../../../../components/presentational/templates';
 
 const OrgSetting: NextPage = () => {
   const router = useRouter();

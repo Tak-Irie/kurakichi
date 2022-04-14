@@ -1,9 +1,13 @@
 import { NextPage } from 'next';
 
-import { ButtonWithIcon, IconsUser, LoadingSpinner, TableMessage, UserTemplate } from '@next/ui';
-import { useGetUserByCookieQuery, useGetMessagesByCookieQuery } from '@next/graphql';
-import React from 'react';
 import Link from 'next/link';
+import {
+  ButtonWithIcon,
+  IconsUser,
+  LoadingSpinner,
+} from '../../../components/presentational/atoms';
+import { TableMessage } from '../../../components/presentational/molecules';
+import { UserTemplate } from '../../../components/presentational/templates';
 
 const MessageBoxPrivatePage: NextPage = () => {
   const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });

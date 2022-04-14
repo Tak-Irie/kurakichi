@@ -1,6 +1,6 @@
-import { DTOOrg } from "@kurakichi/modules";
-import { Org, Address } from "../generated/generatedTypes";
-import { createGqlConn } from "./createConnection";
+import { DTOOrg } from '@kurakichi/modules';
+import { Address, Org } from '../generated/generatedTypes';
+import { createGqlConn } from './createConnection';
 
 export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
   const {
@@ -27,7 +27,7 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
   };
 
   const _inq = createGqlConn(inquiries);
-  let edges = members.map((id) => {
+  const edges = members.map((id) => {
     return { cursor: id, isAdmin: id === adminId ? true : false };
   });
   const _mem = { pageInfo: { hasNext: false, hasPrevious: false }, edges };

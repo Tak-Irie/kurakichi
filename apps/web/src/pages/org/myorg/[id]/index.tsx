@@ -1,21 +1,21 @@
-import { useState } from 'react';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import { useGetOrgPrivateInfoByIdAndCookieQuery } from '../../../../graphql/generated/graphql';
 import {
-  OrgMyPage,
-  OrgArticle,
-  OrgService,
-  TextSmall,
-  LoadingSpinner,
-  OrgTemplate,
   ButtonWithIcon,
   IconsCog,
   IconsMail,
+  LoadingSpinner,
+  OrgArticle,
+  OrgMyPage,
+  OrgService,
+  OrgTemplate,
   Tabs,
+  TextSmall,
 } from '../../../../components/presentational';
+import { useGetOrgPrivateInfoByIdAndCookieQuery } from '../../../../graphql/generated/graphql';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();

@@ -1,10 +1,6 @@
-import { useState, Fragment } from 'react';
 import { Path, UseFormRegister } from 'react-hook-form';
-import { Listbox, Transition } from '@headlessui/react';
 
-import { IconsSelector, IconsCheck } from '@next/ui';
-
-type SelectProps<T, U> = {
+type SelectProps<T extends Record<string, string | number>, U> = {
   label: Path<T>;
   register: UseFormRegister<T>;
   required: boolean;
@@ -15,7 +11,10 @@ type SelectProps<T, U> = {
   }[];
 };
 
-export const Select = <T extends any, U extends string>({
+export const Select = <
+  T extends Record<string, string | number>,
+  U extends string,
+>({
   label,
   fieldLabel,
   register,
@@ -23,9 +22,11 @@ export const Select = <T extends any, U extends string>({
   options,
 }: SelectProps<T, U>) => (
   <>
-    <label className="text-gray-700 text-xs font-bold my-2 mr-auto">{fieldLabel}</label>
+    <label className="my-2 mr-auto text-xs font-bold text-gray-700">
+      {fieldLabel}
+    </label>
     <select
-      className="cursor-pointer flex-grow w-full h-12 px-4 mb-3 border border-gray-400 appearance-none text-gray-900 rounded"
+      className="grow px-4 mb-3 w-full h-12 text-gray-900 rounded border border-gray-400 appearance-none cursor-pointer"
       {...register(label, { required })}
     >
       {options.map((option) => {

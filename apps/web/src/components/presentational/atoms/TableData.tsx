@@ -1,5 +1,5 @@
-import { FC, ReactElement } from 'react';
 import Link from 'next/link';
+import { FC, ReactElement } from 'react';
 
 type TableBodyProps = {
   link: string;
@@ -9,12 +9,17 @@ type TableBodyProps = {
 
 const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => {
   return (
-    <td className="max-w-0 w-full px-6 py-4 whitespace-nowrap text-base text-gray-900">
+    <td className="py-4 px-6 w-full max-w-0 text-base text-gray-900 whitespace-nowrap">
       <div className="flex">
         <Link href={link} passHref>
-          <a href="replace" className="group inline-flex items-center space-x-2 truncate text-base">
-            <div className="h-6 w-6 text-gray-500">{icon}</div>
-            <p className="text-gray-500 truncate group-hover:text-gray-900">{title}</p>
+          <a
+            href="replace"
+            className="group inline-flex items-center space-x-2 text-base truncate"
+          >
+            <div className="w-6 h-6 text-gray-500">{icon}</div>
+            <p className="text-gray-500 group-hover:text-gray-900 truncate">
+              {title}
+            </p>
           </a>
         </Link>
       </div>
@@ -24,8 +29,12 @@ const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => {
 
 const TableData: FC<Omit<TableBodyProps, 'link'>> = ({ title, children }) => {
   return (
-    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-      {title ? <span className="text-gray-800 font-medium">{title}</span> : <div> {children}</div>}
+    <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
+      {title ? (
+        <span className="font-medium text-gray-800">{title}</span>
+      ) : (
+        <div> {children}</div>
+      )}
     </td>
   );
 };

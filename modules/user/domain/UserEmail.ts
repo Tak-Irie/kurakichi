@@ -1,6 +1,6 @@
-import { Result } from "../../shared/core/Result";
-import { ValueObject } from "../../shared/domain/ValueObject";
-import { EmailRegExp } from "../../shared/util/RegularExpressions";
+import { Result } from '../../shared/core/Result';
+import { ValueObject } from '../../shared/domain/ValueObject';
+import { EmailRegExp } from '../../shared/util/RegularExpressions';
 
 export type UserEmailProps = {
   email: string;
@@ -25,14 +25,10 @@ export class UserEmail extends ValueObject<UserEmailProps> {
 
   public static create(email: UserEmailProps): Result<UserEmail> {
     if (!this.isValidEmail(email.email)) {
-      return Result.fail<UserEmail>(
-        "メールアドレスに使用できない文字が含まれています"
-      );
+      return Result.fail<UserEmail>('メールアドレスに使用できない文字が含まれています');
     }
 
-    return Result.success<UserEmail>(
-      new UserEmail({ email: this.formatEmail(email.email) })
-    );
+    return Result.success<UserEmail>(new UserEmail({ email: this.formatEmail(email.email) }));
   }
   public static restoreFromRepo(email: string): UserEmail {
     return new UserEmail({ email: email });

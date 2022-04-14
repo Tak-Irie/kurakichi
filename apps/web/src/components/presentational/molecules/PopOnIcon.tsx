@@ -1,7 +1,7 @@
-import { FC, ReactElement, useRef, useState } from "react";
-import { usePopper } from "react-popper";
-import { Placement } from "@popperjs/core";
-import { reactNewLineToBr } from "../../../util";
+import { Placement } from '@popperjs/core';
+import { FC, ReactElement, useRef, useState } from 'react';
+import { usePopper } from 'react-popper';
+import { reactNewLineToBr } from '../../../util';
 
 type PopOnIconProps = {
   icon: ReactElement;
@@ -13,8 +13,8 @@ type PopOnIconProps = {
 export const PopOnIcon: FC<PopOnIconProps> = ({
   icon,
   content,
-  placement = "top",
-  overWriteCSS = "absolute z-10 text:xs bg-yellow-50  text-yellow-700 p-2 border rounded border-gray-300",
+  placement = 'top',
+  overWriteCSS = 'absolute z-10 text:xs bg-yellow-50  text-yellow-700 p-2 border rounded border-gray-300',
 }) => {
   const [visible, setVisibility] = useState(false);
   const referenceRef = useRef(null);
@@ -25,7 +25,7 @@ export const PopOnIcon: FC<PopOnIconProps> = ({
     popperRef.current,
     {
       placement,
-    }
+    },
   );
 
   const handleEnter = () => {
@@ -44,15 +44,17 @@ export const PopOnIcon: FC<PopOnIconProps> = ({
         ref={referenceRef}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
-        onClick={handleClick}>
+        onClick={handleClick}
+      >
         {icon}
       </div>
       <div
         {...attributes.popper}
         style={styles.popper}
         ref={popperRef}
-        className={`${visible ? "visible" : "invisible"} ${overWriteCSS}`}>
-        {typeof content === "string" ? reactNewLineToBr(content) : content}
+        className={`${visible ? 'visible' : 'invisible'} ${overWriteCSS}`}
+      >
+        {typeof content === 'string' ? reactNewLineToBr(content) : content}
       </div>
     </div>
   );

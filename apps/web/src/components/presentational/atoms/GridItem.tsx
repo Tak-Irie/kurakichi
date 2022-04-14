@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { VFC } from 'react';
 
 type GridItemProps = {
   label: string;
@@ -6,7 +6,11 @@ type GridItemProps = {
   colSpan?: string;
 };
 
-export const GridItem: FC<GridItemProps> = ({ label, content, colSpan = 'sm:col-span-1' }) => {
+export const GridItem: VFC<GridItemProps> = ({
+  label,
+  content,
+  colSpan = 'sm:col-span-1',
+}) => {
   return (
     <div className={colSpan}>
       <dt className="text-sm font-medium text-gray-500">{label}</dt>

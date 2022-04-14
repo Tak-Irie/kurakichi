@@ -1,9 +1,16 @@
-import { Base as StoredBase, User as StoredUser } from "@prisma/client";
-import { UniqueEntityId } from "../../shared/domain";
-import { Base } from "../domain";
+import {
+  Base as StoredBase,
+  Dialog,
+  Karte,
+  User as StoredUser,
+} from '@prisma/client';
+import { UniqueEntityId } from '../../shared/domain';
+import { Base } from '../domain';
 
 type BaseRelations = StoredBase & {
   fellows: StoredUser[];
+  dialog: Dialog | null;
+  karte: Karte | null;
 };
 
 export class BaseMapper {
@@ -12,8 +19,10 @@ export class BaseMapper {
       id: UniqueEntityId.restoreFromRepo({ id: storedBase.id }),
       baseOwner: UniqueEntityId.restoreFromRepo({ id: storedBase.adminId }),
       fellows: storedBase.fellows.map((member) =>
-        UniqueEntityId.restoreFromRepo({ id: member.id })
+        UniqueEntityId.restoreFromRepo({ id: member.id }),
       ),
+      dialogs: '',
+      karte: '',
     });
 
     return domainRoom.getValue();

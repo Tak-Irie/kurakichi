@@ -8,9 +8,23 @@ type InputProps<T> = {
   register: UseFormRegister<T>;
   required: boolean;
   fieldLabel?: string;
-  type: 'date' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'time' | 'url';
+  type:
+    | 'date'
+    | 'email'
+    | 'number'
+    | 'password'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'time'
+    | 'url';
   disable?: boolean;
-  autoComplete?: 'email' | 'new-password' | 'current-password' | 'tel' | 'username';
+  autoComplete?:
+    | 'email'
+    | 'new-password'
+    | 'current-password'
+    | 'tel'
+    | 'username';
   max?: number;
   minLength?: number;
   maxLength?: number;
@@ -46,17 +60,25 @@ export const Input = <T extends any>({
   <>
     <div className="flex justify-start items-center">
       {fieldLabel ? (
-        <label className="text-gray-700 text-xs font-bold my-1">{fieldLabel}</label>
+        <label className="text-gray-700 text-xs font-bold my-1">
+          {fieldLabel}
+        </label>
       ) : null}
       <span className="ml-1">
-        {helperText ? <PopOnIcon icon={<IconsQuestion />} content={helperText} /> : null}
+        {helperText ? (
+          <PopOnIcon icon={<IconsQuestion />} content={helperText} />
+        ) : null}
       </span>
       {isValid ? (
         <IconsCheckCircle />
       ) : errMessage ? (
-        <span className="ml-1 text-red-800 bg-red-100 p-1 text-xs rounded">{errMessage}</span>
+        <span className="ml-1 text-red-800 bg-red-100 p-1 text-xs rounded">
+          {errMessage}
+        </span>
       ) : (
-        <span className="ml-1 text-red-500 text-xs">{required === true ? '必須項目' : null}</span>
+        <span className="ml-1 text-red-500 text-xs">
+          {required === true ? '必須項目' : null}
+        </span>
       )}
     </div>
     {disable ? (
@@ -100,8 +122,12 @@ export const InputTextarea = <T extends any>({
   overWriteCSS = 'flex-grow w-full h-32 px-4 my-2 text-gray-800 border border-gray-400 rounded',
 }: TextareaProps<T>) => (
   <>
-    <label className="text-gray-700 text-xs font-bold my-1 mr-auto">{fieldLabel}</label>
-    {helperText ? <PopOnIcon icon={<IconsQuestion />} content={helperText} /> : null}
+    <label className="text-gray-700 text-xs font-bold my-1 mr-auto">
+      {fieldLabel}
+    </label>
+    {helperText ? (
+      <PopOnIcon icon={<IconsQuestion />} content={helperText} />
+    ) : null}
     {errMessage ? <span>a</span> : null}
     <textarea
       placeholder={placeholder}

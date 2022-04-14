@@ -31,6 +31,11 @@ export const ButtonOrLoading: VFC<ButtonOrLoadingProps> = ({
       }
     />
   ) : (
-    <ButtonBig color={color} onClick={onClick} type={buttonType} label={buttonLabel} />
+    <ButtonBig
+      color={color}
+      onClick={onClick}
+      type={buttonType}
+      label={buttonLabel}
+    />
   );
 };

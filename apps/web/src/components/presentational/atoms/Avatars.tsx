@@ -13,9 +13,13 @@ export const Avatar: FC<AvatarsProps> = ({
 }) => {
   return (
     <span className="inline-block relative">
-      <img className="inline-block h-12 w-12 rounded-full" src={src} alt={alt} />
+      <img
+        className="inline-block w-12 h-12 rounded-full"
+        src={src}
+        alt={alt}
+      />
       {notification ? (
-        <span className="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-red-400"></span>
+        <span className="block absolute top-0 right-0 w-3 h-3 bg-red-400 rounded-full ring-2 ring-white"></span>
       ) : null}
     </span>
   );
@@ -29,12 +33,12 @@ export const AvatarSmall: FC<AvatarsProps> = ({
   return (
     <span className="inline-block relative">
       <img
-        className="inline-block flex-shrink-0 h-8 w-8 rounded-full"
+        className="inline-block shrink-0 w-8 h-8 rounded-full"
         src={src === 'UNKNOWN' ? '/asian_man1.jpg' : src}
         alt={alt}
       />
       {notification ? (
-        <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-400"></span>
+        <span className="block absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full ring-2 ring-white"></span>
       ) : null}
     </span>
   );
@@ -47,7 +51,7 @@ export const AvatarBig: FC<AvatarsProps> = ({
 }) => {
   return (
     <img
-      className="absolute h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-yellow-100"
+      className="absolute w-24 h-24 bg-yellow-100 rounded-full ring-4 ring-white sm:w-32 sm:h-32"
       src={src === 'UNKNOWN' ? '/logo_temp.png' : src}
       alt={alt}
     />

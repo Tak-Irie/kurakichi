@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
-
-import { ImageLogo, TextH2, TextSmall } from '@next/ui';
-import { ForgotPasswordForm } from '@next/container';
+import { ForgotPasswordForm } from '../../components/container';
+import { ImageLogo, TextH2, TextSmall } from '../../components/presentational/atoms';
 
 const ForgotPasswordPublicPage: NextPage = () => {
   return (

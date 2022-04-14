@@ -1,9 +1,13 @@
-import { FC } from 'react';
 import Link from 'next/link';
+import { FC } from 'react';
 
 export const LoadingSpinnerSVG: FC = () => {
   return (
-    <svg className="animate-spin h-5 w-5 mr-3" stroke="currentColor" viewBox="0 0 24 24">
+    <svg
+      className="mr-3 w-5 h-5 animate-spin"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
       <path d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z" />
     </svg>
   );
@@ -24,7 +28,7 @@ export const LightningSVG: FC = () => {
   return (
     <div className="mr-2">
       <svg
-        className="w-6 h-6 text-deep-purple-accent-400 sm:w-8 sm:h-8"
+        className="w-6 h-6 sm:w-8 sm:h-8 text-deep-purple-accent-400"
         stroke="currentColor"
         viewBox="0 0 52 52"
       >
@@ -46,7 +50,7 @@ export const DownwardCurveSVG: FC = () => {
       <svg
         viewBox="0 0 224 12"
         fill="currentColor"
-        className="w-full -mb-1 text-pink-50"
+        className="-mb-1 w-full text-pink-50"
         preserveAspectRatio="none"
       >
         <path d="M0,0 C48.8902582,6.27314026 86.2235915,9.40971039 112,9.40971039 C137.776408,9.40971039 175.109742,6.27314026 224,0 L224,12.0441132 L0,12.0441132 L0,0 Z" />
@@ -79,7 +83,7 @@ export const DownArrowInCircleSVG: FC = () => {
     <Link href="/">
       <button
         aria-label="Scroll down"
-        className="flex items-center justify-center w-10 h-10 mx-auto text-black duration-300 transform border border-black rounded-full hover:text-teal-accent-400 hover:border-teal-accent-400 hover:shadow hover:scale-110"
+        className="flex justify-center items-center mx-auto w-10 h-10 text-black rounded-full border border-black hover:shadow duration-300 hover:scale-110 hover:text-teal-accent-400 hover:border-teal-accent-400"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

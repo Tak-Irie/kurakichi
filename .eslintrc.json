@@ -16,16 +16,14 @@
     "@typescript-eslint",
     "tailwindcss"
   ],
-  "rules": {
-    "@typescript-eslint/strict-boolean-expressions": [
-      2,
-      {
-        "allowString": false,
-        "allowNumber": false
-      }
-    ]
-  },
   "ignorePatterns": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "node_modules",
+    "dist",
+    ".next",
+    "public",
+    "*.config.js",
+    "**/generated/*"
   ]
 }

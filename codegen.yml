@@ -5,6 +5,12 @@ generates:
       useIndexSignature: true
       mappers:
         Hoge: \@kurakichi/modules/shared/infra/graphql/models#HogeModel
+        UserRole: \@kurakichi/modules/shared/infra/graphql/models#UserRoleModel
+      scalars:
+        UserRole: string
+        MessageStatus: string
+        InquiryCategory: string
+        InquiryStatus: string
     plugins:
       - typescript
       - typescript-resolvers

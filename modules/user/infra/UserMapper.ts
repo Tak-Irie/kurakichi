@@ -1,6 +1,6 @@
-import { User as StoredUser } from "@prisma/client";
-import { getIdFromObjectInArray } from "../../shared/util";
-import { User } from "../domain";
+import { User as StoredUser } from '@prisma/client';
+import { getIdFromObjectInArray } from '../../shared/util';
+import { User } from '../domain';
 
 export type StoredUserRelation = StoredUser & {
   receivedMessages?: {
@@ -23,7 +23,7 @@ export class UserMapper {
       ...props,
       userName: name,
       belongOrgs: belongOrgs ? getIdFromObjectInArray(belongOrgs) : [],
-      belongSecureBases: belongSecureBases
+      belongBases: belongSecureBases
         ? getIdFromObjectInArray(belongSecureBases)
         : [],
       messages: receivedMessages

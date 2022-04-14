@@ -3,4 +3,6 @@ type HogeModel = {
   name: string;
 };
 
-export { HogeModel };
+type UserRoleModel = 'VISITOR' | 'CLIENT' | 'EXPERT';
+
+export { HogeModel, UserRoleModel };

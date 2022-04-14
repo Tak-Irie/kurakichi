@@ -1,25 +1,22 @@
-import { useState } from 'react';
-import { GetStaticPaths, InferGetStaticPropsType, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import { fetchGraphqlApi } from '../../util/fetchGraphqlApi';
 import {
-  OrgProfile,
-  OrgTemplate,
   ButtonWithIcon,
-  IconsMail,
-  IconsCaution,
-  FeedbackCaution,
-  PopOnIcon,
   Disclosure,
-  Tabs,
-  OrgService,
-  OrgArticle,
-  TextSmall,
+  FeedbackCaution,
+  IconsCaution,
+  IconsMail,
   LoadingSpinner,
+  OrgArticle,
+  OrgProfile,
+  OrgService,
+  OrgTemplate,
+  PopOnIcon,
+  Tabs,
+  TextSmall,
 } from '../../components/presentational';
-import { SendInquiryForm } from '../../components/container';
-import { OrgPayload, useGetOrgPublicInfoByIdQuery, useGetUserByCookieQuery } from '../../graphql';
 
 // type OrgProps = InferGetStaticPropsType<typeof getStaticProps>;
 const shared = {

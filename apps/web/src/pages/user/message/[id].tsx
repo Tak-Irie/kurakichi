@@ -1,16 +1,14 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-import { useGetMessagesByTreeIdQuery, useGetUserByCookieQuery } from '@next/graphql';
-import {
-  LoadingSpinner,
-  MessageTree,
-  UserTemplate,
-  ButtonWithIcon,
-  IconsUser,
-  IconsMail,
-} from '@next/ui';
 import { useRouter } from 'next/router';
+import {
+  ButtonWithIcon,
+  IconsMail,
+  IconsUser,
+  LoadingSpinner,
+} from '../../../components/presentational/atoms';
+import { MessageTree, UserTemplate } from '../../../components/presentational/templates';
 
 const MessageTreePage: NextPage = () => {
   const router = useRouter();

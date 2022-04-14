@@ -1,4 +1,4 @@
-import { VFC, SyntheticEvent } from 'react';
+import { SyntheticEvent, VFC } from 'react';
 
 type YahooButtonProps = {
   onClick?: (e: SyntheticEvent) => void | Promise<void>;
@@ -8,13 +8,13 @@ type YahooButtonProps = {
 const YahooButton: VFC<YahooButtonProps> = ({ onClick }) => {
   return (
     <button
-      className="rounded flex hover:shadow-md"
+      className="flex rounded hover:shadow-md"
       style={{ height: 50, width: 240, background: '#ff0033' }}
       onClick={onClick}
     >
       <span
         style={{ marginTop: 1, marginLeft: 2 }}
-        className="h-12 w-14 rounded bg-center bg-white"
+        className="w-14 h-12 bg-white bg-center rounded"
       >
         <img
           style={{ paddingTop: 9 }}
@@ -23,8 +23,8 @@ const YahooButton: VFC<YahooButtonProps> = ({ onClick }) => {
           alt="YahooJapan company logo"
         />
       </span>
-      <span className="flex flex-auto h-12 justify-center items-center">
-        <p className="text-white font-bold text-xl">ログイン</p>
+      <span className="flex flex-auto justify-center items-center h-12">
+        <p className="text-xl font-bold text-white">ログイン</p>
       </span>
     </button>
   );

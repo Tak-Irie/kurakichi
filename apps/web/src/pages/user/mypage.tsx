@@ -1,14 +1,12 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import {
-  UserMyPage,
-  UserTemplate,
   ButtonWithIcon,
   IconsCog,
   IconsMail,
   LoadingSpinner,
-} from '@next/ui';
-import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
+} from '../../components/presentational/atoms';
+import { UserMyPage, UserTemplate } from '../../components/presentational/templates';
 
 const UserMyPagePrivatePage: NextPage = () => {
   // TODO:CQRS

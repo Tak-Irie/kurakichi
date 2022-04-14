@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import { UniqueEntityId } from "../../shared/domain";
-import { Base } from "../domain/Base";
-import { IBaseRepo } from "../domain/IBaseRepo";
-import { BaseMapper } from "./BaseMapper";
+import { PrismaClient } from '@prisma/client';
+import { UniqueEntityId } from '../../shared/domain';
+import { Base } from '../domain/Base';
+import { IBaseRepo } from '../domain/IBaseRepo';
+import { BaseMapper } from './BaseMapper';
 
 export class BaseRepo implements IBaseRepo {
   private prisma: PrismaClient;
@@ -12,7 +12,7 @@ export class BaseRepo implements IBaseRepo {
   async getBase(baseId: UniqueEntityId): Promise<Base | false> {
     const dbResult = await this.prisma.base.findUnique({
       where: { id: baseId.getId() },
-      include: { fellows: true },
+      include: { fellows: true, dialog: true, karte: true },
     });
     if (dbResult == undefined) return false;
     return BaseMapper.ToDomain(dbResult);

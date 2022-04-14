@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 
 import {
-  LoginForm,
   GoogleLoginButton,
-  YahooLoginButton,
   LinkNextjs,
+  LoginForm,
+  YahooLoginButton,
 } from '../../components/container';
-import { TextSmall, TextWithDivider, FormPageTemplate } from '../../components/presentational';
+import { FormPageTemplate, TextSmall, TextWithDivider } from '../../components/presentational';
 
 const Login: NextPage = () => {
   return (

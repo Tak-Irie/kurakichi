@@ -1,14 +1,14 @@
-import { Either, left, Result, right } from "../../../shared/core";
-import { UniqueEntityId } from "../../../shared/domain";
+import { Either, left, Result, right } from '../../../shared/core';
+import { UniqueEntityId } from '../../../shared/domain';
 import {
   InvalidInputValueError,
   IUsecase,
   NotExistError,
   StoreConnectionError,
   UnexpectedError,
-} from "../../../shared/usecase";
-import { Base, IBaseRepo } from "../../domain";
-import { createDTOBaseFromDomain, DTOBase } from "../DTOBase";
+} from '../../../shared/usecase';
+import { Base, IBaseRepo } from '../../domain';
+import { createDTOBaseFromDomain, DTOBase } from '../DTOBase';
 
 type createBaseArg = { adminId: string };
 
@@ -29,21 +29,23 @@ export class CreateBaseUsecase
   public async execute(arg: createBaseArg): Promise<createBaseResponse> {
     try {
       const isId = UniqueEntityId.createFromArg({ id: arg.adminId });
-      if (isId === false) return left(new InvalidInputValueError("wip", ""));
+      if (isId === false) return left(new InvalidInputValueError('wip', ''));
 
       const base = Base.create({
         id: UniqueEntityId.createULID(),
         baseOwner: isId,
         fellows: [isId],
+        dialogs: '',
+        karte: '',
       });
 
       const dbResult = await this.BaseRepo.registerBase(base.getValue());
-      if (dbResult === false) return left(new StoreConnectionError(""));
+      if (dbResult === false) return left(new StoreConnectionError(''));
 
       const dtoBase = createDTOBaseFromDomain(dbResult);
       return right(Result.success<DTOBase>(dtoBase));
     } catch (err) {
-      return left(new UnexpectedError(""));
+      return left(new UnexpectedError(''));
     }
   }
 }

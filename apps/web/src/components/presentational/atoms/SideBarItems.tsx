@@ -1,5 +1,5 @@
-import { FC, ReactElement } from 'react';
 import Link from 'next/link';
+import { FC, ReactElement } from 'react';
 
 type SideBarItemsProps = {
   link: string;
@@ -14,7 +14,7 @@ export const SideBarItems: FC<SideBarItemsProps> = (props) => {
     <Link href={link} passHref>
       <a
         href="replace"
-        className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+        className="group flex items-center p-2 text-base font-medium text-gray-900 bg-gray-100 rounded-md"
         aria-current="page"
       >
         {icon}

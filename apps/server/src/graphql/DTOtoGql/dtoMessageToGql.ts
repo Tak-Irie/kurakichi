@@ -1,5 +1,6 @@
-import { DTOMessage } from "@kurakichi/modules";
-import { Message, MessageStatus } from "../generated/generatedTypes";
+/* eslint-disable no-constant-condition */
+import { DTOMessage } from '@kurakichi/modules';
+import { Message, MessageTree } from '../generated/generatedTypes';
 
 export const dtoMessageToGql = (message: DTOMessage): Message => {
   const { content, id, receiverId, senderId, status, sentAt, treeId } = message;
@@ -7,16 +8,7 @@ export const dtoMessageToGql = (message: DTOMessage): Message => {
     id,
     content,
     sentAt,
-    status:
-      status === "DRAFT"
-        ? MessageStatus["Draft"]
-        : "READ"
-        ? MessageStatus["Read"]
-        : "SENT"
-        ? MessageStatus["Sent"]
-        : "UNREAD"
-        ? MessageStatus["Unread"]
-        : undefined,
+    status,
     receiver: { id: receiverId },
     sender: { id: senderId },
   };
@@ -24,6 +16,24 @@ export const dtoMessageToGql = (message: DTOMessage): Message => {
 
 export const dtoMessagesToGql = (messages: DTOMessage[]): Message[] => {
   return messages.map((message) => dtoMessageToGql(message));
+};
+
+export const dtoMessagesToTree = (
+  messages: DTOMessage[],
+  treeId: string,
+): MessageTree => {
+  const edges = messages.map((message) => {
+    return {
+      cursor: message.id,
+      isRoot: message.id === treeId ? true : false,
+      node: message,
+    };
+  });
+
+  return {
+    id: treeId,
+    leaves: { pageInfo: { hasNext: false, hasPrevious: false }, edges },
+  };
 };
 
 // export const dtoMessageWithSenderToGql = (

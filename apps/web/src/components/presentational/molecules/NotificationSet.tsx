@@ -1,7 +1,11 @@
-import { FC } from 'react';
 import { ApolloError } from '@apollo/client';
+import { FC } from 'react';
 
-import { NotificationAlert, NotificationCaution, NotificationSuccess } from '..';
+import {
+  NotificationAlert,
+  NotificationCaution,
+  NotificationSuccess,
+} from '..';
 
 type NotificationsProps = {
   data: any;
@@ -32,13 +36,25 @@ export const NotificationSet: FC<NotificationsProps> = ({
   return (
     <>
       {sysErr ? (
-        <NotificationAlert showingMS={showingMS} label={sysErrLabel} content={sysErr.message} />
+        <NotificationAlert
+          showingMS={showingMS}
+          label={sysErrLabel}
+          content={sysErr.message}
+        />
       ) : null}
       {errData ? (
-        <NotificationCaution showingMS={showingMS} label={errDataLabel} content={errDataContent} />
+        <NotificationCaution
+          showingMS={showingMS}
+          label={errDataLabel}
+          content={errDataContent}
+        />
       ) : null}
       {data ? (
-        <NotificationSuccess showingMS={showingMS} label={dataLabel} content={dataContent} />
+        <NotificationSuccess
+          showingMS={showingMS}
+          label={dataLabel}
+          content={dataContent}
+        />
       ) : null}
     </>
   );

@@ -1,26 +1,26 @@
-import { FC, ReactElement, VFC } from 'react';
 import {
-  ExclamationIcon,
-  MenuIcon,
+  CheckCircleIcon,
+  CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  DotsVerticalIcon,
-  HomeIcon,
-  UserIcon,
-  MailIcon,
-  CogIcon,
-  CheckCircleIcon,
   CloudUploadIcon,
+  CogIcon,
   DocumentAddIcon,
-  QuestionMarkCircleIcon,
-  LogoutIcon,
+  DotsVerticalIcon,
+  ExclamationIcon,
+  HomeIcon,
   LoginIcon,
+  LogoutIcon,
+  MailIcon,
+  MenuIcon,
+  QuestionMarkCircleIcon,
+  SearchIcon,
+  SelectorIcon,
+  UserIcon,
   UsersIcon,
   WifiIcon,
-  SelectorIcon,
-  CheckIcon,
-  SearchIcon,
 } from '@heroicons/react/outline';
+import { FC, ReactElement } from 'react';
 
 type IconsProps = {
   overwriteCSS?: string;
@@ -116,7 +116,9 @@ export const IconsDocumentAdd: FC<Omit<IconsProps, 'icon'>> = ({
 export const IconsQuestion: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',
 }) => {
-  return <Icons overwriteCSS={overwriteCSS} icon={<QuestionMarkCircleIcon />} />;
+  return (
+    <Icons overwriteCSS={overwriteCSS} icon={<QuestionMarkCircleIcon />} />
+  );
 };
 export const IconsLogout: FC<Omit<IconsProps, 'icon'>> = ({
   overwriteCSS = 'flex-shrink-0 h-6 w-6 text-gray-500',

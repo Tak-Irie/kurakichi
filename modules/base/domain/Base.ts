@@ -1,14 +1,14 @@
-import { Nothing, Result } from "../../shared/core";
-import { AggregateRoot } from "../../shared/domain/AggregateRoot";
-import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
-import { Karte } from "./Karte";
+import { Nothing, Result } from '../../shared/core';
+import { AggregateRoot } from '../../shared/domain/AggregateRoot';
+import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
+import { Karte } from './Karte';
 
 interface BaseProps {
   id: UniqueEntityId;
   baseOwner: UniqueEntityId;
+  fellows: UniqueEntityId[];
   karte: Karte | Nothing;
   dialogs: UniqueEntityId[] | Nothing;
-  fellows: UniqueEntityId[];
 }
 
 type BaseRaw = {
@@ -51,10 +51,10 @@ export class Base extends AggregateRoot<BaseProps> {
       fellows: UniqueEntityId.restoreArrayFromRepo(
         secureBase.fellows.map((id) => {
           return { id };
-        })
+        }),
       ),
-      karte: "",
-      dialogs: "",
+      karte: '',
+      dialogs: '',
     });
   }
 }

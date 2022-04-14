@@ -1,7 +1,7 @@
 import { VFC } from 'react';
 
-import { InquiryCategory, InquiryStatus } from '../../../graphql';
 import { Badge, BadgeLarge } from '..';
+import { InquiryCategory, InquiryStatus } from '../../../graphql';
 
 type BadgeInquiryCategoryProps = {
   category: InquiryCategory;
@@ -12,7 +12,10 @@ type BadgeInquiryStatusProps = {
   size?: 'small' | 'large';
 };
 
-export const BadgeInquiryCategory: VFC<BadgeInquiryCategoryProps> = ({ category, size }) => {
+export const BadgeInquiryCategory: VFC<BadgeInquiryCategoryProps> = ({
+  category,
+  size,
+}) => {
   let color: 'red' | 'green' | 'yellow' | 'blue' | 'gray';
   let content: string;
 
@@ -48,7 +51,10 @@ export const BadgeInquiryCategory: VFC<BadgeInquiryCategoryProps> = ({ category,
     <Badge color={color} content={content} />
   );
 };
-export const BadgeInquiryStatus: VFC<BadgeInquiryStatusProps> = ({ status, size }) => {
+export const BadgeInquiryStatus: VFC<BadgeInquiryStatusProps> = ({
+  status,
+  size,
+}) => {
   let color: 'red' | 'green' | 'yellow' | 'gray';
   let content: string;
 

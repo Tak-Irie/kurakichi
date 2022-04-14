@@ -49,20 +49,15 @@ type Inquiry implements Node {
   inquiryStatus: InquiryStatus
 }
 
-enum InquiryCategory {
-  APPLICATION
-  CONTACT
-  COUNSEL
-  INQUIRY
-  OTHERS
-}
+"""
+APPLICATION | CONTACT | COUNSEL | INQUIRY | OTHERS
+"""
+scalar InquiryCategory
 
-enum InquiryStatus {
-  DONE
-  DRAFT
-  UNREAD
-  WORKING
-}
+"""
+DONE | DRAFT | UNREAD | WORKING
+"""
+scalar InquiryStatus
 
 type InquiryTree implements Node {
   id: ID!

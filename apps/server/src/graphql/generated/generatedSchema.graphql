@@ -86,13 +86,8 @@ type Inquiry implements Node {
   sentAt: String
 }
 
-enum InquiryCategory {
-  APPLICATION
-  CONTACT
-  COUNSEL
-  INQUIRY
-  OTHERS
-}
+"""APPLICATION | CONTACT | COUNSEL | INQUIRY | OTHERS"""
+scalar InquiryCategory
 
 type InquiryConnection {
   edges: [InquiryEdges]
@@ -120,12 +115,8 @@ type InquiryPayload {
   inquiry: Inquiry
 }
 
-enum InquiryStatus {
-  DONE
-  DRAFT
-  UNREAD
-  WORKING
-}
+"""DONE | DRAFT | UNREAD | WORKING"""
+scalar InquiryStatus
 
 type InquiryTree implements Node {
   id: ID!
@@ -192,12 +183,8 @@ type MessagePayload {
   message: Message
 }
 
-enum MessageStatus {
-  DRAFT
-  READ
-  SENT
-  UNREAD
-}
+"""SENT | READ | UNREAD | DRAFT"""
+scalar MessageStatus
 
 type MessageTree implements Node {
   id: ID!
@@ -207,6 +194,11 @@ type MessageTree implements Node {
 type MessageTreePayload {
   errors: Errors
   messageTree: MessageTree
+}
+
+type MessagesPayload {
+  errors: Errors
+  messages: [Message]
 }
 
 type Mutation {
@@ -275,7 +267,7 @@ type Query {
   getInquiriesByTreeId(id: String!): InquiryTreePayload
   getInquiry(id: String!): InquiryPayload
   getKarte(id: String!): Karte
-  getMessagesByCookie: MessagePayload
+  getMessagesByCookie: MessagesPayload
   getMessagesByTreeId(id: String!): MessageTreePayload
   getOrg(id: String!): OrgPayload
   getOrgInfoByMemberCookie: OrgPayload
@@ -341,11 +333,8 @@ type UserPayload {
   user: User
 }
 
-enum UserRole {
-  CLIENT
-  EXPERT
-  VISITOR
-}
+"""VISITOR | CLIENT | EXPERT"""
+scalar UserRole
 
 type UsersPayload {
   errors: Errors

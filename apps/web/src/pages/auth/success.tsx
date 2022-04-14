@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { useGetUserByCookieQuery } from '../../graphql/generated/graphql';
 
 const AuthSuccess: NextPage = () => {
   const { data, loading, error } = useGetUserByCookieQuery({

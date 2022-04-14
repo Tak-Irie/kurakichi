@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
-
-import { RegisterUserForm, GoogleLoginButton, YahooLoginButton } from '@next/container';
-import { TextWithDivider, TextSmall, Disclosure, FormPageTemplate } from '@next/ui';
+import { GoogleLoginButton, RegisterUserForm, YahooLoginButton } from '../../components/container';
+import { Disclosure, TextSmall, TextWithDivider } from '../../components/presentational/atoms';
+import { FormPageTemplate } from '../../components/presentational/templates';
 
 const RegisterPublicPage: NextPage = () => {
   return (

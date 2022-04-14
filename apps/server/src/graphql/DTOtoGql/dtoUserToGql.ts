@@ -1,5 +1,6 @@
-import { DTOUser } from "@kurakichi/modules";
-import { User, UserRole } from "../generated/generatedTypes";
+/* eslint-disable no-constant-condition */
+import { DTOUser } from '@kurakichi/modules';
+import { User } from '../generated/generatedTypes';
 
 export const dtoUserToGql = (user: DTOUser): User => {
   const {
@@ -25,14 +26,7 @@ export const dtoUserToGql = (user: DTOUser): User => {
     id,
     name: userName,
     email,
-    role:
-      role === "CLIENT"
-        ? UserRole["Client"]
-        : "EXPERT"
-        ? UserRole["Expert"]
-        : "VISITOR"
-        ? UserRole["Visitor"]
-        : undefined,
+    role: role,
     selfIntro: description,
     avatarUrl: avatar,
     heroImageUrl: image,

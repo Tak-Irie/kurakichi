@@ -1,5 +1,5 @@
-import { FC, ReactElement } from 'react';
 import { ExclamationIcon } from '@heroicons/react/outline';
+import { FC, ReactElement } from 'react';
 
 type FeedbackProps = {
   label: string;

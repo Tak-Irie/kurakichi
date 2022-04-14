@@ -1,6 +1,6 @@
-import { FC, VFC, ReactElement, Fragment } from 'react';
+import { FC, Fragment, ReactElement, VFC } from 'react';
 
-import { Transition, Menu } from '@headlessui/react';
+import { Menu, Transition } from '@headlessui/react';
 
 type DropDownMenuProps = {
   menuElement: ReactElement;
@@ -30,7 +30,7 @@ export const DropDownMenu: FC<DropDownMenuProps> = (props) => {
             >
               <Menu.Items
                 static
-                className="origin-top-right absolute right-0 mt-2 w-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                className="absolute right-0 mt-2 w-auto bg-white rounded-md focus:outline-none ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
               >
                 {props.children}
               </Menu.Items>
@@ -41,7 +41,11 @@ export const DropDownMenu: FC<DropDownMenuProps> = (props) => {
     </div>
   );
 };
-export const DropDownMenu2: VFC<DropDownMenuProps> = ({ menuElement, menuIcon, menuItems }) => {
+export const DropDownMenu2: VFC<DropDownMenuProps> = ({
+  menuElement,
+  menuIcon,
+  menuItems,
+}) => {
   return (
     <div className="z-10">
       <Menu as="div">
@@ -60,7 +64,7 @@ export const DropDownMenu2: VFC<DropDownMenuProps> = ({ menuElement, menuIcon, m
         >
           <Menu.Items
             static
-            className="origin-top-right absolute right-0 mt-2 w-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            className="absolute right-0 mt-2 w-auto bg-white rounded-md focus:outline-none ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
           >
             {menuItems}
           </Menu.Items>

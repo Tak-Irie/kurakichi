@@ -1,4 +1,4 @@
-import { Children, FC } from 'react';
+import { FC } from 'react';
 
 type TableHeadProps = {
   left?: boolean;

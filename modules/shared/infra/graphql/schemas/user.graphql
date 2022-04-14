@@ -9,11 +9,10 @@ type User implements Node {
   messages: MessageConnection
 }
 
-enum UserRole {
-  VISITOR
-  CLIENT
-  EXPERT
-}
+"""
+VISITOR | CLIENT | EXPERT
+"""
+scalar UserRole
 
 type MessageConnection {
   edges: [MessageEdges]
@@ -34,12 +33,10 @@ type Message implements Node {
   receiver: User
 }
 
-enum MessageStatus {
-  SENT
-  READ
-  UNREAD
-  DRAFT
-}
+"""
+SENT | READ | UNREAD | DRAFT
+"""
+scalar MessageStatus
 
 type MessageTree implements Node {
   id: ID!
@@ -61,7 +58,7 @@ type Query {
   getUserByCookie: UserPayload
   getUserById(userId: String!): UserPayload
   getUsers: UsersPayload
-  getMessagesByCookie: MessagePayload
+  getMessagesByCookie: MessagesPayload
   getMessagesByTreeId(id: String!): MessageTreePayload
 }
 
@@ -88,6 +85,10 @@ type UsersPayload {
 
 type MessagePayload {
   message: Message
+  errors: Errors
+}
+type MessagesPayload {
+  messages: [Message]
   errors: Errors
 }
 

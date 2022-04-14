@@ -1,10 +1,11 @@
-import { GraphQLResolveInfo } from 'graphql';
-import { HogeModel } from '\@kurakichi/modules/shared/infra/graphql/models';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { HogeModel, UserRoleModel } from '\@kurakichi/modules/shared/infra/graphql/models';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -13,6 +14,14 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** APPLICATION | CONTACT | COUNSEL | INQUIRY | OTHERS */
+  InquiryCategory: string;
+  /** DONE | DRAFT | UNREAD | WORKING */
+  InquiryStatus: string;
+  /** SENT | READ | UNREAD | DRAFT */
+  MessageStatus: string;
+  /** VISITOR | CLIENT | EXPERT */
+  UserRole: string;
 };
 
 export type Address = {
@@ -110,22 +119,14 @@ export type InquiriesPayload = {
 
 export type Inquiry = Node & {
   __typename?: 'Inquiry';
-  category?: Maybe<InquiryCategory>;
+  category?: Maybe<Scalars['InquiryCategory']>;
   content?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  inquiryStatus?: Maybe<InquiryStatus>;
+  inquiryStatus?: Maybe<Scalars['InquiryStatus']>;
   receiver?: Maybe<Org>;
   sender?: Maybe<User>;
   sentAt?: Maybe<Scalars['String']>;
 };
-
-export enum InquiryCategory {
-  Application = 'APPLICATION',
-  Contact = 'CONTACT',
-  Counsel = 'COUNSEL',
-  Inquiry = 'INQUIRY',
-  Others = 'OTHERS'
-}
 
 export type InquiryConnection = {
   __typename?: 'InquiryConnection';
@@ -157,13 +158,6 @@ export type InquiryPayload = {
   errors?: Maybe<Errors>;
   inquiry?: Maybe<Inquiry>;
 };
-
-export enum InquiryStatus {
-  Done = 'DONE',
-  Draft = 'DRAFT',
-  Unread = 'UNREAD',
-  Working = 'WORKING'
-}
 
 export type InquiryTree = Node & {
   __typename?: 'InquiryTree';
@@ -208,7 +202,7 @@ export type Message = Node & {
   receiver?: Maybe<User>;
   sender?: Maybe<User>;
   sentAt?: Maybe<Scalars['String']>;
-  status?: Maybe<MessageStatus>;
+  status?: Maybe<Scalars['MessageStatus']>;
 };
 
 export type MessageConnection = {
@@ -242,13 +236,6 @@ export type MessagePayload = {
   message?: Maybe<Message>;
 };
 
-export enum MessageStatus {
-  Draft = 'DRAFT',
-  Read = 'READ',
-  Sent = 'SENT',
-  Unread = 'UNREAD'
-}
-
 export type MessageTree = Node & {
   __typename?: 'MessageTree';
   id: Scalars['ID'];
@@ -259,6 +246,12 @@ export type MessageTreePayload = {
   __typename?: 'MessageTreePayload';
   errors?: Maybe<Errors>;
   messageTree?: Maybe<MessageTree>;
+};
+
+export type MessagesPayload = {
+  __typename?: 'MessagesPayload';
+  errors?: Maybe<Errors>;
+  messages?: Maybe<Array<Maybe<Message>>>;
 };
 
 export type Mutation = {
@@ -410,7 +403,7 @@ export type Query = {
   getInquiriesByTreeId?: Maybe<InquiryTreePayload>;
   getInquiry?: Maybe<InquiryPayload>;
   getKarte?: Maybe<Karte>;
-  getMessagesByCookie?: Maybe<MessagePayload>;
+  getMessagesByCookie?: Maybe<MessagesPayload>;
   getMessagesByTreeId?: Maybe<MessageTreePayload>;
   getOrg?: Maybe<OrgPayload>;
   getOrgInfoByMemberCookie?: Maybe<OrgPayload>;
@@ -486,7 +479,7 @@ export type RegisterOrgInput = {
 };
 
 export type SendInquiryInput = {
-  category: InquiryCategory;
+  category: Scalars['InquiryCategory'];
   content: Scalars['String'];
   orgId: Scalars['ID'];
   userId: Scalars['ID'];
@@ -499,7 +492,7 @@ export type Subscription = {
 
 export type UpdateInquiryStatusInput = {
   id: Scalars['ID'];
-  inquiryStatus: InquiryStatus;
+  inquiryStatus: Scalars['InquiryStatus'];
 };
 
 export type UpdateOrgInput = {
@@ -520,7 +513,7 @@ export type User = Node & {
   id: Scalars['ID'];
   messages?: Maybe<MessageConnection>;
   name?: Maybe<Scalars['String']>;
-  role?: Maybe<UserRole>;
+  role?: Maybe<Scalars['UserRole']>;
   selfIntro?: Maybe<Scalars['String']>;
 };
 
@@ -534,12 +527,6 @@ export type UserPayload = {
   errors?: Maybe<Errors>;
   user?: Maybe<User>;
 };
-
-export enum UserRole {
-  Client = 'CLIENT',
-  Expert = 'EXPERT',
-  Visitor = 'VISITOR'
-}
 
 export type UsersPayload = {
   __typename?: 'UsersPayload';
@@ -649,13 +636,13 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>;
   InquiriesPayload: ResolverTypeWrapper<InquiriesPayload>;
   Inquiry: ResolverTypeWrapper<Inquiry>;
-  InquiryCategory: InquiryCategory;
+  InquiryCategory: ResolverTypeWrapper<Scalars['InquiryCategory']>;
   InquiryConnection: ResolverTypeWrapper<InquiryConnection>;
   InquiryEdges: ResolverTypeWrapper<InquiryEdges>;
   InquiryLeafConnection: ResolverTypeWrapper<InquiryLeafConnection>;
   InquiryLeafEdges: ResolverTypeWrapper<InquiryLeafEdges>;
   InquiryPayload: ResolverTypeWrapper<InquiryPayload>;
-  InquiryStatus: InquiryStatus;
+  InquiryStatus: ResolverTypeWrapper<Scalars['InquiryStatus']>;
   InquiryTree: ResolverTypeWrapper<InquiryTree>;
   InquiryTreePayload: ResolverTypeWrapper<InquiryTreePayload>;
   Karte: ResolverTypeWrapper<Karte>;
@@ -668,9 +655,10 @@ export type ResolversTypes = ResolversObject<{
   MessageLeafConnection: ResolverTypeWrapper<MessageLeafConnection>;
   MessageLeafEdges: ResolverTypeWrapper<MessageLeafEdges>;
   MessagePayload: ResolverTypeWrapper<MessagePayload>;
-  MessageStatus: MessageStatus;
+  MessageStatus: ResolverTypeWrapper<Scalars['MessageStatus']>;
   MessageTree: ResolverTypeWrapper<MessageTree>;
   MessageTreePayload: ResolverTypeWrapper<MessageTreePayload>;
+  MessagesPayload: ResolverTypeWrapper<MessagesPayload>;
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolversTypes['Base'] | ResolversTypes['Dialog'] | ResolversTypes['Inquiry'] | ResolversTypes['InquiryTree'] | ResolversTypes['Karte'] | ResolversTypes['Message'] | ResolversTypes['MessageTree'] | ResolversTypes['Org'] | ResolversTypes['User'];
   Org: ResolverTypeWrapper<Org>;
@@ -685,10 +673,10 @@ export type ResolversTypes = ResolversObject<{
   Subscription: ResolverTypeWrapper<{}>;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  User: ResolverTypeWrapper<User>;
+  User: ResolverTypeWrapper<Omit<User, 'role'> & { role?: Maybe<ResolversTypes['UserRole']> }>;
   UserError: ResolverTypeWrapper<UserError>;
   UserPayload: ResolverTypeWrapper<UserPayload>;
-  UserRole: UserRole;
+  UserRole: ResolverTypeWrapper<UserRoleModel>;
   UsersPayload: ResolverTypeWrapper<UsersPayload>;
   registerUserInput: RegisterUserInput;
   updateUserInput: UpdateUserInput;
@@ -715,11 +703,13 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'];
   InquiriesPayload: InquiriesPayload;
   Inquiry: Inquiry;
+  InquiryCategory: Scalars['InquiryCategory'];
   InquiryConnection: InquiryConnection;
   InquiryEdges: InquiryEdges;
   InquiryLeafConnection: InquiryLeafConnection;
   InquiryLeafEdges: InquiryLeafEdges;
   InquiryPayload: InquiryPayload;
+  InquiryStatus: Scalars['InquiryStatus'];
   InquiryTree: InquiryTree;
   InquiryTreePayload: InquiryTreePayload;
   Karte: Karte;
@@ -732,8 +722,10 @@ export type ResolversParentTypes = ResolversObject<{
   MessageLeafConnection: MessageLeafConnection;
   MessageLeafEdges: MessageLeafEdges;
   MessagePayload: MessagePayload;
+  MessageStatus: Scalars['MessageStatus'];
   MessageTree: MessageTree;
   MessageTreePayload: MessageTreePayload;
+  MessagesPayload: MessagesPayload;
   Mutation: {};
   Node: ResolversParentTypes['Base'] | ResolversParentTypes['Dialog'] | ResolversParentTypes['Inquiry'] | ResolversParentTypes['InquiryTree'] | ResolversParentTypes['Karte'] | ResolversParentTypes['Message'] | ResolversParentTypes['MessageTree'] | ResolversParentTypes['Org'] | ResolversParentTypes['User'];
   Org: Org;
@@ -748,9 +740,10 @@ export type ResolversParentTypes = ResolversObject<{
   Subscription: {};
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  User: User;
+  User: Omit<User, 'role'> & { role?: Maybe<ResolversParentTypes['UserRole']> };
   UserError: UserError;
   UserPayload: UserPayload;
+  UserRole: UserRoleModel;
   UsersPayload: UsersPayload;
   registerUserInput: RegisterUserInput;
   updateUserInput: UpdateUserInput;
@@ -860,6 +853,10 @@ export type InquiryResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface InquiryCategoryScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['InquiryCategory'], any> {
+  name: 'InquiryCategory';
+}
+
 export type InquiryConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryConnection'] = ResolversParentTypes['InquiryConnection']> = ResolversObject<{
   edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['InquiryEdges']>>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
@@ -890,6 +887,10 @@ export type InquiryPayloadResolvers<ContextType = any, ParentType extends Resolv
   inquiry?: Resolver<Maybe<ResolversTypes['Inquiry']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export interface InquiryStatusScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['InquiryStatus'], any> {
+  name: 'InquiryStatus';
+}
 
 export type InquiryTreeResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryTree'] = ResolversParentTypes['InquiryTree']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -968,6 +969,10 @@ export type MessagePayloadResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface MessageStatusScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['MessageStatus'], any> {
+  name: 'MessageStatus';
+}
+
 export type MessageTreeResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageTree'] = ResolversParentTypes['MessageTree']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   leaves?: Resolver<Maybe<ResolversTypes['MessageLeafConnection']>, ParentType, ContextType>;
@@ -977,6 +982,12 @@ export type MessageTreeResolvers<ContextType = any, ParentType extends Resolvers
 export type MessageTreePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageTreePayload'] = ResolversParentTypes['MessageTreePayload']> = ResolversObject<{
   errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
   messageTree?: Resolver<Maybe<ResolversTypes['MessageTree']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MessagesPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessagesPayload'] = ResolversParentTypes['MessagesPayload']> = ResolversObject<{
+  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
+  messages?: Resolver<Maybe<Array<Maybe<ResolversTypes['Message']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1052,7 +1063,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreePayload']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'id'>>;
   getInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'id'>>;
   getKarte?: Resolver<Maybe<ResolversTypes['Karte']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
-  getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType>;
+  getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesPayload']>, ParentType, ContextType>;
   getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'id'>>;
   getOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
   getOrgInfoByMemberCookie?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType>;
@@ -1092,6 +1103,10 @@ export type UserPayloadResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface UserRoleScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UserRole'], any> {
+  name: 'UserRole';
+}
+
 export type UsersPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersPayload'] = ResolversParentTypes['UsersPayload']> = ResolversObject<{
   errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
   users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
@@ -1115,11 +1130,13 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Hoge?: HogeResolvers<ContextType>;
   InquiriesPayload?: InquiriesPayloadResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
+  InquiryCategory?: GraphQLScalarType;
   InquiryConnection?: InquiryConnectionResolvers<ContextType>;
   InquiryEdges?: InquiryEdgesResolvers<ContextType>;
   InquiryLeafConnection?: InquiryLeafConnectionResolvers<ContextType>;
   InquiryLeafEdges?: InquiryLeafEdgesResolvers<ContextType>;
   InquiryPayload?: InquiryPayloadResolvers<ContextType>;
+  InquiryStatus?: GraphQLScalarType;
   InquiryTree?: InquiryTreeResolvers<ContextType>;
   InquiryTreePayload?: InquiryTreePayloadResolvers<ContextType>;
   Karte?: KarteResolvers<ContextType>;
@@ -1132,8 +1149,10 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   MessageLeafConnection?: MessageLeafConnectionResolvers<ContextType>;
   MessageLeafEdges?: MessageLeafEdgesResolvers<ContextType>;
   MessagePayload?: MessagePayloadResolvers<ContextType>;
+  MessageStatus?: GraphQLScalarType;
   MessageTree?: MessageTreeResolvers<ContextType>;
   MessageTreePayload?: MessageTreePayloadResolvers<ContextType>;
+  MessagesPayload?: MessagesPayloadResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   Org?: OrgResolvers<ContextType>;
@@ -1146,6 +1165,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   User?: UserResolvers<ContextType>;
   UserError?: UserErrorResolvers<ContextType>;
   UserPayload?: UserPayloadResolvers<ContextType>;
+  UserRole?: GraphQLScalarType;
   UsersPayload?: UsersPayloadResolvers<ContextType>;
 }>;
 

@@ -1,6 +1,11 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
-import { XIcon, CheckCircleIcon, ExclamationIcon, BanIcon } from '@heroicons/react/outline';
 import { Transition } from '@headlessui/react';
+import {
+  BanIcon,
+  CheckCircleIcon,
+  ExclamationIcon,
+  XIcon,
+} from '@heroicons/react/outline';
+import { FC, ReactElement, useEffect, useState } from 'react';
 
 type NotificationProps = {
   icon?: ReactElement;
@@ -39,20 +44,20 @@ export const Notification: FC<NotificationProps> = ({
     >
       <div
         aria-live="assertive"
-        className="z-50 fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end"
+        className="flex fixed inset-0 z-50 justify-center items-end py-6 px-4 pointer-events-none sm:justify-end sm:items-start sm:p-6"
       >
-        <div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+        <div className="overflow-hidden w-full max-w-sm bg-white rounded-lg ring-1 ring-black/5 shadow-lg pointer-events-auto">
           <div className="p-4">
             <div className="flex items-start">
               <div className={`flex-shrink-0 h-6 w-6 ${iconColor}`}>{icon}</div>
-              <div className="ml-3 w-0 flex-1 pt-0.5">
+              <div className="flex-1 pt-0.5 ml-3 w-0">
                 <p className="text-sm font-medium text-gray-900">{label}</p>
                 <p className="mt-1 text-sm text-gray-500">{content}</p>
               </div>
-              <div className="ml-4 flex-shrink-0 flex">
+              <div className="flex shrink-0 ml-4">
                 <button
                   onClick={() => setIsShowing(!isShowing)}
-                  className="h-5 w-5 bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex w-5 h-5 text-gray-400 hover:text-gray-500 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">Close</span>
                   <XIcon />

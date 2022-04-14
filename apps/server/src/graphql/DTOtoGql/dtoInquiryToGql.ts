@@ -1,9 +1,5 @@
-import { DTOInquiry } from "@kurakichi/modules";
-import {
-  Inquiry,
-  InquiryCategory,
-  InquiryStatus,
-} from "../generated/generatedTypes";
+import { DTOInquiry } from '@kurakichi/modules';
+import { Inquiry } from '../generated/generatedTypes';
 
 export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): Inquiry => {
   const { category, content, id, receiver, sender, status, sentAt, tree } =
@@ -15,28 +11,8 @@ export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): Inquiry => {
     receiver: { id: receiver },
     sender: { id: sender },
     sentAt,
-    category:
-      category === "APPLICATION"
-        ? InquiryCategory["Application"]
-        : "COUNSEL"
-        ? InquiryCategory["Counsel"]
-        : "CONTACT"
-        ? InquiryCategory["Contact"]
-        : "INQUIRY"
-        ? InquiryCategory["Inquiry"]
-        : "OTHERS"
-        ? InquiryCategory["Others"]
-        : undefined,
-    inquiryStatus:
-      status === "DONE"
-        ? InquiryStatus["Done"]
-        : "DRAFT"
-        ? InquiryStatus["Draft"]
-        : "UNREAD"
-        ? InquiryStatus["Unread"]
-        : "WORKING"
-        ? InquiryStatus["Working"]
-        : undefined,
+    category,
+    inquiryStatus: status,
   };
 };
 

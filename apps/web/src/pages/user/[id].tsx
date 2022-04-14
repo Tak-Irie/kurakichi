@@ -1,12 +1,7 @@
 import { NextPage } from 'next';
-import {
-  useGetUserByCookieQuery,
-  useGetUserByIdWithOrgQuery,
-} from '../../graphql/generated/graphql';
-import { useGetIdFromUrl } from '../../util';
-
-import { LoadingSpinner, UserProfile } from '@next/ui';
 import { useRouter } from 'next/router';
+import { LoadingSpinner } from '../../components/presentational/atoms';
+import { UserProfile } from '../../components/presentational/templates';
 
 const UserProfilePage: NextPage = () => {
   const router = useRouter();

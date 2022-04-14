@@ -1,9 +1,8 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
-
-import { LoadingSpinner, ButtonWithIcon, UserTemplate, IconsUser } from '@next/ui';
-import { ChangeUserPassword, UpdateUserProfile } from '@next/container';
-import { useGetUserPrivateInfoByCookieQuery } from '@next/graphql';
+import { ChangeUserPassword, UpdateUserProfile } from '../../components/container';
+import { ButtonWithIcon, IconsUser, LoadingSpinner } from '../../components/presentational/atoms';
+import { UserTemplate } from '../../components/presentational/templates';
 
 const UserSettingPrivatePage: NextPage = () => {
   const { data, loading, error } = useGetUserPrivateInfoByCookieQuery({

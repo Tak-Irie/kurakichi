@@ -1,5 +1,5 @@
-import { FC, ReactElement, VFC } from 'react';
 import Link from 'next/link';
+import { FC, VFC } from 'react';
 
 type CardProps = {
   id?: string;
@@ -14,14 +14,14 @@ type CardProps = {
 export const Card: FC<CardProps> = (props) => {
   const { image, title, content, children } = props;
   return (
-    <div className="relative p-px overflow-hidden transition duration-300 transform border rounded shadow-sm hover:scale-105 group hover:shadow-xl max-w-lg">
-      <div className="absolute bottom-0 left-0 w-full h-1 duration-300 origin-left transform scale-x-0 bg-deep-purple-accent-400 group-hover:scale-x-100" />
-      <div className="absolute bottom-0 left-0 w-1 h-full duration-300 origin-bottom transform scale-y-0 bg-deep-purple-accent-400 group-hover:scale-y-100" />
-      <div className="absolute top-0 left-0 w-full h-1 duration-300 origin-right transform scale-x-0 bg-deep-purple-accent-400 group-hover:scale-x-100" />
-      <div className="absolute bottom-0 right-0 w-1 h-full duration-300 origin-top transform scale-y-0 bg-deep-purple-accent-400 group-hover:scale-y-100" />
+    <div className="group overflow-hidden relative p-px max-w-lg rounded border shadow-sm hover:shadow-xl transition duration-300 hover:scale-105">
+      <div className="absolute bottom-0 left-0 w-full h-1 duration-300 scale-x-0 group-hover:scale-x-100 origin-left bg-deep-purple-accent-400" />
+      <div className="absolute bottom-0 left-0 w-1 h-full duration-300 scale-y-0 group-hover:scale-y-100 origin-bottom bg-deep-purple-accent-400" />
+      <div className="absolute top-0 left-0 w-full h-1 duration-300 scale-x-0 group-hover:scale-x-100 origin-right bg-deep-purple-accent-400" />
+      <div className="absolute right-0 bottom-0 w-1 h-full duration-300 scale-y-0 group-hover:scale-y-100 origin-top bg-deep-purple-accent-400" />
       <div className="relative p-5 bg-white rounded-sm">
-        <div className="flex flex-col mb-2 lg:items-center lg:flex-row">
-          <div className="flex items-center justify-center w-10 h-10 mb-6 mr-2 rounded-full bg-indigo-50">
+        <div className="flex flex-col mb-2 lg:flex-row lg:items-center">
+          <div className="flex justify-center items-center mr-2 mb-6 w-10 h-10 bg-indigo-50 rounded-full">
             {image || null}
           </div>
           <h6 className="font-semibold leading-5">{title}</h6>
@@ -45,9 +45,13 @@ export const SmallCard: FC<CardProps> = ({
 }) => {
   return (
     <li key={id}>
-      <div className="flex bg-gray-200 p-3 m-2 max-w-lg items-center border-2 border-red-900">
-        <div className="flex items-center justify-center w-16 h-16 mr-5 rounded-full bg-yellow-100">
-          <svg className="w-16 h-12 text-red-300" stroke="currentColor" viewBox="0 0 52 52">
+      <div className="flex items-center p-3 m-2 max-w-lg bg-gray-200 border-2 border-red-900">
+        <div className="flex justify-center items-center mr-5 w-16 h-16 bg-yellow-100 rounded-full">
+          <svg
+            className="w-16 h-12 text-red-300"
+            stroke="currentColor"
+            viewBox="0 0 52 52"
+          >
             <polygon
               strokeWidth="3"
               strokeLinecap="round"
@@ -76,9 +80,9 @@ export const CardWithPick: VFC<CardProps> = ({
   title,
 }) => {
   return (
-    <div className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500">
-      <div className="flex-shrink-0">
-        <img className="h-10 w-10 rounded-full" src={image} alt={imageAlt} />
+    <div className="flex relative items-center py-5 px-6 space-x-3 bg-white rounded-lg border border-gray-300 hover:border-gray-400 focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 shadow-sm">
+      <div className="shrink-0">
+        <img className="w-10 h-10 rounded-full" src={image} alt={imageAlt} />
       </div>
       <div className="flex-1 min-w-0">
         <Link href={linkUrl} as={linkAs} passHref>

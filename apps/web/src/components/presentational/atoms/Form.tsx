@@ -1,11 +1,12 @@
-import { FC, SyntheticEvent } from 'react';
+import type { ReactNode, SyntheticEvent, VFC } from 'react';
 
 type FormProps = {
   onSubmit?: (e: SyntheticEvent) => void;
   overWriteCSS?: string;
+  children: ReactNode;
 };
 
-const Form: FC<FormProps> = ({
+const Form: VFC<FormProps> = ({
   onSubmit,
   overWriteCSS = 'flex flex-col space-y-1 items-center px-5 border-2 rounded-md border-gray-400 bg-white',
   children,
