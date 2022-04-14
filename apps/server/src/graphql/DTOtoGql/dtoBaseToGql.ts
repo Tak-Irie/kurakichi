@@ -1,15 +1,13 @@
 import { DTOBase } from "@kurakichi/modules";
 import { Base } from "../generated/generatedTypes";
+import { createGqlConn } from "./createConnection";
 
 export const baseToGql = (base: DTOBase): Base => {
   const { baseOwner, id, fellows, dialogs, karte } = base;
   let _dialogs = undefined;
   let _fellows = undefined;
   if (dialogs) {
-    let edges = dialogs.map((id) => {
-      return { cursor: id };
-    });
-    _dialogs = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
+    _dialogs = createGqlConn(dialogs);
   }
 
   if (fellows) {

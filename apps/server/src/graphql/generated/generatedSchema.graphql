@@ -158,7 +158,7 @@ type MemberEdges {
 }
 
 type Message implements Node {
-  content: String!
+  content: String
   id: ID!
   receiver: User
   sender: User
@@ -237,7 +237,7 @@ type Org implements Node {
   avatarUrl: String
   description: String
   email: String
-  heloImageUrl: String
+  heroImageUrl: String
   homePage: String
   id: ID!
   inquiries: InquiryConnection
@@ -323,11 +323,11 @@ input UpdateOrgInput {
 
 type User implements Node {
   avatarUrl: String
-  email: String!
+  email: String
   heroImageUrl: String
   id: ID!
   messages: MessageConnection
-  name: String!
+  name: String
   role: UserRole
   selfIntro: String
 }

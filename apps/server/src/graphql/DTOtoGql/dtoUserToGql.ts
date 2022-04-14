@@ -16,7 +16,7 @@ export const dtoUserToGql = (user: DTOUser): User => {
   } = user;
 
   const edges = messages.map((id) => {
-    return { cursor: id };
+    return { cursor: id, node: { id } };
   });
 
   const _messages = { pageInfo: { hasNext: false, hasPrevious: false }, edges };

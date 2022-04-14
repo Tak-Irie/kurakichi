@@ -203,7 +203,7 @@ export type MemberEdges = {
 
 export type Message = Node & {
   __typename?: 'Message';
-  content: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   receiver?: Maybe<User>;
   sender?: Maybe<User>;
@@ -367,7 +367,7 @@ export type Org = Node & {
   avatarUrl?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  heloImageUrl?: Maybe<Scalars['String']>;
+  heroImageUrl?: Maybe<Scalars['String']>;
   homePage?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   inquiries?: Maybe<InquiryConnection>;
@@ -515,11 +515,11 @@ export type UpdateOrgInput = {
 export type User = Node & {
   __typename?: 'User';
   avatarUrl?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
   heroImageUrl?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   messages?: Maybe<MessageConnection>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   role?: Maybe<UserRole>;
   selfIntro?: Maybe<Scalars['String']>;
 };
@@ -928,7 +928,7 @@ export type MemberEdgesResolvers<ContextType = any, ParentType extends Resolvers
 }>;
 
 export type MessageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = ResolversObject<{
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   receiver?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   sender?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -1009,7 +1009,7 @@ export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTy
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  heloImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  heroImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   homePage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   inquiries?: Resolver<Maybe<ResolversTypes['InquiryConnection']>, ParentType, ContextType>;
@@ -1071,11 +1071,11 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   heroImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   messages?: Resolver<Maybe<ResolversTypes['MessageConnection']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['UserRole']>, ParentType, ContextType>;
   selfIntro?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

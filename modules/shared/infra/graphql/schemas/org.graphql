@@ -7,7 +7,7 @@ type Org implements Node {
   phoneNumber: String
   homePage: String
   avatarUrl: String
-  heloImageUrl: String
+  heroImageUrl: String
   members: MemberConnection
   inquiries: InquiryConnection
 }
