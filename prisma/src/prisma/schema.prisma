@@ -53,7 +53,7 @@ model Message {
   text          String
   senderId      String
   receiverId    String
-  sentAt        BigInt
+  sentAt        String
   status        MESSAGE_STATUS
   receiver      User           @relation("receive", fields: [receiverId], references: [id])
   sender        User           @relation("sent", fields: [senderId], references: [id])
@@ -73,7 +73,7 @@ model Inquiry {
   receiverId    String
   receivedOrgId String
   inquiryTreeId String
-  sentAt        BigInt
+  sentAt        String
   category      INQUIRY_CATEGORY
   status        INQUIRY_STATUS
   sender        User             @relation("sentInquiry", fields: [senderId], references: [id])

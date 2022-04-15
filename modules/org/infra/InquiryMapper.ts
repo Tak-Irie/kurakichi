@@ -22,7 +22,7 @@ export class InquiryMapper {
       content: text,
       receiver: receiverId,
       sender: senderId,
-      sentAt: Number(sentAt),
+      sentAt: sentAt,
       treeId: inquiryTreeId,
       orgId: receivedOrgId,
     });
@@ -31,13 +31,24 @@ export class InquiryMapper {
   }
 
   public static ArrayToDomain(storedInquiries: StoredInquiry[]): Inquiry[] {
-    const arrayResult = storedInquiries.map((inquiry) => InquiryMapper.ToDomain(inquiry));
+    const arrayResult = storedInquiries.map((inquiry) =>
+      InquiryMapper.ToDomain(inquiry),
+    );
     return arrayResult;
   }
 
   public static toStore(Inquiry: Inquiry): StoredInquiry {
-    const { category, content, id, sender, receiver, status, treeId, sentAt, orgId } =
-      Inquiry.getProps();
+    const {
+      category,
+      content,
+      id,
+      sender,
+      receiver,
+      status,
+      treeId,
+      sentAt,
+      orgId,
+    } = Inquiry.getProps();
     return {
       id: id.getId(),
       category: category.getValue(),
@@ -45,7 +56,7 @@ export class InquiryMapper {
       senderId: sender.getId(),
       text: content.getText(),
       receiverId: receiver.getId(),
-      sentAt: BigInt(sentAt.getTime()),
+      sentAt: sentAt.getTime(),
       inquiryTreeId: treeId.getId(),
       receivedOrgId: orgId.getId(),
     };
