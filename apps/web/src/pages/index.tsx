@@ -1,11 +1,16 @@
 import type { NextPage } from 'next';
-import { TextH2 } from '../components/presentational/atoms';
-import { HelperPop } from '../components/presentational/molecules';
+import { useState } from 'react';
+import { MapViewer } from '../components/container/shared';
+import { LoadingSpinner, TextH2 } from '../components/presentational/atoms';
+import { HelperPop } from '../components/presentational/organisms';
+import { DEFAULT_MAP_PIN } from '../util/Constants';
 
 const Index: NextPage = () => {
+  const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);
+  const { data, loading, error } = useGetOrgsForMapQuery();
   return (
     <div className="grid grid-cols-12">
-      <div className="col-start-2 col-end-12 mt-10 bg-white p-5 border-gray-200 border shadow-sm">
+      <div className="col-start-2 col-end-12 p-5 mt-10 bg-white border border-gray-200 shadow-sm">
         <div className="flex justify-items-start">
           <TextH2 content="身近の専門家を探してみましょう！" />
           <span className="flex items-center">
@@ -19,7 +24,7 @@ const Index: NextPage = () => {
         <div className="grid grid-cols-10 mt-5">
           <div className="col-span-8">
             <div>placer</div>
-            {/* {loading && !data?.getOrgs.orgs ? (
+            {loading && !data?.getOrgs.orgs ? (
               <LoadingSpinner />
             ) : (
               <MapViewer
@@ -28,9 +33,9 @@ const Index: NextPage = () => {
                 orgs={data.getOrgs.orgs}
                 zoomLevel={13}
               />
-            )} */}
+            )}
           </div>
-          <div className="col-span-2 ml-10 space-y-10 flex flex-col">
+          <div className="flex flex-col col-span-2 ml-10 space-y-10">
             <div>placer</div>
 
             {/* <GeocodeByBrowserButton dispatcher={setIsAddress} buttonLabel="位置情報から検索" />
@@ -40,7 +45,7 @@ const Index: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="col-start-2 col-end-12 my-10 bg-white p-5 border-gray-200 border shadow-sm">
+      <div className="col-start-2 col-end-12 p-5 my-10 bg-white border border-gray-200 shadow-sm">
         <div className="flex justify-items-start">
           <TextH2 content="公共サービスは沢山あります！" />
           <span className="flex items-center">
@@ -56,7 +61,6 @@ const Index: NextPage = () => {
         {/* <ArticlesWelfareGuide /> */}
         <div></div>
       </div>
-      {/* <UsecasePresenter /> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
-const HowToPublicPage: NextPage = () => {
+const HowTo: NextPage = () => {
   const [isLocation, setIsLocation] = useState<GeolocationCoordinates>();
 
   const handleClick = () => {
@@ -21,7 +21,7 @@ const HowToPublicPage: NextPage = () => {
   }, [isLocation]);
 
   return (
-    <div>
+    <div className="inset-0">
       <p>placer</p>
       <p>lat: {isLocation ? isLocation.latitude : null}</p>
       <p>long: {isLocation ? isLocation.longitude : null}</p>
@@ -32,4 +32,4 @@ const HowToPublicPage: NextPage = () => {
   );
 };
 
-export default HowToPublicPage;
+export default HowTo;

@@ -1,0 +1,8 @@
+const TOKYO_PUBLIC_OFFICE = {
+  lat: 35.6896342,
+  lng: 139.6921007,
+};
+
+const DEFAULT_MAP_PIN = TOKYO_PUBLIC_OFFICE;
+
+export { DEFAULT_MAP_PIN };
