@@ -205,16 +205,16 @@ type Mutation {
   acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
   deleteUser: BoolPayload
   forgetPassword(email: String!): BoolPayload
-  login(email: String!, password: String!): UserPayload
-  logout: BoolPayload
+  loginUser(input: loginUserInput!): UserPayload
+  logoutUser: BoolPayload
   postDialog(content: String!, userId: String!): PostDialogPayload
   registerOrg(input: RegisterOrgInput): OrgPayload
   registerUser(input: registerUserInput!): UserPayload
   replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
-  replyMessage(content: String!, replyTargetId: String!): MessagePayload
+  replyMessage(input: replyMessageInput!): MessagePayload
   requestJoinOrg(orgId: String!): OrgPayload
   sendInquiry(input: SendInquiryInput): InquiryPayload
-  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  sendMessage(input: sendMessageInput!): MessagePayload
   updateInquiryStatus(input: UpdateInquiryStatusInput): InquiryPayload
   updateOrg(input: UpdateOrgInput): OrgPayload
   updateUser(input: updateUserInput!): UserPayload
@@ -268,7 +268,7 @@ type Query {
   getInquiry(id: String!): InquiryPayload
   getKarte(id: String!): Karte
   getMessagesByCookie: MessagesPayload
-  getMessagesByTreeId(id: String!): MessageTreePayload
+  getMessagesByTreeId(input: getMessagesByTreeIdInput!): MessageTreePayload
   getOrg(id: String!): OrgPayload
   getOrgInfoByMemberCookie: OrgPayload
   getOrgs: OrgsPayload
@@ -341,9 +341,29 @@ type UsersPayload {
   users: [User!]
 }
 
+input getMessagesByTreeIdInput {
+  treeId: String!
+  userId: String!
+}
+
+input loginUserInput {
+  email: String!
+  password: String!
+}
+
 input registerUserInput {
   email: String!
   password: String!
+}
+
+input replyMessageInput {
+  content: String!
+  replyTargetId: String!
+}
+
+input sendMessageInput {
+  content: String!
+  receiverId: String!
 }
 
 input updateUserInput {

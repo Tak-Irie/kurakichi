@@ -259,8 +259,8 @@ export type Mutation = {
   acceptJoinOrg?: Maybe<OrgPayload>;
   deleteUser?: Maybe<BoolPayload>;
   forgetPassword?: Maybe<BoolPayload>;
-  login?: Maybe<UserPayload>;
-  logout?: Maybe<BoolPayload>;
+  loginUser?: Maybe<UserPayload>;
+  logoutUser?: Maybe<BoolPayload>;
   postDialog?: Maybe<PostDialogPayload>;
   registerOrg?: Maybe<OrgPayload>;
   registerUser?: Maybe<UserPayload>;
@@ -286,9 +286,8 @@ export type MutationForgetPasswordArgs = {
 };
 
 
-export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+export type MutationLoginUserArgs = {
+  input: LoginUserInput;
 };
 
 
@@ -315,8 +314,7 @@ export type MutationReplyInquiryArgs = {
 
 
 export type MutationReplyMessageArgs = {
-  content: Scalars['String'];
-  replyTargetId: Scalars['String'];
+  input: ReplyMessageInput;
 };
 
 
@@ -331,8 +329,7 @@ export type MutationSendInquiryArgs = {
 
 
 export type MutationSendMessageArgs = {
-  receiverId: Scalars['String'];
-  textInput: Scalars['String'];
+  input: SendMessageInput;
 };
 
 
@@ -443,7 +440,7 @@ export type QueryGetKarteArgs = {
 
 
 export type QueryGetMessagesByTreeIdArgs = {
-  id: Scalars['String'];
+  input: GetMessagesByTreeIdInput;
 };
 
 
@@ -534,9 +531,29 @@ export type UsersPayload = {
   users?: Maybe<Array<User>>;
 };
 
+export type GetMessagesByTreeIdInput = {
+  treeId: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type LoginUserInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type RegisterUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type ReplyMessageInput = {
+  content: Scalars['String'];
+  replyTargetId: Scalars['String'];
+};
+
+export type SendMessageInput = {
+  content: Scalars['String'];
+  receiverId: Scalars['String'];
 };
 
 export type UpdateUserInput = {
@@ -678,7 +695,11 @@ export type ResolversTypes = ResolversObject<{
   UserPayload: ResolverTypeWrapper<UserPayload>;
   UserRole: ResolverTypeWrapper<UserRoleModel>;
   UsersPayload: ResolverTypeWrapper<UsersPayload>;
+  getMessagesByTreeIdInput: GetMessagesByTreeIdInput;
+  loginUserInput: LoginUserInput;
   registerUserInput: RegisterUserInput;
+  replyMessageInput: ReplyMessageInput;
+  sendMessageInput: SendMessageInput;
   updateUserInput: UpdateUserInput;
 }>;
 
@@ -745,7 +766,11 @@ export type ResolversParentTypes = ResolversObject<{
   UserPayload: UserPayload;
   UserRole: UserRoleModel;
   UsersPayload: UsersPayload;
+  getMessagesByTreeIdInput: GetMessagesByTreeIdInput;
+  loginUserInput: LoginUserInput;
   registerUserInput: RegisterUserInput;
+  replyMessageInput: ReplyMessageInput;
+  sendMessageInput: SendMessageInput;
   updateUserInput: UpdateUserInput;
 }>;
 
@@ -995,16 +1020,16 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'requestUserId' | 'requestedOrgId'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
   forgetPassword?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
-  login?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  logout?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
+  loginUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
+  logoutUser?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
   postDialog?: Resolver<Maybe<ResolversTypes['PostDialogPayload']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'content' | 'userId'>>;
   registerOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, Partial<MutationRegisterOrgArgs>>;
   registerUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'content' | 'replyTargetId'>>;
-  replyMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'content' | 'replyTargetId'>>;
+  replyMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
   requestJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
   sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, Partial<MutationSendInquiryArgs>>;
-  sendMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'receiverId' | 'textInput'>>;
+  sendMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
   updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, Partial<MutationUpdateInquiryStatusArgs>>;
   updateOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, Partial<MutationUpdateOrgArgs>>;
   updateUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
@@ -1064,7 +1089,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'id'>>;
   getKarte?: Resolver<Maybe<ResolversTypes['Karte']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
   getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesPayload']>, ParentType, ContextType>;
-  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'id'>>;
+  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'input'>>;
   getOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
   getOrgInfoByMemberCookie?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType>;
   getOrgs?: Resolver<Maybe<ResolversTypes['OrgsPayload']>, ParentType, ContextType>;

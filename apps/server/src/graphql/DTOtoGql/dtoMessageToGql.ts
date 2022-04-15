@@ -2,6 +2,11 @@
 import { DTOMessage } from '@kurakichi/modules';
 import { Message, MessageTree } from '../generated/generatedTypes';
 
+type TreeArg = {
+  treeId: string;
+  messages: DTOMessage[];
+};
+
 export const dtoMessageToGql = (message: DTOMessage): Message => {
   const { content, id, receiverId, senderId, status, sentAt, treeId } = message;
   return {
@@ -18,10 +23,10 @@ export const dtoMessagesToGql = (messages: DTOMessage[]): Message[] => {
   return messages.map((message) => dtoMessageToGql(message));
 };
 
-export const dtoMessagesToTree = (
-  messages: DTOMessage[],
-  treeId: string,
-): MessageTree => {
+export const dtoMessagesToTree = ({
+  treeId,
+  messages,
+}: TreeArg): MessageTree => {
   const edges = messages.map((message) => {
     return {
       cursor: message.id,

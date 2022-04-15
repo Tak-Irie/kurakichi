@@ -59,18 +59,18 @@ type Query {
   getUserById(userId: String!): UserPayload
   getUsers: UsersPayload
   getMessagesByCookie: MessagesPayload
-  getMessagesByTreeId(id: String!): MessageTreePayload
+  getMessagesByTreeId(input: getMessagesByTreeIdInput!): MessageTreePayload
 }
 
 type Mutation {
   registerUser(input: registerUserInput!): UserPayload
-  replyMessage(content: String!, replyTargetId: String!): MessagePayload
+  loginUser(input: loginUserInput!): UserPayload
   updateUser(input: updateUserInput!): UserPayload
-  sendMessage(receiverId: String!, textInput: String!): MessagePayload
+  logoutUser: BoolPayload
   deleteUser: BoolPayload
   forgetPassword(email: String!): BoolPayload
-  login(email: String!, password: String!): UserPayload
-  logout: BoolPayload
+  sendMessage(input: sendMessageInput!): MessagePayload
+  replyMessage(input: replyMessageInput!): MessagePayload
 }
 
 type UserPayload {
@@ -113,4 +113,24 @@ input updateUserInput {
   selfIntro: String
   avatarUrl: String
   heroImageUrl: String
+}
+
+input loginUserInput {
+  email: String!
+  password: String!
+}
+
+input sendMessageInput {
+  receiverId: String!
+  content: String!
+}
+
+input replyMessageInput {
+  replyTargetId: String!
+  content: String!
+}
+
+input getMessagesByTreeIdInput {
+  treeId: String!
+  userId: String!
 }

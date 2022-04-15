@@ -1,7 +1,7 @@
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import type Express from 'express';
-import { GraphQLSchema } from 'graphql';
+import type { GraphQLSchema } from 'graphql';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import http from 'http';
 import { WebSocketServer } from 'ws';
@@ -32,7 +32,7 @@ const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
     schema,
     context: ({ req, res }) => {
       const idOrUndefined = getUserIdByCookie({ req, res });
-      return { idInCookie: idOrUndefined };
+      return { idInCookie: idOrUndefined, req };
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),

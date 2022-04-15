@@ -20,5 +20,7 @@ export interface MyContext {
 }
 
 export interface ApolloContext {
+  req: Request & { session: Session };
+  res: Response;
   idInCookie?: string;
 }

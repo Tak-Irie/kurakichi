@@ -1,5 +1,6 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
+// FIXME: add validation
 const UserRoleScalar = new GraphQLScalarType({
   name: 'UserRole',
   description: 'Literal union VISITOR | CLIENT | EXPERT',
