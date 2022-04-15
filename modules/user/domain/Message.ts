@@ -1,9 +1,9 @@
-import { Result } from "../../shared/core";
-import { Entity } from "../../shared/domain";
-import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
-import { UnixTime } from "../../shared/domain/UnixTime";
-import { MessageContent } from "./MessageContent";
-import { MessageStatus, MessageStatusUnion } from "./MessageStatus";
+import { Result } from '../../shared/core';
+import { Entity } from '../../shared/domain';
+import { Time } from '../../shared/domain/Time';
+import { UniqueEntityId } from '../../shared/domain/UniqueEntityId';
+import { MessageContent } from './MessageContent';
+import { MessageStatus, MessageStatusUnion } from './MessageStatus';
 
 interface MessageProps {
   id: UniqueEntityId;
@@ -11,7 +11,7 @@ interface MessageProps {
   status: MessageStatus;
   sender: UniqueEntityId;
   receiver: UniqueEntityId;
-  sentAt: UnixTime;
+  sentAt: Time;
   treeId: UniqueEntityId;
 }
 
@@ -21,7 +21,7 @@ export type MessagePrimitive = {
   status: MessageStatusUnion;
   sender: string;
   receiver: string;
-  sentAt: number;
+  sentAt: string;
   treeId: string;
 };
 
@@ -45,13 +45,13 @@ export class Message extends Entity<MessageProps> {
   }
 
   public static create(
-    props: Omit<MessageProps, "id" | "status" | "treeId" | "sentAt">
+    props: Omit<MessageProps, 'id' | 'status' | 'treeId' | 'sentAt'>,
   ): Result<Message> {
     const message = new Message({
       ...props,
       id: UniqueEntityId.createULID(),
       status: MessageStatus.create().getValue(),
-      sentAt: UnixTime.create().getValue(),
+      sentAt: Time.create().getValue(),
       treeId: UniqueEntityId.createULID(),
     });
     // Message.addDomainEvent(new _EntityCreated(Message));
@@ -60,7 +60,7 @@ export class Message extends Entity<MessageProps> {
 
   public static createReply(
     replyTarget: Message,
-    replyContent: MessageContent
+    replyContent: MessageContent,
   ): Result<Message> {
     const { receiver, sender, treeId } = replyTarget.props;
     const message = new Message({
@@ -69,7 +69,7 @@ export class Message extends Entity<MessageProps> {
       receiver: sender,
       sender: receiver,
       status: MessageStatus.create().getValue(),
-      sentAt: UnixTime.create().getValue(),
+      sentAt: Time.create().getValue(),
       treeId,
     });
     // Message.addDomainEvent(new _EntityCreated(Message));
@@ -86,13 +86,13 @@ export class Message extends Entity<MessageProps> {
       status: MessageStatus.restoreFromRepo(status),
       receiver: UniqueEntityId.restoreFromRepo({ id: receiver }),
       sender: UniqueEntityId.restoreFromRepo({ id: sender }),
-      sentAt: UnixTime.restoreFromRepo(sentAt),
+      sentAt: Time.restoreFromRepo(sentAt),
       treeId: UniqueEntityId.restoreFromRepo({ id: treeId }),
     });
   }
 
   public static restoreArrayFromRepo(
-    storedMessages: MessagePrimitive[]
+    storedMessages: MessagePrimitive[],
   ): Message[] {
     return storedMessages.map((message) => this.restoreFromRepo(message));
   }

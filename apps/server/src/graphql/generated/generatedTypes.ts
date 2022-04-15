@@ -257,6 +257,7 @@ export type MessagesPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptJoinOrg?: Maybe<OrgPayload>;
+  createBase?: Maybe<BasePayload>;
   deleteUser?: Maybe<BoolPayload>;
   forgetPassword?: Maybe<BoolPayload>;
   loginUser?: Maybe<UserPayload>;
@@ -276,8 +277,7 @@ export type Mutation = {
 
 
 export type MutationAcceptJoinOrgArgs = {
-  requestUserId: Scalars['String'];
-  requestedOrgId: Scalars['String'];
+  input: AcceptJoinOrgInput;
 };
 
 
@@ -292,13 +292,12 @@ export type MutationLoginUserArgs = {
 
 
 export type MutationPostDialogArgs = {
-  content: Scalars['String'];
-  userId: Scalars['String'];
+  input: PostDialogInput;
 };
 
 
 export type MutationRegisterOrgArgs = {
-  input?: InputMaybe<RegisterOrgInput>;
+  input: RegisterOrgInput;
 };
 
 
@@ -308,8 +307,7 @@ export type MutationRegisterUserArgs = {
 
 
 export type MutationReplyInquiryArgs = {
-  content: Scalars['String'];
-  replyTargetId: Scalars['String'];
+  input: ReplyInquiryInput;
 };
 
 
@@ -324,7 +322,7 @@ export type MutationRequestJoinOrgArgs = {
 
 
 export type MutationSendInquiryArgs = {
-  input?: InputMaybe<SendInquiryInput>;
+  input: SendInquiryInput;
 };
 
 
@@ -334,12 +332,12 @@ export type MutationSendMessageArgs = {
 
 
 export type MutationUpdateInquiryStatusArgs = {
-  input?: InputMaybe<UpdateInquiryStatusInput>;
+  input: UpdateInquiryStatusInput;
 };
 
 
 export type MutationUpdateOrgArgs = {
-  input?: InputMaybe<UpdateOrgInput>;
+  input: UpdateOrgInput;
 };
 
 
@@ -394,17 +392,17 @@ export type PostDialogPayload = {
 
 export type Query = {
   __typename?: 'Query';
-  getBase?: Maybe<Base>;
+  getBase?: Maybe<BasePayload>;
   getDialogsByBaseId?: Maybe<Array<Maybe<Dialog>>>;
-  getInquiries?: Maybe<InquiriesPayload>;
+  getInquiriesByOrgId?: Maybe<InquiriesPayload>;
   getInquiriesByTreeId?: Maybe<InquiryTreePayload>;
   getInquiry?: Maybe<InquiryPayload>;
-  getKarte?: Maybe<Karte>;
+  getKarte?: Maybe<KartePayload>;
   getMessagesByCookie?: Maybe<MessagesPayload>;
   getMessagesByTreeId?: Maybe<MessageTreePayload>;
   getOrg?: Maybe<OrgPayload>;
-  getOrgInfoByMemberCookie?: Maybe<OrgPayload>;
   getOrgs?: Maybe<OrgsPayload>;
+  getOrgsInfoByMemberCookie?: Maybe<OrgsPayload>;
   getUserByCookie?: Maybe<UserPayload>;
   getUserById?: Maybe<UserPayload>;
   getUsers?: Maybe<UsersPayload>;
@@ -424,13 +422,18 @@ export type QueryGetDialogsByBaseIdArgs = {
 };
 
 
+export type QueryGetInquiriesByOrgIdArgs = {
+  orgId: Scalars['String'];
+};
+
+
 export type QueryGetInquiriesByTreeIdArgs = {
-  id: Scalars['String'];
+  treeId: Scalars['String'];
 };
 
 
 export type QueryGetInquiryArgs = {
-  id: Scalars['String'];
+  inquiryId: Scalars['String'];
 };
 
 
@@ -479,7 +482,6 @@ export type SendInquiryInput = {
   category: Scalars['InquiryCategory'];
   content: Scalars['String'];
   orgId: Scalars['ID'];
-  userId: Scalars['ID'];
 };
 
 export type Subscription = {
@@ -488,7 +490,7 @@ export type Subscription = {
 };
 
 export type UpdateInquiryStatusInput = {
-  id: Scalars['ID'];
+  inquiryId: Scalars['ID'];
   inquiryStatus: Scalars['InquiryStatus'];
 };
 
@@ -531,6 +533,11 @@ export type UsersPayload = {
   users?: Maybe<Array<User>>;
 };
 
+export type AcceptJoinOrgInput = {
+  requestUserId: Scalars['String'];
+  requestedOrgId: Scalars['String'];
+};
+
 export type GetMessagesByTreeIdInput = {
   treeId: Scalars['String'];
   userId: Scalars['String'];
@@ -541,9 +548,18 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
+export type PostDialogInput = {
+  content: Scalars['String'];
+};
+
 export type RegisterUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type ReplyInquiryInput = {
+  content: Scalars['String'];
+  replyTargetId: Scalars['String'];
 };
 
 export type ReplyMessageInput = {
@@ -695,9 +711,12 @@ export type ResolversTypes = ResolversObject<{
   UserPayload: ResolverTypeWrapper<UserPayload>;
   UserRole: ResolverTypeWrapper<UserRoleModel>;
   UsersPayload: ResolverTypeWrapper<UsersPayload>;
+  acceptJoinOrgInput: AcceptJoinOrgInput;
   getMessagesByTreeIdInput: GetMessagesByTreeIdInput;
   loginUserInput: LoginUserInput;
+  postDialogInput: PostDialogInput;
   registerUserInput: RegisterUserInput;
+  replyInquiryInput: ReplyInquiryInput;
   replyMessageInput: ReplyMessageInput;
   sendMessageInput: SendMessageInput;
   updateUserInput: UpdateUserInput;
@@ -766,9 +785,12 @@ export type ResolversParentTypes = ResolversObject<{
   UserPayload: UserPayload;
   UserRole: UserRoleModel;
   UsersPayload: UsersPayload;
+  acceptJoinOrgInput: AcceptJoinOrgInput;
   getMessagesByTreeIdInput: GetMessagesByTreeIdInput;
   loginUserInput: LoginUserInput;
+  postDialogInput: PostDialogInput;
   registerUserInput: RegisterUserInput;
+  replyInquiryInput: ReplyInquiryInput;
   replyMessageInput: ReplyMessageInput;
   sendMessageInput: SendMessageInput;
   updateUserInput: UpdateUserInput;
@@ -1017,21 +1039,22 @@ export type MessagesPayloadResolvers<ContextType = any, ParentType extends Resol
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'requestUserId' | 'requestedOrgId'>>;
+  acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
+  createBase?: Resolver<Maybe<ResolversTypes['BasePayload']>, ParentType, ContextType>;
   deleteUser?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
   forgetPassword?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
   loginUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
   logoutUser?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
-  postDialog?: Resolver<Maybe<ResolversTypes['PostDialogPayload']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'content' | 'userId'>>;
-  registerOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, Partial<MutationRegisterOrgArgs>>;
+  postDialog?: Resolver<Maybe<ResolversTypes['PostDialogPayload']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
+  registerOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
   registerUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
-  replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'content' | 'replyTargetId'>>;
+  replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
   replyMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
   requestJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
-  sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, Partial<MutationSendInquiryArgs>>;
+  sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
-  updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, Partial<MutationUpdateInquiryStatusArgs>>;
-  updateOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, Partial<MutationUpdateOrgArgs>>;
+  updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
+  updateOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 }>;
 
@@ -1082,17 +1105,17 @@ export type PostDialogPayloadResolvers<ContextType = any, ParentType extends Res
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getBase?: Resolver<Maybe<ResolversTypes['Base']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
+  getBase?: Resolver<Maybe<ResolversTypes['BasePayload']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
   getDialogsByBaseId?: Resolver<Maybe<Array<Maybe<ResolversTypes['Dialog']>>>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
-  getInquiries?: Resolver<Maybe<ResolversTypes['InquiriesPayload']>, ParentType, ContextType>;
-  getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreePayload']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'id'>>;
-  getInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'id'>>;
-  getKarte?: Resolver<Maybe<ResolversTypes['Karte']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
+  getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
+  getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreePayload']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
+  getInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
+  getKarte?: Resolver<Maybe<ResolversTypes['KartePayload']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
   getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesPayload']>, ParentType, ContextType>;
   getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'input'>>;
   getOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
-  getOrgInfoByMemberCookie?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType>;
   getOrgs?: Resolver<Maybe<ResolversTypes['OrgsPayload']>, ParentType, ContextType>;
+  getOrgsInfoByMemberCookie?: Resolver<Maybe<ResolversTypes['OrgsPayload']>, ParentType, ContextType>;
   getUserByCookie?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType>;
   getUserById?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
   getUsers?: Resolver<Maybe<ResolversTypes['UsersPayload']>, ParentType, ContextType>;

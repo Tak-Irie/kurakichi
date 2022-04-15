@@ -1,28 +1,23 @@
-import { Either, left, Result, right } from "../../../shared/core";
-import { UniqueEntityId } from "../../../shared/domain";
+import { Either, left, Result, right } from '../../../shared/core';
+import { UniqueEntityId } from '../../../shared/domain';
 import {
   InvalidInputValueError,
   IUsecase,
   StoreConnectionError,
   UnexpectedError,
-} from "../../../shared/usecase";
-import { IInquiryRepo, Inquiry } from "../../domain";
-import {
-  InquiryCategory,
-  InquiryCategoryUnion,
-} from "../../domain/InquiryCategory";
-import { InquiryContent } from "../../domain/InquiryContent";
-import { InquiryStatusUnion, InquiryStatus } from "../../domain/InquiryStatus";
-import { createDTOInquiryFromDomain, DTOInquiry } from "../DTOInquiry";
-import { ReceiverNotExistError } from "./RegisterInquiryError";
+} from '../../../shared/usecase';
+import { IInquiryRepo, Inquiry } from '../../domain';
+import { InquiryCategory } from '../../domain/InquiryCategory';
+import { InquiryContent } from '../../domain/InquiryContent';
+import { InquiryStatus } from '../../domain/InquiryStatus';
+import { createDTOInquiryFromDomain, DTOInquiry } from '../DTOInquiry';
+import { ReceiverNotExistError } from './RegisterInquiryError';
 
 type InquiryArg = {
-  category: InquiryCategoryUnion;
-  status: InquiryStatusUnion;
-  content: string;
-  receiverId: string;
   senderId: string;
   orgId: string;
+  content: string;
+  category: string;
 };
 
 type RegisterInquiryResponse = Either<
@@ -45,55 +40,42 @@ export class RegisterInquiryUsecase
   public async execute(arg: InquiryArg): Promise<RegisterInquiryResponse> {
     try {
       // console.log('registerInquiryArg:', arg);
-      const { category, content, receiverId, senderId, status, orgId } = arg;
-      const categoryOrError = InquiryCategory.create({ type: category });
-      const contentOrError = InquiryContent.create({ text: content });
-      const statusOrError = InquiryStatus.create({ status: status });
+      const { category, content, senderId, orgId } = arg;
 
-      const verifiedResult = Result.verifyResults<InquiryTypes>([
-        categoryOrError,
-        contentOrError,
-        statusOrError,
-      ]);
-      if (verifiedResult[0].isFailure)
-        return left(
-          new InvalidInputValueError(
-            verifiedResult.map((result) => {
-              return result.getErrorValue();
-            }),
-            ""
-          )
-        );
+      const senderOrErr = UniqueEntityId.createFromArg({ id: senderId });
+      if (senderOrErr === false)
+        return left(new InvalidInputValueError('wip', ''));
+      const orgOrErr = UniqueEntityId.createFromArg({ id: orgId });
+      if (orgOrErr === false)
+        return left(new InvalidInputValueError('wip', ''));
+      // wip, 100%success
+      const _content = InquiryContent.create({ text: content });
 
-      const isReceiver = UniqueEntityId.createFromArg({ id: arg.orgId });
-      if (isReceiver === false)
-        return left(new InvalidInputValueError("wip", ""));
-      const isSender = UniqueEntityId.createFromArg({ id: arg.orgId });
-      if (isSender === false)
-        return left(new InvalidInputValueError("wip", ""));
-      const isOrg = UniqueEntityId.createFromArg({ id: arg.orgId });
-      if (isOrg === false) return left(new InvalidInputValueError("wip", ""));
+      const categoryOrError = InquiryCategory.createFromArg({ category });
+      if (categoryOrError === false) {
+        return left(new InvalidInputValueError('wip', ''));
+      }
 
       const inquiryOrError = Inquiry.create({
         category: categoryOrError.getValue(),
-        status: statusOrError.getValue(),
-        content: contentOrError.getValue(),
-        receiver: isReceiver,
-        sender: isSender,
-        orgId: isOrg,
+        status: InquiryStatus.create({ status: 'UNREAD' }).getValue(),
+        content: _content.getValue(),
+        receiver: senderOrErr,
+        sender: senderOrErr,
+        orgId: orgOrErr,
       });
 
       // FIXME:error handling
       const dbResult = await this.InquiryRepo.registerInquiry(
-        inquiryOrError.getValue()
+        inquiryOrError.getValue(),
       );
 
       const dtoInquiry = createDTOInquiryFromDomain(dbResult);
       return right(Result.success<DTOInquiry>(dtoInquiry));
     } catch (err) {
-      if (err === Error("データベースエラー"))
-        return left(new StoreConnectionError(""));
-      return left(new UnexpectedError(""));
+      if (err === Error('データベースエラー'))
+        return left(new StoreConnectionError(''));
+      return left(new UnexpectedError(''));
     }
   }
 }

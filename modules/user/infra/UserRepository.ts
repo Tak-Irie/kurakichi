@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import { StoredUserRelation, UserMapper } from "./UserMapper";
-import { IUserRepository, User, UserEmail, UserPassword } from "../domain";
-import { UniqueEntityId } from "../../shared/domain";
+import { PrismaClient } from '@prisma/client';
+import { UniqueEntityId } from '../../shared/domain';
+import { IUserRepository, User, UserEmail, UserPassword } from '../domain';
+import { StoredUserRelation, UserMapper } from './UserMapper';
 
 export class UserRepository implements IUserRepository {
   private prisma: PrismaClient;
@@ -89,8 +89,9 @@ export class UserRepository implements IUserRepository {
 
     if (users == undefined) return false;
 
+    // console.log('users:', users);
     const data = users.map((user) =>
-      UserMapper.ToDomain(user as StoredUserRelation)
+      UserMapper.ToDomain(user as StoredUserRelation),
     );
 
     return data;
@@ -121,7 +122,7 @@ export class UserRepository implements IUserRepository {
 
   async changeUserPassword(
     userId: UniqueEntityId,
-    password: UserPassword
+    password: UserPassword,
   ): Promise<boolean> {
     const result = await this.prisma.user.update({
       where: { id: userId.getId() },

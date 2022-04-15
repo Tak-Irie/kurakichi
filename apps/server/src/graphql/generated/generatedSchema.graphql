@@ -202,21 +202,22 @@ type MessagesPayload {
 }
 
 type Mutation {
-  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
+  acceptJoinOrg(input: acceptJoinOrgInput!): OrgPayload
+  createBase: BasePayload
   deleteUser: BoolPayload
   forgetPassword(email: String!): BoolPayload
   loginUser(input: loginUserInput!): UserPayload
   logoutUser: BoolPayload
-  postDialog(content: String!, userId: String!): PostDialogPayload
-  registerOrg(input: RegisterOrgInput): OrgPayload
+  postDialog(input: postDialogInput!): PostDialogPayload
+  registerOrg(input: RegisterOrgInput!): OrgPayload
   registerUser(input: registerUserInput!): UserPayload
-  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
+  replyInquiry(input: replyInquiryInput!): InquiryPayload
   replyMessage(input: replyMessageInput!): MessagePayload
   requestJoinOrg(orgId: String!): OrgPayload
-  sendInquiry(input: SendInquiryInput): InquiryPayload
+  sendInquiry(input: SendInquiryInput!): InquiryPayload
   sendMessage(input: sendMessageInput!): MessagePayload
-  updateInquiryStatus(input: UpdateInquiryStatusInput): InquiryPayload
-  updateOrg(input: UpdateOrgInput): OrgPayload
+  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryPayload
+  updateOrg(input: UpdateOrgInput!): OrgPayload
   updateUser(input: updateUserInput!): UserPayload
 }
 
@@ -261,17 +262,17 @@ type PostDialogPayload {
 }
 
 type Query {
-  getBase(id: String!): Base
+  getBase(id: String!): BasePayload
   getDialogsByBaseId(id: String!): [Dialog]
-  getInquiries: InquiriesPayload
-  getInquiriesByTreeId(id: String!): InquiryTreePayload
-  getInquiry(id: String!): InquiryPayload
-  getKarte(id: String!): Karte
+  getInquiriesByOrgId(orgId: String!): InquiriesPayload
+  getInquiriesByTreeId(treeId: String!): InquiryTreePayload
+  getInquiry(inquiryId: String!): InquiryPayload
+  getKarte(id: String!): KartePayload
   getMessagesByCookie: MessagesPayload
   getMessagesByTreeId(input: getMessagesByTreeIdInput!): MessageTreePayload
   getOrg(id: String!): OrgPayload
-  getOrgInfoByMemberCookie: OrgPayload
   getOrgs: OrgsPayload
+  getOrgsInfoByMemberCookie: OrgsPayload
   getUserByCookie: UserPayload
   getUserById(userId: String!): UserPayload
   getUsers: UsersPayload
@@ -291,7 +292,6 @@ input SendInquiryInput {
   category: InquiryCategory!
   content: String!
   orgId: ID!
-  userId: ID!
 }
 
 type Subscription {
@@ -299,7 +299,7 @@ type Subscription {
 }
 
 input UpdateInquiryStatusInput {
-  id: ID!
+  inquiryId: ID!
   inquiryStatus: InquiryStatus!
 }
 
@@ -341,6 +341,11 @@ type UsersPayload {
   users: [User!]
 }
 
+input acceptJoinOrgInput {
+  requestUserId: String!
+  requestedOrgId: String!
+}
+
 input getMessagesByTreeIdInput {
   treeId: String!
   userId: String!
@@ -351,9 +356,18 @@ input loginUserInput {
   password: String!
 }
 
+input postDialogInput {
+  content: String!
+}
+
 input registerUserInput {
   email: String!
   password: String!
+}
+
+input replyInquiryInput {
+  content: String!
+  replyTargetId: String!
 }
 
 input replyMessageInput {

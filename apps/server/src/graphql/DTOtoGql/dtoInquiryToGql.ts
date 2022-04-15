@@ -1,5 +1,9 @@
 import { DTOInquiry } from '@kurakichi/modules';
-import { Inquiry } from '../generated/generatedTypes';
+import {
+  Inquiry,
+  InquiryConnection,
+  InquiryTree,
+} from '../generated/generatedTypes';
 
 export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): Inquiry => {
   const { category, content, id, receiver, sender, status, sentAt, tree } =
@@ -19,6 +23,54 @@ export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): Inquiry => {
 export const dtoInquiriesToGql = (dtoInquiries: DTOInquiry[]): Inquiry[] => {
   const gqlFields = dtoInquiries.map((inquiry) => dtoInquiryToGql(inquiry));
   return gqlFields;
+};
+
+export const dtoInquiriesToConnection = (
+  dtoInquiries: DTOInquiry[],
+): InquiryConnection => {
+  const edges = dtoInquiries.map((inq) => {
+    const { sender, receiver, ...rest } = inq;
+    return {
+      cursor: inq.id,
+      node: {
+        sender: { id: sender },
+        receiver: { id: receiver },
+        ...rest,
+      },
+    };
+  });
+
+  return {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges,
+  };
+};
+
+// temp function
+export const dtoInquiriesToTree = (
+  dtoInquiries: DTOInquiry[],
+  treeId: string,
+): InquiryTree => {
+  const edges = dtoInquiries.map((inq) => {
+    const { sender, receiver, ...rest } = inq;
+    return {
+      cursor: inq.id,
+      isRoot: false,
+      node: {
+        sender: { id: sender },
+        receiver: { id: receiver },
+        ...rest,
+      },
+    };
+  });
+
+  return {
+    id: treeId,
+    leaves: {
+      pageInfo: { hasNext: false, hasPrevious: false },
+      edges,
+    },
+  };
 };
 
 // // TODO:temp impl

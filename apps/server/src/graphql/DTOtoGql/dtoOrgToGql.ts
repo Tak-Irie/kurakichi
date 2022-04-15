@@ -28,7 +28,7 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
 
   const _inq = createGqlConn(inquiries);
   const edges = members.map((id) => {
-    return { cursor: id, isAdmin: id === adminId ? true : false };
+    return { cursor: id, isAdmin: id === adminId ? true : false, node: { id } };
   });
   const _mem = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
 

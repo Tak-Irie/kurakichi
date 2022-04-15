@@ -19,7 +19,7 @@ export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
     status: status.getValue(),
     receiverId: receiver.getId(),
     senderId: sender.getId(),
-    sentAt: sentAt.getJpDate(),
+    sentAt: sentAt.getTime(),
     treeId: treeId.getId(),
   };
 };

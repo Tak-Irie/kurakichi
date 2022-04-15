@@ -50,7 +50,7 @@ export class Result<T> {
   }
 
   public static success<U>(value: U): Result<U> {
-    return new Result<U>(true, 'Success!', value);
+    return new Result<U>(true, '', value);
   }
 
   public static fail<U>(error: string): Result<U> {

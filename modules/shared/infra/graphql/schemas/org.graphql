@@ -78,20 +78,20 @@ type InquiryLeafEdges {
 type Query {
   getOrg(id: String!): OrgPayload
   getOrgs: OrgsPayload
-  getOrgInfoByMemberCookie: OrgPayload
-  getInquiry(id: String!): InquiryPayload
-  getInquiries: InquiriesPayload
-  getInquiriesByTreeId(id: String!): InquiryTreePayload
+  getOrgsInfoByMemberCookie: OrgsPayload
+  getInquiry(inquiryId: String!): InquiryPayload
+  getInquiriesByOrgId(orgId: String!): InquiriesPayload
+  getInquiriesByTreeId(treeId: String!): InquiryTreePayload
 }
 
 type Mutation {
-  acceptJoinOrg(requestUserId: String!, requestedOrgId: String!): OrgPayload
-  registerOrg(input: RegisterOrgInput): OrgPayload
-  updateOrg(input: UpdateOrgInput): OrgPayload
+  acceptJoinOrg(input: acceptJoinOrgInput!): OrgPayload
+  registerOrg(input: RegisterOrgInput!): OrgPayload
+  updateOrg(input: UpdateOrgInput!): OrgPayload
   requestJoinOrg(orgId: String!): OrgPayload
-  replyInquiry(content: String!, replyTargetId: String!): InquiryPayload
-  sendInquiry(input: SendInquiryInput): InquiryPayload
-  updateInquiryStatus(input: UpdateInquiryStatusInput): InquiryPayload
+  replyInquiry(input: replyInquiryInput!): InquiryPayload
+  sendInquiry(input: SendInquiryInput!): InquiryPayload
+  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryPayload
 }
 
 input UpdateOrgInput {
@@ -112,14 +112,13 @@ input RegisterOrgInput {
 }
 
 input SendInquiryInput {
-  userId: ID!
   orgId: ID!
   category: InquiryCategory!
   content: String!
 }
 
 input UpdateInquiryStatusInput {
-  id: ID!
+  inquiryId: ID!
   inquiryStatus: InquiryStatus!
 }
 
@@ -145,4 +144,14 @@ type InquiriesPayload {
 type InquiryTreePayload {
   inquiryTree: InquiryTree
   errors: Errors
+}
+
+input acceptJoinOrgInput {
+  requestUserId: String!
+  requestedOrgId: String!
+}
+
+input replyInquiryInput {
+  replyTargetId: String!
+  content: String!
 }
