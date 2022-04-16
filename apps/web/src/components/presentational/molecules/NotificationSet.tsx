@@ -8,11 +8,9 @@ import {
 } from '..';
 
 type NotificationsProps = {
-  data: any;
-  errData: any;
-  sysErr: ApolloError;
-  dataContent?: string;
-  errDataContent?: string;
+  data?: string;
+  errData?: string;
+  sysErr?: ApolloError;
   dataLabel?: string;
   errDataLabel?: string;
   sysErrLabel?: string;
@@ -26,8 +24,6 @@ export const NotificationSet: FC<NotificationsProps> = ({
   data,
   errData,
   sysErr,
-  dataContent,
-  errDataContent,
   dataLabel = '成功！',
   errDataLabel = 'エラー！',
   sysErrLabel = 'エラー！',
@@ -46,14 +42,14 @@ export const NotificationSet: FC<NotificationsProps> = ({
         <NotificationCaution
           showingMS={showingMS}
           label={errDataLabel}
-          content={errDataContent}
+          content={errData}
         />
       ) : null}
       {data ? (
         <NotificationSuccess
           showingMS={showingMS}
           label={dataLabel}
-          content={dataContent}
+          content={data}
         />
       ) : null}
     </>

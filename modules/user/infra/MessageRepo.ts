@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@kurakichi/prisma/src";
 import { UniqueEntityId } from "../../shared/domain";
 import { IMessageRepo, Message } from "../domain";
 import { MessageMapper } from "./MessageMapper";

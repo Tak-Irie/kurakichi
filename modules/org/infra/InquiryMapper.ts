@@ -1,4 +1,4 @@
-import { Inquiry as StoredInquiry } from '@prisma/client';
+import { Inquiry as StoredInquiry } from '@kurakichi/prisma/src';
 import { Inquiry } from '../domain';
 
 export class InquiryMapper {

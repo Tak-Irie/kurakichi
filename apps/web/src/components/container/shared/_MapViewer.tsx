@@ -1,5 +1,5 @@
 // import {Status,Wrapper,WrapperProps} from '@googlemaps/react-wrapper';
-import { CSSProperties, VFC } from 'react';
+import { CSSProperties, FC } from 'react';
 
 import { LinkNextjs } from '..';
 import { Org } from '../../../graphql';
@@ -22,7 +22,7 @@ type MapViewerProps = {
 /**
  * zoomLevelInfo, 10:beyondPref, 11:pref, 12-13:cities 14:city 15:likeAroundStation
  */
-export const MapViewer: VFC<MapViewerProps> = ({
+export const MapViewer: FC<MapViewerProps> = ({
   center,
   mapContainerCSS,
   orgs,

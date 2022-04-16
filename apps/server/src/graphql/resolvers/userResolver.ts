@@ -1,5 +1,6 @@
 import { Resolvers } from '../generated/generatedTypes';
 
+import { getUserMyInfo } from '@kurakichi/modules';
 import {
   useDeleteUserUsecase,
   useForgotPasswordUsecase,
@@ -13,7 +14,7 @@ import {
 import { ApolloContext } from '../../types';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
-import { dtoUsersToGql, dtoUserToGql } from '../DTOtoGql';
+import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 
 const UserResolver: Resolvers<ApolloContext> = {
   Query: {
@@ -21,11 +22,16 @@ const UserResolver: Resolvers<ApolloContext> = {
       if (idInCookie === undefined)
         return returnErrorToGQL('ログインが確認できませんでした');
 
-      const usecaseResult = await useGetUserById.execute({ id: idInCookie });
+      // FIXME:CQRS
+      // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
       // console.log('me/usecaseResult:', usecaseResult);
-      if (usecaseResult.isLeft())
-        return returnErrorToGQL(usecaseResult.value.getErrorValue());
-      const user = dtoUserToGql(usecaseResult.value.getValue());
+      // if (usecaseResult.isLeft())
+      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
+
+      const res = await getUserMyInfo(idInCookie);
+      if (res === false) return returnErrorToGQL('wip');
+
+      const user = readUserToGql(res);
 
       return { user };
     },

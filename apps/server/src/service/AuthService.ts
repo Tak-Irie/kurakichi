@@ -1,4 +1,4 @@
-import { Redis } from "ioredis";
+import { Redis } from 'ioredis';
 
 // FIXME:These services temporally created.it must be written in modules/*
 
@@ -35,9 +35,9 @@ class AuthService {
     // console.log('ses:', sessionId);
     const storedParam = await this.client.hmget(
       `auth:${sessionId}`,
-      "state",
-      "nonce",
-      "code_verifier"
+      'state',
+      'nonce',
+      'code_verifier',
     );
 
     // console.log('stored:', storedParam);
@@ -67,8 +67,8 @@ class AuthService {
   public async getTokenSet(uniqueSubject: string) {
     const cryptedToken = await this.client.hmget(
       `token:${uniqueSubject}`,
-      "token",
-      "iv"
+      'token',
+      'iv',
     );
     if (cryptedToken.includes(null) === true) return undefined;
     const [token, iv] = [...cryptedToken];
@@ -80,8 +80,8 @@ class AuthService {
     const result = await this.client.set(
       `forgetPassword:${userId}`,
       changePassToken,
-      "ex",
-      60 * 60 //1hour
+      'EX',
+      60 * 60, //1hour
     );
     if (result === null) return false;
     return true;

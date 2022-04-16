@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useState } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import '../../globals.css';
 
-import { AuthContext } from '..';
-import { apolloClient } from '../util/createApolloClient';
 import { Layout } from '../components/presentational/templates';
+import { AuthContext } from '../util';
+import { apolloClient } from '../util/createApolloClient';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const [authStatus, setAuthStatus] = useState<boolean>(false);

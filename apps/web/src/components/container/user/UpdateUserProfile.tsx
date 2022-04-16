@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { useUpdateUserMutation } from '../../../graphql';
+
 import {
   ButtonOrLoading,
   Form,
@@ -31,11 +31,17 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
   const { register, handleSubmit } = useForm<UpdateUserProfileInput>();
 
   const onSubmit = async (value: UpdateUserProfileInput) => {
-    console.log('submittedValue:', value);
+    // console.log('submittedValue:', value);
     const { description, email, userName } = value;
     try {
       await updateUser({
-        variables: { userName, description, email },
+        variables: {
+          input: {
+            name: userName || '',
+            selfIntro: description || '',
+            email: email || '',
+          },
+        },
       });
     } catch (err) {
       console.log('err:', err);
@@ -46,10 +52,8 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
     <>
       <NotificationSet
         sysErr={error}
-        errData={data?.updateUser.error}
-        data={data?.updateUser.user}
-        errDataContent={data?.updateUser.error?.message}
-        dataContent={data?.updateUser.user?.id}
+        errData={data?.updateUser?.errors?.applicationError?.message}
+        data={'プロフィールが更新されました！'}
       />
       <Form
         overWriteCSS="flex flex-col space-y-2"

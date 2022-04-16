@@ -1,9 +1,9 @@
 import {
-  Base as StoredBase,
-  Dialog,
-  Karte,
-  User as StoredUser,
-} from '@prisma/client';
+    Base as StoredBase,
+    Dialog,
+    Karte,
+    User as StoredUser
+} from '@kurakichi/prisma/src';
 import { UniqueEntityId } from '../../shared/domain';
 import { Base } from '../domain';
 

@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@kurakichi/prisma/src';
 import { UniqueEntityId } from '../../shared/domain';
 import { IUserRepository, User, UserEmail, UserPassword } from '../domain';
+import { UserReadModel } from '../tempRead/UserReadModel';
 import { StoredUserRelation, UserMapper } from './UserMapper';
 
 export class UserRepository implements IUserRepository {
@@ -142,5 +143,14 @@ export class UserRepository implements IUserRepository {
     });
     if (dbResult == undefined) return false;
     return user;
+  }
+
+  async getUserMyInfoTemp(userId: string): Promise<false | UserReadModel> {
+    const data = await this.prisma.user.findFirst({
+      where: { id: userId },
+      include: { receivedMessages: true },
+    });
+    if (!data) return false;
+    return data;
   }
 }

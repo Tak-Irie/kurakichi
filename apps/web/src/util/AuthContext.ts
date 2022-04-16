@@ -1,5 +1,6 @@
-import React from "react";
+import React from 'react';
 
+// TODO: not use. use loginQuery(cache-only)
 export interface AuthContextType {
   authStatus: boolean;
   setAuthStatus: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,7 +1,4 @@
 {
-  "files.exclude": {
-    "**/node_modules": true
-  },
   "editor.tabSize": 2,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
@@ -13,6 +10,9 @@
     "files.trimTrailingWhitespace": false
   },
   "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }

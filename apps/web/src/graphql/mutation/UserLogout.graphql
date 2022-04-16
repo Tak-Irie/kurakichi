@@ -1,6 +1,0 @@
-mutation UserLogout {
-  logout {
-    message
-    result
-  }
-}

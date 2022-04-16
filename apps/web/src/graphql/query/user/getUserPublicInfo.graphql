@@ -1,0 +1,10 @@
+query GetUserPublicInfo($userId: String!) {
+  getUserById(userId: $userId) {
+    user {
+      ...UserPublicInfo
+    }
+    errors {
+      ...Errors
+    }
+  }
+}

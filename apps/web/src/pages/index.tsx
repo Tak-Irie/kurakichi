@@ -1,13 +1,14 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import { MapViewer } from '../components/container/shared';
-import { LoadingSpinner, TextH2 } from '../components/presentational/atoms';
+import { TextH2 } from '../components/presentational/atoms';
 import { HelperPop } from '../components/presentational/organisms';
+import { useGetOrgsForMapQuery } from '../graphql';
 import { DEFAULT_MAP_PIN } from '../util/Constants';
 
 const Index: NextPage = () => {
   const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);
   const { data, loading, error } = useGetOrgsForMapQuery();
+
   return (
     <div className="grid grid-cols-12">
       <div className="col-start-2 col-end-12 p-5 mt-10 bg-white border border-gray-200 shadow-sm">
@@ -24,16 +25,16 @@ const Index: NextPage = () => {
         <div className="grid grid-cols-10 mt-5">
           <div className="col-span-8">
             <div>placer</div>
-            {loading && !data?.getOrgs.orgs ? (
+            {/* {loading && !data?.getOrgs.orgs ? (
               <LoadingSpinner />
             ) : (
               <MapViewer
-                center={isAddress}
+                center={isLocation}
                 mapContainerCSS={{ height: '50vh', width: 'auto' }}
                 orgs={data.getOrgs.orgs}
                 zoomLevel={13}
               />
-            )}
+            )} */}
           </div>
           <div className="flex flex-col col-span-2 ml-10 space-y-10">
             <div>placer</div>

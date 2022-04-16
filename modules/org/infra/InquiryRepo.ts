@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@kurakichi/prisma/src";
 import { Nothing } from "../../shared/core";
 import { UniqueEntityId } from "../../shared/domain";
 import { IInquiryRepo, Inquiry } from "../domain";

@@ -8,10 +8,12 @@ import {
 } from '../../../components/presentational/atoms';
 import { TableMessage } from '../../../components/presentational/molecules';
 import { UserTemplate } from '../../../components/presentational/templates';
+import { useGetUserMyInfoQuery } from '../../../graphql';
 
-const MessageBoxPrivatePage: NextPage = () => {
-  const { data: userData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
-  const { data, loading, error } = useGetMessagesByCookieQuery();
+const Message: NextPage = () => {
+  const { data, loading, error } = useGetUserMyInfoQuery({
+    fetchPolicy: 'cache-first',
+  });
 
   // console.log('user:', userData.getUserByCookie.user);
   if (loading) return <LoadingSpinner />;
@@ -20,7 +22,11 @@ const MessageBoxPrivatePage: NextPage = () => {
   if (data.getMessagesByCookie.error) {
     return <p>{data.getMessagesByCookie.error.message}</p>;
   }
-  if (!loading && data.getMessagesByCookie.messages && userData.getUserByCookie.user) {
+  if (
+    !loading &&
+    data.getMessagesByCookie.messages &&
+    userData.getUserByCookie.user
+  ) {
     const _user = userData.getUserByCookie.user;
     return (
       <UserTemplate
@@ -30,7 +36,11 @@ const MessageBoxPrivatePage: NextPage = () => {
         headerButtons={
           <Link href="/user/mypage" passHref>
             <a href="replace">
-              <ButtonWithIcon type="button" label="マイページに戻る" icon={<IconsUser />} />
+              <ButtonWithIcon
+                type="button"
+                label="マイページに戻る"
+                icon={<IconsUser />}
+              />
             </a>
           </Link>
         }
@@ -46,4 +56,4 @@ const MessageBoxPrivatePage: NextPage = () => {
   }
 };
 
-export default MessageBoxPrivatePage;
+export default Message;

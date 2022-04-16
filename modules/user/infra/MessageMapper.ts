@@ -1,7 +1,7 @@
 import {
-  Message as StoredMessage,
-  MessageTree as StoredMessageTree,
-} from '@prisma/client';
+    Message as StoredMessage,
+    MessageTree as StoredMessageTree
+} from '@kurakichi/prisma/src';
 import { Message } from '../domain';
 
 type MessageTree = StoredMessageTree & {

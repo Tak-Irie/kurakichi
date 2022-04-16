@@ -1,0 +1,30 @@
+fragment UserMyInfo on User {
+  id
+  name
+  email
+  selfIntro
+  role
+  avatarUrl
+  heroImageUrl
+  messages {
+    edges {
+      cursor
+      node {
+        content
+        id
+        receiver {
+          id
+        }
+        sender {
+          id
+        }
+        sentAt
+        status
+      }
+    }
+    pageInfo {
+      hasNext
+      hasPrevious
+    }
+  }
+}

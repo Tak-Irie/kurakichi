@@ -1,0 +1,15 @@
+fragment OrgExceptConn on Org {
+  address {
+    address
+    latitude
+    longitude
+  }
+  avatarUrl
+  description
+  email
+  heroImageUrl
+  homePage
+  id
+  name
+  phoneNumber
+}

@@ -6,53 +6,65 @@ import {
   IconsMail,
   LoadingSpinner,
 } from '../../components/presentational/atoms';
-import { UserMyPage, UserTemplate } from '../../components/presentational/templates';
+import {
+  UserMyPage,
+  UserTemplate,
+} from '../../components/presentational/templates';
+import { useGetUserMyInfoQuery } from '../../graphql';
 
 const UserMyPagePrivatePage: NextPage = () => {
   // TODO:CQRS
-  const { data, loading, error } = useGetUserPrivateInfoByCookieQuery({
+  const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
   });
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  if (data.getUserByCookie.user) {
+  if (data?.getUserByCookie?.user) {
     // console.log('MyPageData:', data.me.user);
-    const { image, userName, belongOrgs, avatar, description, messages, email, belongSecureBases } =
-      data.getUserByCookie.user;
+    const _user = data.getUserByCookie.user;
+
     return (
       <UserTemplate
-        avatar={avatar}
-        image={image}
-        userName={userName}
+        avatar={_user.avatarUrl || ''}
+        image={_user.heroImageUrl || ''}
+        userName={_user.name || ''}
         headerButtons={
           <>
             <Link href="/user/setting" passHref>
               <a href="replace">
-                <ButtonWithIcon type="button" label="アカウント設定" icon={<IconsCog />} />
+                <ButtonWithIcon
+                  type="button"
+                  label="アカウント設定"
+                  icon={<IconsCog />}
+                />
               </a>
             </Link>
             <Link href="/user/message" passHref>
               <a href="replace">
-                <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+                <ButtonWithIcon
+                  type="button"
+                  label="メッセージボックス"
+                  icon={<IconsMail />}
+                />
               </a>
             </Link>
           </>
         }
         pageContents={
           <UserMyPage
-            description={description}
-            orgs={belongOrgs}
-            messages={messages}
-            email={email}
-            secureBases={belongSecureBases}
+            description={_user.selfIntro || ''}
+            orgs={[]}
+            messages={_user.messages?.edges || []}
+            email={_user.email || ''}
+            secureBases={[]}
           />
         }
       />
     );
   }
-  return <p>{data.getUserByCookie.error.message}</p>;
+  return <p>{data?.getUserByCookie?.errors?.applicationError?.message}</p>;
 };
 
 export default UserMyPagePrivatePage;

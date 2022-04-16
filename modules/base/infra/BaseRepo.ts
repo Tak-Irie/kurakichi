@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@kurakichi/prisma/src';
 import { UniqueEntityId } from '../../shared/domain';
 import { Base } from '../domain/Base';
 import { IBaseRepo } from '../domain/IBaseRepo';

@@ -1,5 +1,0 @@
-subscription SubscriptDialog {
-  dialogPosted {
-    ...DialogPayload
-  }
-}

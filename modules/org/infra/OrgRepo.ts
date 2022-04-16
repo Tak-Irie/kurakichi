@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-import { UniqueEntityId } from "../../shared/domain";
-import { IOrgRepo, Org } from "../domain";
-import { OrgName } from "../domain/OrgName";
-import { OrgMapper } from "./OrgMapper";
+import { PrismaClient } from '@kurakichi/prisma/src';
+import { UniqueEntityId } from '../../shared/domain';
+import { IOrgRepo, Org } from '../domain';
+import { OrgName } from '../domain/OrgName';
+import { OrgMapper } from './OrgMapper';
 
 export class OrgRepo implements IOrgRepo {
   private prisma: PrismaClient;
@@ -20,7 +20,7 @@ export class OrgRepo implements IOrgRepo {
 
   async confirmMemberExistence(
     orgId: UniqueEntityId,
-    memberId: UniqueEntityId
+    memberId: UniqueEntityId,
   ): Promise<boolean> {
     // console.log('confirmMember:', orgId, memberId);
     const result = await this.prisma.organization.findUnique({
@@ -40,7 +40,7 @@ export class OrgRepo implements IOrgRepo {
       }),
       this.prisma.user.update({
         where: { id: data.adminId },
-        data: { belongOrgs: { connect: { id: data.id } }, role: "EXPERT" },
+        data: { belongOrgs: { connect: { id: data.id } }, role: 'EXPERT' },
       }),
     ]);
 
@@ -90,7 +90,7 @@ export class OrgRepo implements IOrgRepo {
 
   async acceptJoinOrg(
     orgId: UniqueEntityId,
-    MemberId: UniqueEntityId
+    MemberId: UniqueEntityId,
   ): Promise<Org | false> {
     const userId = MemberId.getId();
     const _orgId = orgId.getId();
@@ -102,7 +102,7 @@ export class OrgRepo implements IOrgRepo {
         data: {
           members: {
             connect: { id: userId },
-            update: { where: { id: userId }, data: { role: "EXPERT" } },
+            update: { where: { id: userId }, data: { role: 'EXPERT' } },
           },
         },
       }),
@@ -119,7 +119,7 @@ export class OrgRepo implements IOrgRepo {
 
   async requestJoinOrg(
     reqId: UniqueEntityId,
-    orgId: UniqueEntityId
+    orgId: UniqueEntityId,
   ): Promise<Org | false> {
     const result = await this.prisma.organization.update({
       where: { id: orgId.getId() },
@@ -142,7 +142,7 @@ export class OrgRepo implements IOrgRepo {
       return OrgMapper.ToDomain(result);
     } catch (err) {
       console.error(err);
-      throw Error("データベースエラー");
+      throw Error('データベースエラー');
     }
   }
 }

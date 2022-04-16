@@ -1,6 +1,6 @@
-import Redis from "ioredis";
+import Redis from 'ioredis';
 
-const url = process.env.REDIS_AUTH_URL || "redis://127.0.0.1:6380";
+const url = process.env.REDIS_AUTH_URL || 'redis://127.0.0.1:6380';
 const redis = new Redis(url);
 
 type StoreAuthArg = {
@@ -31,9 +31,9 @@ class RedisAuthAPI {
     // console.log('ses:', sessionId);
     const storedParam = await redis.hmget(
       `auth:${sessionId}`,
-      "state",
-      "nonce",
-      "code_verifier"
+      'state',
+      'nonce',
+      'code_verifier',
     );
 
     // console.log('stored:', storedParam);
@@ -60,7 +60,7 @@ class RedisAuthAPI {
   }
 
   public static async getTokenSet(sub: string) {
-    const cryptedToken = await redis.hmget(`token:${sub}`, "token", "iv");
+    const cryptedToken = await redis.hmget(`token:${sub}`, 'token', 'iv');
     if (cryptedToken.includes(null) === true) return undefined;
     const [token, iv] = [...cryptedToken];
     return { token, iv };
@@ -68,13 +68,13 @@ class RedisAuthAPI {
 
   public static async storePasswordToken(
     userId: string,
-    changePassToken: string
+    changePassToken: string,
   ) {
     const result = await redis.set(
       `forgetPassword:${userId}`,
       changePassToken,
-      "ex",
-      60 * 60 //1hour
+      'EX',
+      60 * 60, //1hour
     );
     if (result === null) return false;
     return true;

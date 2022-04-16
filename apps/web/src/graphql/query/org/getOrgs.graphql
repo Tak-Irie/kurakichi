@@ -1,0 +1,10 @@
+query GetOrgsForMap {
+  getOrgs {
+    orgs {
+      ...OrgExceptConn
+    }
+    errors {
+      ...Errors
+    }
+  }
+}

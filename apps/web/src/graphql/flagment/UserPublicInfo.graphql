@@ -1,0 +1,7 @@
+fragment UserPublicInfo on User {
+  id
+  name
+  selfIntro
+  avatarUrl
+  heroImageUrl
+}

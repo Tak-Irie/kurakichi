@@ -34,7 +34,7 @@ const createExpress = async ({ redis }: ExpressArgs) => {
         domain: IS_PROD ? 'www.kurakichi.org' : undefined,
       },
       saveUninitialized: false,
-      secret: process.env.SESSION_SECRET as string,
+      secret: process.env.SESSION_SECRET || 'development',
       resave: false,
     }),
   );

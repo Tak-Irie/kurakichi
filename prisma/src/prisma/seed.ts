@@ -1,11 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
-import { orgs, users } from "./seedData";
+import { orgs, users } from './seedData';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("setting seedData");
+  console.log('setting seedData');
   for (const user of users) {
     await prisma.user.create({ data: user });
   }
@@ -17,7 +17,7 @@ async function main() {
       },
     });
   }
-  console.log("done");
+  console.log('done');
 }
 
 main()

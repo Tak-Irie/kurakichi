@@ -1,6 +1,11 @@
 /* eslint-disable no-constant-condition */
 import { DTOUser } from '@kurakichi/modules';
-import { User } from '../generated/generatedTypes';
+import { UserReadModel } from '@kurakichi/modules/user/tempRead/UserReadModel';
+import {
+  MessageConnection,
+  MessageEdges,
+  User,
+} from '../generated/generatedTypes';
 
 export const dtoUserToGql = (user: DTOUser): User => {
   const {
@@ -36,4 +41,46 @@ export const dtoUserToGql = (user: DTOUser): User => {
 
 export const dtoUsersToGql = (users: DTOUser[]): User[] => {
   return users.map((user) => dtoUserToGql(user));
+};
+
+export const readUserToGql = (user: UserReadModel): User => {
+  const {
+    id,
+    name,
+    email,
+    role,
+    avatar,
+    description,
+    image,
+    receivedMessages,
+  } = user;
+
+  const edges: MessageEdges[] = receivedMessages.map((mes) => {
+    const { receiverId, senderId, text, messageTreeId, ...rest } = mes;
+    return {
+      cursor: mes.id,
+      node: {
+        receiver: { id: receiverId },
+        sender: { id: senderId },
+        content: text,
+        ...rest,
+      },
+    };
+  });
+
+  const _messages: MessageConnection = {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges,
+  };
+
+  return {
+    id,
+    name,
+    email,
+    role: role,
+    selfIntro: description,
+    avatarUrl: avatar,
+    heroImageUrl: image,
+    messages: _messages,
+  };
 };
