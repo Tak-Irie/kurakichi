@@ -12,7 +12,11 @@ export const dtoBaseToGql = (base: DTOBase): Base => {
 
   if (fellows) {
     const edges = dialogs.map((id) => {
-      return { cursor: id, isBaseAdmin: id === baseOwner ? true : false };
+      return {
+        cursor: id,
+        isBaseAdmin: id === baseOwner ? true : false,
+        node: { id },
+      };
     });
     _fellows = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
   }

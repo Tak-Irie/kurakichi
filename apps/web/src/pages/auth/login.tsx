@@ -6,9 +6,13 @@ import {
   LoginForm,
   YahooLoginButton,
 } from '../../components/container';
-import { FormPageTemplate, TextSmall, TextWithDivider } from '../../components/presentational';
+import {
+  FormPageTemplate,
+  TextSmall,
+  TextWithDivider,
+} from '../../components/presentational';
 
-const Login: NextPage = () => {
+const LoginPage: NextPage = () => {
   return (
     <FormPageTemplate
       title="ログイン"
@@ -16,7 +20,7 @@ const Login: NextPage = () => {
         <>
           <div>
             <TextWithDivider content="ソーシャルログイン" />
-            <div className="grid grid-cols-2 max-h-12 mt-10">
+            <div className="grid grid-cols-2 mt-10 max-h-12">
               <span className="flex">
                 <GoogleLoginButton />
               </span>
@@ -30,19 +34,24 @@ const Login: NextPage = () => {
             <TextWithDivider content="くらきちログイン" />
             <LoginForm />
           </div>
-          <div className="mt-10 flex justify-end">
+          <div className="flex justify-end mt-10">
             <LinkNextjs
               url="/auth/forgot-password"
               labelOrElement={
-                <TextSmall color="yellow" content="※パスワードを忘れてしまった方はこちら" />
+                <TextSmall
+                  color="yellow"
+                  content="※パスワードを忘れてしまった方はこちら"
+                />
               }
               overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
             />
           </div>
-          <div className="mt-5 flex justify-end">
+          <div className="flex justify-end mt-5">
             <LinkNextjs
               url="/auth/register"
-              labelOrElement={<TextSmall color="yellow" content="※ユーザー新規登録はこちら" />}
+              labelOrElement={
+                <TextSmall color="yellow" content="※ユーザー新規登録はこちら" />
+              }
               overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
             />
           </div>
@@ -52,4 +61,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

@@ -151,6 +151,6 @@ export class UserRepository implements IUserRepository {
       include: { receivedMessages: true },
     });
     if (!data) return false;
-    return data;
+    return { sentMessages: [], ...data };
   }
 }

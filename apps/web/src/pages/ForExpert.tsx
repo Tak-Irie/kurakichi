@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 
 import { LinkNextjs } from '../components/container';
 
-const ForExpert: NextPage = () => {
+const forExpertPage: NextPage = () => {
   return (
     <div className="inset-0">
       <div className="grid grid-cols-12">
@@ -15,4 +15,4 @@ const ForExpert: NextPage = () => {
   );
 };
 
-export default ForExpert;
+export default forExpertPage;

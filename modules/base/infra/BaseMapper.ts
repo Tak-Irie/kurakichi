@@ -1,8 +1,8 @@
 import {
-    Base as StoredBase,
-    Dialog,
-    Karte,
-    User as StoredUser
+  Base as StoredBase,
+  Dialog,
+  Karte,
+  User as StoredUser,
 } from '@kurakichi/prisma/src';
 import { UniqueEntityId } from '../../shared/domain';
 import { Base } from '../domain';
@@ -33,7 +33,7 @@ export class BaseMapper {
   //   const props = domainMessage.getProps();
   //   const rawData = {
   //     id: props.id.getId(),
-  //     text: props.content.getText(),
+  //     content: props.content.getContent(),
   //     senderId: props.sender.getId(),
   //     receiverId: props.receiver.getId(),
   //   };

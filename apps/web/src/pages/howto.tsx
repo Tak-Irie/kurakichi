@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
-const HowTo: NextPage = () => {
+const howToPage: NextPage = () => {
   const [isLocation, setIsLocation] = useState<GeolocationCoordinates>();
 
   const handleClick = () => {
@@ -32,4 +32,4 @@ const HowTo: NextPage = () => {
   );
 };
 
-export default HowTo;
+export default howToPage;

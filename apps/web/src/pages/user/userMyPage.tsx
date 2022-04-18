@@ -12,7 +12,7 @@ import {
 } from '../../components/presentational/templates';
 import { useGetUserMyInfoQuery } from '../../graphql';
 
-const UserMyPagePrivatePage: NextPage = () => {
+const userMyPage: NextPage = () => {
   // TODO:CQRS
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
@@ -67,4 +67,4 @@ const UserMyPagePrivatePage: NextPage = () => {
   return <p>{data?.getUserByCookie?.errors?.applicationError?.message}</p>;
 };
 
-export default UserMyPagePrivatePage;
+export default userMyPage;

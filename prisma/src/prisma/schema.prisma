@@ -50,7 +50,7 @@ model Organization {
 
 model Message {
   id            String         @id
-  text          String
+  content          String
   senderId      String
   receiverId    String
   sentAt        String
@@ -68,7 +68,7 @@ model MessageTree {
 
 model Inquiry {
   id            String           @id
-  text          String
+  content          String
   senderId      String
   receiverId    String
   receivedOrgId String
@@ -98,7 +98,7 @@ model Base {
 
 model Dialog {
   id     String @id
-  text   String
+  content   String
   baseId String @unique
   base   Base   @relation(fields: [baseId], references: [id])
 }
@@ -113,7 +113,7 @@ model Karte {
 model Article {
   id        String       @id
   image     String
-  text      String
+  content      String
   orgId     String
   writerOrg Organization @relation("orgArticle", fields: [orgId], references: [id])
 }

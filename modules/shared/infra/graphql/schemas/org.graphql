@@ -19,24 +19,24 @@ type Address {
 }
 
 type MemberConnection {
-  edges: [MemberEdges]
+  edges: [MemberEdges]!
   pageInfo: PageInfo!
 }
 
 type MemberEdges {
   cursor: String!
-  node: User
+  node: User!
   isAdmin: Boolean!
 }
 
 type InquiryConnection {
-  edges: [InquiryEdges]
+  edges: [InquiryEdges]!
   pageInfo: PageInfo!
 }
 
 type InquiryEdges {
   cursor: String!
-  node: Inquiry
+  node: Inquiry!
 }
 
 type Inquiry implements Node {
@@ -65,13 +65,13 @@ type InquiryTree implements Node {
 }
 
 type InquiryLeafConnection {
-  edges: [InquiryLeafEdges]
+  edges: [InquiryLeafEdges]!
   pageInfo: PageInfo!
 }
 
 type InquiryLeafEdges {
   cursor: String!
-  node: Inquiry
+  node: Inquiry!
   isRoot: Boolean!
 }
 

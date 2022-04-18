@@ -1,14 +1,14 @@
 import { Result } from '../../shared/core';
 import { ValueObject } from '../../shared/domain/ValueObject';
 
-type MessageContentProps = { text: string };
+type MessageContentProps = { content: string };
 
 export class MessageContent extends ValueObject<MessageContentProps> {
   private constructor(readonly props: MessageContentProps) {
     super(props);
   }
-  public getText(): string {
-    return this.props.text;
+  public getContent(): string {
+    return this.props.content;
   }
 
   // TODO:need verification? like long, improper word/expression
@@ -19,7 +19,7 @@ export class MessageContent extends ValueObject<MessageContentProps> {
     return Result.success<MessageContent>(_MessageContent);
   }
 
-  public static restoreFromRepo(text: string): MessageContent {
-    return new MessageContent({ text });
+  public static restoreFromRepo(content: string): MessageContent {
+    return new MessageContent({ content });
   }
 }

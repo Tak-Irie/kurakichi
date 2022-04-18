@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-const CommitteePublicPage: NextPage = () => {
+const CommitteePage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const CommitteePublicPage: NextPage = () => {
   );
 };
 
-export default CommitteePublicPage;
+export default CommitteePage;

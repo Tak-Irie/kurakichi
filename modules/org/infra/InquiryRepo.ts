@@ -21,7 +21,7 @@ export class InquiryRepo implements IInquiryRepo {
         senderId,
         sentAt,
         status,
-        text,
+        content,
         receivedOrgId,
       } = InquiryMapper.toStore(inquiry);
 
@@ -31,7 +31,7 @@ export class InquiryRepo implements IInquiryRepo {
           category,
           sentAt,
           status,
-          text,
+          content,
           receiver: { connect: { id: receiverId } },
           sender: { connect: { id: senderId } },
           receivedOrg: { connect: { id: receivedOrgId } },

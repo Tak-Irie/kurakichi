@@ -1,5 +1,6 @@
 /* eslint-disable no-constant-condition */
 import { DTOMessage } from '@kurakichi/modules';
+import { UserReadModel } from '@kurakichi/modules/user/tempRead/UserReadModel';
 import { Message, MessageTree } from '../generated/generatedTypes';
 
 type TreeArg = {
@@ -39,6 +40,12 @@ export const dtoMessagesToTree = ({
     id: treeId,
     leaves: { pageInfo: { hasNext: false, hasPrevious: false }, edges },
   };
+};
+
+export const readMessagesToGql = (user: UserReadModel): Message[] => {
+  const { receivedMessages, sentMessages } = user;
+
+  return receivedMessages.concat(sentMessages);
 };
 
 // export const dtoMessageWithSenderToGql = (

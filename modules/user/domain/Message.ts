@@ -34,7 +34,7 @@ export class Message extends Entity<MessageProps> {
   }
 
   public getContent(): string {
-    return this.props.content.getText();
+    return this.props.content.getContent();
   }
 
   public getSender(): string {

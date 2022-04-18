@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-const AboutUs: NextPage = () => {
+const AboutUsPage: NextPage = () => {
   return (
     <div className="inset-0">
       <p>placer</p>
@@ -8,4 +8,4 @@ const AboutUs: NextPage = () => {
   );
 };
 
-export default AboutUs;
+export default AboutUsPage;

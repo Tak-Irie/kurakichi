@@ -9,11 +9,12 @@ export type UserReadModel = {
   description: string;
   role: string;
   receivedMessages: Message[];
+  sentMessages: Message[];
 };
 
 type Message = {
   id: string;
-  text: string;
+  content: string;
   senderId: string;
   receiverId: string;
   sentAt: string;

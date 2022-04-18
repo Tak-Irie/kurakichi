@@ -15,23 +15,23 @@ type Dialog implements Node {
 }
 
 type DialogConnection {
-  edges: [DialogEdges]
+  edges: [DialogEdges]!
   pageInfo: PageInfo!
 }
 
 type DialogEdges {
   cursor: String!
-  node: Dialog
+  node: Dialog!
 }
 
 type FellowConnection {
-  edges: [FellowEdge]
+  edges: [FellowEdge]!
   pageInfo: PageInfo!
 }
 
 type FellowEdge {
   cursor: String!
-  node: User
+  node: User!
   isBaseAdmin: Boolean!
 }
 

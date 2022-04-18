@@ -37,13 +37,13 @@ type Dialog implements Node {
 }
 
 type DialogConnection {
-  edges: [DialogEdges]
+  edges: [DialogEdges]!
   pageInfo: PageInfo!
 }
 
 type DialogEdges {
   cursor: String!
-  node: Dialog
+  node: Dialog!
 }
 
 type DialogPayload {
@@ -57,14 +57,14 @@ type Errors {
 }
 
 type FellowConnection {
-  edges: [FellowEdge]
+  edges: [FellowEdge]!
   pageInfo: PageInfo!
 }
 
 type FellowEdge {
   cursor: String!
   isBaseAdmin: Boolean!
-  node: User
+  node: User!
 }
 
 type Hoge {
@@ -90,24 +90,24 @@ type Inquiry implements Node {
 scalar InquiryCategory
 
 type InquiryConnection {
-  edges: [InquiryEdges]
+  edges: [InquiryEdges]!
   pageInfo: PageInfo!
 }
 
 type InquiryEdges {
   cursor: String!
-  node: Inquiry
+  node: Inquiry!
 }
 
 type InquiryLeafConnection {
-  edges: [InquiryLeafEdges]
+  edges: [InquiryLeafEdges]!
   pageInfo: PageInfo!
 }
 
 type InquiryLeafEdges {
   cursor: String!
   isRoot: Boolean!
-  node: Inquiry
+  node: Inquiry!
 }
 
 type InquiryPayload {
@@ -138,14 +138,14 @@ type KartePayload {
 }
 
 type MemberConnection {
-  edges: [MemberEdges]
+  edges: [MemberEdges]!
   pageInfo: PageInfo!
 }
 
 type MemberEdges {
   cursor: String!
   isAdmin: Boolean!
-  node: User
+  node: User!
 }
 
 type Message implements Node {
@@ -158,24 +158,24 @@ type Message implements Node {
 }
 
 type MessageConnection {
-  edges: [MessageEdges]
+  edges: [MessageEdges]!
   pageInfo: PageInfo!
 }
 
 type MessageEdges {
   cursor: String!
-  node: Message
+  node: Message!
 }
 
 type MessageLeafConnection {
-  edges: [MessageLeafEdges]
+  edges: [MessageLeafEdges]!
   pageInfo: PageInfo!
 }
 
 type MessageLeafEdges {
   cursor: String!
   isRoot: Boolean!
-  node: Message
+  node: Message!
 }
 
 type MessagePayload {
@@ -269,7 +269,7 @@ type Query {
   getInquiry(inquiryId: String!): InquiryPayload
   getKarte(id: String!): KartePayload
   getMessagesByCookie: MessagesPayload
-  getMessagesByTreeId(input: getMessagesByTreeIdInput!): MessageTreePayload
+  getMessagesByTreeId(treeId: String!): MessageTreePayload
   getOrg(id: String!): OrgPayload
   getOrgs: OrgsPayload
   getOrgsInfoByMemberCookie: OrgsPayload
@@ -344,11 +344,6 @@ type UsersPayload {
 input acceptJoinOrgInput {
   requestUserId: String!
   requestedOrgId: String!
-}
-
-input getMessagesByTreeIdInput {
-  treeId: String!
-  userId: String!
 }
 
 input loginUserInput {

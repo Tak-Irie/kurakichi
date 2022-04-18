@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-const AlphaLoadMapPublicPage: NextPage = () => {
+const AlphaGoalPage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const AlphaLoadMapPublicPage: NextPage = () => {
   );
 };
 
-export default AlphaLoadMapPublicPage;
+export default AlphaGoalPage;

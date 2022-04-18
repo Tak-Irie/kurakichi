@@ -1,0 +1,21 @@
+fragment MessageLeafConn on MessageLeafConnection {
+  edges {
+    cursor
+    isRoot
+    node {
+      id
+      content
+      sentAt
+      status
+      receiver {
+        id
+      }
+      sender {
+        id
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfos
+  }
+}

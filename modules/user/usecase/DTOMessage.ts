@@ -1,9 +1,9 @@
-import { Message } from "../domain";
+import { Message } from '../domain';
 
 export type DTOMessage = {
   id: string;
   content: string;
-  status: "DRAFT" | "READ" | "UNREAD";
+  status: 'DRAFT' | 'READ' | 'UNREAD';
   senderId: string;
   receiverId: string;
   sentAt: string;
@@ -15,7 +15,7 @@ export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
     message.getProps();
   return {
     id: id.getId(),
-    content: content.getText(),
+    content: content.getContent(),
     status: status.getValue(),
     receiverId: receiver.getId(),
     senderId: sender.getId(),
@@ -24,7 +24,7 @@ export const createDTOMessageFromDomain = (message: Message): DTOMessage => {
   };
 };
 export const createDTOMessagesFromDomain = (
-  messages: Message[]
+  messages: Message[],
 ): DTOMessage[] => {
   return messages.map((message) => createDTOMessageFromDomain(message));
 };

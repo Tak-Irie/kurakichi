@@ -53,16 +53,17 @@ export const readUserToGql = (user: UserReadModel): User => {
     description,
     image,
     receivedMessages,
+    sentMessages,
   } = user;
 
   const edges: MessageEdges[] = receivedMessages.map((mes) => {
-    const { receiverId, senderId, text, messageTreeId, ...rest } = mes;
+    const { receiverId, senderId, content, messageTreeId, ...rest } = mes;
     return {
       cursor: mes.id,
       node: {
         receiver: { id: receiverId },
         sender: { id: senderId },
-        content: text,
+        content,
         ...rest,
       },
     };

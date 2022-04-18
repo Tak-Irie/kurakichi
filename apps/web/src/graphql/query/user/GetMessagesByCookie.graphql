@@ -1,0 +1,23 @@
+query GetMessagesByCookie {
+  getMessagesByCookie {
+    errors {
+      ...Errors
+    }
+    messages {
+      id
+      content
+      receiver {
+        id
+        name
+        avatarUrl
+      }
+      sender {
+        id
+        name
+        avatarUrl
+      }
+      sentAt
+      status
+    }
+  }
+}

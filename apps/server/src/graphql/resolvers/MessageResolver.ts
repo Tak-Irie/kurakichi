@@ -1,6 +1,6 @@
+import { getMessagesByCookie } from '@kurakichi/modules';
 import {
   useGetMessagesByTreeIdUsecase,
-  useGetMessagesUsecase,
   useReplyMessageUsecase,
   useSendMessageUsecase,
 } from '@kurakichi/modules/user/usecase';
@@ -10,9 +10,9 @@ import {
   returnNotLoggedIn,
 } from '../../util/FunctionsForGqlResolver';
 import {
-  dtoMessagesToGql,
   dtoMessagesToTree,
   dtoMessageToGql,
+  readMessagesToGql,
 } from '../DTOtoGql';
 import { Resolvers } from '../generated/generatedTypes';
 
@@ -20,20 +20,20 @@ export const MessageResolver: Resolvers<ApolloContext> = {
   Query: {
     getMessagesByCookie: async (_, __, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
-      const usecaseResult = await useGetMessagesUsecase.execute({
-        userId: idInCookie,
-      });
-      if (usecaseResult.isLeft())
-        return returnErrorToGQL(usecaseResult.value.getErrorValue());
-      const messages = dtoMessagesToGql(usecaseResult.value.getValue());
+      // const usecaseResult = await useGetMessagesUsecase.execute({
+      //   userId: idInCookie,
+      // });
+      // if (usecaseResult.isLeft())
+      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
+
+      const result = await getMessagesByCookie(idInCookie);
+      if (result === false) return returnErrorToGQL('wip');
+
+      const messages = readMessagesToGql(result);
 
       return { messages };
     },
-    getMessagesByTreeId: async (
-      _,
-      { input: { treeId, userId } },
-      { idInCookie },
-    ) => {
+    getMessagesByTreeId: async (_, { treeId }, { idInCookie }) => {
       if (idInCookie === undefined)
         return returnErrorToGQL('ログインが確認できませんでした');
       const usecaseResult = await useGetMessagesByTreeIdUsecase.execute({
@@ -60,7 +60,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
       const usecaseResult = await useSendMessageUsecase.execute({
         senderId: idInCookie,
         receiverId: receiverId,
-        textInput: content,
+        contentInput: content,
       });
 
       if (usecaseResult.isLeft())

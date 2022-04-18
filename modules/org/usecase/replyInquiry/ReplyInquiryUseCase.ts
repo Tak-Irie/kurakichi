@@ -5,10 +5,10 @@ import {
   IUsecase,
   NotExistError,
   StoreConnectionError,
-  UnexpectedError,
+  UnexpectedError
 } from "../../../shared/usecase";
 import { IInquiryRepo, Inquiry, InquiryContent } from "../../domain";
-import { DTOInquiry, createDTOInquiryFromDomain } from "../DTOInquiry";
+import { createDTOInquiryFromDomain, DTOInquiry } from "../DTOInquiry";
 
 type ReplyInquiryArg = {
   replyTargetId: string;
@@ -49,7 +49,7 @@ export class ReplyInquiryUsecase
       if (replyTarget == false)
         return left(new NotExistError("問い合わせが存在しません", ""));
 
-      const contentOrError = InquiryContent.create({ text: arg.content });
+      const contentOrError = InquiryContent.create({ content: arg.content });
       if (contentOrError.isFailure)
         return left(new InvalidInputValueError("不正な内容です", ""));
 

@@ -1,11 +1,17 @@
 import { NextPage } from 'next';
-import { LinkNextjs } from '../../components/container';
-import { ButtonBig, GeneralTemplate, TextLabel, TextSmall } from '../../components/presentational';
 
-const PensionGuidePublicPage: NextPage = () => {
+import { LinkNextjs } from '../../components/container';
+import {
+  ButtonBig,
+  GeneralTemplate,
+  TextLabel,
+  TextSmall,
+} from '../../components/presentational';
+
+const LifeKnowledgePage: NextPage = () => {
   return (
     <GeneralTemplate
-      title="年金に係る福祉サービス"
+      title="日々のくらしで利用できる公共福祉サービス"
       content={
         <div className="h-screen">
           <TextLabel content="Alpha版:作成中" />
@@ -14,7 +20,9 @@ const PensionGuidePublicPage: NextPage = () => {
           <TextSmall content="※ こちらのページはあくまで事例紹介・基礎知識に留まるものであり、くらきちの本旨はクライアントを専門家へ繋げることです" />
           <div className="flex justify-end w-auto">
             <LinkNextjs
-              labelOrElement={<ButtonBig type="button" color="yellow" label="トップに戻る" />}
+              labelOrElement={
+                <ButtonBig type="button" color="yellow" label="トップに戻る" />
+              }
               url="/"
             />
           </div>
@@ -24,4 +32,4 @@ const PensionGuidePublicPage: NextPage = () => {
   );
 };
 
-export default PensionGuidePublicPage;
+export default LifeKnowledgePage;

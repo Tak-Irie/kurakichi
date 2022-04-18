@@ -1,14 +1,14 @@
 import { Result } from "../../shared/core";
 import { ValueObject } from "../../shared/domain/ValueObject";
 
-type InquiryContentProps = { text: string };
+type InquiryContentProps = { content: string };
 
 export class InquiryContent extends ValueObject<InquiryContentProps> {
   private constructor(readonly props: InquiryContentProps) {
     super(props);
   }
-  public getText(): string {
-    return this.props.text;
+  public getContent(): string {
+    return this.props.content;
   }
 
   // TODO:need verification? like long, improper word/expression
@@ -18,7 +18,7 @@ export class InquiryContent extends ValueObject<InquiryContentProps> {
     });
     return Result.success<InquiryContent>(inquiry);
   }
-  public static restoreFromRepo(text: string): InquiryContent {
-    return new InquiryContent({ text });
+  public static restoreFromRepo(content: string): InquiryContent {
+    return new InquiryContent({ content });
   }
 }

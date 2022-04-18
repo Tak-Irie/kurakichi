@@ -12,7 +12,7 @@ import {
 import { UserTemplate } from '../../components/presentational/templates';
 import { useGetUserMyInfoQuery } from '../../graphql/generated';
 
-const UserSettingPrivatePage: NextPage = () => {
+const userSettingPage: NextPage = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
   });
@@ -60,4 +60,4 @@ const UserSettingPrivatePage: NextPage = () => {
   }
   return <LoadingSpinner />;
 };
-export default UserSettingPrivatePage;
+export default userSettingPage;

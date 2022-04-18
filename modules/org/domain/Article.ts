@@ -5,13 +5,13 @@ import { UniqueEntityId } from "../../shared/domain/UniqueEntityId";
 interface ArticleProps {
   id: UniqueEntityId;
   image: string;
-  text: string;
+  content: string;
 }
 
 type ArticlePrimitive = {
   id: string;
   image: string;
-  text: string;
+  content: string;
 };
 export class Article extends Entity<ArticleProps> {
   private constructor(readonly props: ArticleProps) {
@@ -24,17 +24,17 @@ export class Article extends Entity<ArticleProps> {
     const article = new Article({
       id: props.id,
       image: props.image,
-      text: props.text,
+      content: props.content,
     });
     // Article.addDomainEvent(new _EntityCreated(Article));
     return Result.success<Article>(article);
   }
   public static restoreFromRepo(storedArticle: ArticlePrimitive): Article {
-    const { id, image, text } = storedArticle;
+    const { id, image, content } = storedArticle;
     return new Article({
       id: UniqueEntityId.restoreFromRepo({ id }),
       image,
-      text,
+      content,
     });
   }
 }

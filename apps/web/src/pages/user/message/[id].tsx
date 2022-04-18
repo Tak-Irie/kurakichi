@@ -8,50 +8,70 @@ import {
   IconsUser,
   LoadingSpinner,
 } from '../../../components/presentational/atoms';
-import { MessageTree, UserTemplate } from '../../../components/presentational/templates';
+import {
+  MessageTree,
+  UserTemplate,
+} from '../../../components/presentational/templates';
+import { useGetMessagesByTreeIdQuery } from '../../../graphql';
+import { isLoggedIn } from '../../../util';
 
 const MessageTreePage: NextPage = () => {
   const router = useRouter();
   const messageTreeId = router.query.id as string;
 
-  const { data: uData } = useGetUserByCookieQuery({ fetchPolicy: 'cache-only' });
+  const { cachedUser, loadingCache } = isLoggedIn();
+
   const { data, loading, error } = useGetMessagesByTreeIdQuery({
     variables: { treeId: messageTreeId },
   });
 
   // console.log('user:', userData.getUserByCookie.user);
-  if (loading) return <LoadingSpinner />;
+  if (loadingCache || loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
+  if (data?.getMessagesByTreeId?.errors)
+    return <p>{data.getMessagesByTreeId.errors.applicationError?.message}</p>;
 
-  const mesData = data.getMessagesByTreeId;
-  const usrData = uData.getUserByCookie;
+  if (!loading && data?.getMessagesByTreeId?.messageTree && cachedUser) {
+    const _tree = data.getMessagesByTreeId.messageTree;
 
-  if (mesData.error) {
-    return <p>{mesData.error.message}</p>;
-  }
-  if (!loading && mesData.messageTree && usrData.user)
+    const _messages: any[] = [];
+    if (_tree.leaves && _tree.leaves.edges.length !== 0) {
+      _messages.concat(_tree.leaves.edges.map((arr) => arr?.node || ''));
+    }
+
+    _tree.leaves?.edges.map((edge) => edge?.node);
     return (
       <UserTemplate
-        avatar={usrData.user.avatar}
-        image={usrData.user.image}
-        userName={usrData.user.userName}
+        avatar={cachedUser.avatarUrl || ''}
+        image={cachedUser.heroImageUrl || ''}
+        userName={cachedUser.name || ''}
         headerButtons={
           <>
             <Link href="/user/mypage" passHref>
               <a href="replace">
-                <ButtonWithIcon type="button" label="マイページに戻る" icon={<IconsUser />} />
+                <ButtonWithIcon
+                  type="button"
+                  label="マイページに戻る"
+                  icon={<IconsUser />}
+                />
               </a>
             </Link>
             <Link href="/user/message" passHref scroll={false}>
               <a href="replace">
-                <ButtonWithIcon type="button" label="メッセージボックス" icon={<IconsMail />} />
+                <ButtonWithIcon
+                  type="button"
+                  label="メッセージボックス"
+                  icon={<IconsMail />}
+                />
               </a>
             </Link>
           </>
         }
-        pageContents={<MessageTree messages={mesData.messageTree.treedMessage} />}
+        pageContents={<MessageTree treeId={_tree.id} messages={_messages} />}
       />
     );
+  }
+  return <p>wip</p>;
 };
 
 export default MessageTreePage;

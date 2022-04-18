@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-const AnswerToOpinionPublicPage: NextPage = () => {
+const AnswerToOpinionPage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const AnswerToOpinionPublicPage: NextPage = () => {
   );
 };
 
-export default AnswerToOpinionPublicPage;
+export default AnswerToOpinionPage;

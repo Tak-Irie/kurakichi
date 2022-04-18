@@ -8,31 +8,32 @@ import {
 } from '../../../components/presentational/atoms';
 import { TableMessage } from '../../../components/presentational/molecules';
 import { UserTemplate } from '../../../components/presentational/templates';
-import { useGetUserMyInfoQuery } from '../../../graphql';
+import { useGetMessagesByCookieQuery } from '../../../graphql';
+import { isLoggedIn } from '../../../util';
 
-const Message: NextPage = () => {
-  const { data, loading, error } = useGetUserMyInfoQuery({
-    fetchPolicy: 'cache-first',
-  });
+const MessageBoxPage: NextPage = () => {
+  const { cachedUser, loadingCache } = isLoggedIn();
 
+  const { data, loading, error } = useGetMessagesByCookieQuery();
   // console.log('user:', userData.getUserByCookie.user);
-  if (loading) return <LoadingSpinner />;
+  if (loading && loadingCache) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  if (data.getMessagesByCookie.error) {
-    return <p>{data.getMessagesByCookie.error.message}</p>;
+  if (data?.getMessagesByCookie?.errors?.applicationError) {
+    return <p>{data.getMessagesByCookie.errors.applicationError.message}</p>;
   }
-  if (
-    !loading &&
-    data.getMessagesByCookie.messages &&
-    userData.getUserByCookie.user
-  ) {
-    const _user = userData.getUserByCookie.user;
+  if (!loadingCache && data?.getMessagesByCookie?.messages && cachedUser) {
+    const messages = data.getMessagesByCookie.messages;
+    const _messages: any[] = [];
+    if (messages.length !== 0) {
+      _messages.concat(messages);
+    }
+
     return (
       <UserTemplate
-        avatar={_user.avatar}
-        image={_user.image}
-        userName={_user.userName}
+        avatar={cachedUser.avatarUrl || ''}
+        image={cachedUser.heroImageUrl || ''}
+        userName={cachedUser.name || ''}
         headerButtons={
           <Link href="/user/mypage" passHref>
             <a href="replace">
@@ -48,12 +49,13 @@ const Message: NextPage = () => {
           <TableMessage
             tableLabel="メッセージボックス"
             textOfNotExist="メッセージはありません"
-            messages={data.getMessagesByCookie.messages}
+            messages={_messages}
           />
         }
       />
     );
   }
+  return <p>wip</p>;
 };
 
-export default Message;
+export default MessageBoxPage;

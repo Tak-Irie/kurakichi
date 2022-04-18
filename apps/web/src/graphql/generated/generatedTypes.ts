@@ -14,13 +14,13 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** APPLICATION | CONTACT | COUNSEL | INQUIRY | OTHERS */
-  InquiryCategory: any;
+  InquiryCategory: string;
   /** DONE | DRAFT | UNREAD | WORKING */
-  InquiryStatus: any;
+  InquiryStatus: string;
   /** SENT | READ | UNREAD | DRAFT */
-  MessageStatus: any;
+  MessageStatus: string;
   /** VISITOR | CLIENT | EXPERT */
-  UserRole: any;
+  UserRole: string;
 };
 
 export type Address = {
@@ -70,14 +70,14 @@ export type Dialog = Node & {
 
 export type DialogConnection = {
   __typename?: 'DialogConnection';
-  edges?: Maybe<Array<Maybe<DialogEdges>>>;
+  edges: Array<Maybe<DialogEdges>>;
   pageInfo: PageInfo;
 };
 
 export type DialogEdges = {
   __typename?: 'DialogEdges';
   cursor: Scalars['String'];
-  node?: Maybe<Dialog>;
+  node: Dialog;
 };
 
 export type DialogPayload = {
@@ -94,7 +94,7 @@ export type Errors = {
 
 export type FellowConnection = {
   __typename?: 'FellowConnection';
-  edges?: Maybe<Array<Maybe<FellowEdge>>>;
+  edges: Array<Maybe<FellowEdge>>;
   pageInfo: PageInfo;
 };
 
@@ -102,7 +102,7 @@ export type FellowEdge = {
   __typename?: 'FellowEdge';
   cursor: Scalars['String'];
   isBaseAdmin: Scalars['Boolean'];
-  node?: Maybe<User>;
+  node: User;
 };
 
 export type Hoge = {
@@ -129,19 +129,19 @@ export type Inquiry = Node & {
 
 export type InquiryConnection = {
   __typename?: 'InquiryConnection';
-  edges?: Maybe<Array<Maybe<InquiryEdges>>>;
+  edges: Array<Maybe<InquiryEdges>>;
   pageInfo: PageInfo;
 };
 
 export type InquiryEdges = {
   __typename?: 'InquiryEdges';
   cursor: Scalars['String'];
-  node?: Maybe<Inquiry>;
+  node: Inquiry;
 };
 
 export type InquiryLeafConnection = {
   __typename?: 'InquiryLeafConnection';
-  edges?: Maybe<Array<Maybe<InquiryLeafEdges>>>;
+  edges: Array<Maybe<InquiryLeafEdges>>;
   pageInfo: PageInfo;
 };
 
@@ -149,7 +149,7 @@ export type InquiryLeafEdges = {
   __typename?: 'InquiryLeafEdges';
   cursor: Scalars['String'];
   isRoot: Scalars['Boolean'];
-  node?: Maybe<Inquiry>;
+  node: Inquiry;
 };
 
 export type InquiryPayload = {
@@ -183,7 +183,7 @@ export type KartePayload = {
 
 export type MemberConnection = {
   __typename?: 'MemberConnection';
-  edges?: Maybe<Array<Maybe<MemberEdges>>>;
+  edges: Array<Maybe<MemberEdges>>;
   pageInfo: PageInfo;
 };
 
@@ -191,7 +191,7 @@ export type MemberEdges = {
   __typename?: 'MemberEdges';
   cursor: Scalars['String'];
   isAdmin: Scalars['Boolean'];
-  node?: Maybe<User>;
+  node: User;
 };
 
 export type Message = Node & {
@@ -206,19 +206,19 @@ export type Message = Node & {
 
 export type MessageConnection = {
   __typename?: 'MessageConnection';
-  edges?: Maybe<Array<Maybe<MessageEdges>>>;
+  edges: Array<Maybe<MessageEdges>>;
   pageInfo: PageInfo;
 };
 
 export type MessageEdges = {
   __typename?: 'MessageEdges';
   cursor: Scalars['String'];
-  node?: Maybe<Message>;
+  node: Message;
 };
 
 export type MessageLeafConnection = {
   __typename?: 'MessageLeafConnection';
-  edges?: Maybe<Array<Maybe<MessageLeafEdges>>>;
+  edges: Array<Maybe<MessageLeafEdges>>;
   pageInfo: PageInfo;
 };
 
@@ -226,7 +226,7 @@ export type MessageLeafEdges = {
   __typename?: 'MessageLeafEdges';
   cursor: Scalars['String'];
   isRoot: Scalars['Boolean'];
-  node?: Maybe<Message>;
+  node: Message;
 };
 
 export type MessagePayload = {
@@ -442,7 +442,7 @@ export type QueryGetKarteArgs = {
 
 
 export type QueryGetMessagesByTreeIdArgs = {
-  input: GetMessagesByTreeIdInput;
+  treeId: Scalars['String'];
 };
 
 
@@ -537,11 +537,6 @@ export type AcceptJoinOrgInput = {
   requestedOrgId: Scalars['String'];
 };
 
-export type GetMessagesByTreeIdInput = {
-  treeId: Scalars['String'];
-  userId: Scalars['String'];
-};
-
 export type LoginUserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -579,11 +574,15 @@ export type UpdateUserInput = {
   selfIntro?: InputMaybe<Scalars['String']>;
 };
 
+export type MessageLeafConnFragment = { __typename?: 'MessageLeafConnection', edges: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot: boolean, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } } | null>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } };
+
 export type ErrorsFragment = { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null };
 
 export type OrgExceptConnFragment = { __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null };
 
-export type UserMyInfoFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: any | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node?: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: any | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } } | null };
+export type PageInfosFragment = { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null };
+
+export type UserMyInfoFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } } | null>, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } } | null };
 
 export type UserPublicInfoFragment = { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null };
 
@@ -599,10 +598,22 @@ export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs?: { __typename?: 'OrgsPayload', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null } | null> | null, errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null } | null };
 
+export type GetMessagesByTreeIdQueryVariables = Exact<{
+  treeId: Scalars['String'];
+}>;
+
+
+export type GetMessagesByTreeIdQuery = { __typename?: 'Query', getMessagesByTreeId?: { __typename?: 'MessageTreePayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, messageTree?: { __typename?: 'MessageTree', id: string, leaves?: { __typename?: 'MessageLeafConnection', edges: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot: boolean, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } } | null>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } } | null } | null } | null };
+
+export type GetMessagesByCookieQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMessagesByCookieQuery = { __typename?: 'Query', getMessagesByCookie?: { __typename?: 'MessagesPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, messages?: Array<{ __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } | null> | null } | null };
+
 export type GetUserMyInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserMyInfoQuery = { __typename?: 'Query', getUserByCookie?: { __typename?: 'UserPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, user?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: any | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node?: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: any | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } } | null } | null } | null };
+export type GetUserMyInfoQuery = { __typename?: 'Query', getUserByCookie?: { __typename?: 'UserPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, user?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } } | null>, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } } | null } | null } | null };
 
 export type GetUserPublicInfoQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -611,6 +622,37 @@ export type GetUserPublicInfoQueryVariables = Exact<{
 
 export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById?: { __typename?: 'UserPayload', user?: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } | null, errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null } | null };
 
+export const PageInfosFragmentDoc = gql`
+    fragment PageInfos on PageInfo {
+  endCursor
+  hasNext
+  hasPrevious
+  startCursor
+}
+    `;
+export const MessageLeafConnFragmentDoc = gql`
+    fragment MessageLeafConn on MessageLeafConnection {
+  edges {
+    cursor
+    isRoot
+    node {
+      id
+      content
+      sentAt
+      status
+      receiver {
+        id
+      }
+      sender {
+        id
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfos
+  }
+}
+    ${PageInfosFragmentDoc}`;
 export const ErrorsFragmentDoc = gql`
     fragment Errors on Errors {
   applicationError {
@@ -761,6 +803,102 @@ export function useGetOrgsForMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetOrgsForMapQueryHookResult = ReturnType<typeof useGetOrgsForMapQuery>;
 export type GetOrgsForMapLazyQueryHookResult = ReturnType<typeof useGetOrgsForMapLazyQuery>;
 export type GetOrgsForMapQueryResult = Apollo.QueryResult<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>;
+export const GetMessagesByTreeIdDocument = gql`
+    query GetMessagesByTreeId($treeId: String!) {
+  getMessagesByTreeId(treeId: $treeId) {
+    errors {
+      ...Errors
+    }
+    messageTree {
+      id
+      leaves {
+        ...MessageLeafConn
+      }
+    }
+  }
+}
+    ${ErrorsFragmentDoc}
+${MessageLeafConnFragmentDoc}`;
+
+/**
+ * __useGetMessagesByTreeIdQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesByTreeIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesByTreeIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesByTreeIdQuery({
+ *   variables: {
+ *      treeId: // value for 'treeId'
+ *   },
+ * });
+ */
+export function useGetMessagesByTreeIdQuery(baseOptions: Apollo.QueryHookOptions<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>(GetMessagesByTreeIdDocument, options);
+      }
+export function useGetMessagesByTreeIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>(GetMessagesByTreeIdDocument, options);
+        }
+export type GetMessagesByTreeIdQueryHookResult = ReturnType<typeof useGetMessagesByTreeIdQuery>;
+export type GetMessagesByTreeIdLazyQueryHookResult = ReturnType<typeof useGetMessagesByTreeIdLazyQuery>;
+export type GetMessagesByTreeIdQueryResult = Apollo.QueryResult<GetMessagesByTreeIdQuery, GetMessagesByTreeIdQueryVariables>;
+export const GetMessagesByCookieDocument = gql`
+    query GetMessagesByCookie {
+  getMessagesByCookie {
+    errors {
+      ...Errors
+    }
+    messages {
+      id
+      content
+      receiver {
+        id
+        name
+        avatarUrl
+      }
+      sender {
+        id
+        name
+        avatarUrl
+      }
+      sentAt
+      status
+    }
+  }
+}
+    ${ErrorsFragmentDoc}`;
+
+/**
+ * __useGetMessagesByCookieQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesByCookieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesByCookieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesByCookieQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMessagesByCookieQuery(baseOptions?: Apollo.QueryHookOptions<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>(GetMessagesByCookieDocument, options);
+      }
+export function useGetMessagesByCookieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>(GetMessagesByCookieDocument, options);
+        }
+export type GetMessagesByCookieQueryHookResult = ReturnType<typeof useGetMessagesByCookieQuery>;
+export type GetMessagesByCookieLazyQueryHookResult = ReturnType<typeof useGetMessagesByCookieLazyQuery>;
+export type GetMessagesByCookieQueryResult = Apollo.QueryResult<GetMessagesByCookieQuery, GetMessagesByCookieQueryVariables>;
 export const GetUserMyInfoDocument = gql`
     query GetUserMyInfo {
   getUserByCookie {

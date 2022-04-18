@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-const AlphaMotivationPublicPage: NextPage = () => {
+const AlphaMotivationPage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const AlphaMotivationPublicPage: NextPage = () => {
   );
 };
 
-export default AlphaMotivationPublicPage;
+export default AlphaMotivationPage;

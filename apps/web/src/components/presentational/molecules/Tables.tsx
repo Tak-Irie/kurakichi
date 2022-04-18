@@ -1,15 +1,15 @@
-import { VFC } from 'react';
 import Link from 'next/link';
+import { FC } from 'react';
 
-import { Message, Org, SecureBase, User, Inquiry } from '../../../graphql';
 import {
   AvatarSmall,
-  TextSmall,
-  TextLabel,
-  CardWithPick,
   BadgeInquiryCategory,
   BadgeInquiryStatus,
+  CardWithPick,
+  TextLabel,
+  TextSmall,
 } from '..';
+import { Base, Inquiry, Message, Org, User } from '../../../graphql';
 
 type TableProps = {
   tableLabel?: string;
@@ -25,7 +25,7 @@ type TableOrgMemberProps = TableProps & {
 };
 
 type TableSecureBaseProps = TableProps & {
-  secureBases: SecureBase[];
+  bases: Base[];
 };
 
 type TableMessageProps = TableProps & {
@@ -37,7 +37,7 @@ type TableInquiryProps = TableProps & {
   orgId: string;
 };
 
-export const TableOrg: VFC<TableOrgProps> = ({
+export const TableOrg: FC<TableOrgProps> = ({
   orgs,
   tableLabel = '所属団体',
   textOfNotExist = '団体に所属していません',
@@ -64,7 +64,7 @@ export const TableOrg: VFC<TableOrgProps> = ({
   );
 };
 
-export const TableOrgMember: VFC<TableOrgMemberProps> = ({
+export const TableOrgMember: FC<TableOrgMemberProps> = ({
   members,
   tableLabel = '団体メンバー',
   textOfNotExist = 'メンバーが読み込めません、お手数ですが管理者にお問い合わせ下さい',
@@ -76,7 +76,9 @@ export const TableOrgMember: VFC<TableOrgMemberProps> = ({
         members.map((member) => (
           <div key={member.id}>
             <CardWithPick
-              image={member.avatar === 'UNKNOWN' ? '/asian_man1.jpg' : member.avatar}
+              image={
+                member.avatar === 'UNKNOWN' ? '/asian_man1.jpg' : member.avatar
+              }
               title={member.userName}
               content={member.description}
               imageAlt="ユーザーアバター"
@@ -91,19 +93,23 @@ export const TableOrgMember: VFC<TableOrgMemberProps> = ({
     </>
   );
 };
-export const TableSecureBase: VFC<TableSecureBaseProps> = ({
-  secureBases,
+export const TableSecureBase: FC<TableSecureBaseProps> = ({
+  bases,
   tableLabel = '所属ベース',
   textOfNotExist = 'ベースに所属していません',
 }) => {
   return (
     <>
       <TextLabel content={tableLabel} />
-      {secureBases[0] ? (
-        secureBases.map((base) => (
+      {bases[0] ? (
+        bases.map((base) => (
           <CardWithPick
             key={base.id}
-            image={base.baseOwner.avatar === 'UNKNOWN' ? '/logo_temp.png' : base.baseOwner.avatar}
+            image={
+              base.baseOwner.avatar === 'UNKNOWN'
+                ? '/logo_temp.png'
+                : base.baseOwner.avatar
+            }
             title={base.baseOwner.userName}
             content={base.baseOwner.userName}
             imageAlt="ユーザーアバター"
@@ -117,7 +123,7 @@ export const TableSecureBase: VFC<TableSecureBaseProps> = ({
   );
 };
 
-export const TableMessage: VFC<TableMessageProps> = ({
+export const TableMessage: FC<TableMessageProps> = ({
   messages,
   tableLabel = '新着メッセージ',
   textOfNotExist = '新着メッセージはありません',
@@ -126,33 +132,45 @@ export const TableMessage: VFC<TableMessageProps> = ({
     <>
       <TextLabel content={tableLabel} />
       {messages[0] ? (
-        <div className="bg-gray-50 shadow border-2 border-gray-200 rounded-lg">
+        <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
           <div className="grid grid-cols-6 divide-y divide-gray-200">
-            <div className="col-star-1 pl-4 py-1 text-left text-xs font-medium text-gray-500">
+            <div className="py-1 pl-4 text-xs font-medium text-left text-gray-500 col-star-1">
               送信者
             </div>
-            <div className="col-auto py-1 text-left text-xs font-medium text-gray-500">内容</div>
-            <div className="col-end-7 py-1 px-1 text-left text-xs font-medium text-gray-500">
+            <div className="col-auto py-1 text-xs font-medium text-left text-gray-500">
+              内容
+            </div>
+            <div className="col-end-7 p-1 text-xs font-medium text-left text-gray-500">
               受信日
             </div>
             {messages.map((message) => (
-              <div className="relative col-span-full grid grid-cols-6" key={message.id}>
-                <Link href="/user/message/[id]" as={`/user/message/${message.tree.id}`} passHref>
+              <div
+                className="grid relative grid-cols-6 col-span-full"
+                key={message.id}
+              >
+                <Link
+                  href="/user/message/[id]"
+                  as={`/user/message/${message.tree.id}`}
+                  passHref
+                >
                   <a
                     href="replace"
-                    className="h-full w-full absolute z-10 bg-black opacity-0 transition hover:opacity-30 "
+                    className="absolute z-10 w-full h-full bg-black opacity-0 hover:opacity-30 transition "
                   >
                     link to message
                   </a>
                 </Link>
-                <div className="col-start-1 pl-2 py-2 space-x-1 flex items-center">
-                  <AvatarSmall src={message.sender?.avatar} alt="ユーザーアバター" />
+                <div className="flex col-start-1 items-center py-2 pl-2 space-x-1">
+                  <AvatarSmall
+                    src={message.sender?.avatar}
+                    alt="ユーザーアバター"
+                  />
                   <TextSmall content={message.sender?.userName} />
                 </div>
-                <div className="col-span-4 mx-1 py-4 whitespace-nowrap overflow-scroll">
+                <div className="overflow-scroll col-span-4 py-4 mx-1 whitespace-nowrap">
                   <TextSmall content={message.content} />
                 </div>
-                <div className="col-end-7 px-1 whitespace-nowrap py-4">
+                <div className="col-end-7 py-4 px-1 whitespace-nowrap">
                   <TextSmall content={message.sentAt} />
                 </div>
               </div>
@@ -166,7 +184,7 @@ export const TableMessage: VFC<TableMessageProps> = ({
   );
 };
 
-export const TableInquiry: VFC<TableInquiryProps> = ({
+export const TableInquiry: FC<TableInquiryProps> = ({
   inquiries,
   orgId,
   textOfNotExist = '新着のお問い合わせはありません',
@@ -176,7 +194,7 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
   return (
     <div>
       {inquiries[0] ? (
-        <div className="bg-gray-50 shadow border-2 border-gray-200 rounded-lg">
+        <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
           <div className="grid grid-cols-8 divide-y divide-gray-200">
             <div className={labelCss}>送信者</div>
             <div className={`${labelCss} col-span-4`}>内容</div>
@@ -184,7 +202,10 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
             <div className={labelCss}>カテゴリ</div>
             <div className={labelCss}>受信日</div>
             {inquiries.map((inquiry) => (
-              <div className="relative col-span-full grid grid-cols-8" key={inquiry.id}>
+              <div
+                className="grid relative grid-cols-8 col-span-full"
+                key={inquiry.id}
+              >
                 <Link
                   href="/org/myorg/[id]/inquiry/[inqtid]"
                   as={`/org/myorg/${orgId}/inquiry/${inquiry.tree.id}`}
@@ -192,13 +213,16 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
                 >
                   <a
                     href="replace"
-                    className="h-full w-full absolute z-10 bg-black opacity-0 transition hover:opacity-30 "
+                    className="absolute z-10 w-full h-full bg-black opacity-0 hover:opacity-30 transition "
                   >
                     link to inquiry
                   </a>
                 </Link>
                 <div className={`${dataCss} space-x-2`}>
-                  <AvatarSmall src={inquiry.sender?.avatar} alt="ユーザーアバター" />
+                  <AvatarSmall
+                    src={inquiry.sender?.avatar}
+                    alt="ユーザーアバター"
+                  />
                   <TextSmall content={inquiry.sender?.userName} />
                 </div>
                 <div className={`${dataCss} col-span-4`}>
@@ -208,12 +232,18 @@ export const TableInquiry: VFC<TableInquiryProps> = ({
                 </div>
                 <div className={dataCss}>
                   <div className="px-2 w-full">
-                    <BadgeInquiryStatus size="large" status={inquiry.inquiryStatus} />
+                    <BadgeInquiryStatus
+                      size="large"
+                      status={inquiry.inquiryStatus}
+                    />
                   </div>
                 </div>
                 <div className={dataCss}>
                   <div className="px-2 w-full">
-                    <BadgeInquiryCategory size="large" category={inquiry.category} />
+                    <BadgeInquiryCategory
+                      size="large"
+                      category={inquiry.category}
+                    />
                   </div>
                 </div>
                 <div className={dataCss}>

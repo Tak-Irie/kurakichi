@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-const PrivacyPolicyPublicPage: NextPage = () => {
+const TermsOfServicePage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const PrivacyPolicyPublicPage: NextPage = () => {
   );
 };
 
-export default PrivacyPolicyPublicPage;
+export default TermsOfServicePage;

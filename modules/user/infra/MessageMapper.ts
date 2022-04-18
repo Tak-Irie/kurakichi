@@ -1,6 +1,6 @@
 import {
-    Message as StoredMessage,
-    MessageTree as StoredMessageTree
+  Message as StoredMessage,
+  MessageTree as StoredMessageTree,
 } from '@kurakichi/prisma/src';
 import { Message } from '../domain';
 
@@ -10,15 +10,15 @@ type MessageTree = StoredMessageTree & {
 
 export class MessageMapper {
   public static ToDomain(storedMessage: StoredMessage): Message {
-    const { sentAt, id, receiverId, senderId, status, text, messageTreeId } =
+    const { sentAt, id, receiverId, senderId, status, content, messageTreeId } =
       storedMessage;
     const MessageResult = Message.restoreFromRepo({
       id,
-      content: text,
-      status: status,
+      content,
+      status,
       sender: senderId,
       receiver: receiverId,
-      sentAt: sentAt,
+      sentAt,
       treeId: messageTreeId,
     });
 
@@ -39,7 +39,7 @@ export class MessageMapper {
       domainMessage.getProps();
     return {
       id: id.getId(),
-      text: content.getText(),
+      content: content.getContent(),
       status: status.getValue(),
       senderId: sender.getId(),
       receiverId: receiver.getId(),

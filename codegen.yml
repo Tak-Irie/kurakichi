@@ -22,6 +22,11 @@ generates:
       - typescript-react-apollo
     config:
       withHooks: true
+      scalars:
+        UserRole: string
+        MessageStatus: string
+        InquiryCategory: string
+        InquiryStatus: string
   ./apps/server/src/graphql/generated/generatedSchema.graphql:
     plugins:
       - schema-ast

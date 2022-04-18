@@ -17,7 +17,7 @@ export const createDTOInquiryFromDomain = (inquiry: Inquiry): DTOInquiry => {
   return {
     id: id.getId(),
     category: category.getValue(),
-    content: content.getText(),
+    content: content.getContent(),
     receiver: receiver.getId(),
     sender: sender.getId(),
     status: status.getValue(),

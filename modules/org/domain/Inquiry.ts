@@ -39,7 +39,7 @@ export class Inquiry extends Entity<InquiryProps> {
   }
 
   public getContent(): string {
-    return this.getProps().content.getText();
+    return this.getProps().content.getContent();
   }
 
   public getCategory(): InquiryCategoryUnion {

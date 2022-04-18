@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 
-const GoalPublicPage: NextPage = () => {
+const AnswerToQuestionPage: NextPage = () => {
   return (
     <div>
       <p>placer</p>
@@ -8,4 +8,4 @@ const GoalPublicPage: NextPage = () => {
   );
 };
 
-export default GoalPublicPage;
+export default AnswerToQuestionPage;

@@ -49,7 +49,7 @@ export class RegisterInquiryUsecase
       if (orgOrErr === false)
         return left(new InvalidInputValueError('wip', ''));
       // wip, 100%success
-      const _content = InquiryContent.create({ text: content });
+      const _content = InquiryContent.create({ content });
 
       const categoryOrError = InquiryCategory.createFromArg({ category });
       if (categoryOrError === false) {

@@ -71,14 +71,14 @@ export type Dialog = Node & {
 
 export type DialogConnection = {
   __typename?: 'DialogConnection';
-  edges?: Maybe<Array<Maybe<DialogEdges>>>;
+  edges: Array<Maybe<DialogEdges>>;
   pageInfo: PageInfo;
 };
 
 export type DialogEdges = {
   __typename?: 'DialogEdges';
   cursor: Scalars['String'];
-  node?: Maybe<Dialog>;
+  node: Dialog;
 };
 
 export type DialogPayload = {
@@ -95,7 +95,7 @@ export type Errors = {
 
 export type FellowConnection = {
   __typename?: 'FellowConnection';
-  edges?: Maybe<Array<Maybe<FellowEdge>>>;
+  edges: Array<Maybe<FellowEdge>>;
   pageInfo: PageInfo;
 };
 
@@ -103,7 +103,7 @@ export type FellowEdge = {
   __typename?: 'FellowEdge';
   cursor: Scalars['String'];
   isBaseAdmin: Scalars['Boolean'];
-  node?: Maybe<User>;
+  node: User;
 };
 
 export type Hoge = {
@@ -130,19 +130,19 @@ export type Inquiry = Node & {
 
 export type InquiryConnection = {
   __typename?: 'InquiryConnection';
-  edges?: Maybe<Array<Maybe<InquiryEdges>>>;
+  edges: Array<Maybe<InquiryEdges>>;
   pageInfo: PageInfo;
 };
 
 export type InquiryEdges = {
   __typename?: 'InquiryEdges';
   cursor: Scalars['String'];
-  node?: Maybe<Inquiry>;
+  node: Inquiry;
 };
 
 export type InquiryLeafConnection = {
   __typename?: 'InquiryLeafConnection';
-  edges?: Maybe<Array<Maybe<InquiryLeafEdges>>>;
+  edges: Array<Maybe<InquiryLeafEdges>>;
   pageInfo: PageInfo;
 };
 
@@ -150,7 +150,7 @@ export type InquiryLeafEdges = {
   __typename?: 'InquiryLeafEdges';
   cursor: Scalars['String'];
   isRoot: Scalars['Boolean'];
-  node?: Maybe<Inquiry>;
+  node: Inquiry;
 };
 
 export type InquiryPayload = {
@@ -184,7 +184,7 @@ export type KartePayload = {
 
 export type MemberConnection = {
   __typename?: 'MemberConnection';
-  edges?: Maybe<Array<Maybe<MemberEdges>>>;
+  edges: Array<Maybe<MemberEdges>>;
   pageInfo: PageInfo;
 };
 
@@ -192,7 +192,7 @@ export type MemberEdges = {
   __typename?: 'MemberEdges';
   cursor: Scalars['String'];
   isAdmin: Scalars['Boolean'];
-  node?: Maybe<User>;
+  node: User;
 };
 
 export type Message = Node & {
@@ -207,19 +207,19 @@ export type Message = Node & {
 
 export type MessageConnection = {
   __typename?: 'MessageConnection';
-  edges?: Maybe<Array<Maybe<MessageEdges>>>;
+  edges: Array<Maybe<MessageEdges>>;
   pageInfo: PageInfo;
 };
 
 export type MessageEdges = {
   __typename?: 'MessageEdges';
   cursor: Scalars['String'];
-  node?: Maybe<Message>;
+  node: Message;
 };
 
 export type MessageLeafConnection = {
   __typename?: 'MessageLeafConnection';
-  edges?: Maybe<Array<Maybe<MessageLeafEdges>>>;
+  edges: Array<Maybe<MessageLeafEdges>>;
   pageInfo: PageInfo;
 };
 
@@ -227,7 +227,7 @@ export type MessageLeafEdges = {
   __typename?: 'MessageLeafEdges';
   cursor: Scalars['String'];
   isRoot: Scalars['Boolean'];
-  node?: Maybe<Message>;
+  node: Message;
 };
 
 export type MessagePayload = {
@@ -443,7 +443,7 @@ export type QueryGetKarteArgs = {
 
 
 export type QueryGetMessagesByTreeIdArgs = {
-  input: GetMessagesByTreeIdInput;
+  treeId: Scalars['String'];
 };
 
 
@@ -536,11 +536,6 @@ export type UsersPayload = {
 export type AcceptJoinOrgInput = {
   requestUserId: Scalars['String'];
   requestedOrgId: Scalars['String'];
-};
-
-export type GetMessagesByTreeIdInput = {
-  treeId: Scalars['String'];
-  userId: Scalars['String'];
 };
 
 export type LoginUserInput = {
@@ -712,7 +707,6 @@ export type ResolversTypes = ResolversObject<{
   UserRole: ResolverTypeWrapper<UserRoleModel>;
   UsersPayload: ResolverTypeWrapper<UsersPayload>;
   acceptJoinOrgInput: AcceptJoinOrgInput;
-  getMessagesByTreeIdInput: GetMessagesByTreeIdInput;
   loginUserInput: LoginUserInput;
   postDialogInput: PostDialogInput;
   registerUserInput: RegisterUserInput;
@@ -786,7 +780,6 @@ export type ResolversParentTypes = ResolversObject<{
   UserRole: UserRoleModel;
   UsersPayload: UsersPayload;
   acceptJoinOrgInput: AcceptJoinOrgInput;
-  getMessagesByTreeIdInput: GetMessagesByTreeIdInput;
   loginUserInput: LoginUserInput;
   postDialogInput: PostDialogInput;
   registerUserInput: RegisterUserInput;
@@ -842,14 +835,14 @@ export type DialogResolvers<ContextType = any, ParentType extends ResolversParen
 }>;
 
 export type DialogConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['DialogConnection'] = ResolversParentTypes['DialogConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['DialogEdges']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['DialogEdges']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type DialogEdgesResolvers<ContextType = any, ParentType extends ResolversParentTypes['DialogEdges'] = ResolversParentTypes['DialogEdges']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['Dialog']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Dialog'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -866,7 +859,7 @@ export type ErrorsResolvers<ContextType = any, ParentType extends ResolversParen
 }>;
 
 export type FellowConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['FellowConnection'] = ResolversParentTypes['FellowConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['FellowEdge']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['FellowEdge']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -874,7 +867,7 @@ export type FellowConnectionResolvers<ContextType = any, ParentType extends Reso
 export type FellowEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['FellowEdge'] = ResolversParentTypes['FellowEdge']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isBaseAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -905,19 +898,19 @@ export interface InquiryCategoryScalarConfig extends GraphQLScalarTypeConfig<Res
 }
 
 export type InquiryConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryConnection'] = ResolversParentTypes['InquiryConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['InquiryEdges']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['InquiryEdges']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InquiryEdgesResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryEdges'] = ResolversParentTypes['InquiryEdges']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['Inquiry']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Inquiry'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InquiryLeafConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryLeafConnection'] = ResolversParentTypes['InquiryLeafConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['InquiryLeafEdges']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['InquiryLeafEdges']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -925,7 +918,7 @@ export type InquiryLeafConnectionResolvers<ContextType = any, ParentType extends
 export type InquiryLeafEdgesResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryLeafEdges'] = ResolversParentTypes['InquiryLeafEdges']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isRoot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['Inquiry']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Inquiry'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -963,7 +956,7 @@ export type KartePayloadResolvers<ContextType = any, ParentType extends Resolver
 }>;
 
 export type MemberConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberConnection'] = ResolversParentTypes['MemberConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['MemberEdges']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['MemberEdges']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -971,7 +964,7 @@ export type MemberConnectionResolvers<ContextType = any, ParentType extends Reso
 export type MemberEdgesResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberEdges'] = ResolversParentTypes['MemberEdges']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -986,19 +979,19 @@ export type MessageResolvers<ContextType = any, ParentType extends ResolversPare
 }>;
 
 export type MessageConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageConnection'] = ResolversParentTypes['MessageConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['MessageEdges']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['MessageEdges']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MessageEdgesResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageEdges'] = ResolversParentTypes['MessageEdges']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['Message']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Message'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MessageLeafConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageLeafConnection'] = ResolversParentTypes['MessageLeafConnection']> = ResolversObject<{
-  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['MessageLeafEdges']>>>, ParentType, ContextType>;
+  edges?: Resolver<Array<Maybe<ResolversTypes['MessageLeafEdges']>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1006,7 +999,7 @@ export type MessageLeafConnectionResolvers<ContextType = any, ParentType extends
 export type MessageLeafEdgesResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageLeafEdges'] = ResolversParentTypes['MessageLeafEdges']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isRoot?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['Message']>, ParentType, ContextType>;
+  node?: Resolver<ResolversTypes['Message'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1112,7 +1105,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
   getKarte?: Resolver<Maybe<ResolversTypes['KartePayload']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
   getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesPayload']>, ParentType, ContextType>;
-  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'input'>>;
+  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
   getOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
   getOrgs?: Resolver<Maybe<ResolversTypes['OrgsPayload']>, ParentType, ContextType>;
   getOrgsInfoByMemberCookie?: Resolver<Maybe<ResolversTypes['OrgsPayload']>, ParentType, ContextType>;
