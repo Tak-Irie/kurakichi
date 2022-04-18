@@ -1,32 +1,48 @@
 import { FC } from 'react';
 
-import { GridTemplate, GridItem, TextLabel, TableOrgMember, TableInquiry } from '..';
-import { InquiryStatus, Org } from '../../../graphql/generated/graphql';
-import { InquiryInfiniteTableWithStatus } from '../../container';
-import { TextSmall } from '../atoms';
+import { Inquiry, Org as GqlOrg, User } from '../../../graphql';
+import { FAIL_TO_FETCH } from '../../../util/Constants';
+// import { InquiryInfiniteTableWithStatus } from '../../container';
+import { GridItem, GridTemplate, TextLabel, TextSmall } from '../atoms';
+import { TableInquiry, TableOrgMember } from '../molecules';
 
 type OrgMyPageProps = {
-  org: Org;
+  org: GqlOrg;
 };
 
 export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
-  const { id, email, phoneNumber, location, homePage, description, members, inquiries } = props.org;
-  // console.log('inquiries on orgMy:', inquiries);
-  const unreadInq = inquiries.filter((inq) => inq.inquiryStatus === 'UNREAD');
+  const {
+    id,
+    email,
+    phoneNumber,
+    address,
+    homePage,
+    description,
+    members,
+    inquiries,
+  } = props.org;
+
+  let unreadInq: Inquiry[] = [];
+  let _members: User[] = [];
+
+  if (inquiries?.edges) {
+    const _inq = inquiries.edges.map((edge) => {
+      return edge.node;
+    });
+    unreadInq = _inq.filter((inq) => inq.inquiryStatus === 'UNREAD');
+  }
+
+  if (members?.edges) {
+    _members = members.edges.map((edge) => edge.node);
+  }
   // const descById = unreadInq.reverse();
   // const descById = [...inquiries].reverse();
-
   return (
     <>
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="未読お問い合わせ" />
-        {inquiries[0] ? (
-          <InquiryInfiniteTableWithStatus
-            orgId={id}
-            limit={20}
-            status={InquiryStatus['Unread']}
-            initialInquiries={unreadInq}
-          />
+        {unreadInq[0] ? (
+          <TableInquiry orgId={id} inquiries={unreadInq} />
         ) : (
           <TextSmall content="未読お問い合わせはありません" />
         )}
@@ -34,22 +50,22 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="プロフィール" />
         <GridTemplate>
-          <GridItem label="メールアドレス" content={email} />
-          <GridItem label="電話番号" content={phoneNumber} />
-          <GridItem label="所在地" content={location} />
+          <GridItem label="メールアドレス" content={email || FAIL_TO_FETCH} />
+          <GridItem label="電話番号" content={phoneNumber || FAIL_TO_FETCH} />
           <GridItem
-            label="ホームページ"
-            content={homePage === 'UNKNOWN' ? 'ホームページはありません' : homePage}
+            label="所在地"
+            content={address?.address || FAIL_TO_FETCH}
           />
+          <GridItem label="ホームページ" content={homePage || FAIL_TO_FETCH} />
           <GridItem
             label="私達について"
-            content={description === 'UNKNOWN' ? '団体の概要を記入して下さい' : description}
+            content={description || '団体の概要を記入して下さい'}
             colSpan="col-span-2"
           />
         </GridTemplate>
       </div>
       <div className="col-start-3 col-end-10 mt-5">
-        <TableOrgMember members={members} />
+        <TableOrgMember members={_members} />
       </div>
     </>
   );

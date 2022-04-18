@@ -1,3 +1,4 @@
-export * from "./domain";
-export * from "./infra";
-export * from "./usecase";
+export * from './domain';
+export * from './infra';
+export * from './tempRead';
+export * from './usecase';

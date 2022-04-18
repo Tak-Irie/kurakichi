@@ -4,9 +4,9 @@ export type UserReadModel = {
   name: string;
   password: string;
   ssoSub: string;
-  avatar: string;
-  image: string;
-  description: string;
+  avatarUrl: string;
+  heroImageUrl: string;
+  selfIntro: string;
   role: string;
   receivedMessages: Message[];
   sentMessages: Message[];

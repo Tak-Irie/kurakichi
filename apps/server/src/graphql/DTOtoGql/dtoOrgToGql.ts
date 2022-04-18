@@ -1,5 +1,5 @@
-import { DTOOrg } from '@kurakichi/modules';
-import { Address, Org } from '../generated/generatedTypes';
+import { DTOOrg, OrgReadModel } from '@kurakichi/modules';
+import { Address, MemberConnection, Org } from '../generated/generatedTypes';
 import { createGqlConn } from './createConnection';
 
 export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
@@ -8,14 +8,14 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
     adminId,
     name,
     email,
-    avatar,
+    avatarUrl,
     phoneNumber,
     address,
     latitude,
     longitude,
     description,
-    homePage,
-    image,
+    homePageUrl,
+    heroImageUrl,
     inquiries,
     members,
   } = dtoOrg;
@@ -39,9 +39,9 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
     phoneNumber,
     description,
     address: _address,
-    avatarUrl: avatar,
-    heroImageUrl: image,
-    homePage,
+    avatarUrl,
+    heroImageUrl,
+    homePage: homePageUrl,
     inquiries: _inq,
     members: _mem,
   };
@@ -64,6 +64,24 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
 };
 export const dtoOrgsToGql = (dtoOrgs: DTOOrg[]): Org[] => {
   return dtoOrgs.map((org) => dtoOrgToGql(org));
+};
+
+export const readOrgToGql = (readOrg: OrgReadModel): Org => {
+  const { latitude, longitude, address, members, ...rest } = readOrg;
+  const _address = { address, latitude, longitude };
+  const _memConn: MemberConnection = {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges: members.map((mem) => {
+      return { cursor: mem.id, isAdmin: false, node: { ...mem } };
+    }),
+  };
+  members;
+
+  return {
+    address: _address,
+    members: _memConn,
+    ...rest,
+  };
 };
 
 // // TODO:these function is used still impl CQRS

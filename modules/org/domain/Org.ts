@@ -1,6 +1,7 @@
-import { OrgDescription, OrgName } from ".";
-import { Nothing, PropInResult, Result } from "../../shared/core";
+import { OrgDescription, OrgName } from '.';
+import { Nothing, PropInResult, Result } from '../../shared/core';
 import {
+  Address,
   AggregateRoot,
   Email,
   Geocode,
@@ -8,8 +9,7 @@ import {
   PropPrimitives,
   UniqueEntityId,
   ValidURL,
-  Address,
-} from "../../shared/domain";
+} from '../../shared/domain';
 
 export interface OrgProps {
   id: UniqueEntityId;
@@ -21,9 +21,9 @@ export interface OrgProps {
   longitude: Geocode;
   description: OrgDescription | Nothing;
   adminId: UniqueEntityId;
-  avatar: ValidURL | Nothing;
-  image: ValidURL | Nothing;
-  homePage: ValidURL | Nothing;
+  avatarUrl: ValidURL | Nothing;
+  heroImageUrl: ValidURL | Nothing;
+  homePageUrl: ValidURL | Nothing;
   members: UniqueEntityId[];
   inquiries: UniqueEntityId[];
 }
@@ -42,7 +42,7 @@ export type OrgPropInResult = PropInResult<Partial<OrgProps>>;
 
 type OrgPropPrimitives = PropPrimitives<
   OrgProps,
-  "latitude" | "longitude" | "members" | "inquiries"
+  'latitude' | 'longitude' | 'members' | 'inquiries'
 > & {
   latitude: number;
   longitude: number;
@@ -51,26 +51,26 @@ type OrgPropPrimitives = PropPrimitives<
 };
 
 type OrgInitialCreate =
-  | "id"
-  | "name"
-  | "email"
-  | "phoneNumber"
-  | "address"
-  | "latitude"
-  | "longitude"
-  | "adminId";
+  | 'id'
+  | 'name'
+  | 'email'
+  | 'phoneNumber'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
+  | 'adminId';
 type OrgUpdatable =
-  | "name"
-  | "email"
-  | "phoneNumber"
-  | "address"
-  | "latitude"
-  | "longitude"
-  | "description"
-  | "adminId"
-  | "avatar"
-  | "image"
-  | "homePage";
+  | 'name'
+  | 'email'
+  | 'phoneNumber'
+  | 'address'
+  | 'latitude'
+  | 'longitude'
+  | 'description'
+  | 'adminId'
+  | 'avatarUrl'
+  | 'heroImageUrl'
+  | 'homePageUrl';
 
 type OrgValidatorArg = Partial<Pick<OrgPropPrimitives, OrgUpdatable>>;
 
@@ -117,10 +117,10 @@ export class Org extends AggregateRoot<OrgProps> {
       address,
       latitude,
       longitude,
-      avatar: "",
-      description: "",
-      homePage: "",
-      image: "",
+      avatarUrl: '',
+      description: '',
+      homePageUrl: '',
+      heroImageUrl: '',
       inquiries: [],
       members: [adminId],
     });
@@ -147,10 +147,10 @@ export class Org extends AggregateRoot<OrgProps> {
       longitude,
       phoneNumber,
       adminId,
-      description: OrgDescription.create({ content: "UNKNOWN" }).getValue(),
-      avatar: ValidURL.create({ url: "UNKNOWN" }).getValue(),
-      homePage: ValidURL.create({ url: "UNKNOWN" }).getValue(),
-      image: ValidURL.create({ url: "UNKNOWN" }).getValue(),
+      description: OrgDescription.create({ content: 'UNKNOWN' }).getValue(),
+      avatarUrl: ValidURL.create({ url: 'UNKNOWN' }).getValue(),
+      homePageUrl: ValidURL.create({ url: 'UNKNOWN' }).getValue(),
+      heroImageUrl: ValidURL.create({ url: 'UNKNOWN' }).getValue(),
       members: [adminId],
       inquiries: [],
     });
@@ -161,12 +161,12 @@ export class Org extends AggregateRoot<OrgProps> {
   public static restoreFromRepo(storedOrg: OrgPropPrimitives): Org {
     const {
       adminId,
-      avatar,
+      avatarUrl,
       description,
       email,
-      homePage,
+      homePageUrl,
       id,
-      image,
+      heroImageUrl,
       inquiries,
       address,
       latitude,
@@ -177,16 +177,16 @@ export class Org extends AggregateRoot<OrgProps> {
     } = storedOrg;
     const org = new Org({
       adminId: UniqueEntityId.restoreFromRepo({ id: adminId }),
-      avatar: ValidURL.restoreFromRepo(avatar),
+      avatarUrl: ValidURL.restoreFromRepo(avatarUrl),
       email: Email.restoreFromRepo(email),
       description: OrgDescription.restoreFromRepo(description),
-      homePage: ValidURL.restoreFromRepo(homePage),
+      homePageUrl: ValidURL.restoreFromRepo(homePageUrl),
       id: UniqueEntityId.restoreFromRepo({ id }),
-      image: ValidURL.restoreFromRepo(image),
+      heroImageUrl: ValidURL.restoreFromRepo(heroImageUrl),
       inquiries: UniqueEntityId.restoreArrayFromRepo(
         inquiries.map((inq) => {
           return { id: inq };
-        })
+        }),
       ),
       address: Address.restoreFromRepo({ address }),
       latitude: Geocode.restoreFromRepo(latitude),
@@ -194,7 +194,7 @@ export class Org extends AggregateRoot<OrgProps> {
       members: UniqueEntityId.restoreArrayFromRepo(
         members.map((mem) => {
           return { id: mem };
-        })
+        }),
       ),
       name: OrgName.restoreFromRepo(name),
       phoneNumber: PhoneNumber.restoreFromRepo(phoneNumber),
@@ -205,15 +205,15 @@ export class Org extends AggregateRoot<OrgProps> {
 
   public static updateProps(
     currentOrg: Org,
-    newProps: Partial<Pick<OrgProps, OrgUpdatable>>
+    newProps: Partial<Pick<OrgProps, OrgUpdatable>>,
   ): Org {
     const {
       adminId,
-      avatar,
+      avatarUrl,
       description,
       email,
-      homePage,
-      image,
+      homePageUrl,
+      heroImageUrl,
       address,
       latitude,
       longitude,
@@ -224,11 +224,11 @@ export class Org extends AggregateRoot<OrgProps> {
     const {
       phoneNumber: prevPhone,
       name: prevName,
-      avatar: prevAvatar,
+      avatarUrl: prevAvatar,
       description: prevDesc,
       email: prevEmail,
-      homePage: prevHomePage,
-      image: prevImg,
+      homePageUrl: prevHomePage,
+      heroImageUrl: prevImg,
       address: prevAddress,
       latitude: prevLatitude,
       longitude: prevLongitude,
@@ -239,11 +239,11 @@ export class Org extends AggregateRoot<OrgProps> {
     } = currentOrg.getProps();
 
     const updatedOrg = new Org({
-      avatar: avatar ? avatar : prevAvatar,
+      avatarUrl: avatarUrl ? avatarUrl : prevAvatar,
       description: description ? description : prevDesc,
       email: email ? email : prevEmail,
-      homePage: homePage ? homePage : prevHomePage,
-      image: image ? image : prevImg,
+      homePageUrl: homePageUrl ? homePageUrl : prevHomePage,
+      heroImageUrl: heroImageUrl ? heroImageUrl : prevImg,
       address: address ? address : prevAddress,
       latitude: latitude ? latitude : prevLatitude,
       longitude: longitude ? longitude : prevLongitude,
@@ -267,12 +267,12 @@ export class Org extends AggregateRoot<OrgProps> {
       adminId,
       description,
       email,
-      homePage,
+      homePageUrl,
       address,
       name,
       phoneNumber,
-      avatar,
-      image,
+      avatarUrl,
+      heroImageUrl,
     } = props;
 
     // console.log('adminId:', adminId);
@@ -291,8 +291,8 @@ export class Org extends AggregateRoot<OrgProps> {
     if (email) {
       results.email = Email.create({ email });
     }
-    if (homePage) {
-      results.homePage = ValidURL.create({ url: homePage });
+    if (homePageUrl) {
+      results.homePageUrl = ValidURL.create({ url: homePageUrl });
     }
     if (address) {
       results.address = Address.create({ address });
@@ -303,11 +303,11 @@ export class Org extends AggregateRoot<OrgProps> {
     if (phoneNumber) {
       results.phoneNumber = PhoneNumber.create({ phoneNumber });
     }
-    if (avatar) {
-      results.avatar = ValidURL.create({ url: avatar });
+    if (avatarUrl) {
+      results.avatarUrl = ValidURL.create({ url: avatarUrl });
     }
-    if (image) {
-      results.image = ValidURL.create({ url: image });
+    if (heroImageUrl) {
+      results.heroImageUrl = ValidURL.create({ url: heroImageUrl });
     }
 
     // console.log('validatorResult:', results);

@@ -10,6 +10,7 @@ import {
   TextSmall,
 } from '..';
 import { Base, Inquiry, Message, Org, User } from '../../../graphql';
+import { FAIL_TO_FETCH } from '../../../util/Constants';
 
 type TableProps = {
   tableLabel?: string;
@@ -33,7 +34,7 @@ type TableMessageProps = TableProps & {
 };
 
 type TableInquiryProps = TableProps & {
-  inquiries: Inquiry[];
+  inquiries?: Inquiry[];
   orgId: string;
 };
 
@@ -49,9 +50,9 @@ export const TableOrg: FC<TableOrgProps> = ({
         orgs.map((org) => (
           <CardWithPick
             key={org.id}
-            image={org.avatar === 'UNKNOWN' ? '/logo_temp.png' : org.avatar}
-            title={org.orgName}
-            content={org.description}
+            image={org.avatarUrl || '/logo_temp.png'}
+            title={org.name || FAIL_TO_FETCH}
+            content={org.description || FAIL_TO_FETCH}
             imageAlt="団体アバター"
             linkUrl="/org/[id]/"
             linkAs={`/org/${org.id}`}
@@ -76,11 +77,9 @@ export const TableOrgMember: FC<TableOrgMemberProps> = ({
         members.map((member) => (
           <div key={member.id}>
             <CardWithPick
-              image={
-                member.avatar === 'UNKNOWN' ? '/asian_man1.jpg' : member.avatar
-              }
-              title={member.userName}
-              content={member.description}
+              image={member.avatarUrl || '/asian_man1.jpg'}
+              title={member.name || FAIL_TO_FETCH}
+              content={member.selfIntro || FAIL_TO_FETCH}
               imageAlt="ユーザーアバター"
               linkUrl="/user/[id]"
               linkAs={`/user/${member.id}`}
@@ -93,7 +92,7 @@ export const TableOrgMember: FC<TableOrgMemberProps> = ({
     </>
   );
 };
-export const TableSecureBase: FC<TableSecureBaseProps> = ({
+export const TableBase: FC<TableSecureBaseProps> = ({
   bases,
   tableLabel = '所属ベース',
   textOfNotExist = 'ベースに所属していません',
@@ -105,13 +104,9 @@ export const TableSecureBase: FC<TableSecureBaseProps> = ({
         bases.map((base) => (
           <CardWithPick
             key={base.id}
-            image={
-              base.baseOwner.avatar === 'UNKNOWN'
-                ? '/logo_temp.png'
-                : base.baseOwner.avatar
-            }
-            title={base.baseOwner.userName}
-            content={base.baseOwner.userName}
+            image={'/logo_temp.png'}
+            title={FAIL_TO_FETCH}
+            content={FAIL_TO_FETCH}
             imageAlt="ユーザーアバター"
             linkUrl={base.id}
           />
@@ -134,7 +129,7 @@ export const TableMessage: FC<TableMessageProps> = ({
       {messages[0] ? (
         <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
           <div className="grid grid-cols-6 divide-y divide-gray-200">
-            <div className="py-1 pl-4 text-xs font-medium text-left text-gray-500 col-star-1">
+            <div className="col-start-1 py-1 pl-4 text-xs font-medium text-left text-gray-500">
               送信者
             </div>
             <div className="col-auto py-1 text-xs font-medium text-left text-gray-500">
@@ -150,7 +145,7 @@ export const TableMessage: FC<TableMessageProps> = ({
               >
                 <Link
                   href="/user/message/[id]"
-                  as={`/user/message/${message.tree.id}`}
+                  as={`/user/message/${message.id}`}
                   passHref
                 >
                   <a
@@ -162,16 +157,16 @@ export const TableMessage: FC<TableMessageProps> = ({
                 </Link>
                 <div className="flex col-start-1 items-center py-2 pl-2 space-x-1">
                   <AvatarSmall
-                    src={message.sender?.avatar}
+                    src={message.sender?.avatarUrl || ''}
                     alt="ユーザーアバター"
                   />
-                  <TextSmall content={message.sender?.userName} />
+                  <TextSmall content={message.sender?.name || FAIL_TO_FETCH} />
                 </div>
                 <div className="overflow-scroll col-span-4 py-4 mx-1 whitespace-nowrap">
-                  <TextSmall content={message.content} />
+                  <TextSmall content={message.content || FAIL_TO_FETCH} />
                 </div>
                 <div className="col-end-7 py-4 px-1 whitespace-nowrap">
-                  <TextSmall content={message.sentAt} />
+                  <TextSmall content={message.sentAt || FAIL_TO_FETCH} />
                 </div>
               </div>
             ))}
@@ -193,7 +188,7 @@ export const TableInquiry: FC<TableInquiryProps> = ({
   const dataCss = 'py-1 flex h-auto items-center justify-center';
   return (
     <div>
-      {inquiries[0] ? (
+      {inquiries ? (
         <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
           <div className="grid grid-cols-8 divide-y divide-gray-200">
             <div className={labelCss}>送信者</div>
@@ -208,7 +203,7 @@ export const TableInquiry: FC<TableInquiryProps> = ({
               >
                 <Link
                   href="/org/myorg/[id]/inquiry/[inqtid]"
-                  as={`/org/myorg/${orgId}/inquiry/${inquiry.tree.id}`}
+                  as={`/org/myorg/${orgId}/inquiry/${inquiry.id}`}
                   passHref
                 >
                   <a
@@ -220,14 +215,14 @@ export const TableInquiry: FC<TableInquiryProps> = ({
                 </Link>
                 <div className={`${dataCss} space-x-2`}>
                   <AvatarSmall
-                    src={inquiry.sender?.avatar}
+                    src={inquiry.sender?.avatarUrl || FAIL_TO_FETCH}
                     alt="ユーザーアバター"
                   />
-                  <TextSmall content={inquiry.sender?.userName} />
+                  <TextSmall content={inquiry.sender?.name || FAIL_TO_FETCH} />
                 </div>
                 <div className={`${dataCss} col-span-4`}>
                   <div className="px-2 w-full">
-                    <TextSmall content={inquiry.content} />
+                    <TextSmall content={inquiry.content || FAIL_TO_FETCH} />
                   </div>
                 </div>
                 <div className={dataCss}>
@@ -248,7 +243,7 @@ export const TableInquiry: FC<TableInquiryProps> = ({
                 </div>
                 <div className={dataCss}>
                   <div className="px-2 w-full">
-                    <TextSmall content={inquiry.sentAt} />
+                    <TextSmall content={inquiry.sentAt || FAIL_TO_FETCH} />
                   </div>
                 </div>
               </div>

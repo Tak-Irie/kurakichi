@@ -1,8 +1,8 @@
 import {
+  getOrgPrivateInfoByCookieAndId,
+  getOrgPublicInfoById,
   useAcceptJoinOrgUsecase,
-  useGetOrgsByMemberIdUsecase,
   useGetOrgsUsecase,
-  useGetOrgUsecase,
   useRegisterOrgUsecase,
   useRequestJoinOrgUsecase,
   useUpdateOrgUsecase,
@@ -12,21 +12,31 @@ import {
   returnErrorToGQL,
   returnNotLoggedIn,
 } from '../../util/FunctionsForGqlResolver';
-import { dtoOrgsToGql, dtoOrgToGql } from '../DTOtoGql';
+import {
+  dtoOrgsToGql,
+  dtoOrgToGql,
+  readInquiresToConn,
+  readOrgToGql,
+} from '../DTOtoGql';
 import { Resolvers } from '../generated/generatedTypes';
 
 export const OrgResolver: Resolvers<ApolloContext> = {
   Query: {
     getOrg: async (_, { id }) => {
-      const usecaseResult = await useGetOrgUsecase.execute({ orgId: id });
-      if (usecaseResult.isLeft())
-        return returnErrorToGQL(usecaseResult.value.getErrorValue());
+      // const usecaseResult = await useGetOrgUsecase.execute({ orgId: id });
+      // if (usecaseResult.isLeft())
+      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
+      // const org = dtoOrgToGql(usecaseResult.value.getValue());
 
-      const org = dtoOrgToGql(usecaseResult.value.getValue());
+      // temp
+      const readResult = await getOrgPublicInfoById(id);
+      if (readResult === false) return returnErrorToGQL('wip');
+      const org = readOrgToGql(readResult);
 
       return { org };
     },
     getOrgs: async () => {
+      // console.log('catch:');
       const usecaseResult = await useGetOrgsUsecase.execute();
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
@@ -34,16 +44,22 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       const orgs = dtoOrgsToGql(usecaseResult.value.getValue());
       return { orgs };
     },
-    getOrgsInfoByMemberCookie: async (_, __, { idInCookie }) => {
+    getOrgInfoByMemberCookieAndId: async (_, { orgId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
-      const usecaseResult = await useGetOrgsByMemberIdUsecase.execute({
-        memberId: idInCookie,
-      });
-      if (usecaseResult.isLeft())
-        return returnErrorToGQL(usecaseResult.value.getErrorValue());
-      const orgs = dtoOrgsToGql(usecaseResult.value.getValue());
+      // const usecaseResult = await useGetOrgsByMemberIdUsecase.execute({
+      //   memberId: idInCookie,
+      // });
+      // if (usecaseResult.isLeft())
+      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
+      // const orgs = dtoOrgsToGql(usecaseResult.value.getValue());
 
-      return { orgs };
+      const result = await getOrgPrivateInfoByCookieAndId(orgId, idInCookie);
+      if (result === false) return returnErrorToGQL('wip');
+      const { inquiries, ...rest } = result;
+      const _org = readOrgToGql(rest);
+      const _inq = readInquiresToConn(inquiries);
+
+      return { org: { inquiries: _inq, ..._org } };
     },
   },
   Mutation: {
@@ -107,10 +123,10 @@ export const OrgResolver: Resolvers<ApolloContext> = {
         email: email || '',
         description: description || '',
         address: address || '',
-        homePage: homePage || '',
+        homePageUrl: homePage || '',
         phoneNumber: phoneNumber || '',
-        avatar: '',
-        image: '',
+        avatarUrl: '',
+        heroImageUrl: '',
         adminId: '',
       });
       if (usecaseResult.isLeft())

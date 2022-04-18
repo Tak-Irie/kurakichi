@@ -5,4 +5,6 @@ const TOKYO_PUBLIC_OFFICE = {
 
 const DEFAULT_MAP_PIN = TOKYO_PUBLIC_OFFICE;
 
-export { DEFAULT_MAP_PIN };
+const FAIL_TO_FETCH = 'データの取得に失敗しました';
+
+export { DEFAULT_MAP_PIN, FAIL_TO_FETCH };

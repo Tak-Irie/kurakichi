@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { PostcodeAPI } from '@kurakichi/modules/shared/infra';
@@ -18,7 +18,7 @@ type OrgRegisterInput = {
   orgPhoneNumber: string;
 };
 
-export const OrgRegisterForm: VFC = () => {
+export const OrgRegisterForm: FC = () => {
   const [isPostcode, setIsPostcode] = useState('');
   const [isLocation, setIsLocation] = useState('');
   const [orgRegister, { data, loading, error }] = useRegisterOrgMutation();

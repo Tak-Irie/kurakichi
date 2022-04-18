@@ -15,8 +15,8 @@ type Dialog implements Node {
 }
 
 type DialogConnection {
-  edges: [DialogEdges]!
-  pageInfo: PageInfo!
+  edges: [DialogEdges!]
+  pageInfo: PageInfo
 }
 
 type DialogEdges {
@@ -25,14 +25,14 @@ type DialogEdges {
 }
 
 type FellowConnection {
-  edges: [FellowEdge]!
-  pageInfo: PageInfo!
+  edges: [FellowEdge!]
+  pageInfo: PageInfo
 }
 
 type FellowEdge {
   cursor: String!
   node: User!
-  isBaseAdmin: Boolean!
+  isBaseAdmin: Boolean
 }
 
 type Query {

@@ -40,11 +40,11 @@ export class UserMapper {
 
   public static toStore(user: User): StoredUser {
     const {
-      avatar,
-      description,
+      avatarUrl,
+      selfIntro,
       email,
       id,
-      image,
+      heroImageUrl,
       password,
       role,
       ssoSub,
@@ -56,9 +56,9 @@ export class UserMapper {
       email: email.getValue(),
       password: password.getValue(),
       ssoSub,
-      avatar,
-      image,
-      description,
+      avatarUrl,
+      heroImageUrl,
+      selfIntro,
       role,
     };
   }

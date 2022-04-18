@@ -14,7 +14,7 @@ import { isLoggedIn } from '../../../util';
 const MessageBoxPage: NextPage = () => {
   const { cachedUser, loadingCache } = isLoggedIn();
 
-  const { data, loading, error } = useGetMessagesByCookieQuery();
+  const { data, loading, error } = useGetMessagesByCookieQuery({ ssr: false });
   // console.log('user:', userData.getUserByCookie.user);
   if (loading && loadingCache) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;

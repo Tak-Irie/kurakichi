@@ -1,6 +1,6 @@
-import { Organization as StoredOrg } from "@kurakichi/prisma/src";
-import { getIdFromObjectInArray } from "../../shared/util";
-import { Org } from "../domain";
+import { Organization as StoredOrg } from '@kurakichi/prisma/src';
+import { getIdFromObjectInArray } from '../../shared/util';
+import { Org } from '../domain';
 
 type StoredOrgRelation = StoredOrg & {
   members?: { id: string }[];
@@ -28,11 +28,11 @@ export class OrgMapper {
     const {
       id,
       adminId,
-      avatar,
+      avatarUrl,
       description,
       email,
-      homePage,
-      image,
+      homePageUrl,
+      heroImageUrl,
       address,
       latitude,
       longitude,
@@ -50,10 +50,10 @@ export class OrgMapper {
       longitude: longitude.getValue(),
       name: name.getValue(),
       phoneNumber: phoneNumber.getValue(),
-      avatar: avatar ? avatar.getURL() : "",
-      description: description ? description.getContent() : "",
-      homePage: homePage ? homePage.getURL() : "",
-      image: image ? image.getURL() : "",
+      avatarUrl: avatarUrl ? avatarUrl.getURL() : '',
+      description: description ? description.getContent() : '',
+      homePageUrl: homePageUrl ? homePageUrl.getURL() : '',
+      heroImageUrl: heroImageUrl ? heroImageUrl.getURL() : '',
     };
   }
 }

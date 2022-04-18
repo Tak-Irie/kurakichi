@@ -1,13 +1,13 @@
-import { User } from "../domain";
+import { User } from '../domain';
 
 export type DTOUser = {
   id: string;
   email: string;
   userName: string;
-  avatar: string;
-  description: string;
-  image: string;
-  role: "VISITOR" | "EXPERT" | "CLIENT";
+  avatarUrl: string;
+  selfIntro: string;
+  heroImageUrl: string;
+  role: 'VISITOR' | 'EXPERT' | 'CLIENT';
   messages: string[];
   belongOrgs: string[];
   belongBases: string[];
@@ -18,11 +18,11 @@ export const createDTOUserFromDomain = (user: User): DTOUser => {
     id,
     email,
     userName,
-    avatar,
+    avatarUrl,
     belongOrgs,
     belongBases,
-    description,
-    image,
+    selfIntro,
+    heroImageUrl,
     messages,
     role,
   } = user.getProps();
@@ -30,9 +30,9 @@ export const createDTOUserFromDomain = (user: User): DTOUser => {
     id: id.getId(),
     email: email.getValue(),
     userName: userName.getValue(),
-    description: description,
-    avatar: avatar,
-    image: image,
+    selfIntro: selfIntro,
+    avatarUrl,
+    heroImageUrl: heroImageUrl,
     role: role,
     messages: messages.map((message) => message.getId()),
     belongOrgs: belongOrgs.map((org) => org.getId()),

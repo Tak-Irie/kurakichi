@@ -2,6 +2,7 @@ import { PrismaClient } from '@kurakichi/prisma/src';
 import { UniqueEntityId } from '../../shared/domain';
 import { IOrgRepo, Org } from '../domain';
 import { OrgName } from '../domain/OrgName';
+import { OrgReadModel } from '../tempRead/OrgReadModel';
 import { OrgMapper } from './OrgMapper';
 
 export class OrgRepo implements IOrgRepo {
@@ -49,12 +50,15 @@ export class OrgRepo implements IOrgRepo {
   }
 
   async getOrgs(): Promise<Org[]> {
+    console.log('catch:');
     const dbOrgs = await this.prisma.organization.findMany({
       include: {
         members: { select: { id: true } },
         inquiries: { select: { id: true } },
       },
     });
+    // console.log('dbOrgs:', dbOrgs);
+
     // console.log('repoOrgs:', orgs);
 
     const domainOrgs = dbOrgs.map((org) => OrgMapper.ToDomain(org));
@@ -144,5 +148,25 @@ export class OrgRepo implements IOrgRepo {
       console.error(err);
       throw Error('データベースエラー');
     }
+  }
+
+  async getOrgPublicInfoTemp(orgId: string): Promise<OrgReadModel | false> {
+    const data = await this.prisma.organization.findUnique({
+      where: { id: orgId },
+      include: { members: true },
+    });
+    if (data === null) return false;
+    return data;
+  }
+  async getOrgPrivateInfoTemp(orgId: string, memberId: string) {
+    const data = await this.prisma.organization.findFirst({
+      where: { id: orgId, members: { some: { id: memberId } } },
+      include: {
+        inquiries: { include: { sender: true, receiver: true } },
+        members: true,
+      },
+    });
+    if (!data) return false;
+    return data;
   }
 }

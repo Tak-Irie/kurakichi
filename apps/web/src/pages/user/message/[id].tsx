@@ -23,6 +23,7 @@ const MessageTreePage: NextPage = () => {
 
   const { data, loading, error } = useGetMessagesByTreeIdQuery({
     variables: { treeId: messageTreeId },
+    ssr: false,
   });
 
   // console.log('user:', userData.getUserByCookie.user);
@@ -35,11 +36,10 @@ const MessageTreePage: NextPage = () => {
     const _tree = data.getMessagesByTreeId.messageTree;
 
     const _messages: any[] = [];
-    if (_tree.leaves && _tree.leaves.edges.length !== 0) {
-      _messages.concat(_tree.leaves.edges.map((arr) => arr?.node || ''));
+    if (_tree.leaves && _tree.leaves?.edges?.length !== 0) {
+      _messages.concat(_tree.leaves?.edges?.map((arr) => arr.node || ''));
     }
 
-    _tree.leaves?.edges.map((edge) => edge?.node);
     return (
       <UserTemplate
         avatar={cachedUser.avatarUrl || ''}

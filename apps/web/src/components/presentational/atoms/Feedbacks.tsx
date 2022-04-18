@@ -1,9 +1,10 @@
 import { ExclamationIcon } from '@heroicons/react/outline';
-import { FC, ReactElement } from 'react';
+import { FC, ReactChild, ReactElement } from 'react';
 
 type FeedbackProps = {
   label: string;
   color: string;
+  children: ReactChild;
   icon?: ReactElement;
 };
 
@@ -28,7 +29,7 @@ export const Feedback: FC<FeedbackProps> = ({
   );
 };
 
-export const FeedbackCaution: FC = (props) => {
+export const FeedbackCaution: FC<Pick<FeedbackProps, 'children'>> = (props) => {
   return (
     <Feedback label="Caution" color="yellow" icon={<ExclamationIcon />}>
       {props.children}

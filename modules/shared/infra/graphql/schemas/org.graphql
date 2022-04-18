@@ -19,19 +19,19 @@ type Address {
 }
 
 type MemberConnection {
-  edges: [MemberEdges]!
-  pageInfo: PageInfo!
+  edges: [MemberEdges!]
+  pageInfo: PageInfo
 }
 
 type MemberEdges {
   cursor: String!
   node: User!
-  isAdmin: Boolean!
+  isAdmin: Boolean
 }
 
 type InquiryConnection {
-  edges: [InquiryEdges]!
-  pageInfo: PageInfo!
+  edges: [InquiryEdges!]
+  pageInfo: PageInfo
 }
 
 type InquiryEdges {
@@ -43,7 +43,8 @@ type Inquiry implements Node {
   id: ID!
   content: String
   sender: User
-  receiver: Org
+  replier: User
+  receivedOrg: Org
   sentAt: String
   category: InquiryCategory
   inquiryStatus: InquiryStatus
@@ -66,19 +67,19 @@ type InquiryTree implements Node {
 
 type InquiryLeafConnection {
   edges: [InquiryLeafEdges]!
-  pageInfo: PageInfo!
+  pageInfo: PageInfo
 }
 
 type InquiryLeafEdges {
   cursor: String!
   node: Inquiry!
-  isRoot: Boolean!
+  isRoot: Boolean
 }
 
 type Query {
   getOrg(id: String!): OrgPayload
   getOrgs: OrgsPayload
-  getOrgsInfoByMemberCookie: OrgsPayload
+  getOrgInfoByMemberCookieAndId(orgId: String!): OrgPayload
   getInquiry(inquiryId: String!): InquiryPayload
   getInquiriesByOrgId(orgId: String!): InquiriesPayload
   getInquiriesByTreeId(treeId: String!): InquiryTreePayload

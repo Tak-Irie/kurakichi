@@ -15,8 +15,8 @@ VISITOR | CLIENT | EXPERT
 scalar UserRole
 
 type MessageConnection {
-  edges: [MessageEdges]!
-  pageInfo: PageInfo!
+  edges: [MessageEdges!]
+  pageInfo: PageInfo
 }
 
 type MessageEdges {
@@ -44,14 +44,14 @@ type MessageTree implements Node {
 }
 
 type MessageLeafConnection {
-  edges: [MessageLeafEdges]!
-  pageInfo: PageInfo!
+  edges: [MessageLeafEdges!]
+  pageInfo: PageInfo
 }
 
 type MessageLeafEdges {
   cursor: String!
   node: Message!
-  isRoot: Boolean!
+  isRoot: Boolean
 }
 
 type Query {

@@ -1,14 +1,14 @@
-import { Either, left, Result, right } from "../../../shared/core";
-import { UniqueEntityId } from "../../../shared/domain";
+import { Either, left, Result, right } from '../../../shared/core';
+import { UniqueEntityId } from '../../../shared/domain';
 import {
   InvalidInputValueError,
   IUsecase,
   StoreConnectionError,
   UnexpectedError,
-} from "../../../shared/usecase";
-import { User, UserEmail, UserName, IUserRepository } from "../../domain";
+} from '../../../shared/usecase';
+import { IUserRepository, User, UserEmail, UserName } from '../../domain';
 
-import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
+import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 
 type SsoUserArgs = {
   email: string;
@@ -37,7 +37,7 @@ export class SsoUserUsecase
       });
 
       const usernameOrError = UserName.create({
-        userName: arg.email.split("@")[0],
+        userName: arg.email.split('@')[0],
       });
 
       const verifiedResult = Result.verifyResults<UserTypes>([
@@ -48,7 +48,7 @@ export class SsoUserUsecase
       if (verifiedResult[0].isFailure) {
         const message = verifiedResult.map((result) => result.getErrorValue());
 
-        return left(new InvalidInputValueError(message, ""));
+        return left(new InvalidInputValueError(message, ''));
       }
 
       const email = emailOrError.getValue();
@@ -66,21 +66,21 @@ export class SsoUserUsecase
         email,
         userName,
         ssoSub: arg.ssoSub,
-        avatar: arg.avatar ? arg.avatar : "",
+        avatarUrl: arg.avatar ? arg.avatar : '',
       });
       // console.log('ssoUser:', ssoUser);
 
       const dbResult = await this.userRepository.registerUser(ssoUser);
 
       if (dbResult === undefined) {
-        return left(new StoreConnectionError(""));
+        return left(new StoreConnectionError(''));
       }
       const dtoUser = createDTOUserFromDomain(dbResult);
 
       return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
-      console.error("err:", err);
-      return left(new UnexpectedError(""));
+      console.error('err:', err);
+      return left(new UnexpectedError(''));
     }
   }
 }

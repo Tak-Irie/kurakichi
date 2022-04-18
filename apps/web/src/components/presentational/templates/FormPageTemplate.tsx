@@ -1,4 +1,4 @@
-import { ReactElement, VFC } from 'react';
+import { FC, ReactElement } from 'react';
 
 import { ImageLogo, TextH2 } from '..';
 
@@ -7,13 +7,20 @@ type FormPageTemplateProps = {
   content: ReactElement;
 };
 
-export const FormPageTemplate: VFC<FormPageTemplateProps> = ({ content, title }) => {
+export const FormPageTemplate: FC<FormPageTemplateProps> = ({
+  content,
+  title,
+}) => {
   return (
     <div className="grid grid-cols-12">
-      <div className="col-start-4 col-end-10 bg-white p-8 shadow my-4">
+      <div className="col-start-4 col-end-10 p-8 my-4 bg-white shadow">
         <div className="grid grid-cols-4">
-          <ImageLogo src="/logo_temp.png" alt="くらきちロゴ" css="bg-yellow-50 rounded-full" />
-          <div className="col-start-2 col-span-2 flex items-center">
+          <ImageLogo
+            src="/logo_temp.png"
+            alt="くらきちロゴ"
+            css="bg-yellow-50 rounded-full"
+          />
+          <div className="flex col-span-2 col-start-2 items-center">
             <TextH2 content={title} />
           </div>
         </div>

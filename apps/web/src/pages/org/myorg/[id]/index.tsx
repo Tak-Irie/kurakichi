@@ -15,47 +15,79 @@ import {
   Tabs,
   TextSmall,
 } from '../../../../components/presentational';
-import { useGetOrgPrivateInfoByIdAndCookieQuery } from '../../../../graphql/generated/graphql';
+import { useGetOrgPrivateInfoByCookieAndIdQuery } from '../../../../graphql';
+import { FAIL_TO_FETCH } from '../../../../util/Constants';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();
+  const orgId = router.query.id as string;
   const [shownTab, setShownTab] = useState(0);
 
-  const { data, loading, error } = useGetOrgPrivateInfoByIdAndCookieQuery({
-    variables: { orgId: router.query.id as string },
+  const { data, loading, error } = useGetOrgPrivateInfoByCookieAndIdQuery({
+    variables: { orgId },
+    fetchPolicy: 'cache-first',
+    ssr: false,
   });
 
   if (loading) return <LoadingSpinner />;
-
   if (error) return <p>{error.message}</p>;
 
-  if (data?.getOrgPrivateInfoByIdAndCookie.error)
-    return <p>{data?.getOrgPrivateInfoByIdAndCookie.error.message}</p>;
+  if (data?.getOrgInfoByMemberCookieAndId?.errors?.applicationError)
+    return (
+      <p>
+        {data?.getOrgInfoByMemberCookieAndId?.errors?.applicationError.message}
+      </p>
+    );
 
-  const { avatar, image, orgName, id } = data?.getOrgPrivateInfoByIdAndCookie.org;
+  const _org = data?.getOrgInfoByMemberCookieAndId?.org;
   return (
     <OrgTemplate
-      avatar={avatar}
-      image={image}
-      orgName={orgName}
+      avatar={_org?.avatarUrl || FAIL_TO_FETCH}
+      image={_org?.heroImageUrl || FAIL_TO_FETCH}
+      orgName={_org?.name || FAIL_TO_FETCH}
       headerButtons={
         <>
-          <Link href="/org/myorg/[id]/setting" as={`/org/myorg/${id}/setting`} passHref>
+          <Link
+            href="/org/myorg/[id]/setting"
+            as={`/org/myorg/${orgId}/setting`}
+            passHref
+          >
             <a href="replace">
-              <ButtonWithIcon type="button" label="団体情報設定" icon={<IconsCog />} />
+              <ButtonWithIcon
+                type="button"
+                label="団体情報設定"
+                icon={<IconsCog />}
+              />
             </a>
           </Link>
-          <Link href="/org/myorg/[id]/inquiry" as={`/org/myorg/${id}/inquiry`} passHref>
+          <Link
+            href="/org/myorg/[id]/inquiry"
+            as={`/org/myorg/${orgId}/inquiry`}
+            passHref
+          >
             <a href="replace">
-              <ButtonWithIcon type="button" label="お問い合わせボックス" icon={<IconsMail />} />
+              <ButtonWithIcon
+                type="button"
+                label="お問い合わせボックス"
+                icon={<IconsMail />}
+              />
             </a>
           </Link>
         </>
       }
-      pageTabs={<Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />}
+      pageTabs={
+        <Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />
+      }
       pageContents={
-        shownTab === 0 ? (
-          <OrgMyPage org={data.getOrgPrivateInfoByIdAndCookie.org} />
+        shownTab === 0 && _org ? (
+          <OrgMyPage
+            org={{
+              members: {
+                edges: _org.members?.edges,
+              },
+              ..._org,
+            }}
+          />
         ) : shownTab === 1 ? (
           <OrgService
             title="事業紹介"

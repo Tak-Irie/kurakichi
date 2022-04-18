@@ -16,6 +16,7 @@ const userMyPage: NextPage = () => {
   // TODO:CQRS
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
+    ssr: false,
   });
 
   if (loading) return <LoadingSpinner />;

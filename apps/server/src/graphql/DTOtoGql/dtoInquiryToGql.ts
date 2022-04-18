@@ -1,4 +1,4 @@
-import { DTOInquiry } from '@kurakichi/modules';
+import { DTOInquiry, InquiryModel } from '@kurakichi/modules';
 import {
   Inquiry,
   InquiryConnection,
@@ -12,7 +12,7 @@ export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): Inquiry => {
   return {
     id,
     content,
-    receiver: { id: receiver },
+    replier: { id: receiver },
     sender: { id: sender },
     sentAt,
     category,
@@ -70,6 +70,27 @@ export const dtoInquiriesToTree = (
       pageInfo: { hasNext: false, hasPrevious: false },
       edges,
     },
+  };
+};
+
+export const readInquiresToConn = (
+  inquiries: InquiryModel[],
+): InquiryConnection => {
+  const edges = inquiries.map((inq) => {
+    const { sender, replier, ...rest } = inq;
+    return {
+      cursor: inq.id,
+      isRoot: false,
+      node: {
+        sender,
+        receiver: replier,
+        ...rest,
+      },
+    };
+  });
+  return {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges,
   };
 };
 

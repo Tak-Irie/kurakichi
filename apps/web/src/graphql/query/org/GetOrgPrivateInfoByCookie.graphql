@@ -1,0 +1,10 @@
+query GetOrgPrivateInfoByCookieAndId($orgId: String!) {
+  getOrgInfoByMemberCookieAndId(orgId: $orgId) {
+    errors {
+      ...Errors
+    }
+    org {
+      ...OrgPrivateInfo
+    }
+  }
+}

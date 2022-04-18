@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 type GridTemplateProps = {
+  children: ReactNode;
   gridConf?: string;
 };
 

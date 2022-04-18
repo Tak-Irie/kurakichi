@@ -1,17 +1,17 @@
-import { UniqueEntityId } from "../../shared/domain";
-import { AggregateRoot } from "../../shared/domain/AggregateRoot";
-import { UserEmail } from "./UserEmail";
-import { UserName } from "./UserName";
-import { UserPassword } from "./UserPassword";
+import { UniqueEntityId } from '../../shared/domain';
+import { AggregateRoot } from '../../shared/domain/AggregateRoot';
+import { UserEmail } from './UserEmail';
+import { UserName } from './UserName';
+import { UserPassword } from './UserPassword';
 
 interface UserProps {
   id: UniqueEntityId;
   userName: UserName;
   email: UserEmail;
-  description: string;
-  avatar: string;
-  image: string;
-  role: "VISITOR" | "EXPERT" | "CLIENT";
+  selfIntro: string;
+  avatarUrl: string;
+  heroImageUrl: string;
+  role: 'VISITOR' | 'EXPERT' | 'CLIENT';
   password: UserPassword;
   ssoSub: string;
   messages: UniqueEntityId[];
@@ -23,19 +23,24 @@ type UserPrimitive = {
   id: string;
   email: string;
   userName: string;
-  avatar: string;
-  description: string;
-  image: string;
+  avatarUrl: string;
+  selfIntro: string;
+  heroImageUrl: string;
   password: string;
   ssoSub: string;
-  role: "VISITOR" | "EXPERT" | "CLIENT";
+  role: 'VISITOR' | 'EXPERT' | 'CLIENT';
   messages: string[];
   belongOrgs: string[];
   belongBases: string[];
 };
 
-type UserInitialRegister = "id" | "userName" | "password" | "email";
-type SSOUserInitialRegister = "id" | "userName" | "email" | "avatar" | "ssoSub";
+type UserInitialRegister = 'id' | 'userName' | 'password' | 'email';
+type SSOUserInitialRegister =
+  | 'id'
+  | 'userName'
+  | 'email'
+  | 'avatarUrl'
+  | 'ssoSub';
 
 export class User extends AggregateRoot<UserProps> {
   private constructor(readonly props: UserProps) {
@@ -66,11 +71,11 @@ export class User extends AggregateRoot<UserProps> {
       email: props.email,
       userName: props.userName,
       password: props.password,
-      ssoSub: "IT_IS_KURAKICHI_ORIGINAL_USER",
-      avatar: "UNKNOWN",
-      description: "UNKNOWN",
-      image: "UNKNOWN",
-      role: "VISITOR",
+      ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
+      avatarUrl: 'UNKNOWN',
+      selfIntro: 'UNKNOWN',
+      heroImageUrl: 'UNKNOWN',
+      role: 'VISITOR',
       belongOrgs: [],
       belongBases: [],
       messages: [],
@@ -80,7 +85,7 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   public static createSsoUser(
-    props: Pick<UserProps, SSOUserInitialRegister>
+    props: Pick<UserProps, SSOUserInitialRegister>,
   ): User {
     const user = new User({
       id: props.id,
@@ -88,10 +93,10 @@ export class User extends AggregateRoot<UserProps> {
       userName: props.userName,
       password: UserPassword.createForSSO(),
       ssoSub: props.ssoSub,
-      avatar: props.avatar || "UNKNOWN",
-      description: "UNKNOWN",
-      image: "UNKNOWN",
-      role: "VISITOR",
+      avatarUrl: props.avatarUrl || 'UNKNOWN',
+      selfIntro: 'UNKNOWN',
+      heroImageUrl: 'UNKNOWN',
+      role: 'VISITOR',
       belongOrgs: [],
       belongBases: [],
       messages: [],
@@ -101,13 +106,13 @@ export class User extends AggregateRoot<UserProps> {
 
   public static restoreFromRepo(storedUser: UserPrimitive): User {
     const {
-      avatar,
+      avatarUrl,
       belongOrgs,
       belongBases,
-      description,
+      selfIntro,
       email,
       id,
-      image,
+      heroImageUrl,
       password,
       messages,
       role,
@@ -116,10 +121,10 @@ export class User extends AggregateRoot<UserProps> {
     } = storedUser;
     const user = new User({
       id: UniqueEntityId.restoreFromRepo({ id }),
-      avatar: avatar,
-      description: description,
+      avatarUrl: avatarUrl,
+      selfIntro: selfIntro,
       email: UserEmail.restoreFromRepo(email),
-      image: image,
+      heroImageUrl: heroImageUrl,
       password: UserPassword.restoreFromRepo(password),
       role: role,
       ssoSub: ssoSub,
@@ -127,17 +132,17 @@ export class User extends AggregateRoot<UserProps> {
       belongOrgs: UniqueEntityId.restoreArrayFromRepo(
         belongOrgs.map((id) => {
           return { id };
-        })
+        }),
       ),
       belongBases: UniqueEntityId.restoreArrayFromRepo(
         belongBases.map((id) => {
           return { id };
-        })
+        }),
       ),
       messages: UniqueEntityId.restoreArrayFromRepo(
         messages.map((id) => {
           return { id };
-        })
+        }),
       ),
     });
     return user;
@@ -155,15 +160,15 @@ export class User extends AggregateRoot<UserProps> {
     this.props.userName = result.getValue();
   }
 
-  public updateDescription(description: string): void {
-    this.props.description = description;
+  public updateDescription(selfIntro: string): void {
+    this.props.selfIntro = selfIntro;
   }
 
-  public updateAvatar(avatar: string): void {
-    this.props.avatar = avatar;
+  public updateAvatar(avatarUrl: string): void {
+    this.props.avatarUrl = avatarUrl;
   }
 
-  public updateImage(image: string): void {
-    this.props.image = image;
+  public updateImage(heroImageUrl: string): void {
+    this.props.heroImageUrl = heroImageUrl;
   }
 }

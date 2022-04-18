@@ -9,13 +9,13 @@ import {
 
 export const dtoUserToGql = (user: DTOUser): User => {
   const {
-    avatar,
+    avatarUrl,
     belongOrgs,
     belongBases,
-    description,
+    selfIntro,
     email,
     id,
-    image,
+    heroImageUrl,
     messages,
     role,
     userName,
@@ -32,9 +32,9 @@ export const dtoUserToGql = (user: DTOUser): User => {
     name: userName,
     email,
     role: role,
-    selfIntro: description,
-    avatarUrl: avatar,
-    heroImageUrl: image,
+    selfIntro,
+    avatarUrl,
+    heroImageUrl,
     messages: _messages,
   };
 };
@@ -49,9 +49,9 @@ export const readUserToGql = (user: UserReadModel): User => {
     name,
     email,
     role,
-    avatar,
-    description,
-    image,
+    avatarUrl,
+    selfIntro,
+    heroImageUrl,
     receivedMessages,
     sentMessages,
   } = user;
@@ -79,9 +79,9 @@ export const readUserToGql = (user: UserReadModel): User => {
     name,
     email,
     role: role,
-    selfIntro: description,
-    avatarUrl: avatar,
-    heroImageUrl: image,
+    selfIntro,
+    avatarUrl,
+    heroImageUrl,
     messages: _messages,
   };
 };

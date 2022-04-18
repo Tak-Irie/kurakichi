@@ -13,9 +13,9 @@ model User {
   name              String
   password          String
   ssoSub            String
-  avatar            String
-  image             String
-  description       String
+  avatarUrl            String
+  heroImageUrl             String
+  selfIntro       String
   role              USER_ROLE
   receivedMessages  Message[]      @relation("receive")
   sentMessages      Message[]      @relation("sent")
@@ -37,9 +37,9 @@ model Organization {
   address          String
   latitude         Float
   longitude        Float
-  avatar           String
-  image            String
-  homePage         String
+  avatarUrl           String
+  heroImageUrl            String
+  homePageUrl         String
   adminId          String
   admin            User      @relation("orgAdmin", fields: [adminId], references: [id])
   members          User[]    @relation("orgMember")
@@ -112,7 +112,7 @@ model Karte {
 
 model Article {
   id        String       @id
-  image     String
+  imageUrl     String
   content      String
   orgId     String
   writerOrg Organization @relation("orgArticle", fields: [orgId], references: [id])

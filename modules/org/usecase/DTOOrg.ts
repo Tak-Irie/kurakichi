@@ -1,13 +1,13 @@
-import { Org } from "../domain";
+import { Org } from '../domain';
 
 export type DTOOrg = {
   id: string;
   adminId: string;
-  avatar: string;
+  avatarUrl: string;
   description: string;
   email: string;
-  homePage: string;
-  image: string;
+  homePageUrl: string;
+  heroImageUrl: string;
   inquiries: string[];
   address: string;
   latitude: number;
@@ -26,11 +26,11 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
   const {
     id,
     adminId,
-    avatar,
+    avatarUrl,
     description,
     email,
-    homePage,
-    image,
+    homePageUrl,
+    heroImageUrl,
     inquiries,
     address,
     latitude,
@@ -42,11 +42,11 @@ export const createDTOOrgFromDomain = (org: Org): DTOOrg => {
   return {
     id: id.getId(),
     adminId: adminId.getId(),
-    avatar: avatar ? avatar.getURL() : "",
-    description: description ? description.getContent() : "",
+    avatarUrl: avatarUrl ? avatarUrl.getURL() : '',
+    description: description ? description.getContent() : '',
     email: email.getValue(),
-    homePage: homePage ? homePage.getURL() : "",
-    image: image ? image.getURL() : "",
+    homePageUrl: homePageUrl ? homePageUrl.getURL() : '',
+    heroImageUrl: heroImageUrl ? heroImageUrl.getURL() : '',
     inquiries: inquiries.map((inquiry) => inquiry.getId()),
     address: address.getValue(),
     latitude: latitude.getValue(),

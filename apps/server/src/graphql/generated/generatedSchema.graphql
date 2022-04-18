@@ -37,8 +37,8 @@ type Dialog implements Node {
 }
 
 type DialogConnection {
-  edges: [DialogEdges]!
-  pageInfo: PageInfo!
+  edges: [DialogEdges!]
+  pageInfo: PageInfo
 }
 
 type DialogEdges {
@@ -57,13 +57,13 @@ type Errors {
 }
 
 type FellowConnection {
-  edges: [FellowEdge]!
-  pageInfo: PageInfo!
+  edges: [FellowEdge!]
+  pageInfo: PageInfo
 }
 
 type FellowEdge {
   cursor: String!
-  isBaseAdmin: Boolean!
+  isBaseAdmin: Boolean
   node: User!
 }
 
@@ -81,7 +81,8 @@ type Inquiry implements Node {
   content: String
   id: ID!
   inquiryStatus: InquiryStatus
-  receiver: Org
+  receivedOrg: Org
+  replier: User
   sender: User
   sentAt: String
 }
@@ -90,8 +91,8 @@ type Inquiry implements Node {
 scalar InquiryCategory
 
 type InquiryConnection {
-  edges: [InquiryEdges]!
-  pageInfo: PageInfo!
+  edges: [InquiryEdges!]
+  pageInfo: PageInfo
 }
 
 type InquiryEdges {
@@ -101,12 +102,12 @@ type InquiryEdges {
 
 type InquiryLeafConnection {
   edges: [InquiryLeafEdges]!
-  pageInfo: PageInfo!
+  pageInfo: PageInfo
 }
 
 type InquiryLeafEdges {
   cursor: String!
-  isRoot: Boolean!
+  isRoot: Boolean
   node: Inquiry!
 }
 
@@ -138,13 +139,13 @@ type KartePayload {
 }
 
 type MemberConnection {
-  edges: [MemberEdges]!
-  pageInfo: PageInfo!
+  edges: [MemberEdges!]
+  pageInfo: PageInfo
 }
 
 type MemberEdges {
   cursor: String!
-  isAdmin: Boolean!
+  isAdmin: Boolean
   node: User!
 }
 
@@ -158,8 +159,8 @@ type Message implements Node {
 }
 
 type MessageConnection {
-  edges: [MessageEdges]!
-  pageInfo: PageInfo!
+  edges: [MessageEdges!]
+  pageInfo: PageInfo
 }
 
 type MessageEdges {
@@ -168,13 +169,13 @@ type MessageEdges {
 }
 
 type MessageLeafConnection {
-  edges: [MessageLeafEdges]!
-  pageInfo: PageInfo!
+  edges: [MessageLeafEdges!]
+  pageInfo: PageInfo
 }
 
 type MessageLeafEdges {
   cursor: String!
-  isRoot: Boolean!
+  isRoot: Boolean
   node: Message!
 }
 
@@ -271,8 +272,8 @@ type Query {
   getMessagesByCookie: MessagesPayload
   getMessagesByTreeId(treeId: String!): MessageTreePayload
   getOrg(id: String!): OrgPayload
+  getOrgInfoByMemberCookieAndId(orgId: String!): OrgPayload
   getOrgs: OrgsPayload
-  getOrgsInfoByMemberCookie: OrgsPayload
   getUserByCookie: UserPayload
   getUserById(userId: String!): UserPayload
   getUsers: UsersPayload

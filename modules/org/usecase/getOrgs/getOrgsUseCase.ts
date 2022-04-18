@@ -1,11 +1,11 @@
-import { Either, left, Result, right } from "../../../shared/core";
+import { Either, left, Result, right } from '../../../shared/core';
 import {
   IUsecase,
   StoreConnectionError,
   UnexpectedError,
-} from "../../../shared/usecase";
-import { IOrgRepo } from "../../domain";
-import { createDTOOrgsFromDomain, DTOOrg } from "../DTOOrg";
+} from '../../../shared/usecase';
+import { IOrgRepo } from '../../domain';
+import { createDTOOrgsFromDomain, DTOOrg } from '../DTOOrg';
 // import { SomeError } from './getOrgError';
 
 type GetOrgsResponse = Either<
@@ -22,13 +22,13 @@ export class GetOrgsUsecase
   public async execute(): Promise<GetOrgsResponse> {
     try {
       const dbOrgs = await this.OrgsRepo.getOrgs();
-      // console.log('ucRes:', result);
+      console.log('dbOrgs:', dbOrgs);
 
       const dtoOrgs = createDTOOrgsFromDomain(dbOrgs);
 
       return right(Result.success<DTOOrg[]>(dtoOrgs));
     } catch (err) {
-      return left(new UnexpectedError(""));
+      return left(new UnexpectedError(''));
     }
   }
 }
