@@ -1,9 +1,11 @@
+import idx from 'idx';
 import { useRouter } from 'next/router';
-import { useContext, VFC } from 'react';
+import { FC, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useGetUserMyInfoQuery, useLoginUserMutation } from '../../../graphql';
 
-import { useGetUserByCookieQuery, useLoginUserMutation } from '@next/graphql';
-import { AuthContext, isServer } from '../../../util';
+import { AuthContext } from '../../../util';
+import { FAIL_TO_FETCH } from '../../../util/Constants';
 import { Form, Input, LoadingSpinner } from '../../presentational/atoms';
 import {
   ButtonOrLoading,
@@ -15,13 +17,12 @@ interface UserLoginInput {
   password: string;
 }
 
-export const LoginForm: VFC = () => {
+export const LoginForm: FC = () => {
   const router = useRouter();
   const { setAuthStatus } = useContext(AuthContext);
-  const { data: userData, loading: userLoading } = useGetUserByCookieQuery({
-    skip: isServer(),
-    ssr: false,
+  const { data: userData, loading: userLoading } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
+    ssr: false,
   });
 
   const [loginUser, { data, loading, error }] = useLoginUserMutation();
@@ -31,14 +32,13 @@ export const LoginForm: VFC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<UserLoginInput>({
-    resolver: yupResolver(yupRegisterUserAndLoginSchema),
     mode: 'onBlur',
   });
 
   const onSubmit = async (value: UserLoginInput) => {
     try {
       await loginUser({
-        variables: { ...value },
+        variables: { input: { ...value } },
         fetchPolicy: 'no-cache',
       });
       setAuthStatus(true);
@@ -51,19 +51,20 @@ export const LoginForm: VFC = () => {
     return <p>loading</p>;
   }
 
-  if (userData?.getUserByCookie.user) {
+  if (userData?.getUserByCookie?.user) {
     router.replace('/');
   }
 
-  if (!userLoading && !userData?.getUserByCookie.user) {
+  if (!userLoading && userData?.getUserByCookie?.user) {
+    const _name = idx(userData.getUserByCookie.user, (_) => _.name);
     return (
       <>
         <NotificationSet
-          data={data?.login.user}
-          errData={data?.login.error}
+          data={_name || FAIL_TO_FETCH}
+          errData={data?.loginUser?.errors?.applicationError?.message}
           sysErr={error}
           dataLabel="ログインしました！"
-          errDataLabel={data?.login.error?.message}
+          errDataLabel={'ログインに失敗しました'}
         />
         <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
           <Input<UserLoginInput>

@@ -1,8 +1,7 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useChangeUserPasswordMutation } from '../../../graphql';
 
-import { yupChangePasswordSchema } from '@kurakichi/node-util';
 import { Form, Input } from '../../presentational/atoms';
 import {
   ButtonOrLoading,
@@ -16,19 +15,20 @@ type ChangeUserPasswordInput = {
 
 export const ChangeUserPassword: FC = () => {
   const [changePassword, { data, loading, error }] =
-    useUserChangePasswordMutation();
+    useChangeUserPasswordMutation();
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<ChangeUserPasswordInput>({
-    resolver: yupResolver(yupChangePasswordSchema),
-  });
+  } = useForm<ChangeUserPasswordInput>();
 
   const onSubmit = async (value: ChangeUserPasswordInput) => {
     try {
       await changePassword({
-        variables: { CurrentPass: value.currentPass, NewPass: value.newPass },
+        variables: {
+          input: { oldPassword: value.currentPass, newPassword: value.newPass },
+        },
         fetchPolicy: 'no-cache',
       });
     } catch (err) {

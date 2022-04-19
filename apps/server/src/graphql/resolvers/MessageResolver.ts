@@ -47,7 +47,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
         treeId: treeId,
         messages: usecaseResult.value.getValue(),
       });
-      return { messageTree };
+      return { ...messageTree };
     },
   },
   Mutation: {
@@ -67,7 +67,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const message = dtoMessageToGql(usecaseResult.value.getValue());
-      return { message };
+      return { ...message };
     },
     replyMessage: async (
       _,
@@ -84,7 +84,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const message = dtoMessageToGql(usecaseResult.value.getValue());
-      return { message };
+      return { ...message };
     },
   },
 };

@@ -1,11 +1,11 @@
-import { SyntheticEvent, VFC } from 'react';
+import { FC, SyntheticEvent } from 'react';
 
 type GoogleButtonProps = {
   onClick?: (e: SyntheticEvent) => void | Promise<void>;
 };
 
 // design guide https://developer.yahoo.co.jp/yconnect/loginbuttons.html
-const GoogleButton: VFC<GoogleButtonProps> = ({ onClick }) => {
+const GoogleButton: FC<GoogleButtonProps> = ({ onClick }) => {
   return (
     <button className="google-button" onClick={onClick}>
       <span className="google-icon-wrapper">

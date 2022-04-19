@@ -5,51 +5,51 @@ import {
   NotificationAlert,
   NotificationCaution,
   NotificationSuccess,
-} from '..';
+} from '../atoms';
 
 type NotificationsProps = {
-  data?: string;
-  errData?: string;
-  sysErr?: ApolloError;
-  dataLabel?: string;
-  errDataLabel?: string;
+  succeededContent?: string;
+  errContent?: string;
+  sysErrContent?: ApolloError;
+  succeededLabel?: string;
+  errLabel?: string;
   sysErrLabel?: string;
   showingMS?: number;
 };
 
 /**
- * @desc data, errData, sysErr is used for event trigger.
+ * @desc succeededContent, errContent, sysErrContent is used for event trigger.
  */
 export const NotificationSet: FC<NotificationsProps> = ({
-  data,
-  errData,
-  sysErr,
-  dataLabel = '成功！',
-  errDataLabel = 'エラー！',
+  succeededContent,
+  errContent,
+  sysErrContent,
+  succeededLabel = '成功！',
+  errLabel = 'エラー！',
   sysErrLabel = 'エラー！',
   showingMS,
 }) => {
   return (
     <>
-      {sysErr ? (
+      {sysErrContent ? (
         <NotificationAlert
           showingMS={showingMS}
           label={sysErrLabel}
-          content={sysErr.message}
+          content={sysErrContent.message}
         />
       ) : null}
-      {errData ? (
+      {errContent ? (
         <NotificationCaution
           showingMS={showingMS}
-          label={errDataLabel}
-          content={errData}
+          label={errLabel}
+          content={errContent}
         />
       ) : null}
-      {data ? (
+      {succeededContent ? (
         <NotificationSuccess
           showingMS={showingMS}
-          label={dataLabel}
-          content={data}
+          label={succeededLabel}
+          content={succeededContent}
         />
       ) : null}
     </>

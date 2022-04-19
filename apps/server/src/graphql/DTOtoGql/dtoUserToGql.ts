@@ -28,6 +28,7 @@ export const dtoUserToGql = (user: DTOUser): User => {
   const _messages = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
 
   return {
+    __typename: 'User',
     id,
     name: userName,
     email,
@@ -75,6 +76,7 @@ export const readUserToGql = (user: UserReadModel): User => {
   };
 
   return {
+    __typename: 'User',
     id,
     name,
     email,

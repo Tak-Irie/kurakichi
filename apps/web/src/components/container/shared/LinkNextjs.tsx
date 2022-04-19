@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ReactElement, VFC } from 'react';
+import { FC, ReactElement } from 'react';
 
 type LinkNextjsProps = {
   url: string;
@@ -14,7 +14,7 @@ type LinkNextjsProps = {
 /**
  * props is passed to \<a ...props>{labelOrElement}\</a> except for as and url
  */
-export const LinkNextjs: VFC<LinkNextjsProps> = ({
+export const LinkNextjs: FC<LinkNextjsProps> = ({
   as,
   url,
   labelOrElement,

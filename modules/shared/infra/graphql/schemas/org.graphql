@@ -13,9 +13,9 @@ type Org implements Node {
 }
 
 type Address {
-  address: String
-  latitude: Float
-  longitude: Float
+  address: String!
+  latitude: Float!
+  longitude: Float!
 }
 
 type MemberConnection {
@@ -77,22 +77,32 @@ type InquiryLeafEdges {
 }
 
 type Query {
-  getOrg(id: String!): OrgPayload
-  getOrgs: OrgsPayload
-  getOrgInfoByMemberCookieAndId(orgId: String!): OrgPayload
-  getInquiry(inquiryId: String!): InquiryPayload
-  getInquiriesByOrgId(orgId: String!): InquiriesPayload
-  getInquiriesByTreeId(treeId: String!): InquiryTreePayload
+  getOrg(id: String!): OrgResult
+  getOrgs: OrgsResult
+  getOrgInfoByMemberCookieAndId(orgId: String!): OrgResult
+  getInquiry(inquiryId: String!): InquiryResult
+  getInquiriesByOrgId(orgId: String!): InquiriesResult
+  getInquiriesByTreeId(treeId: String!): InquiryTreeResult
 }
 
 type Mutation {
-  acceptJoinOrg(input: acceptJoinOrgInput!): OrgPayload
-  registerOrg(input: RegisterOrgInput!): OrgPayload
-  updateOrg(input: UpdateOrgInput!): OrgPayload
-  requestJoinOrg(orgId: String!): OrgPayload
-  replyInquiry(input: replyInquiryInput!): InquiryPayload
-  sendInquiry(input: SendInquiryInput!): InquiryPayload
-  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryPayload
+  acceptJoinOrg(input: acceptJoinOrgInput!): OrgResult
+  registerOrg(input: RegisterOrgInput!): OrgResult
+  updateOrg(input: UpdateOrgInput!): OrgResult
+  requestJoinOrg(orgId: String!): OrgResult
+  replyInquiry(input: replyInquiryInput!): InquiryResult
+  sendInquiry(input: SendInquiryInput!): InquiryResult
+  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult
+}
+
+union OrgResult = Org | Errors
+union OrgsResult = Orgs | Errors
+union InquiryResult = Inquiry | Errors
+union InquiriesResult = InquiryConnection | Errors
+union InquiryTreeResult = InquiryTree | Errors
+
+type Orgs {
+  orgs: [Org!]
 }
 
 input UpdateOrgInput {
@@ -121,30 +131,6 @@ input SendInquiryInput {
 input UpdateInquiryStatusInput {
   inquiryId: ID!
   inquiryStatus: InquiryStatus!
-}
-
-type OrgPayload {
-  org: Org
-  errors: Errors
-}
-type OrgsPayload {
-  orgs: [Org]
-  errors: Errors
-}
-
-type InquiryPayload {
-  inquiry: Inquiry
-  errors: Errors
-}
-
-type InquiriesPayload {
-  inquiries: InquiryConnection
-  errors: Errors
-}
-
-type InquiryTreePayload {
-  inquiryTree: InquiryTree
-  errors: Errors
 }
 
 input acceptJoinOrgInput {

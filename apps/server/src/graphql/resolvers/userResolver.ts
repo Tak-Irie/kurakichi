@@ -31,9 +31,7 @@ const UserResolver: Resolvers<ApolloContext> = {
       const res = await getUserMyInfo(idInCookie);
       if (res === false) return returnErrorToGQL('wip');
 
-      const user = readUserToGql(res);
-
-      return { user };
+      return readUserToGql(res);
     },
 
     getUserById: async (_, { userId }) => {
@@ -41,8 +39,7 @@ const UserResolver: Resolvers<ApolloContext> = {
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
-      const user = dtoUserToGql(usecaseResult.value.getValue());
-      return { user };
+      return dtoUserToGql(usecaseResult.value.getValue());
     },
     getUsers: async () => {
       const result = await useGetUsersUsecase.execute();
@@ -65,9 +62,7 @@ const UserResolver: Resolvers<ApolloContext> = {
       // console.log('stoUser:', dtoUser);
       context.req.session.userId = dtoUser.id;
       // console.log('session:', context.req.session.userId);
-      const gqlUser = dtoUserToGql(dtoUser);
-
-      return { user: gqlUser };
+      return dtoUserToGql(dtoUser);
     },
     loginUser: async (_, { input }, context) => {
       // console.log('arg:', args);
@@ -75,9 +70,9 @@ const UserResolver: Resolvers<ApolloContext> = {
       if (useCaseResult.isLeft())
         return returnErrorToGQL(useCaseResult.value.getErrorValue());
       const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
-      // console.log('gqluser:', gqlUser);
       context.req.session.userId = gqlUser.id;
-      return { user: gqlUser };
+      // console.log('gqluser:', gqlUser);
+      return { ...gqlUser };
     },
     logoutUser: async (_, __, { idInCookie, req, res }) => {
       if (idInCookie === undefined)
@@ -89,41 +84,37 @@ const UserResolver: Resolvers<ApolloContext> = {
         userId: idInCookie,
       });
       if (useCaseResult.isLeft())
-        return {
-          result: false,
-          message: useCaseResult.value.getErrorValue(),
-        };
+        return returnErrorToGQL(useCaseResult.value.getErrorValue());
+
       // TODO::transplant this process to auth service
       req.session.destroy((err) => {
         console.log('err:', err);
       });
       res.clearCookie(COOKIE_NAME);
-      return { result: true, message: 'ログアウトしました' };
+      return { succeeded: 'ログアウトしました' };
     },
     deleteUser: async (_, __, { idInCookie, req, res }) => {
       // TODO:set up logger sentry or winston
       if (idInCookie === undefined)
         return { result: false, ...returnErrorToGQL('ログインしていません') };
       const result = await useDeleteUserUsecase.execute({ userId: idInCookie });
-      if (result.isLeft())
-        return {
-          result: false,
-          ...returnErrorToGQL(result.value.getErrorValue()),
-        };
-      req.session.destroy((err) => {
-        console.log('err:', err);
-      });
+      if (result.isLeft()) {
+        req.session.destroy((err) => {
+          console.log('err:', err);
+        });
+        return returnErrorToGQL(result.value.getErrorValue());
+      }
+
       res.clearCookie(COOKIE_NAME);
       return {
-        result: true,
-        message: 'アカウントの削除に成功しました',
+        succeeded: 'アカウントの削除に成功しました',
       };
     },
     forgetPassword: async (_, { email }) => {
       const result = await useForgotPasswordUsecase.execute(email);
       if (result.isLeft())
-        return { result: false, message: result.value.getErrorValue() };
-      return { result: true, message: 'パスワード再登録メールを送信しました' };
+        return returnErrorToGQL(result.value.getErrorValue());
+      return { succeeded: 'パスワード再登録メールを送信しました' };
     },
     updateUser: async (_, { input }, { idInCookie }) => {
       if (idInCookie === undefined) {
@@ -143,9 +134,7 @@ const UserResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(useCaseResult.value.getErrorValue());
 
       const dtoUser = useCaseResult.value.getValue();
-      const gqlUser = dtoUserToGql(dtoUser);
-
-      return { user: gqlUser };
+      return dtoUserToGql(dtoUser);
     },
     // replyMessage:async () => {},
     // sendMessage: async() => {},

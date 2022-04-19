@@ -1,14 +1,10 @@
 mutation UpdateUser($input: updateUserInput!) {
   updateUser(input: $input) {
-    errors {
-      ...Errors
+    ... on User {
+      ...UserPrivateInfo
     }
-    user {
-      avatarUrl
-      email
-      heroImageUrl
-      name
-      selfIntro
+    ... on Errors {
+      ...Errors
     }
   }
 }

@@ -25,12 +25,12 @@ export type Scalars = {
 
 export type Address = {
   __typename?: 'Address';
-  address?: Maybe<Scalars['String']>;
-  latitude?: Maybe<Scalars['Float']>;
-  longitude?: Maybe<Scalars['Float']>;
+  address: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
 };
 
-export type ApplicationError = {
+export type ApplicationError = Error & {
   __typename?: 'ApplicationError';
   message: Scalars['String'];
 };
@@ -43,24 +43,9 @@ export type Base = Node & {
   karte?: Maybe<Karte>;
 };
 
-export type BasePayload = {
-  __typename?: 'BasePayload';
-  base?: Maybe<Base>;
-  errors?: Maybe<Errors>;
-};
+export type BaseResult = Base | Errors;
 
-export type BoolPayload = {
-  __typename?: 'BoolPayload';
-  errors?: Maybe<Errors>;
-  message?: Maybe<Scalars['String']>;
-  result: Scalars['Boolean'];
-};
-
-export type DeleteUserPayload = {
-  __typename?: 'DeleteUserPayload';
-  errors?: Maybe<Errors>;
-  result: Scalars['Boolean'];
-};
+export type BoolResult = Errors | Succeeded;
 
 export type Dialog = Node & {
   __typename?: 'Dialog';
@@ -80,10 +65,17 @@ export type DialogEdges = {
   node: Dialog;
 };
 
-export type DialogPayload = {
-  __typename?: 'DialogPayload';
-  dialog?: Maybe<Array<Maybe<Dialog>>>;
-  errors?: Maybe<Errors>;
+export type DialogResult = Dialog | Errors;
+
+export type Dialogs = {
+  __typename?: 'Dialogs';
+  dialogs?: Maybe<Array<Dialog>>;
+};
+
+export type DialogsResult = Dialogs | Errors;
+
+export type Error = {
+  message: Scalars['String'];
 };
 
 export type Errors = {
@@ -110,11 +102,7 @@ export type Hoge = {
   id: Scalars['ID'];
 };
 
-export type InquiriesPayload = {
-  __typename?: 'InquiriesPayload';
-  errors?: Maybe<Errors>;
-  inquiries?: Maybe<InquiryConnection>;
-};
+export type InquiriesResult = Errors | InquiryConnection;
 
 export type Inquiry = Node & {
   __typename?: 'Inquiry';
@@ -153,11 +141,7 @@ export type InquiryLeafEdges = {
   node: Inquiry;
 };
 
-export type InquiryPayload = {
-  __typename?: 'InquiryPayload';
-  errors?: Maybe<Errors>;
-  inquiry?: Maybe<Inquiry>;
-};
+export type InquiryResult = Errors | Inquiry;
 
 export type InquiryTree = Node & {
   __typename?: 'InquiryTree';
@@ -165,22 +149,14 @@ export type InquiryTree = Node & {
   leaves?: Maybe<InquiryLeafConnection>;
 };
 
-export type InquiryTreePayload = {
-  __typename?: 'InquiryTreePayload';
-  errors?: Maybe<Errors>;
-  inquiryTree?: Maybe<InquiryTree>;
-};
+export type InquiryTreeResult = Errors | InquiryTree;
 
 export type Karte = Node & {
   __typename?: 'Karte';
   id: Scalars['ID'];
 };
 
-export type KartePayload = {
-  __typename?: 'KartePayload';
-  errors?: Maybe<Errors>;
-  karte?: Maybe<Karte>;
-};
+export type KarteResult = Errors | Karte;
 
 export type MemberConnection = {
   __typename?: 'MemberConnection';
@@ -230,11 +206,7 @@ export type MessageLeafEdges = {
   node: Message;
 };
 
-export type MessagePayload = {
-  __typename?: 'MessagePayload';
-  errors?: Maybe<Errors>;
-  message?: Maybe<Message>;
-};
+export type MessageResult = Errors | Message;
 
 export type MessageTree = Node & {
   __typename?: 'MessageTree';
@@ -242,42 +214,45 @@ export type MessageTree = Node & {
   leaves?: Maybe<MessageLeafConnection>;
 };
 
-export type MessageTreePayload = {
-  __typename?: 'MessageTreePayload';
-  errors?: Maybe<Errors>;
-  messageTree?: Maybe<MessageTree>;
+export type MessageTreeResult = Errors | MessageTree;
+
+export type Messages = {
+  __typename?: 'Messages';
+  messages?: Maybe<Array<Message>>;
 };
 
-export type MessagesPayload = {
-  __typename?: 'MessagesPayload';
-  errors?: Maybe<Errors>;
-  messages?: Maybe<Array<Maybe<Message>>>;
-};
+export type MessagesResult = Errors | Messages;
 
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptJoinOrg?: Maybe<OrgPayload>;
-  createBase?: Maybe<BasePayload>;
-  deleteUser?: Maybe<BoolPayload>;
-  forgetPassword?: Maybe<BoolPayload>;
-  loginUser?: Maybe<UserPayload>;
-  logoutUser?: Maybe<BoolPayload>;
-  postDialog?: Maybe<PostDialogPayload>;
-  registerOrg?: Maybe<OrgPayload>;
-  registerUser?: Maybe<UserPayload>;
-  replyInquiry?: Maybe<InquiryPayload>;
-  replyMessage?: Maybe<MessagePayload>;
-  requestJoinOrg?: Maybe<OrgPayload>;
-  sendInquiry?: Maybe<InquiryPayload>;
-  sendMessage?: Maybe<MessagePayload>;
-  updateInquiryStatus?: Maybe<InquiryPayload>;
-  updateOrg?: Maybe<OrgPayload>;
-  updateUser?: Maybe<UserPayload>;
+  acceptJoinOrg?: Maybe<OrgResult>;
+  changePassword?: Maybe<BoolResult>;
+  createBase?: Maybe<BaseResult>;
+  deleteUser?: Maybe<BoolResult>;
+  forgetPassword?: Maybe<BoolResult>;
+  loginUser?: Maybe<UserResult>;
+  logoutUser?: Maybe<BoolResult>;
+  postDialog?: Maybe<PostDialogResult>;
+  registerOrg?: Maybe<OrgResult>;
+  registerUser?: Maybe<UserResult>;
+  replyInquiry?: Maybe<InquiryResult>;
+  replyMessage?: Maybe<MessageResult>;
+  requestJoinOrg?: Maybe<OrgResult>;
+  sendInquiry?: Maybe<InquiryResult>;
+  sendMessage?: Maybe<MessageResult>;
+  updateInquiryStatus?: Maybe<InquiryResult>;
+  updateOrg?: Maybe<OrgResult>;
+  updateUser?: Maybe<UserResult>;
 };
 
 
 export type MutationAcceptJoinOrgArgs = {
   input: AcceptJoinOrgInput;
+};
+
+
+export type MutationChangePasswordArgs = {
+  input?: InputMaybe<ChangePasswordInput>;
 };
 
 
@@ -364,17 +339,14 @@ export type Org = Node & {
   phoneNumber?: Maybe<Scalars['String']>;
 };
 
-export type OrgPayload = {
-  __typename?: 'OrgPayload';
-  errors?: Maybe<Errors>;
-  org?: Maybe<Org>;
+export type OrgResult = Errors | Org;
+
+export type Orgs = {
+  __typename?: 'Orgs';
+  orgs?: Maybe<Array<Org>>;
 };
 
-export type OrgsPayload = {
-  __typename?: 'OrgsPayload';
-  errors?: Maybe<Errors>;
-  orgs?: Maybe<Array<Maybe<Org>>>;
-};
+export type OrgsResult = Errors | Orgs;
 
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -384,28 +356,24 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
-export type PostDialogPayload = {
-  __typename?: 'PostDialogPayload';
-  dialog?: Maybe<Dialog>;
-  errors?: Maybe<Errors>;
-};
+export type PostDialogResult = Dialog | Errors;
 
 export type Query = {
   __typename?: 'Query';
-  getBase?: Maybe<BasePayload>;
-  getDialogsByBaseId?: Maybe<Array<Maybe<Dialog>>>;
-  getInquiriesByOrgId?: Maybe<InquiriesPayload>;
-  getInquiriesByTreeId?: Maybe<InquiryTreePayload>;
-  getInquiry?: Maybe<InquiryPayload>;
-  getKarte?: Maybe<KartePayload>;
-  getMessagesByCookie?: Maybe<MessagesPayload>;
-  getMessagesByTreeId?: Maybe<MessageTreePayload>;
-  getOrg?: Maybe<OrgPayload>;
-  getOrgInfoByMemberCookieAndId?: Maybe<OrgPayload>;
-  getOrgs?: Maybe<OrgsPayload>;
-  getUserByCookie?: Maybe<UserPayload>;
-  getUserById?: Maybe<UserPayload>;
-  getUsers?: Maybe<UsersPayload>;
+  getBase?: Maybe<BaseResult>;
+  getDialogsByBaseId?: Maybe<DialogsResult>;
+  getInquiriesByOrgId?: Maybe<InquiriesResult>;
+  getInquiriesByTreeId?: Maybe<InquiryTreeResult>;
+  getInquiry?: Maybe<InquiryResult>;
+  getKarte?: Maybe<KarteResult>;
+  getMessagesByCookie?: Maybe<MessagesResult>;
+  getMessagesByTreeId?: Maybe<MessageTreeResult>;
+  getOrg?: Maybe<OrgResult>;
+  getOrgInfoByMemberCookieAndId?: Maybe<OrgResult>;
+  getOrgs?: Maybe<OrgsResult>;
+  getUserByCookie?: Maybe<UserResult>;
+  getUserById?: Maybe<UserResult>;
+  getUsers?: Maybe<UsersResult>;
   hoge?: Maybe<Hoge>;
   node?: Maybe<Node>;
   nodes?: Maybe<Array<Maybe<Node>>>;
@@ -494,6 +462,11 @@ export type Subscription = {
   dialogPosted?: Maybe<Dialog>;
 };
 
+export type Succeeded = {
+  __typename?: 'Succeeded';
+  succeeded: Scalars['String'];
+};
+
 export type UpdateInquiryStatusInput = {
   inquiryId: Scalars['ID'];
   inquiryStatus: Scalars['InquiryStatus'];
@@ -521,26 +494,28 @@ export type User = Node & {
   selfIntro?: Maybe<Scalars['String']>;
 };
 
-export type UserError = {
+export type UserError = Error & {
   __typename?: 'UserError';
   message: Scalars['String'];
 };
 
-export type UserPayload = {
-  __typename?: 'UserPayload';
-  errors?: Maybe<Errors>;
-  user?: Maybe<User>;
-};
+export type UserResult = Errors | User;
 
-export type UsersPayload = {
-  __typename?: 'UsersPayload';
-  errors?: Maybe<Errors>;
+export type Users = {
+  __typename?: 'Users';
   users?: Maybe<Array<User>>;
 };
+
+export type UsersResult = Errors | Users;
 
 export type AcceptJoinOrgInput = {
   requestUserId: Scalars['String'];
   requestedOrgId: Scalars['String'];
+};
+
+export type ChangePasswordInput = {
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
 };
 
 export type LoginUserInput = {
@@ -584,67 +559,88 @@ export type MessageLeafConnFragment = { __typename?: 'MessageLeafConnection', ed
 
 export type ErrorsFragment = { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null };
 
-export type OrgExceptConnFragment = { __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null };
+export type OrgExceptConnFragment = { __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null };
 
-export type OrgPrivateInfoFragment = { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: string | null, content?: string | null, id: string, inquiryStatus?: string | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null };
+export type OrgPrivateInfoFragment = { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: string | null, content?: string | null, id: string, inquiryStatus?: string | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null };
 
-export type OrgPublicInfoFragment = { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null };
+export type OrgPublicInfoFragment = { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null };
 
 export type PageInfosFragment = { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null };
 
-export type UserMyInfoFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null };
+export type UserPrivateInfoFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null };
 
 export type UserPublicInfoFragment = { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null };
+
+export type ChangeUserPasswordMutationVariables = Exact<{
+  input?: InputMaybe<ChangePasswordInput>;
+}>;
+
+
+export type ChangeUserPasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } | null };
+
+export type ForgetUserPasswordMutationVariables = Exact<{
+  forgetPasswordEmail: Scalars['String'];
+}>;
+
+
+export type ForgetUserPasswordMutation = { __typename?: 'Mutation', forgetPassword?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } | null };
+
+export type LoginUserMutationVariables = Exact<{
+  input: LoginUserInput;
+}>;
+
+
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null } | null };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'UserPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, user?: { __typename?: 'User', avatarUrl?: string | null, email?: string | null, heroImageUrl?: string | null, name?: string | null, selfIntro?: string | null } | null } | null };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null } | null };
 
 export type GetOrgPrivateInfoByCookieAndIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetOrgPrivateInfoByCookieAndIdQuery = { __typename?: 'Query', getOrgInfoByMemberCookieAndId?: { __typename?: 'OrgPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, org?: { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: string | null, content?: string | null, id: string, inquiryStatus?: string | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null } | null };
+export type GetOrgPrivateInfoByCookieAndIdQuery = { __typename?: 'Query', getOrgInfoByMemberCookieAndId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: string | null, content?: string | null, id: string, inquiryStatus?: string | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
 
 export type GetOrgPublicInfoByIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetOrgPublicInfoByIdQuery = { __typename?: 'Query', getOrg?: { __typename?: 'OrgPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, org?: { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null } | null };
+export type GetOrgPublicInfoByIdQuery = { __typename?: 'Query', getOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
 
 export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs?: { __typename?: 'OrgsPayload', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address?: string | null, latitude?: number | null, longitude?: number | null } | null } | null> | null, errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null } | null };
+export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null }> | null } | null };
 
 export type GetMessagesByTreeIdQueryVariables = Exact<{
   treeId: Scalars['String'];
 }>;
 
 
-export type GetMessagesByTreeIdQuery = { __typename?: 'Query', getMessagesByTreeId?: { __typename?: 'MessageTreePayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, messageTree?: { __typename?: 'MessageTree', id: string, leaves?: { __typename?: 'MessageLeafConnection', edges?: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null } | null };
+export type GetMessagesByTreeIdQuery = { __typename?: 'Query', getMessagesByTreeId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'MessageTree', id: string, leaves?: { __typename?: 'MessageLeafConnection', edges?: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
 
 export type GetMessagesByCookieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMessagesByCookieQuery = { __typename?: 'Query', getMessagesByCookie?: { __typename?: 'MessagesPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, messages?: Array<{ __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } | null> | null } | null };
+export type GetMessagesByCookieQuery = { __typename?: 'Query', getMessagesByCookie?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Messages', messages?: Array<{ __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null }> | null } | null };
 
 export type GetUserMyInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserMyInfoQuery = { __typename?: 'Query', getUserByCookie?: { __typename?: 'UserPayload', errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null, user?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null } | null } | null };
+export type GetUserMyInfoQuery = { __typename?: 'Query', getUserByCookie?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: string | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null } | null };
 
 export type GetUserPublicInfoQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById?: { __typename?: 'UserPayload', user?: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } | null, errors?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null } | null };
+export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } | null };
 
 export const PageInfosFragmentDoc = gql`
     fragment PageInfos on PageInfo {
@@ -795,8 +791,8 @@ export const OrgPublicInfoFragmentDoc = gql`
   }
 }
     ${PageInfosFragmentDoc}`;
-export const UserMyInfoFragmentDoc = gql`
-    fragment UserMyInfo on User {
+export const UserPrivateInfoFragmentDoc = gql`
+    fragment UserPrivateInfo on User {
   id
   name
   email
@@ -836,22 +832,134 @@ export const UserPublicInfoFragmentDoc = gql`
   heroImageUrl
 }
     `;
-export const UpdateUserDocument = gql`
-    mutation UpdateUser($input: updateUserInput!) {
-  updateUser(input: $input) {
-    errors {
+export const ChangeUserPasswordDocument = gql`
+    mutation ChangeUserPassword($input: changePasswordInput) {
+  changePassword(input: $input) {
+    ... on Errors {
       ...Errors
     }
-    user {
-      avatarUrl
-      email
-      heroImageUrl
-      name
-      selfIntro
+    ... on Succeeded {
+      succeeded
     }
   }
 }
     ${ErrorsFragmentDoc}`;
+export type ChangeUserPasswordMutationFn = Apollo.MutationFunction<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>;
+
+/**
+ * __useChangeUserPasswordMutation__
+ *
+ * To run a mutation, you first call `useChangeUserPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeUserPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeUserPasswordMutation, { data, loading, error }] = useChangeUserPasswordMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeUserPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>(ChangeUserPasswordDocument, options);
+      }
+export type ChangeUserPasswordMutationHookResult = ReturnType<typeof useChangeUserPasswordMutation>;
+export type ChangeUserPasswordMutationResult = Apollo.MutationResult<ChangeUserPasswordMutation>;
+export type ChangeUserPasswordMutationOptions = Apollo.BaseMutationOptions<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>;
+export const ForgetUserPasswordDocument = gql`
+    mutation ForgetUserPassword($forgetPasswordEmail: String!) {
+  forgetPassword(email: $forgetPasswordEmail) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Succeeded {
+      succeeded
+    }
+  }
+}
+    ${ErrorsFragmentDoc}`;
+export type ForgetUserPasswordMutationFn = Apollo.MutationFunction<ForgetUserPasswordMutation, ForgetUserPasswordMutationVariables>;
+
+/**
+ * __useForgetUserPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgetUserPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgetUserPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgetUserPasswordMutation, { data, loading, error }] = useForgetUserPasswordMutation({
+ *   variables: {
+ *      forgetPasswordEmail: // value for 'forgetPasswordEmail'
+ *   },
+ * });
+ */
+export function useForgetUserPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgetUserPasswordMutation, ForgetUserPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgetUserPasswordMutation, ForgetUserPasswordMutationVariables>(ForgetUserPasswordDocument, options);
+      }
+export type ForgetUserPasswordMutationHookResult = ReturnType<typeof useForgetUserPasswordMutation>;
+export type ForgetUserPasswordMutationResult = Apollo.MutationResult<ForgetUserPasswordMutation>;
+export type ForgetUserPasswordMutationOptions = Apollo.BaseMutationOptions<ForgetUserPasswordMutation, ForgetUserPasswordMutationVariables>;
+export const LoginUserDocument = gql`
+    mutation LoginUser($input: loginUserInput!) {
+  loginUser(input: $input) {
+    ... on User {
+      ...UserPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}
+    ${UserPrivateInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
+export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
+
+/**
+ * __useLoginUserMutation__
+ *
+ * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
+export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
+export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
+export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($input: updateUserInput!) {
+  updateUser(input: $input) {
+    ... on User {
+      ...UserPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}
+    ${UserPrivateInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -881,16 +989,16 @@ export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMut
 export const GetOrgPrivateInfoByCookieAndIdDocument = gql`
     query GetOrgPrivateInfoByCookieAndId($orgId: String!) {
   getOrgInfoByMemberCookieAndId(orgId: $orgId) {
-    errors {
-      ...Errors
-    }
-    org {
+    ... on Org {
       ...OrgPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
     }
   }
 }
-    ${ErrorsFragmentDoc}
-${OrgPrivateInfoFragmentDoc}`;
+    ${OrgPrivateInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
 
 /**
  * __useGetOrgPrivateInfoByCookieAndIdQuery__
@@ -922,16 +1030,16 @@ export type GetOrgPrivateInfoByCookieAndIdQueryResult = Apollo.QueryResult<GetOr
 export const GetOrgPublicInfoByIdDocument = gql`
     query GetOrgPublicInfoById($orgId: String!) {
   getOrg(id: $orgId) {
-    errors {
-      ...Errors
-    }
-    org {
+    ... on Org {
       ...OrgPublicInfo
+    }
+    ... on Errors {
+      ...Errors
     }
   }
 }
-    ${ErrorsFragmentDoc}
-${OrgPublicInfoFragmentDoc}`;
+    ${OrgPublicInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
 
 /**
  * __useGetOrgPublicInfoByIdQuery__
@@ -963,10 +1071,12 @@ export type GetOrgPublicInfoByIdQueryResult = Apollo.QueryResult<GetOrgPublicInf
 export const GetOrgsForMapDocument = gql`
     query GetOrgsForMap {
   getOrgs {
-    orgs {
-      ...OrgExceptConn
+    ... on Orgs {
+      orgs {
+        ...OrgExceptConn
+      }
     }
-    errors {
+    ... on Errors {
       ...Errors
     }
   }
@@ -1003,19 +1113,19 @@ export type GetOrgsForMapQueryResult = Apollo.QueryResult<GetOrgsForMapQuery, Ge
 export const GetMessagesByTreeIdDocument = gql`
     query GetMessagesByTreeId($treeId: String!) {
   getMessagesByTreeId(treeId: $treeId) {
-    errors {
-      ...Errors
-    }
-    messageTree {
+    ... on MessageTree {
       id
       leaves {
         ...MessageLeafConn
       }
     }
+    ... on Errors {
+      ...Errors
+    }
   }
 }
-    ${ErrorsFragmentDoc}
-${MessageLeafConnFragmentDoc}`;
+    ${MessageLeafConnFragmentDoc}
+${ErrorsFragmentDoc}`;
 
 /**
  * __useGetMessagesByTreeIdQuery__
@@ -1047,24 +1157,26 @@ export type GetMessagesByTreeIdQueryResult = Apollo.QueryResult<GetMessagesByTre
 export const GetMessagesByCookieDocument = gql`
     query GetMessagesByCookie {
   getMessagesByCookie {
-    errors {
-      ...Errors
+    ... on Messages {
+      messages {
+        id
+        content
+        receiver {
+          id
+          name
+          avatarUrl
+        }
+        sender {
+          id
+          name
+          avatarUrl
+        }
+        sentAt
+        status
+      }
     }
-    messages {
-      id
-      content
-      receiver {
-        id
-        name
-        avatarUrl
-      }
-      sender {
-        id
-        name
-        avatarUrl
-      }
-      sentAt
-      status
+    ... on Errors {
+      ...Errors
     }
   }
 }
@@ -1099,16 +1211,16 @@ export type GetMessagesByCookieQueryResult = Apollo.QueryResult<GetMessagesByCoo
 export const GetUserMyInfoDocument = gql`
     query GetUserMyInfo {
   getUserByCookie {
-    errors {
-      ...Errors
+    ... on User {
+      ...UserPrivateInfo
     }
-    user {
-      ...UserMyInfo
+    ... on Errors {
+      ...Errors
     }
   }
 }
-    ${ErrorsFragmentDoc}
-${UserMyInfoFragmentDoc}`;
+    ${UserPrivateInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
 
 /**
  * __useGetUserMyInfoQuery__
@@ -1139,10 +1251,10 @@ export type GetUserMyInfoQueryResult = Apollo.QueryResult<GetUserMyInfoQuery, Ge
 export const GetUserPublicInfoDocument = gql`
     query GetUserPublicInfo($userId: String!) {
   getUserById(userId: $userId) {
-    user {
+    ... on User {
       ...UserPublicInfo
     }
-    errors {
+    ... on Errors {
       ...Errors
     }
   }

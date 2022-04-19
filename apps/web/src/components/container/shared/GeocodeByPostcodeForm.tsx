@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, VFC } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
@@ -18,9 +18,9 @@ type PostcodeInput = {
   postcode: string;
 };
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export const GeocodeByPostcodeForm: VFC<GeocodeByPostcodeButtonProps> = ({
+export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
   buttonLabel,
   dispatcher,
 }) => {

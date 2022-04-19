@@ -1910,6 +1910,7 @@ __metadata:
     "@types/react": ^18.0.5
     autoprefixer: ^10.4.4
     graphql: ^16.3.0
+    idx: ^2.5.6
     next: ^12.1.5
     next-transpile-modules: ^9.0.0
     postcss: ^8.4.12
@@ -1917,6 +1918,7 @@ __metadata:
     react-dom: ^18.0.0
     react-hook-form: ^7.29.0
     react-popper: ^2.2.5
+    swr: ^1.3.0
     tailwindcss: ^3.0.24
   languageName: unknown
   linkType: soft
@@ -6673,6 +6675,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"idx@npm:^2.5.6":
+  version: 2.5.6
+  resolution: "idx@npm:2.5.6"
+  checksum: e118528f0d175a39867c1ad5129fbd6b0d09c2d3c489ca72510f727a7263edc198a3a10b70a71284f04f3160622b09a85ed090207056c0c804f8859ae0f345ba
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
@@ -11286,6 +11295,15 @@ __metadata:
   dependencies:
     tslib: ^2.0.3
   checksum: 6e21c9e1b3cd5735eb2af679a99ec3efc78a14e3d4d5e3fd594e254b91cfd37185b3d1c6e41b22f53a2cdf5d1b963ce30c0fe8b78337e3fd43d0137084670a5f
+  languageName: node
+  linkType: hard
+
+"swr@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "swr@npm:1.3.0"
+  peerDependencies:
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0
+  checksum: e7a184f0d560e9c8be85c023cc8e65e56a88a6ed46f9394b301b07f838edca23d2e303685319a4fcd620b81d447a7bcb489c7fa0a752c259f91764903c690cdb
   languageName: node
   linkType: hard
 

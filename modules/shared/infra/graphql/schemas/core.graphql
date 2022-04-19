@@ -2,6 +2,10 @@ interface Node {
   id: ID!
 }
 
+interface Error {
+  message: String!
+}
+
 type Query {
   node(id: ID!): Node
   nodes(ids: [ID!]!): [Node]
@@ -14,10 +18,10 @@ type PageInfo {
   endCursor: String
 }
 
-type BoolPayload {
-  result: Boolean!
-  message: String
-  errors: Errors
+union BoolResult = Succeeded | Errors
+
+type Succeeded {
+  succeeded: String!
 }
 
 type Errors {
@@ -25,10 +29,10 @@ type Errors {
   applicationError: ApplicationError
 }
 
-type UserError {
+type UserError implements Error {
   message: String!
 }
 
-type ApplicationError {
+type ApplicationError implements Error {
   message: String!
 }

@@ -1,11 +1,10 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { HogeModel, UserRoleModel } from '\@kurakichi/modules/shared/infra/graphql/models';
+import { HogeModel } from '\@kurakichi/modules/shared/infra/graphql/models';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -26,12 +25,12 @@ export type Scalars = {
 
 export type Address = {
   __typename?: 'Address';
-  address?: Maybe<Scalars['String']>;
-  latitude?: Maybe<Scalars['Float']>;
-  longitude?: Maybe<Scalars['Float']>;
+  address: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
 };
 
-export type ApplicationError = {
+export type ApplicationError = Error & {
   __typename?: 'ApplicationError';
   message: Scalars['String'];
 };
@@ -44,24 +43,9 @@ export type Base = Node & {
   karte?: Maybe<Karte>;
 };
 
-export type BasePayload = {
-  __typename?: 'BasePayload';
-  base?: Maybe<Base>;
-  errors?: Maybe<Errors>;
-};
+export type BaseResult = Base | Errors;
 
-export type BoolPayload = {
-  __typename?: 'BoolPayload';
-  errors?: Maybe<Errors>;
-  message?: Maybe<Scalars['String']>;
-  result: Scalars['Boolean'];
-};
-
-export type DeleteUserPayload = {
-  __typename?: 'DeleteUserPayload';
-  errors?: Maybe<Errors>;
-  result: Scalars['Boolean'];
-};
+export type BoolResult = Errors | Succeeded;
 
 export type Dialog = Node & {
   __typename?: 'Dialog';
@@ -81,10 +65,17 @@ export type DialogEdges = {
   node: Dialog;
 };
 
-export type DialogPayload = {
-  __typename?: 'DialogPayload';
-  dialog?: Maybe<Array<Maybe<Dialog>>>;
-  errors?: Maybe<Errors>;
+export type DialogResult = Dialog | Errors;
+
+export type Dialogs = {
+  __typename?: 'Dialogs';
+  dialogs?: Maybe<Array<Dialog>>;
+};
+
+export type DialogsResult = Dialogs | Errors;
+
+export type Error = {
+  message: Scalars['String'];
 };
 
 export type Errors = {
@@ -111,11 +102,7 @@ export type Hoge = {
   id: Scalars['ID'];
 };
 
-export type InquiriesPayload = {
-  __typename?: 'InquiriesPayload';
-  errors?: Maybe<Errors>;
-  inquiries?: Maybe<InquiryConnection>;
-};
+export type InquiriesResult = Errors | InquiryConnection;
 
 export type Inquiry = Node & {
   __typename?: 'Inquiry';
@@ -154,11 +141,7 @@ export type InquiryLeafEdges = {
   node: Inquiry;
 };
 
-export type InquiryPayload = {
-  __typename?: 'InquiryPayload';
-  errors?: Maybe<Errors>;
-  inquiry?: Maybe<Inquiry>;
-};
+export type InquiryResult = Errors | Inquiry;
 
 export type InquiryTree = Node & {
   __typename?: 'InquiryTree';
@@ -166,22 +149,14 @@ export type InquiryTree = Node & {
   leaves?: Maybe<InquiryLeafConnection>;
 };
 
-export type InquiryTreePayload = {
-  __typename?: 'InquiryTreePayload';
-  errors?: Maybe<Errors>;
-  inquiryTree?: Maybe<InquiryTree>;
-};
+export type InquiryTreeResult = Errors | InquiryTree;
 
 export type Karte = Node & {
   __typename?: 'Karte';
   id: Scalars['ID'];
 };
 
-export type KartePayload = {
-  __typename?: 'KartePayload';
-  errors?: Maybe<Errors>;
-  karte?: Maybe<Karte>;
-};
+export type KarteResult = Errors | Karte;
 
 export type MemberConnection = {
   __typename?: 'MemberConnection';
@@ -231,11 +206,7 @@ export type MessageLeafEdges = {
   node: Message;
 };
 
-export type MessagePayload = {
-  __typename?: 'MessagePayload';
-  errors?: Maybe<Errors>;
-  message?: Maybe<Message>;
-};
+export type MessageResult = Errors | Message;
 
 export type MessageTree = Node & {
   __typename?: 'MessageTree';
@@ -243,42 +214,45 @@ export type MessageTree = Node & {
   leaves?: Maybe<MessageLeafConnection>;
 };
 
-export type MessageTreePayload = {
-  __typename?: 'MessageTreePayload';
-  errors?: Maybe<Errors>;
-  messageTree?: Maybe<MessageTree>;
+export type MessageTreeResult = Errors | MessageTree;
+
+export type Messages = {
+  __typename?: 'Messages';
+  messages?: Maybe<Array<Message>>;
 };
 
-export type MessagesPayload = {
-  __typename?: 'MessagesPayload';
-  errors?: Maybe<Errors>;
-  messages?: Maybe<Array<Maybe<Message>>>;
-};
+export type MessagesResult = Errors | Messages;
 
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptJoinOrg?: Maybe<OrgPayload>;
-  createBase?: Maybe<BasePayload>;
-  deleteUser?: Maybe<BoolPayload>;
-  forgetPassword?: Maybe<BoolPayload>;
-  loginUser?: Maybe<UserPayload>;
-  logoutUser?: Maybe<BoolPayload>;
-  postDialog?: Maybe<PostDialogPayload>;
-  registerOrg?: Maybe<OrgPayload>;
-  registerUser?: Maybe<UserPayload>;
-  replyInquiry?: Maybe<InquiryPayload>;
-  replyMessage?: Maybe<MessagePayload>;
-  requestJoinOrg?: Maybe<OrgPayload>;
-  sendInquiry?: Maybe<InquiryPayload>;
-  sendMessage?: Maybe<MessagePayload>;
-  updateInquiryStatus?: Maybe<InquiryPayload>;
-  updateOrg?: Maybe<OrgPayload>;
-  updateUser?: Maybe<UserPayload>;
+  acceptJoinOrg?: Maybe<OrgResult>;
+  changePassword?: Maybe<BoolResult>;
+  createBase?: Maybe<BaseResult>;
+  deleteUser?: Maybe<BoolResult>;
+  forgetPassword?: Maybe<BoolResult>;
+  loginUser?: Maybe<UserResult>;
+  logoutUser?: Maybe<BoolResult>;
+  postDialog?: Maybe<PostDialogResult>;
+  registerOrg?: Maybe<OrgResult>;
+  registerUser?: Maybe<UserResult>;
+  replyInquiry?: Maybe<InquiryResult>;
+  replyMessage?: Maybe<MessageResult>;
+  requestJoinOrg?: Maybe<OrgResult>;
+  sendInquiry?: Maybe<InquiryResult>;
+  sendMessage?: Maybe<MessageResult>;
+  updateInquiryStatus?: Maybe<InquiryResult>;
+  updateOrg?: Maybe<OrgResult>;
+  updateUser?: Maybe<UserResult>;
 };
 
 
 export type MutationAcceptJoinOrgArgs = {
   input: AcceptJoinOrgInput;
+};
+
+
+export type MutationChangePasswordArgs = {
+  input?: InputMaybe<ChangePasswordInput>;
 };
 
 
@@ -365,17 +339,14 @@ export type Org = Node & {
   phoneNumber?: Maybe<Scalars['String']>;
 };
 
-export type OrgPayload = {
-  __typename?: 'OrgPayload';
-  errors?: Maybe<Errors>;
-  org?: Maybe<Org>;
+export type OrgResult = Errors | Org;
+
+export type Orgs = {
+  __typename?: 'Orgs';
+  orgs?: Maybe<Array<Org>>;
 };
 
-export type OrgsPayload = {
-  __typename?: 'OrgsPayload';
-  errors?: Maybe<Errors>;
-  orgs?: Maybe<Array<Maybe<Org>>>;
-};
+export type OrgsResult = Errors | Orgs;
 
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -385,28 +356,24 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
-export type PostDialogPayload = {
-  __typename?: 'PostDialogPayload';
-  dialog?: Maybe<Dialog>;
-  errors?: Maybe<Errors>;
-};
+export type PostDialogResult = Dialog | Errors;
 
 export type Query = {
   __typename?: 'Query';
-  getBase?: Maybe<BasePayload>;
-  getDialogsByBaseId?: Maybe<Array<Maybe<Dialog>>>;
-  getInquiriesByOrgId?: Maybe<InquiriesPayload>;
-  getInquiriesByTreeId?: Maybe<InquiryTreePayload>;
-  getInquiry?: Maybe<InquiryPayload>;
-  getKarte?: Maybe<KartePayload>;
-  getMessagesByCookie?: Maybe<MessagesPayload>;
-  getMessagesByTreeId?: Maybe<MessageTreePayload>;
-  getOrg?: Maybe<OrgPayload>;
-  getOrgInfoByMemberCookieAndId?: Maybe<OrgPayload>;
-  getOrgs?: Maybe<OrgsPayload>;
-  getUserByCookie?: Maybe<UserPayload>;
-  getUserById?: Maybe<UserPayload>;
-  getUsers?: Maybe<UsersPayload>;
+  getBase?: Maybe<BaseResult>;
+  getDialogsByBaseId?: Maybe<DialogsResult>;
+  getInquiriesByOrgId?: Maybe<InquiriesResult>;
+  getInquiriesByTreeId?: Maybe<InquiryTreeResult>;
+  getInquiry?: Maybe<InquiryResult>;
+  getKarte?: Maybe<KarteResult>;
+  getMessagesByCookie?: Maybe<MessagesResult>;
+  getMessagesByTreeId?: Maybe<MessageTreeResult>;
+  getOrg?: Maybe<OrgResult>;
+  getOrgInfoByMemberCookieAndId?: Maybe<OrgResult>;
+  getOrgs?: Maybe<OrgsResult>;
+  getUserByCookie?: Maybe<UserResult>;
+  getUserById?: Maybe<UserResult>;
+  getUsers?: Maybe<UsersResult>;
   hoge?: Maybe<Hoge>;
   node?: Maybe<Node>;
   nodes?: Maybe<Array<Maybe<Node>>>;
@@ -495,6 +462,11 @@ export type Subscription = {
   dialogPosted?: Maybe<Dialog>;
 };
 
+export type Succeeded = {
+  __typename?: 'Succeeded';
+  succeeded: Scalars['String'];
+};
+
 export type UpdateInquiryStatusInput = {
   inquiryId: Scalars['ID'];
   inquiryStatus: Scalars['InquiryStatus'];
@@ -522,26 +494,28 @@ export type User = Node & {
   selfIntro?: Maybe<Scalars['String']>;
 };
 
-export type UserError = {
+export type UserError = Error & {
   __typename?: 'UserError';
   message: Scalars['String'];
 };
 
-export type UserPayload = {
-  __typename?: 'UserPayload';
-  errors?: Maybe<Errors>;
-  user?: Maybe<User>;
-};
+export type UserResult = Errors | User;
 
-export type UsersPayload = {
-  __typename?: 'UsersPayload';
-  errors?: Maybe<Errors>;
+export type Users = {
+  __typename?: 'Users';
   users?: Maybe<Array<User>>;
 };
+
+export type UsersResult = Errors | Users;
 
 export type AcceptJoinOrgInput = {
   requestUserId: Scalars['String'];
   requestedOrgId: Scalars['String'];
+};
+
+export type ChangePasswordInput = {
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
 };
 
 export type LoginUserInput = {
@@ -654,33 +628,35 @@ export type ResolversTypes = ResolversObject<{
   Address: ResolverTypeWrapper<Address>;
   ApplicationError: ResolverTypeWrapper<ApplicationError>;
   Base: ResolverTypeWrapper<Base>;
-  BasePayload: ResolverTypeWrapper<BasePayload>;
-  BoolPayload: ResolverTypeWrapper<BoolPayload>;
+  BaseResult: ResolversTypes['Base'] | ResolversTypes['Errors'];
+  BoolResult: ResolversTypes['Errors'] | ResolversTypes['Succeeded'];
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  DeleteUserPayload: ResolverTypeWrapper<DeleteUserPayload>;
   Dialog: ResolverTypeWrapper<Dialog>;
   DialogConnection: ResolverTypeWrapper<DialogConnection>;
   DialogEdges: ResolverTypeWrapper<DialogEdges>;
-  DialogPayload: ResolverTypeWrapper<DialogPayload>;
+  DialogResult: ResolversTypes['Dialog'] | ResolversTypes['Errors'];
+  Dialogs: ResolverTypeWrapper<Dialogs>;
+  DialogsResult: ResolversTypes['Dialogs'] | ResolversTypes['Errors'];
+  Error: ResolversTypes['ApplicationError'] | ResolversTypes['UserError'];
   Errors: ResolverTypeWrapper<Errors>;
   FellowConnection: ResolverTypeWrapper<FellowConnection>;
   FellowEdge: ResolverTypeWrapper<FellowEdge>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Hoge: ResolverTypeWrapper<HogeModel>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  InquiriesPayload: ResolverTypeWrapper<InquiriesPayload>;
+  InquiriesResult: ResolversTypes['Errors'] | ResolversTypes['InquiryConnection'];
   Inquiry: ResolverTypeWrapper<Inquiry>;
   InquiryCategory: ResolverTypeWrapper<Scalars['InquiryCategory']>;
   InquiryConnection: ResolverTypeWrapper<InquiryConnection>;
   InquiryEdges: ResolverTypeWrapper<InquiryEdges>;
   InquiryLeafConnection: ResolverTypeWrapper<InquiryLeafConnection>;
   InquiryLeafEdges: ResolverTypeWrapper<InquiryLeafEdges>;
-  InquiryPayload: ResolverTypeWrapper<InquiryPayload>;
+  InquiryResult: ResolversTypes['Errors'] | ResolversTypes['Inquiry'];
   InquiryStatus: ResolverTypeWrapper<Scalars['InquiryStatus']>;
   InquiryTree: ResolverTypeWrapper<InquiryTree>;
-  InquiryTreePayload: ResolverTypeWrapper<InquiryTreePayload>;
+  InquiryTreeResult: ResolversTypes['Errors'] | ResolversTypes['InquiryTree'];
   Karte: ResolverTypeWrapper<Karte>;
-  KartePayload: ResolverTypeWrapper<KartePayload>;
+  KarteResult: ResolversTypes['Errors'] | ResolversTypes['Karte'];
   MemberConnection: ResolverTypeWrapper<MemberConnection>;
   MemberEdges: ResolverTypeWrapper<MemberEdges>;
   Message: ResolverTypeWrapper<Message>;
@@ -688,31 +664,36 @@ export type ResolversTypes = ResolversObject<{
   MessageEdges: ResolverTypeWrapper<MessageEdges>;
   MessageLeafConnection: ResolverTypeWrapper<MessageLeafConnection>;
   MessageLeafEdges: ResolverTypeWrapper<MessageLeafEdges>;
-  MessagePayload: ResolverTypeWrapper<MessagePayload>;
+  MessageResult: ResolversTypes['Errors'] | ResolversTypes['Message'];
   MessageStatus: ResolverTypeWrapper<Scalars['MessageStatus']>;
   MessageTree: ResolverTypeWrapper<MessageTree>;
-  MessageTreePayload: ResolverTypeWrapper<MessageTreePayload>;
-  MessagesPayload: ResolverTypeWrapper<MessagesPayload>;
+  MessageTreeResult: ResolversTypes['Errors'] | ResolversTypes['MessageTree'];
+  Messages: ResolverTypeWrapper<Messages>;
+  MessagesResult: ResolversTypes['Errors'] | ResolversTypes['Messages'];
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolversTypes['Base'] | ResolversTypes['Dialog'] | ResolversTypes['Inquiry'] | ResolversTypes['InquiryTree'] | ResolversTypes['Karte'] | ResolversTypes['Message'] | ResolversTypes['MessageTree'] | ResolversTypes['Org'] | ResolversTypes['User'];
   Org: ResolverTypeWrapper<Org>;
-  OrgPayload: ResolverTypeWrapper<OrgPayload>;
-  OrgsPayload: ResolverTypeWrapper<OrgsPayload>;
+  OrgResult: ResolversTypes['Errors'] | ResolversTypes['Org'];
+  Orgs: ResolverTypeWrapper<Orgs>;
+  OrgsResult: ResolversTypes['Errors'] | ResolversTypes['Orgs'];
   PageInfo: ResolverTypeWrapper<PageInfo>;
-  PostDialogPayload: ResolverTypeWrapper<PostDialogPayload>;
+  PostDialogResult: ResolversTypes['Dialog'] | ResolversTypes['Errors'];
   Query: ResolverTypeWrapper<{}>;
   RegisterOrgInput: RegisterOrgInput;
   SendInquiryInput: SendInquiryInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
+  Succeeded: ResolverTypeWrapper<Succeeded>;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  User: ResolverTypeWrapper<Omit<User, 'role'> & { role?: Maybe<ResolversTypes['UserRole']> }>;
+  User: ResolverTypeWrapper<User>;
   UserError: ResolverTypeWrapper<UserError>;
-  UserPayload: ResolverTypeWrapper<UserPayload>;
-  UserRole: ResolverTypeWrapper<UserRoleModel>;
-  UsersPayload: ResolverTypeWrapper<UsersPayload>;
+  UserResult: ResolversTypes['Errors'] | ResolversTypes['User'];
+  UserRole: ResolverTypeWrapper<Scalars['UserRole']>;
+  Users: ResolverTypeWrapper<Users>;
+  UsersResult: ResolversTypes['Errors'] | ResolversTypes['Users'];
   acceptJoinOrgInput: AcceptJoinOrgInput;
+  changePasswordInput: ChangePasswordInput;
   loginUserInput: LoginUserInput;
   postDialogInput: PostDialogInput;
   registerUserInput: RegisterUserInput;
@@ -727,33 +708,35 @@ export type ResolversParentTypes = ResolversObject<{
   Address: Address;
   ApplicationError: ApplicationError;
   Base: Base;
-  BasePayload: BasePayload;
-  BoolPayload: BoolPayload;
+  BaseResult: ResolversParentTypes['Base'] | ResolversParentTypes['Errors'];
+  BoolResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Succeeded'];
   Boolean: Scalars['Boolean'];
-  DeleteUserPayload: DeleteUserPayload;
   Dialog: Dialog;
   DialogConnection: DialogConnection;
   DialogEdges: DialogEdges;
-  DialogPayload: DialogPayload;
+  DialogResult: ResolversParentTypes['Dialog'] | ResolversParentTypes['Errors'];
+  Dialogs: Dialogs;
+  DialogsResult: ResolversParentTypes['Dialogs'] | ResolversParentTypes['Errors'];
+  Error: ResolversParentTypes['ApplicationError'] | ResolversParentTypes['UserError'];
   Errors: Errors;
   FellowConnection: FellowConnection;
   FellowEdge: FellowEdge;
   Float: Scalars['Float'];
   Hoge: HogeModel;
   ID: Scalars['ID'];
-  InquiriesPayload: InquiriesPayload;
+  InquiriesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryConnection'];
   Inquiry: Inquiry;
   InquiryCategory: Scalars['InquiryCategory'];
   InquiryConnection: InquiryConnection;
   InquiryEdges: InquiryEdges;
   InquiryLeafConnection: InquiryLeafConnection;
   InquiryLeafEdges: InquiryLeafEdges;
-  InquiryPayload: InquiryPayload;
+  InquiryResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Inquiry'];
   InquiryStatus: Scalars['InquiryStatus'];
   InquiryTree: InquiryTree;
-  InquiryTreePayload: InquiryTreePayload;
+  InquiryTreeResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryTree'];
   Karte: Karte;
-  KartePayload: KartePayload;
+  KarteResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Karte'];
   MemberConnection: MemberConnection;
   MemberEdges: MemberEdges;
   Message: Message;
@@ -761,31 +744,36 @@ export type ResolversParentTypes = ResolversObject<{
   MessageEdges: MessageEdges;
   MessageLeafConnection: MessageLeafConnection;
   MessageLeafEdges: MessageLeafEdges;
-  MessagePayload: MessagePayload;
+  MessageResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Message'];
   MessageStatus: Scalars['MessageStatus'];
   MessageTree: MessageTree;
-  MessageTreePayload: MessageTreePayload;
-  MessagesPayload: MessagesPayload;
+  MessageTreeResult: ResolversParentTypes['Errors'] | ResolversParentTypes['MessageTree'];
+  Messages: Messages;
+  MessagesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Messages'];
   Mutation: {};
   Node: ResolversParentTypes['Base'] | ResolversParentTypes['Dialog'] | ResolversParentTypes['Inquiry'] | ResolversParentTypes['InquiryTree'] | ResolversParentTypes['Karte'] | ResolversParentTypes['Message'] | ResolversParentTypes['MessageTree'] | ResolversParentTypes['Org'] | ResolversParentTypes['User'];
   Org: Org;
-  OrgPayload: OrgPayload;
-  OrgsPayload: OrgsPayload;
+  OrgResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Org'];
+  Orgs: Orgs;
+  OrgsResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Orgs'];
   PageInfo: PageInfo;
-  PostDialogPayload: PostDialogPayload;
+  PostDialogResult: ResolversParentTypes['Dialog'] | ResolversParentTypes['Errors'];
   Query: {};
   RegisterOrgInput: RegisterOrgInput;
   SendInquiryInput: SendInquiryInput;
   String: Scalars['String'];
   Subscription: {};
+  Succeeded: Succeeded;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  User: Omit<User, 'role'> & { role?: Maybe<ResolversParentTypes['UserRole']> };
+  User: User;
   UserError: UserError;
-  UserPayload: UserPayload;
-  UserRole: UserRoleModel;
-  UsersPayload: UsersPayload;
+  UserResult: ResolversParentTypes['Errors'] | ResolversParentTypes['User'];
+  UserRole: Scalars['UserRole'];
+  Users: Users;
+  UsersResult: ResolversParentTypes['Errors'] | ResolversParentTypes['Users'];
   acceptJoinOrgInput: AcceptJoinOrgInput;
+  changePasswordInput: ChangePasswordInput;
   loginUserInput: LoginUserInput;
   postDialogInput: PostDialogInput;
   registerUserInput: RegisterUserInput;
@@ -796,9 +784,9 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = ResolversObject<{
-  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  latitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  longitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -815,23 +803,12 @@ export type BaseResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type BasePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['BasePayload'] = ResolversParentTypes['BasePayload']> = ResolversObject<{
-  base?: Resolver<Maybe<ResolversTypes['Base']>, ParentType, ContextType>;
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type BaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['BaseResult'] = ResolversParentTypes['BaseResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Base' | 'Errors', ParentType, ContextType>;
 }>;
 
-export type BoolPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['BoolPayload'] = ResolversParentTypes['BoolPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type DeleteUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteUserPayload'] = ResolversParentTypes['DeleteUserPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type BoolResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['BoolResult'] = ResolversParentTypes['BoolResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Succeeded', ParentType, ContextType>;
 }>;
 
 export type DialogResolvers<ContextType = any, ParentType extends ResolversParentTypes['Dialog'] = ResolversParentTypes['Dialog']> = ResolversObject<{
@@ -852,10 +829,22 @@ export type DialogEdgesResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type DialogPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DialogPayload'] = ResolversParentTypes['DialogPayload']> = ResolversObject<{
-  dialog?: Resolver<Maybe<Array<Maybe<ResolversTypes['Dialog']>>>, ParentType, ContextType>;
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
+export type DialogResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DialogResult'] = ResolversParentTypes['DialogResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Dialog' | 'Errors', ParentType, ContextType>;
+}>;
+
+export type DialogsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Dialogs'] = ResolversParentTypes['Dialogs']> = ResolversObject<{
+  dialogs?: Resolver<Maybe<Array<ResolversTypes['Dialog']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type DialogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DialogsResult'] = ResolversParentTypes['DialogsResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Dialogs' | 'Errors', ParentType, ContextType>;
+}>;
+
+export type ErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Error'] = ResolversParentTypes['Error']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'ApplicationError' | 'UserError', ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type ErrorsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Errors'] = ResolversParentTypes['Errors']> = ResolversObject<{
@@ -882,10 +871,8 @@ export type HogeResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InquiriesPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiriesPayload'] = ResolversParentTypes['InquiriesPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  inquiries?: Resolver<Maybe<ResolversTypes['InquiryConnection']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type InquiriesResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiriesResult'] = ResolversParentTypes['InquiriesResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'InquiryConnection', ParentType, ContextType>;
 }>;
 
 export type InquiryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Inquiry'] = ResolversParentTypes['Inquiry']> = ResolversObject<{
@@ -929,10 +916,8 @@ export type InquiryLeafEdgesResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InquiryPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryPayload'] = ResolversParentTypes['InquiryPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  inquiry?: Resolver<Maybe<ResolversTypes['Inquiry']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type InquiryResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryResult'] = ResolversParentTypes['InquiryResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Inquiry', ParentType, ContextType>;
 }>;
 
 export interface InquiryStatusScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['InquiryStatus'], any> {
@@ -945,10 +930,8 @@ export type InquiryTreeResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InquiryTreePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryTreePayload'] = ResolversParentTypes['InquiryTreePayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  inquiryTree?: Resolver<Maybe<ResolversTypes['InquiryTree']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type InquiryTreeResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['InquiryTreeResult'] = ResolversParentTypes['InquiryTreeResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'InquiryTree', ParentType, ContextType>;
 }>;
 
 export type KarteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Karte'] = ResolversParentTypes['Karte']> = ResolversObject<{
@@ -956,10 +939,8 @@ export type KarteResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type KartePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['KartePayload'] = ResolversParentTypes['KartePayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  karte?: Resolver<Maybe<ResolversTypes['Karte']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type KarteResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['KarteResult'] = ResolversParentTypes['KarteResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Karte', ParentType, ContextType>;
 }>;
 
 export type MemberConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberConnection'] = ResolversParentTypes['MemberConnection']> = ResolversObject<{
@@ -1010,10 +991,8 @@ export type MessageLeafEdgesResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MessagePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessagePayload'] = ResolversParentTypes['MessagePayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['Message']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type MessageResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageResult'] = ResolversParentTypes['MessageResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Message', ParentType, ContextType>;
 }>;
 
 export interface MessageStatusScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['MessageStatus'], any> {
@@ -1026,36 +1005,38 @@ export type MessageTreeResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MessageTreePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageTreePayload'] = ResolversParentTypes['MessageTreePayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  messageTree?: Resolver<Maybe<ResolversTypes['MessageTree']>, ParentType, ContextType>;
+export type MessageTreeResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessageTreeResult'] = ResolversParentTypes['MessageTreeResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'MessageTree', ParentType, ContextType>;
+}>;
+
+export type MessagesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Messages'] = ResolversParentTypes['Messages']> = ResolversObject<{
+  messages?: Resolver<Maybe<Array<ResolversTypes['Message']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MessagesPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessagesPayload'] = ResolversParentTypes['MessagesPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  messages?: Resolver<Maybe<Array<Maybe<ResolversTypes['Message']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type MessagesResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['MessagesResult'] = ResolversParentTypes['MessagesResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Messages', ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
-  createBase?: Resolver<Maybe<ResolversTypes['BasePayload']>, ParentType, ContextType>;
-  deleteUser?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
-  forgetPassword?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
-  loginUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
-  logoutUser?: Resolver<Maybe<ResolversTypes['BoolPayload']>, ParentType, ContextType>;
-  postDialog?: Resolver<Maybe<ResolversTypes['PostDialogPayload']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
-  registerOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
-  registerUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
-  replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
-  replyMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
-  requestJoinOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
-  sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
-  sendMessage?: Resolver<Maybe<ResolversTypes['MessagePayload']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
-  updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
-  updateOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
-  updateUser?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
+  acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
+  changePassword?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType, Partial<MutationChangePasswordArgs>>;
+  createBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType>;
+  deleteUser?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType>;
+  forgetPassword?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
+  loginUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
+  logoutUser?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType>;
+  postDialog?: Resolver<Maybe<ResolversTypes['PostDialogResult']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
+  registerOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
+  registerUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
+  replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
+  replyMessage?: Resolver<Maybe<ResolversTypes['MessageResult']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
+  requestJoinOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
+  sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
+  sendMessage?: Resolver<Maybe<ResolversTypes['MessageResult']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
+  updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
+  updateOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
+  updateUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 }>;
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = ResolversObject<{
@@ -1078,16 +1059,17 @@ export type OrgResolvers<ContextType = any, ParentType extends ResolversParentTy
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type OrgPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgPayload'] = ResolversParentTypes['OrgPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  org?: Resolver<Maybe<ResolversTypes['Org']>, ParentType, ContextType>;
+export type OrgResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgResult'] = ResolversParentTypes['OrgResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Org', ParentType, ContextType>;
+}>;
+
+export type OrgsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Orgs'] = ResolversParentTypes['Orgs']> = ResolversObject<{
+  orgs?: Resolver<Maybe<Array<ResolversTypes['Org']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type OrgsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgsPayload'] = ResolversParentTypes['OrgsPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  orgs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Org']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type OrgsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgsResult'] = ResolversParentTypes['OrgsResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Orgs', ParentType, ContextType>;
 }>;
 
 export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
@@ -1098,27 +1080,25 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PostDialogPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostDialogPayload'] = ResolversParentTypes['PostDialogPayload']> = ResolversObject<{
-  dialog?: Resolver<Maybe<ResolversTypes['Dialog']>, ParentType, ContextType>;
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type PostDialogResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostDialogResult'] = ResolversParentTypes['PostDialogResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Dialog' | 'Errors', ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getBase?: Resolver<Maybe<ResolversTypes['BasePayload']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
-  getDialogsByBaseId?: Resolver<Maybe<Array<Maybe<ResolversTypes['Dialog']>>>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
-  getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
-  getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreePayload']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
-  getInquiry?: Resolver<Maybe<ResolversTypes['InquiryPayload']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
-  getKarte?: Resolver<Maybe<ResolversTypes['KartePayload']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
-  getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesPayload']>, ParentType, ContextType>;
-  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreePayload']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
-  getOrg?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
-  getOrgInfoByMemberCookieAndId?: Resolver<Maybe<ResolversTypes['OrgPayload']>, ParentType, ContextType, RequireFields<QueryGetOrgInfoByMemberCookieAndIdArgs, 'orgId'>>;
-  getOrgs?: Resolver<Maybe<ResolversTypes['OrgsPayload']>, ParentType, ContextType>;
-  getUserByCookie?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType>;
-  getUserById?: Resolver<Maybe<ResolversTypes['UserPayload']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
-  getUsers?: Resolver<Maybe<ResolversTypes['UsersPayload']>, ParentType, ContextType>;
+  getBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
+  getDialogsByBaseId?: Resolver<Maybe<ResolversTypes['DialogsResult']>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
+  getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
+  getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreeResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
+  getInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
+  getKarte?: Resolver<Maybe<ResolversTypes['KarteResult']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
+  getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesResult']>, ParentType, ContextType>;
+  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreeResult']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
+  getOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
+  getOrgInfoByMemberCookieAndId?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<QueryGetOrgInfoByMemberCookieAndIdArgs, 'orgId'>>;
+  getOrgs?: Resolver<Maybe<ResolversTypes['OrgsResult']>, ParentType, ContextType>;
+  getUserByCookie?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType>;
+  getUserById?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
+  getUsers?: Resolver<Maybe<ResolversTypes['UsersResult']>, ParentType, ContextType>;
   hoge?: Resolver<Maybe<ResolversTypes['Hoge']>, ParentType, ContextType, RequireFields<QueryHogeArgs, 'id'>>;
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Node']>>>, ParentType, ContextType, RequireFields<QueryNodesArgs, 'ids'>>;
@@ -1126,6 +1106,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   dialogPosted?: SubscriptionResolver<Maybe<ResolversTypes['Dialog']>, "dialogPosted", ParentType, ContextType>;
+}>;
+
+export type SucceededResolvers<ContextType = any, ParentType extends ResolversParentTypes['Succeeded'] = ResolversParentTypes['Succeeded']> = ResolversObject<{
+  succeeded?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -1145,50 +1130,53 @@ export type UserErrorResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type UserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserPayload'] = ResolversParentTypes['UserPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type UserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserResult'] = ResolversParentTypes['UserResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'User', ParentType, ContextType>;
 }>;
 
 export interface UserRoleScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UserRole'], any> {
   name: 'UserRole';
 }
 
-export type UsersPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersPayload'] = ResolversParentTypes['UsersPayload']> = ResolversObject<{
-  errors?: Resolver<Maybe<ResolversTypes['Errors']>, ParentType, ContextType>;
+export type UsersResolvers<ContextType = any, ParentType extends ResolversParentTypes['Users'] = ResolversParentTypes['Users']> = ResolversObject<{
   users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UsersResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersResult'] = ResolversParentTypes['UsersResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'Users', ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Address?: AddressResolvers<ContextType>;
   ApplicationError?: ApplicationErrorResolvers<ContextType>;
   Base?: BaseResolvers<ContextType>;
-  BasePayload?: BasePayloadResolvers<ContextType>;
-  BoolPayload?: BoolPayloadResolvers<ContextType>;
-  DeleteUserPayload?: DeleteUserPayloadResolvers<ContextType>;
+  BaseResult?: BaseResultResolvers<ContextType>;
+  BoolResult?: BoolResultResolvers<ContextType>;
   Dialog?: DialogResolvers<ContextType>;
   DialogConnection?: DialogConnectionResolvers<ContextType>;
   DialogEdges?: DialogEdgesResolvers<ContextType>;
-  DialogPayload?: DialogPayloadResolvers<ContextType>;
+  DialogResult?: DialogResultResolvers<ContextType>;
+  Dialogs?: DialogsResolvers<ContextType>;
+  DialogsResult?: DialogsResultResolvers<ContextType>;
+  Error?: ErrorResolvers<ContextType>;
   Errors?: ErrorsResolvers<ContextType>;
   FellowConnection?: FellowConnectionResolvers<ContextType>;
   FellowEdge?: FellowEdgeResolvers<ContextType>;
   Hoge?: HogeResolvers<ContextType>;
-  InquiriesPayload?: InquiriesPayloadResolvers<ContextType>;
+  InquiriesResult?: InquiriesResultResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
   InquiryCategory?: GraphQLScalarType;
   InquiryConnection?: InquiryConnectionResolvers<ContextType>;
   InquiryEdges?: InquiryEdgesResolvers<ContextType>;
   InquiryLeafConnection?: InquiryLeafConnectionResolvers<ContextType>;
   InquiryLeafEdges?: InquiryLeafEdgesResolvers<ContextType>;
-  InquiryPayload?: InquiryPayloadResolvers<ContextType>;
+  InquiryResult?: InquiryResultResolvers<ContextType>;
   InquiryStatus?: GraphQLScalarType;
   InquiryTree?: InquiryTreeResolvers<ContextType>;
-  InquiryTreePayload?: InquiryTreePayloadResolvers<ContextType>;
+  InquiryTreeResult?: InquiryTreeResultResolvers<ContextType>;
   Karte?: KarteResolvers<ContextType>;
-  KartePayload?: KartePayloadResolvers<ContextType>;
+  KarteResult?: KarteResultResolvers<ContextType>;
   MemberConnection?: MemberConnectionResolvers<ContextType>;
   MemberEdges?: MemberEdgesResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
@@ -1196,24 +1184,28 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   MessageEdges?: MessageEdgesResolvers<ContextType>;
   MessageLeafConnection?: MessageLeafConnectionResolvers<ContextType>;
   MessageLeafEdges?: MessageLeafEdgesResolvers<ContextType>;
-  MessagePayload?: MessagePayloadResolvers<ContextType>;
+  MessageResult?: MessageResultResolvers<ContextType>;
   MessageStatus?: GraphQLScalarType;
   MessageTree?: MessageTreeResolvers<ContextType>;
-  MessageTreePayload?: MessageTreePayloadResolvers<ContextType>;
-  MessagesPayload?: MessagesPayloadResolvers<ContextType>;
+  MessageTreeResult?: MessageTreeResultResolvers<ContextType>;
+  Messages?: MessagesResolvers<ContextType>;
+  MessagesResult?: MessagesResultResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
   Org?: OrgResolvers<ContextType>;
-  OrgPayload?: OrgPayloadResolvers<ContextType>;
-  OrgsPayload?: OrgsPayloadResolvers<ContextType>;
+  OrgResult?: OrgResultResolvers<ContextType>;
+  Orgs?: OrgsResolvers<ContextType>;
+  OrgsResult?: OrgsResultResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
-  PostDialogPayload?: PostDialogPayloadResolvers<ContextType>;
+  PostDialogResult?: PostDialogResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  Succeeded?: SucceededResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserError?: UserErrorResolvers<ContextType>;
-  UserPayload?: UserPayloadResolvers<ContextType>;
+  UserResult?: UserResultResolvers<ContextType>;
   UserRole?: GraphQLScalarType;
-  UsersPayload?: UsersPayloadResolvers<ContextType>;
+  Users?: UsersResolvers<ContextType>;
+  UsersResult?: UsersResultResolvers<ContextType>;
 }>;
 

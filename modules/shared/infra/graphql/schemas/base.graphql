@@ -36,38 +36,28 @@ type FellowEdge {
 }
 
 type Query {
-  getBase(id: String!): BasePayload
-  getKarte(id: String!): KartePayload
-  getDialogsByBaseId(id: String!): [Dialog]
+  getBase(id: String!): BaseResult
+  getKarte(id: String!): KarteResult
+  getDialogsByBaseId(id: String!): DialogsResult
 }
 
 type Mutation {
-  createBase: BasePayload
-  postDialog(input: postDialogInput!): PostDialogPayload
+  createBase: BaseResult
+  postDialog(input: postDialogInput!): PostDialogResult
 }
 
 type Subscription {
   dialogPosted: Dialog
 }
 
-type BasePayload {
-  base: Base
-  errors: Errors
-}
+union BaseResult = Base | Errors
+union KarteResult = Karte | Errors
+union DialogResult = Dialog | Errors
+union DialogsResult = Dialogs | Errors
+union PostDialogResult = Dialog | Errors
 
-type KartePayload {
-  karte: Karte
-  errors: Errors
-}
-
-type PostDialogPayload {
-  dialog: Dialog
-  errors: Errors
-}
-
-type DialogPayload {
-  dialog: [Dialog]
-  errors: Errors
+type Dialogs {
+  dialogs: [Dialog!]
 }
 
 input postDialogInput {

@@ -31,9 +31,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       // temp
       const readResult = await getOrgPublicInfoById(id);
       if (readResult === false) return returnErrorToGQL('wip');
-      const org = readOrgToGql(readResult);
-
-      return { org };
+      return readOrgToGql(readResult);
     },
     getOrgs: async () => {
       // console.log('catch:');
@@ -59,7 +57,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       const _org = readOrgToGql(rest);
       const _inq = readInquiresToConn(inquiries);
 
-      return { org: { inquiries: _inq, ..._org } };
+      return { inquiries: _inq, ..._org };
     },
   },
   Mutation: {
@@ -71,8 +69,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       });
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
-      const org = dtoOrgToGql(usecaseResult.value.getValue());
-      return { org };
+      return dtoOrgToGql(usecaseResult.value.getValue());
     },
     requestJoinOrg: async (_, { orgId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -84,8 +81,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
-      const org = dtoOrgToGql(usecaseResult.value.getValue());
-      return { org };
+      return dtoOrgToGql(usecaseResult.value.getValue());
     },
     acceptJoinOrg: async (
       _,
@@ -101,8 +97,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
-      const org = dtoOrgToGql(usecaseResult.value.getValue());
-      return { org };
+      return dtoOrgToGql(usecaseResult.value.getValue());
     },
     // FIXME:need separate them, implement feature of control admin
     updateOrg: async (_, { input }, { idInCookie }) => {
@@ -132,8 +127,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
-      const gqlOrg = dtoOrgToGql(usecaseResult.value.getValue());
-      return { org: gqlOrg };
+      return dtoOrgToGql(usecaseResult.value.getValue());
     },
   },
 };

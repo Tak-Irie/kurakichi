@@ -1,13 +1,13 @@
 query GetMessagesByTreeId($treeId: String!) {
   getMessagesByTreeId(treeId: $treeId) {
-    errors {
-      ...Errors
-    }
-    messageTree {
+    ... on MessageTree {
       id
       leaves {
         ...MessageLeafConn
       }
+    }
+    ... on Errors {
+      ...Errors
     }
   }
 }

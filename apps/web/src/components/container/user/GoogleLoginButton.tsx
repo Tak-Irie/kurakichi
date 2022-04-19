@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import GoogleButton from 'react-google-button';
+import { GoogleButton } from '../../presentational/atoms';
 
 const GoogleLoginButton: FC = () => {
   const handleClick = async () => {
@@ -25,7 +25,7 @@ const GoogleLoginButton: FC = () => {
     }
   };
 
-  return <GoogleButton type="dark" onClick={handleClick} />;
+  return <GoogleButton onClick={handleClick} />;
 };
 
 export { GoogleLoginButton };

@@ -55,51 +55,42 @@ type MessageLeafEdges {
 }
 
 type Query {
-  getUserByCookie: UserPayload
-  getUserById(userId: String!): UserPayload
-  getUsers: UsersPayload
-  getMessagesByCookie: MessagesPayload
-  getMessagesByTreeId(treeId: String!): MessageTreePayload
+  getUserByCookie: UserResult
+  getUserById(userId: String!): UserResult
+  getUsers: UsersResult
+  getMessagesByCookie: MessagesResult
+  getMessagesByTreeId(treeId: String!): MessageTreeResult
 }
 
 type Mutation {
-  registerUser(input: registerUserInput!): UserPayload
-  loginUser(input: loginUserInput!): UserPayload
-  updateUser(input: updateUserInput!): UserPayload
-  logoutUser: BoolPayload
-  deleteUser: BoolPayload
-  forgetPassword(email: String!): BoolPayload
-  sendMessage(input: sendMessageInput!): MessagePayload
-  replyMessage(input: replyMessageInput!): MessagePayload
+  registerUser(input: registerUserInput!): UserResult
+  loginUser(input: loginUserInput!): UserResult
+  updateUser(input: updateUserInput!): UserResult
+  logoutUser: BoolResult
+  deleteUser: BoolResult
+  forgetPassword(email: String!): BoolResult
+  changePassword(input: changePasswordInput): BoolResult
+  sendMessage(input: sendMessageInput!): MessageResult
+  replyMessage(input: replyMessageInput!): MessageResult
 }
 
-type UserPayload {
-  user: User
-  errors: Errors
-}
+union UserResult = User | Errors
+union UsersResult = Users | Errors
+union MessageResult = Message | Errors
+union MessagesResult = Messages | Errors
+union MessageTreeResult = MessageTree | Errors
 
-type UsersPayload {
+type Users {
   users: [User!]
-  errors: Errors
 }
 
-type MessagePayload {
-  message: Message
-  errors: Errors
-}
-type MessagesPayload {
-  messages: [Message]
-  errors: Errors
+type Messages {
+  messages: [Message!]
 }
 
-type MessageTreePayload {
-  messageTree: MessageTree
-  errors: Errors
-}
-
-type DeleteUserPayload {
-  result: Boolean!
-  errors: Errors
+input changePasswordInput {
+  oldPassword: String!
+  newPassword: String!
 }
 
 input registerUserInput {

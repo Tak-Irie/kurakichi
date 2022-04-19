@@ -1,5 +1,5 @@
-query GetUserMyInfo {
-  getUserByCookie {
+mutation LoginUser($input: loginUserInput!) {
+  loginUser(input: $input) {
     ... on User {
       ...UserPrivateInfo
     }

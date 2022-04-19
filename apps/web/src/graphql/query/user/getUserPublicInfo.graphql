@@ -1,9 +1,9 @@
 query GetUserPublicInfo($userId: String!) {
   getUserById(userId: $userId) {
-    user {
+    ... on User {
       ...UserPublicInfo
     }
-    errors {
+    ... on Errors {
       ...Errors
     }
   }

@@ -1,9 +1,11 @@
 query GetOrgsForMap {
   getOrgs {
-    orgs {
-      ...OrgExceptConn
+    ... on Orgs {
+      orgs {
+        ...OrgExceptConn
+      }
     }
-    errors {
+    ... on Errors {
       ...Errors
     }
   }

@@ -29,7 +29,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResponse.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResponse.value.getValue());
-      return { inquiry };
+      return { ...inquiry };
     },
     getInquiriesByOrgId: async (_, { orgId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -46,7 +46,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
       );
 
       return {
-        inquiries,
+        ...inquiries,
       };
     },
     getInquiriesByTreeId: async (_, { treeId }, { idInCookie }) => {
@@ -63,7 +63,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         treeId,
       );
 
-      return { inquiryTree };
+      return { ...inquiryTree };
     },
   },
   Mutation: {
@@ -82,7 +82,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResult.value.getValue());
-      return { inquiry };
+      return { ...inquiry };
     },
     replyInquiry: async (_, { input }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -96,7 +96,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResult.value.getValue());
-      return { inquiry };
+      return { ...inquiry };
     },
     updateInquiryStatus: async (
       _,
@@ -113,7 +113,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResult.value.getValue());
-      return { inquiry };
+      return { ...inquiry };
     },
   },
 };

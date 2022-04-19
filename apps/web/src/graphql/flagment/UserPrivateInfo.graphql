@@ -1,4 +1,4 @@
-fragment UserMyInfo on User {
+fragment UserPrivateInfo on User {
   id
   name
   email

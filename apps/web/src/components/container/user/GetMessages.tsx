@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import { useGetMessagesByCookieQuery } from '../../../graphql';
+import { FAIL_TO_FETCH } from '../../../util/Constants';
 import { LoadingSpinner, SmallCard } from '../../presentational/atoms';
 
 export const GetMessages: FC = () => {
@@ -10,16 +12,16 @@ export const GetMessages: FC = () => {
   // console.log('data:', data);
   return (
     <div>
-      {!data.getMessagesByCookie.messages ? (
+      {data?.getMessagesByCookie?.messages ? (
         <p>no massage</p>
       ) : (
         <ul>
-          {data.getMessagesByCookie.messages.map((message) => {
+          {data?.getMessagesByCookie?.messages?.map((message) => {
             return (
               <SmallCard
-                key={message.id}
-                title={message.id}
-                content={message.content}
+                key={message?.id || FAIL_TO_FETCH}
+                title={message?.id}
+                content={message?.content || FAIL_TO_FETCH}
               />
             );
           })}

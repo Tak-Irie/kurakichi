@@ -1,3 +1,4 @@
+export * from '../organisms/NotificationSet';
 export * from './AnimationBlock';
 export * from './Article';
 export * from './BadgeInquiry';
@@ -6,7 +7,6 @@ export * from './DropDownMenu';
 export * from './DropDownMenuItems';
 export * from './HeaderDropDown';
 export * from './MessageForm';
-export * from './NotificationSet';
 export * from './PopOnIcon';
 export * from './SideBar';
 export * from './Tables';

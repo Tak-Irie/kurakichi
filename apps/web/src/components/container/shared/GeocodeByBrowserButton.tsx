@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState, VFC } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 
 import { ButtonWithIcon, IconsWifi } from '../../presentational';
 
@@ -12,7 +12,7 @@ type GeocodeByBrowserButtonProps = {
   >;
 };
 
-export const GeocodeByBrowserButton: VFC<GeocodeByBrowserButtonProps> = ({
+export const GeocodeByBrowserButton: FC<GeocodeByBrowserButtonProps> = ({
   buttonLabel,
   dispatcher,
 }) => {
