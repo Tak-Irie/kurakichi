@@ -1,4 +1,4 @@
-import { ReactElement, VFC } from 'react';
+import { FC, ReactElement } from 'react';
 
 import { TextBase, TextH3 } from '..';
 import { LinkNextjs } from '../../container';
@@ -15,7 +15,7 @@ type ArticleProps = {
   linkAs?: string;
 };
 
-export const Article: VFC<ArticleProps> = ({
+export const Article: FC<ArticleProps> = ({
   title,
   description,
   linkUrl,

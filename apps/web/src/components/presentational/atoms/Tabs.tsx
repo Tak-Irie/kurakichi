@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState, VFC } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { fixClassNameForTailwind } from '../../../util';
 
 type TabsProps = {
@@ -6,7 +6,7 @@ type TabsProps = {
   labels: string[];
 };
 
-export const Tabs: VFC<TabsProps> = ({ clickHandler, labels }) => {
+export const Tabs: FC<TabsProps> = ({ clickHandler, labels }) => {
   const tabs = labels.map((label, index) => {
     return {
       name: label,

@@ -1,14 +1,14 @@
-import { VFC, useState, Fragment, Dispatch, SetStateAction } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
+import { InquiryStatusModel } from '@kurakichi/modules';
+import { Dispatch, FC, Fragment, SetStateAction } from 'react';
 
-import { InquiryStatus } from '../../../graphql';
 import { BadgeInquiryStatus } from '..';
 import { IconsCheck, IconsSelector } from '../atoms';
 
 type BadgeInquiryStatusChangeableProps = {
-  status: InquiryStatus;
+  status: InquiryStatusModel;
   size: 'large' | 'small';
-  handleChange: Dispatch<SetStateAction<InquiryStatus>>;
+  handleChange: Dispatch<SetStateAction<InquiryStatusModel>>;
 };
 
 const _status = [
@@ -17,11 +17,9 @@ const _status = [
   { en: 'WORKING', jp: '対応中' },
   { en: 'DRAFT', jp: '作成中' },
 ];
-export const BadgeInquiryStatusChangeable: VFC<BadgeInquiryStatusChangeableProps> = ({
-  status,
-  size,
-  handleChange,
-}) => {
+export const BadgeInquiryStatusChangeable: FC<
+  BadgeInquiryStatusChangeableProps
+> = ({ status, size, handleChange }) => {
   return (
     <Listbox value={status} onChange={handleChange}>
       <div className="relative">
@@ -29,7 +27,7 @@ export const BadgeInquiryStatusChangeable: VFC<BadgeInquiryStatusChangeableProps
           <span className="block truncate">
             <BadgeInquiryStatus size={size} status={status} />
           </span>
-          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+          <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
             <IconsSelector />
           </span>
         </Listbox.Button>
@@ -39,7 +37,7 @@ export const BadgeInquiryStatusChangeable: VFC<BadgeInquiryStatusChangeableProps
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Listbox.Options className="overflow-auto absolute py-1 mt-1 w-full max-h-60 text-base bg-white rounded-md focus:outline-none ring-1 ring-black/5 shadow-lg sm:text-sm">
             {_status.map((value) => (
               <Listbox.Option
                 key={value.en}
@@ -51,12 +49,18 @@ export const BadgeInquiryStatusChangeable: VFC<BadgeInquiryStatusChangeableProps
               >
                 {({ selected, active }) => (
                   <>
-                    <span className={`${selected ? 'font-medium' : 'font-normal'} block truncate`}>
+                    <span
+                      className={`${
+                        selected ? 'font-medium' : 'font-normal'
+                      } block truncate`}
+                    >
                       {value.jp}
                     </span>
                     {selected ? (
                       <span
-                        className={`${active ? 'text-yellow-600' : 'text-yellow-600'}
+                        className={`${
+                          active ? 'text-yellow-600' : 'text-yellow-600'
+                        }
                                 absolute inset-y-0 left-0 flex items-center pl-3`}
                       >
                         <IconsCheck />

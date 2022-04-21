@@ -1,8 +1,15 @@
+import { PostcodeRegExp } from '@kurakichi/modules';
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 
-import { ButtonWithIcon, Form, IconsPost, Input } from '../../presentational';
+import {
+  ButtonWithIcon,
+  Form,
+  IconsPost,
+  Input,
+  InputValue,
+} from '../../presentational';
 
 type Geocode = {
   lat: number;
@@ -14,9 +21,9 @@ type GeocodeByPostcodeButtonProps = {
   dispatcher: Dispatch<SetStateAction<Geocode>>;
 };
 
-type PostcodeInput = {
+interface PostcodeInput extends InputValue {
   postcode: string;
-};
+}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -27,8 +34,11 @@ export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
   const [isLocation, setIsLocation] = useState<Geocode>();
   const [isPostcode, setIsPostcode] = useState<string>();
   const { register, handleSubmit } = useForm<PostcodeInput>();
+  const POST_CODE_API =
+    process.env.POST_CODE_API ||
+    `http://localhost:4000/geocode/postcode?code=${isPostcode}`;
 
-  useSWR(`http://localhost:4000/geocode/postcode?code=${isPostcode}`, fetcher, {
+  useSWR(POST_CODE_API, fetcher, {
     revalidateOnMount: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -59,6 +69,7 @@ export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
           <Input<PostcodeInput>
             type="text"
             label="postcode"
+            pattern={PostcodeRegExp}
             required={false}
             register={register}
           />

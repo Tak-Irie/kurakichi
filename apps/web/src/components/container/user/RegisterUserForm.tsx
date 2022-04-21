@@ -1,31 +1,33 @@
+import { EmailRegExp, PasswordRegExp } from '@kurakichi/modules';
 import { useRouter } from 'next/router';
-import { useContext, VFC } from 'react';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  useGetUserMyInfoQuery,
+  useRegisterUserMutation,
+} from '../../../graphql';
 
 import {
-  useGetUserByCookieQuery,
-  useRegisterUserMutation,
-} from '@next/graphql';
-import { AuthContext, isServer } from '../../../util';
-import { Form, Input, LoadingSpinner } from '../../presentational/atoms';
+  Form,
+  Input,
+  InputValue,
+  LoadingSpinner,
+} from '../../presentational/atoms';
 import {
   ButtonOrLoading,
   NotificationSet,
 } from '../../presentational/molecules';
 
-type UserRegisterInput = {
+interface UserRegisterInput extends InputValue {
   email: string;
   password: string;
-};
+}
 
-export const RegisterUserForm: VFC = () => {
+export const RegisterUserForm: FC = () => {
   const router = useRouter();
-  const { setAuthStatus } = useContext(AuthContext);
-
-  const { data: userData, loading: userLoading } = useGetUserByCookieQuery({
-    skip: isServer(),
+  const { data: userData, loading: userLoading } = useGetUserMyInfoQuery({
+    fetchPolicy: 'cache-only',
     ssr: false,
-    fetchPolicy: 'cache-first',
   });
 
   const [registerUser, { data, loading, error }] = useRegisterUserMutation();
@@ -35,7 +37,6 @@ export const RegisterUserForm: VFC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<UserRegisterInput>({
-    resolver: yupResolver(yupRegisterUserAndLoginSchema),
     mode: 'onBlur',
   });
 
@@ -44,10 +45,9 @@ export const RegisterUserForm: VFC = () => {
     try {
       // avoid to cache input data, set no-cache
       await registerUser({
-        variables: { ...value },
+        variables: { input: { ...value } },
         fetchPolicy: 'no-cache',
       });
-      setAuthStatus(true);
     } catch (err) {
       console.error('registerMutateErr:', err);
     }
@@ -57,18 +57,26 @@ export const RegisterUserForm: VFC = () => {
     return <p>loading</p>;
   }
 
-  if (userData?.getUserByCookie.user) {
+  if (userData?.getUserByCookie?.__typename === 'User') {
     router.replace('/');
   }
 
-  if (!userLoading && !userData?.getUserByCookie.user) {
+  if (userData?.getUserByCookie?.__typename === 'Errors' || null) {
     return (
       <>
         <NotificationSet
-          data={null}
-          errData={data?.registerUser.error}
-          sysErr={error}
-          errDataLabel={data?.registerUser.error?.message}
+          succeededContent=""
+          succeededLabel={
+            data?.registerUser?.__typename === 'User'
+              ? (data.registerUser.name as string)
+              : ''
+          }
+          errContent={
+            data?.registerUser?.__typename === 'Errors'
+              ? data.registerUser.applicationError?.message
+              : ''
+          }
+          sysErrContent={error}
         />
         <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
           <Input<UserRegisterInput>
@@ -77,6 +85,7 @@ export const RegisterUserForm: VFC = () => {
             label="email"
             register={register}
             required
+            pattern={EmailRegExp}
             autoComplete="email"
             errMessage={errors.email && errors.email.message}
           />
@@ -86,6 +95,7 @@ export const RegisterUserForm: VFC = () => {
             label="password"
             register={register}
             required
+            pattern={PasswordRegExp}
             autoComplete="new-password"
             errMessage={errors.password && errors.password.message}
             helperText="8~30字の英数記号(.-_*!)を入力して下さい。英字の大小は区別されます"

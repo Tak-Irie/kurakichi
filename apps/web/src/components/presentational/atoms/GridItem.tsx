@@ -1,4 +1,4 @@
-import type { VFC } from 'react';
+import type { FC } from 'react';
 
 type GridItemProps = {
   label: string;
@@ -6,7 +6,7 @@ type GridItemProps = {
   colSpan?: string;
 };
 
-export const GridItem: VFC<GridItemProps> = ({
+export const GridItem: FC<GridItemProps> = ({
   label,
   content,
   colSpan = 'sm:col-span-1',

@@ -1,14 +1,11 @@
-import { VFC } from 'react';
+import { FC } from 'react';
+import { Article } from '../molecules';
 
-import { Article } from '@next/ui';
+// type ArticlesWelfareGuideProps = {};
 
-type ArticlesWelfareGuideProps = {
-  some?: string;
-};
-
-export const ArticlesWelfareGuide: VFC<ArticlesWelfareGuideProps> = ({ some }) => {
+export const ArticlesWelfareGuide: FC = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-10 max-w-full">
+    <div className="grid grid-cols-1 gap-8 mt-10 max-w-full md:grid-cols-2 xl:grid-cols-3">
       <Article
         imageSrc="/save_money_pig.jpg"
         title="暮らし"
@@ -44,7 +41,9 @@ export const ArticlesWelfareGuide: VFC<ArticlesWelfareGuideProps> = ({ some }) =
       <Article
         imageSrc="/father_and_girl.jpg"
         title="育児"
-        description={'・育児休業給付金を受ける\n・ひとり親職業訓練給付金\n・毎月の児童手当'}
+        description={
+          '・育児休業給付金を受ける\n・ひとり親職業訓練給付金\n・毎月の児童手当'
+        }
         linkUrl="/guide/child"
       />
       <Article

@@ -1,0 +1,24 @@
+fragment InquiryConnection on InquiryConnection {
+  edges {
+    cursor
+    node {
+      id
+      content
+      category
+      inquiryStatus
+      sentAt
+      receivedOrg {
+        id
+      }
+      replier {
+        id
+      }
+      sender {
+        id
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}

@@ -1,18 +1,19 @@
-import { VFC } from 'react';
+import { InquiryCategoryModel, InquiryStatusModel } from '@kurakichi/modules';
+import { FC } from 'react';
 
-import { Badge, BadgeLarge } from '..';
-import { InquiryCategory, InquiryStatus } from '../../../graphql';
+import { Badge, BadgeLarge } from '../atoms';
 
 type BadgeInquiryCategoryProps = {
-  category: InquiryCategory;
+  category: InquiryCategoryModel;
   size?: 'small' | 'large';
 };
 type BadgeInquiryStatusProps = {
-  status: InquiryStatus;
+  status: InquiryStatusModel;
   size?: 'small' | 'large';
 };
 
-export const BadgeInquiryCategory: VFC<BadgeInquiryCategoryProps> = ({
+// TODO:fix to cope with undefined
+export const BadgeInquiryCategory: FC<BadgeInquiryCategoryProps> = ({
   category,
   size,
 }) => {
@@ -51,7 +52,7 @@ export const BadgeInquiryCategory: VFC<BadgeInquiryCategoryProps> = ({
     <Badge color={color} content={content} />
   );
 };
-export const BadgeInquiryStatus: VFC<BadgeInquiryStatusProps> = ({
+export const BadgeInquiryStatus: FC<BadgeInquiryStatusProps> = ({
   status,
   size,
 }) => {

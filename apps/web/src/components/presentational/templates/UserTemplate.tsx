@@ -1,5 +1,6 @@
-import { ReactElement, VFC } from 'react';
-import { ProfileHeader, ProfileHeaderSetting, Text2xl } from '@next/ui';
+import { FC, ReactElement } from 'react';
+import { Text2xl } from '../atoms';
+import { ProfileHeader, ProfileHeaderSetting } from '../organisms';
 
 type UserTemplateProps = {
   avatar: string;
@@ -10,7 +11,7 @@ type UserTemplateProps = {
   settingHeader?: boolean;
 };
 
-export const UserTemplate: VFC<UserTemplateProps> = ({
+export const UserTemplate: FC<UserTemplateProps> = ({
   headerButtons,
   pageContents,
   avatar,
@@ -22,9 +23,17 @@ export const UserTemplate: VFC<UserTemplateProps> = ({
     <div className="grid grid-cols-12 pb-10">
       <div className="col-span-full">
         {settingHeader ? (
-          <ProfileHeaderSetting avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+          <ProfileHeaderSetting
+            avatarSrc={avatar}
+            imageSrc={image}
+            buttons={headerButtons}
+          />
         ) : (
-          <ProfileHeader avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+          <ProfileHeader
+            avatarSrc={avatar}
+            imageSrc={image}
+            buttons={headerButtons}
+          />
         )}
       </div>
       <div className="col-start-3">

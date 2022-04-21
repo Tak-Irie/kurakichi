@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 
 type ImagesProps = {
   src: string;
@@ -6,11 +6,11 @@ type ImagesProps = {
   css?: string;
 };
 
-export const Images: VFC<ImagesProps> = ({ alt, css, src }) => {
+export const Images: FC<ImagesProps> = ({ alt, css, src }) => {
   return <img className={css} src={src} alt={alt} />;
 };
 
-export const ImageLogo: VFC<ImagesProps> = ({
+export const ImageLogo: FC<ImagesProps> = ({
   alt,
   src,
   css = 'h-32 bg-white rounded-full border-gray-200 border',
@@ -26,7 +26,7 @@ export const ImageLogo: VFC<ImagesProps> = ({
   );
 };
 
-export const ImageHero: VFC<ImagesProps> = ({
+export const ImageHero: FC<ImagesProps> = ({
   alt,
   src,
   css = 'h-32 w-full object-cover lg:h-56',
@@ -40,7 +40,7 @@ export const ImageHero: VFC<ImagesProps> = ({
   );
 };
 
-export const ImageHeroTransition: VFC<ImagesProps> = ({
+export const ImageHeroTransition: FC<ImagesProps> = ({
   alt,
   src,
   css = 'h-32 w-full object-cover lg:h-56 transition duration-500 hover:bg-black',

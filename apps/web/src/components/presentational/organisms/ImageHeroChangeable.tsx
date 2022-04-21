@@ -1,15 +1,18 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import { ImageHero, IconsDocumentAdd } from '@next/ui';
 import { UploadFiles } from '../../../util';
+import { IconsDocumentAdd, ImageHero } from '../atoms';
 
 type ImageHeroDroppableProps = {
   setImage: Dispatch<SetStateAction<UploadFiles>>;
   files: UploadFiles;
 };
 
-export const ImageHeroChangeable: FC<ImageHeroDroppableProps> = ({ files, setImage }) => {
+export const ImageHeroChangeable: FC<ImageHeroDroppableProps> = ({
+  files,
+  setImage,
+}) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
@@ -31,18 +34,25 @@ export const ImageHeroChangeable: FC<ImageHeroDroppableProps> = ({ files, setIma
   }, [files.image]);
 
   return (
-    <div className="grid grid-cols-12 group relative">
+    <div className="group grid relative grid-cols-12">
       <div className="col-span-full">
-        <div className="absolute bg-black h-32 w-full lg:h-56 opacity-50 transition duration-500 group-hover:opacity-75" />
+        <div className="absolute w-full h-32 bg-black opacity-50 group-hover:opacity-75 transition duration-500 lg:h-56" />
         <ImageHero
-          src={typeof files.image === 'object' ? files.image[0].preview : files.image}
+          src={
+            typeof files.image === 'object'
+              ? files.image[0].preview
+              : files.image
+          }
           alt="イメージ画像"
         />
       </div>
-      <div className="col-start-5 col-end-9 absolute w-full h-full">
-        <div className="w-full h-full flex py-14 justify-center" {...getRootProps()}>
+      <div className="absolute col-start-5 col-end-9 w-full h-full">
+        <div
+          className="flex justify-center py-14 w-full h-full"
+          {...getRootProps()}
+        >
           <input {...getInputProps()} />
-          <label className="w-full h-full flex flex-col justify-center items-center border rounded-3xl cursor-pointer">
+          <label className="flex flex-col justify-center items-center w-full h-full rounded-3xl border cursor-pointer">
             <IconsDocumentAdd overwriteCSS={'w-16 h-16 text-gray-400'} />
           </label>
         </div>

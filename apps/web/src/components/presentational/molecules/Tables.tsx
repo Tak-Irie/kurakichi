@@ -229,7 +229,7 @@ export const TableInquiry: FC<TableInquiryProps> = ({
                   <div className="px-2 w-full">
                     <BadgeInquiryStatus
                       size="large"
-                      status={inquiry.inquiryStatus}
+                      status={inquiry.inquiryStatus || 'UNREAD'}
                     />
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export const TableInquiry: FC<TableInquiryProps> = ({
                   <div className="px-2 w-full">
                     <BadgeInquiryCategory
                       size="large"
-                      category={inquiry.category}
+                      category={inquiry.category || 'OTHERS'}
                     />
                   </div>
                 </div>

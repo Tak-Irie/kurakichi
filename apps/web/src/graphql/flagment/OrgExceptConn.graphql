@@ -1,4 +1,4 @@
-fragment OrgExceptConn on Org {
+fragment OrgExceptConnection on Org {
   address {
     address
     latitude

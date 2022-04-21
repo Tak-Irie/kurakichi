@@ -1,6 +1,6 @@
-import { VFC, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 
-import { ImageHero, AvatarBig } from '..';
+import { AvatarBig, ImageHero } from '..';
 
 type ProfileHeaderProps = {
   imageSrc: string;
@@ -9,7 +9,11 @@ type ProfileHeaderProps = {
   buttons?: ReactNode;
 };
 
-export const ProfileHeader: VFC<ProfileHeaderProps> = ({ avatarSrc, imageSrc, buttons }) => {
+export const ProfileHeader: FC<ProfileHeaderProps> = ({
+  avatarSrc,
+  imageSrc,
+  buttons,
+}) => {
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-full">
@@ -18,7 +22,9 @@ export const ProfileHeader: VFC<ProfileHeaderProps> = ({ avatarSrc, imageSrc, bu
       <div className="col-start-3 -mt-20">
         <AvatarBig src={avatarSrc} alt="プロフィールアバター" />
       </div>
-      <div className="col-start-6 col-end-11 mt-4 flex justify-end space-x-1">{buttons}</div>
+      <div className="flex col-start-6 col-end-11 justify-end mt-4 space-x-1">
+        {buttons}
+      </div>
     </div>
   );
 };

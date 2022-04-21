@@ -7,6 +7,16 @@ type User implements Node {
   heroImageUrl: String
   role: UserRole
   messages: MessageConnection
+  orgs: OrgConnection
+}
+
+type OrgConnection {
+  edges: [OrgEdges!]
+  pageInfo: PageInfo
+}
+type OrgEdges {
+  cursor: String!
+  node: Org!
 }
 
 """

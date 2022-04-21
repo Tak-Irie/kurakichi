@@ -1,0 +1,10 @@
+mutation AcceptToJoinOrg($input: acceptJoinOrgInput!) {
+  acceptJoinOrg(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Org {
+      ...OrgPrivateInfo
+    }
+  }
+}

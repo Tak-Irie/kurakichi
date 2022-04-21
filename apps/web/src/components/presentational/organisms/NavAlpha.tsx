@@ -4,9 +4,13 @@ import { LinkNextjs } from '../../container';
 
 export const NavAlpha: FC = () => {
   return (
-    <div className="flex bg-red-200 text-gray-700 border border-gray-100">
-      <LinkNextjs labelOrElement="Alpha限定メニュー" url="/" overwriteCSS="ml-2 text-md" />
-      <div className="hidden sm:flex ml-5 w-auto space-x-2">
+    <div className="flex text-gray-700 bg-red-200 border border-gray-100">
+      <LinkNextjs
+        labelOrElement="Alpha限定メニュー"
+        url="/"
+        overwriteCSS="ml-2 text-md"
+      />
+      <div className="hidden ml-5 space-x-2 w-auto sm:flex">
         <LinkNextjs
           labelOrElement="製作動機"
           url="/alpha/motivation"
@@ -23,7 +27,7 @@ export const NavAlpha: FC = () => {
           overwriteCSS="hover:bg-red-300 transition duration-300  rounded px-1"
         />
       </div>
-      <div className="hover:bg-red-300 transition duration-200 px-1 ml-auto mr-2 rounded">
+      <div className="px-1 mr-2 ml-auto hover:bg-red-300 rounded transition duration-200">
         <LinkNextjs labelOrElement="簡易ログイン" url="/" />
       </div>
     </div>

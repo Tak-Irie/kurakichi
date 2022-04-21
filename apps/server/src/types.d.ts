@@ -1,5 +1,6 @@
-import { Request, Response } from 'express';
-import { Session, SessionData } from 'express-session';
+import type { Request, Response } from 'express';
+import type { Session, SessionData } from 'express-session';
+import type { RedisPubSub } from 'graphql-redis-subscriptions';
 
 declare module '@types/express-session' {
   interface SessionData {
@@ -23,4 +24,5 @@ export interface ApolloContext {
   req: Request & { session: Session };
   res: Response;
   idInCookie?: string;
+  pubsub: RedisPubSub;
 }

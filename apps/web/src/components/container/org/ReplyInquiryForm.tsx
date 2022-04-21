@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import { VFC } from 'react';
+import { Any100chrRegExp } from '@kurakichi/modules';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useReplyInquiryMutation } from '../../../graphql';
@@ -18,7 +18,7 @@ type ResponseInquiryProps = {
 type InquiryInquiryInput = {
   textInput: string;
 };
-export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({
+export const ReplyInquiryForm: FC<ResponseInquiryProps> = ({
   replyTargetId,
   onClick,
 }) => {
@@ -30,29 +30,10 @@ export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({
     try {
       await replyInquiry({
         variables: {
-          content: values.textInput,
-          targetId: replyTargetId,
-        },
-        update: (cache, { data: { replyInquiry } }) => {
-          // console.log('cache:', cache);
-          // console.log('update:', replyInquiry);
-          // console.log('treeId:', replyInquiry.inquiry.tree.id);
-          cache.modify({
-            id: 'InquiryTree:' + replyInquiry.inquiry.tree.id,
-            fields: {
-              treedInquiry(existing = []) {
-                const newReply = cache.writeFragment({
-                  data: replyInquiry.inquiry,
-                  fragment: gql`
-                    fragment Inquiry on InquiryTree {
-                      id
-                    }
-                  `,
-                });
-                return [...existing, newReply];
-              },
-            },
-          });
+          input: {
+            content: values.textInput,
+            replyTargetId: replyTargetId,
+          },
         },
       });
     } catch (err) {
@@ -63,11 +44,16 @@ export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({
   return (
     <div>
       <NotificationSet
-        data={data?.replyInquiry.inquiry}
-        errData={data?.replyInquiry.error}
-        sysErr={error}
-        dataContent="回答を送信しました!"
-        errDataContent={data?.replyInquiry.error?.message}
+        succeededContent={
+          data?.replyInquiry?.__typename === 'Inquiry' ? '返信しました' : ''
+        }
+        errContent={
+          data?.replyInquiry?.__typename === 'Errors'
+            ? data.replyInquiry.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
+        sysErrLabel="システムトラブルが発生しました。管理者に連絡してください"
       />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputTextarea<InquiryInquiryInput>
@@ -75,6 +61,7 @@ export const ReplyInquiryForm: VFC<ResponseInquiryProps> = ({
           cols={30}
           fieldLabel="返信内容"
           label="textInput"
+          pattern={Any100chrRegExp}
           required
           register={register}
         />

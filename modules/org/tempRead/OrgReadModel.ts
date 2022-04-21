@@ -32,8 +32,8 @@ export type OrgPrivateModel = {
 export type InquiryModel = {
   id: string;
   content: string;
-  category: string;
-  inquiryStatus: string;
+  category: 'APPLICATION' | 'CONTACT' | 'COUNSEL' | 'INQUIRY' | 'OTHERS';
+  inquiryStatus: 'DONE' | 'DRAFT' | 'UNREAD' | 'WORKING';
   sentAt: string;
   receivedOrg: {
     id: string;

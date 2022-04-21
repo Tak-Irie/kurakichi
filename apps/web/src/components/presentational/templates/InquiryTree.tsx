@@ -1,3 +1,4 @@
+import { InquiryStatusModel } from '@kurakichi/modules';
 import { FC, useState } from 'react';
 
 import {
@@ -18,14 +19,19 @@ type InquiryTreeProps = {
   orgId: string;
 };
 
+type LocalInquiryStatus = InquiryStatusModel | undefined;
+
 export const InquiryTree: FC<InquiryTreeProps> = ({ inquiries, orgId }) => {
-  const [isStatus, setIsStatus] = useState(inquiries[0].inquiryStatus);
+  const [isStatus, setIsStatus] = useState<LocalInquiryStatus>();
 
   return (
     <div className="space-y-2">
       <div className="flex space-x-1">
         <div className="space-y-1 w-44">
-          <BadgeInquiryCategory size="large" category={inquiries[0].category} />
+          <BadgeInquiryCategory
+            size="large"
+            category={inquiries[0].category || 'OTHERS'}
+          />
           {inquiries[0].category === 'APPLICATION' ? (
             <span className="flex justify-center">
               <AcceptJoinOrgButton

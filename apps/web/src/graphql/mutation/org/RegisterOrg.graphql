@@ -1,0 +1,10 @@
+mutation RegisterOrg($input: RegisterOrgInput!) {
+  registerOrg(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Org {
+      ...OrgPrivateInfo
+    }
+  }
+}

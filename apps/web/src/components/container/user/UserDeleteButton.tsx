@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useUserDeleteMutation } from '../../../graphql/generated/graphql';
+import { useDeleteUserMutation } from '../../../graphql/generated';
 import { ButtonBig } from '../../presentational';
 
 const UserDeleteButton: FC = () => {
-  const [userDelete, { client }] = useUserDeleteMutation();
+  const [userDelete, { client }] = useDeleteUserMutation();
   const router = useRouter();
 
   return (

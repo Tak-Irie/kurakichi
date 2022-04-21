@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import { reactNewLineToBr } from '../../../util/reactNewLineToBr';
 
 type TextProps = {
@@ -15,7 +15,7 @@ type TextProps = {
  *If you wanna use \n, give string in object to content
  *@example ok:content={"hello\nworld"} fail:content="hello\nworld"
  */
-export const TextBase: VFC<TextProps> = ({
+export const TextBase: FC<TextProps> = ({
   content,
   overwriteCSS = 'text-base text-gray-700',
 }) => {
@@ -26,27 +26,27 @@ export const TextBase: VFC<TextProps> = ({
   return <p className={overwriteCSS}>{content}</p>;
 };
 
-export const TextSmall: VFC<TextProps> = ({ content, color = 'gray' }) => {
+export const TextSmall: FC<TextProps> = ({ content, color = 'gray' }) => {
   return (
     <TextBase content={content} overwriteCSS={`text-small text-${color}-700`} />
   );
 };
 
-export const Text2xl: VFC<TextProps> = ({ content, color = 'gray' }) => {
+export const Text2xl: FC<TextProps> = ({ content, color = 'gray' }) => {
   return <p className={`text-2xl text-${color}-700`}>{content}</p>;
 };
 
-export const TextH1: VFC<TextProps> = ({ content, color = 'gray' }) => {
+export const TextH1: FC<TextProps> = ({ content, color = 'gray' }) => {
   return <h1 className={`text-4xl font-bold text-${color}-700`}>{content}</h1>;
 };
-export const TextH2: VFC<TextProps> = ({ content, color = 'gray' }) => {
+export const TextH2: FC<TextProps> = ({ content, color = 'gray' }) => {
   return <h2 className={`text-3xl font-bold text-${color}-700`}>{content}</h2>;
 };
-export const TextH3: VFC<TextProps> = ({ content, color = 'gray' }) => {
+export const TextH3: FC<TextProps> = ({ content, color = 'gray' }) => {
   return <h3 className={`text-2xl font-bold text-${color}-700`}>{content}</h3>;
 };
 
-export const TextLabel: VFC<Omit<TextProps, 'label'>> = ({
+export const TextLabel: FC<Omit<TextProps, 'label'>> = ({
   content,
   color = 'gray',
 }) => {
@@ -59,7 +59,7 @@ export const TextLabel: VFC<Omit<TextProps, 'label'>> = ({
   );
 };
 
-export const TextLabeled: VFC<TextProps> = ({ content, label, color }) => {
+export const TextLabeled: FC<TextProps> = ({ content, label }) => {
   return (
     <div className="flex flex-col">
       <label className="text-sm font-medium text-gray-500">{label}</label>
@@ -68,10 +68,7 @@ export const TextLabeled: VFC<TextProps> = ({ content, label, color }) => {
   );
 };
 
-export const TextWithDivider: VFC<Omit<TextProps, 'label'>> = ({
-  content,
-  color,
-}) => {
+export const TextWithDivider: FC<Omit<TextProps, 'label'>> = ({ content }) => {
   return (
     <div className="flex relative justify-center items-center my-4">
       <div className="w-full border-t border-gray-300" />

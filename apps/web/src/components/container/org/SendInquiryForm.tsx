@@ -1,32 +1,26 @@
 import {
-  InquiryCategory,
-  InquiryStatus,
-  useSendInquiryMutation,
-} from '@next/graphql';
-
-import { VFC } from 'react';
+  Any100chrRegExp,
+  InquiryCategoryModel,
+  InquiryStatusModel,
+} from '@kurakichi/modules';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSendInquiryMutation } from '../../../graphql/generated';
 import { Form, InputTextarea, Select } from '../../presentational/atoms';
-import {
-  ButtonOrLoading,
-  NotificationSet,
-} from '../../presentational/molecules';
+import { ButtonOrLoading } from '../../presentational/molecules';
+import { NotificationSet } from '../../presentational/organisms';
 
 type SendInquiryProps = {
   orgId: string;
-  receiverId: string;
 };
 
 type SendInquiryInput = {
-  textInput: string;
-  category: InquiryCategory;
-  status: InquiryStatus;
+  content: string;
+  category: InquiryCategoryModel;
+  status: InquiryStatusModel;
 };
 
-export const SendInquiryForm: VFC<SendInquiryProps> = ({
-  orgId,
-  receiverId,
-}) => {
+export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId }) => {
   const { register, handleSubmit } = useForm<SendInquiryInput>();
   const [sendInquiry, { data, error, loading }] = useSendInquiryMutation();
 
@@ -36,11 +30,10 @@ export const SendInquiryForm: VFC<SendInquiryProps> = ({
     try {
       await sendInquiry({
         variables: {
-          orgId: orgId,
-          receiverId: receiverId,
-          textInput: values.textInput,
-          category: values.category,
-          status: InquiryStatus['Unread'],
+          input: {
+            orgId,
+            ...values,
+          },
         },
       });
       // console.log('data:', data);
@@ -52,24 +45,27 @@ export const SendInquiryForm: VFC<SendInquiryProps> = ({
   return (
     <div>
       <NotificationSet
-        data={data?.sendInquiry.inquiry}
-        errData={data?.sendInquiry.error}
-        sysErr={error}
-        dataLabel="送信に成功しました。返信をお待ち下さい"
-        errDataLabel="送信に失敗しました"
-        errDataContent={data?.sendInquiry.error?.message}
-        sysErrLabel="システムに問題があります。管理者に連絡して下さい"
+        succeededContent={
+          data?.sendInquiry?.__typename === 'Inquiry' ? '送信しました' : ''
+        }
+        errContent={
+          data?.sendInquiry?.__typename === 'Errors'
+            ? data.sendInquiry.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
+        sysErrLabel="システムトラブルが発生しました。管理者に連絡してください"
       />
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Select<SendInquiryInput, InquiryCategory>
+        <Select<SendInquiryInput, InquiryCategoryModel>
           fieldLabel="メッセージカテゴリー"
           label="category"
           options={[
-            { label: '相談', value: InquiryCategory.Counsel },
-            { label: '問い合わせ', value: InquiryCategory.Inquiry },
-            { label: '業務連絡', value: InquiryCategory.Contact },
-            { label: '所属申請', value: InquiryCategory.Application },
-            { label: 'その他', value: InquiryCategory.Others },
+            { label: '相談', value: 'COUNSEL' },
+            { label: '問い合わせ', value: 'INQUIRY' },
+            { label: '業務連絡', value: 'CONTACT' },
+            { label: '所属申請', value: 'APPLICATION' },
+            { label: 'その他', value: 'OTHERS' },
           ]}
           required
           register={register}
@@ -78,7 +74,8 @@ export const SendInquiryForm: VFC<SendInquiryProps> = ({
           rows={3}
           cols={30}
           fieldLabel="メッセージ内容"
-          label="textInput"
+          label="content"
+          pattern={Any100chrRegExp}
           required
           register={register}
         />

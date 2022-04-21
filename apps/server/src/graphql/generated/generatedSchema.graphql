@@ -62,8 +62,10 @@ type FellowEdge {
   node: User!
 }
 
-type Hoge {
-  id: ID!
+type File {
+  encoding: String!
+  filename: String!
+  mimetype: String!
 }
 
 union InquiriesResult = Errors | InquiryConnection
@@ -199,6 +201,7 @@ type Mutation {
   updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult
   updateOrg(input: UpdateOrgInput!): OrgResult
   updateUser(input: updateUserInput!): UserResult
+  uploadFile(file: Upload!): File!
 }
 
 interface Node {
@@ -217,6 +220,16 @@ type Org implements Node {
   members: MemberConnection
   name: String
   phoneNumber: String
+}
+
+type OrgConnection {
+  edges: [OrgEdges!]
+  pageInfo: PageInfo
+}
+
+type OrgEdges {
+  cursor: String!
+  node: Org!
 }
 
 union OrgResult = Errors | Org
@@ -251,7 +264,6 @@ type Query {
   getUserByCookie: UserResult
   getUserById(userId: String!): UserResult
   getUsers: UsersResult
-  hoge(id: ID!): Hoge
   node(id: ID!): Node
   nodes(ids: [ID!]!): [Node]
 }
@@ -292,6 +304,8 @@ input UpdateOrgInput {
   phoneNumber: String
 }
 
+scalar Upload
+
 type User implements Node {
   avatarUrl: String
   email: String
@@ -299,6 +313,7 @@ type User implements Node {
   id: ID!
   messages: MessageConnection
   name: String
+  orgs: OrgConnection
   role: UserRole
   selfIntro: String
 }

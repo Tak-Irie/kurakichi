@@ -1,5 +1,22 @@
-import { VFC } from 'react';
+import {
+  Any100chrRegExp,
+  EmailRegExp,
+  JapaneseAddressRegExp,
+  OrgNameRegExp,
+  PhoneNumberRegExp,
+  URLRegExp,
+} from '@kurakichi/modules';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useUpdateOrgInfoMutation } from '../../../graphql/generated';
+import {
+  Form,
+  Input,
+  InputTextarea,
+  InputValue,
+} from '../../presentational/atoms';
+import { ButtonOrLoading } from '../../presentational/molecules';
+import { NotificationSet } from '../../presentational/organisms';
 
 type UpdateOrgProfileProps = {
   exName: string;
@@ -11,7 +28,7 @@ type UpdateOrgProfileProps = {
   orgId: string;
 };
 
-type UpdateOrgProfileInput = {
+interface UpdateOrgProfileInput extends InputValue {
   orgName: string;
   email: string;
   description: string;
@@ -19,9 +36,9 @@ type UpdateOrgProfileInput = {
   location: string;
   homePage: string;
   adminId: string;
-};
+}
 
-export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
+export const UpdateOrgProfileForm: FC<UpdateOrgProfileProps> = ({
   exDescription,
   exEmail,
   exHomePage,
@@ -30,14 +47,14 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
   exPhoneNumber,
   orgId,
 }) => {
-  const [updateOrg, { data, loading, error }] = useUpdateOrgMutation();
+  const [updateOrg, { data, loading, error }] = useUpdateOrgInfoMutation();
   const { register, handleSubmit } = useForm<UpdateOrgProfileInput>();
 
   const onSubmit = async (values: UpdateOrgProfileInput) => {
     console.log('orgUpdateValue:', values);
     try {
       await updateOrg({
-        variables: { orgId, orgInput: { ...values } },
+        variables: { input: { orgId, ...values } },
       });
     } catch (err) {
       console.log('err:', err);
@@ -47,11 +64,21 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
   return (
     <>
       <NotificationSet
-        sysErr={error}
-        errData={data?.updateOrg.error}
-        data={data?.updateOrg.org}
-        errDataContent={data?.updateOrg.error?.message}
-        dataContent={data?.updateOrg.org?.id}
+        succeededContent={
+          data?.updateOrg?.__typename === 'Org' ? '組織情報を更新しました' : ''
+        }
+        errContent={
+          data?.updateOrg?.__typename === 'Errors'
+            ? data?.updateOrg.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
+        errLabel={
+          (data?.updateOrg?.__typename === 'Errors' &&
+            data?.updateOrg.applicationError?.message) ||
+          ''
+        }
+        sysErrLabel="システムトラブルが発生しました。管理者に連絡してください"
       />
       <Form
         overWriteCSS="flex flex-col space-y-2"
@@ -62,6 +89,7 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
           fieldLabel="団体名"
           label="orgName"
           required={false}
+          pattern={OrgNameRegExp}
           register={register}
           placeholder={exName}
         />
@@ -70,6 +98,7 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
           fieldLabel="メールアドレス"
           label="email"
           required={false}
+          pattern={EmailRegExp}
           register={register}
           placeholder={exEmail}
         />
@@ -78,6 +107,7 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
           cols={1}
           fieldLabel="団体紹介"
           label="description"
+          pattern={Any100chrRegExp}
           required={false}
           register={register}
           placeholder={
@@ -88,6 +118,7 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
           type="tel"
           fieldLabel="電話番号"
           label="phoneNumber"
+          pattern={PhoneNumberRegExp}
           required={false}
           register={register}
           placeholder={exPhoneNumber}
@@ -97,6 +128,7 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
           fieldLabel="所在地"
           label="location"
           required={false}
+          pattern={JapaneseAddressRegExp}
           register={register}
           placeholder={exLocation}
         />
@@ -105,6 +137,7 @@ export const UpdateOrgProfileForm: VFC<UpdateOrgProfileProps> = ({
           fieldLabel="ホームページ"
           label="homePage"
           required={false}
+          pattern={URLRegExp}
           register={register}
           placeholder={
             exHomePage === 'UNKNOWN' ? '登録されていません' : exHomePage

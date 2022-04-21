@@ -1,20 +1,26 @@
+import {
+  Any100chrRegExp,
+  EmailRegExp,
+  UserNameRegExp,
+} from '@kurakichi/modules';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useUpdateUserMutation } from '../../../graphql';
+import { useUpdateUserMutation } from '../../../graphql/generated';
 
 import {
   ButtonOrLoading,
   Form,
   Input,
   InputTextarea,
+  InputValue,
   NotificationSet,
 } from '../../presentational';
 
-type UpdateUserProfileProps = {
+interface UpdateUserProfileProps extends InputValue {
   exName: string;
   exEmail: string;
   exDescription: string;
-};
+}
 
 type UpdateUserProfileInput = {
   userName: string;
@@ -51,9 +57,17 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
   return (
     <>
       <NotificationSet
-        sysErr={error}
-        errData={data?.updateUser?.errors?.applicationError?.message}
-        data={'プロフィールが更新されました！'}
+        succeededContent={
+          data?.updateUser?.__typename === 'User'
+            ? 'プロフィールを更新しました'
+            : ''
+        }
+        errContent={
+          data?.updateUser?.__typename === 'Errors'
+            ? data.updateUser.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
       />
       <Form
         overWriteCSS="flex flex-col space-y-2"
@@ -64,6 +78,7 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
           fieldLabel="ニックネーム"
           label="userName"
           required={false}
+          pattern={UserNameRegExp}
           register={register}
           placeholder={exName}
         />
@@ -72,6 +87,7 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
           fieldLabel="メールアドレス"
           label="email"
           required={false}
+          pattern={EmailRegExp}
           register={register}
           placeholder={exEmail}
         />
@@ -81,10 +97,9 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
           fieldLabel="自己紹介"
           label="description"
           required={false}
+          pattern={Any100chrRegExp}
           register={register}
-          placeholder={
-            exDescription === 'UNKNOWN' ? '記入されていません' : exDescription
-          }
+          placeholder={exDescription || '記入されていません'}
         />
         <div className="flex justify-end">
           <ButtonOrLoading

@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 
 import { ButtonBig, LoadingSpinner } from '..';
 
@@ -11,13 +11,12 @@ type ButtonOrLoadingProps = {
   disabled?: boolean;
 };
 
-export const ButtonOrLoading: VFC<ButtonOrLoadingProps> = ({
+export const ButtonOrLoading: FC<ButtonOrLoadingProps> = ({
   loading,
   buttonLabel,
   buttonType,
   onClick,
   color,
-  disabled,
 }) => {
   return loading ? (
     <ButtonBig

@@ -1,13 +1,11 @@
-import { VFC } from 'react';
+import { Any100chrRegExp } from '@kurakichi/modules';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { gql } from '@apollo/client';
-import { useReplyMessageMutation } from '@next/graphql';
+import { useReplyMessageMutation } from '../../../graphql';
 import { Form, InputTextarea } from '../../presentational/atoms';
-import {
-  ButtonOrLoading,
-  NotificationSet,
-} from '../../presentational/molecules';
+import { ButtonOrLoading } from '../../presentational/molecules';
+import { NotificationSet } from '../../presentational/organisms';
 
 type ResponseMessageProps = {
   replyTargetId: string;
@@ -17,7 +15,7 @@ type ResponseMessageProps = {
 type ResponseMessageInput = {
   textInput: string;
 };
-export const ReplyMessageForm: VFC<ResponseMessageProps> = ({
+export const ReplyMessageForm: FC<ResponseMessageProps> = ({
   replyTargetId,
   onClick,
 }) => {
@@ -29,29 +27,10 @@ export const ReplyMessageForm: VFC<ResponseMessageProps> = ({
     try {
       await replyMessage({
         variables: {
-          content: values.textInput,
-          replyTargetId,
-        },
-        update: (cache, { data: { replyMessage } }) => {
-          // console.log('cache:', cache);
-          // console.log('update:', replyMessage);
-          // console.log('treeId:', replyMessage.message.tree.id);
-          cache.modify({
-            id: 'MessageTree:' + replyMessage.message.tree.id,
-            fields: {
-              treedMessage(existing = []) {
-                const newReply = cache.writeFragment({
-                  data: replyMessage.message,
-                  fragment: gql`
-                    fragment Message on MessageTree {
-                      id
-                    }
-                  `,
-                });
-                return [...existing, newReply];
-              },
-            },
-          });
+          input: {
+            content: values.textInput,
+            replyTargetId,
+          },
         },
       });
     } catch (err) {
@@ -62,11 +41,13 @@ export const ReplyMessageForm: VFC<ResponseMessageProps> = ({
   return (
     <div>
       <NotificationSet
-        data={data?.replyMessage.message}
-        errData={data?.replyMessage.error}
-        sysErr={error}
-        dataContent="メッセージを送信しました!"
-        errDataContent={data?.replyMessage.error?.message}
+        succeededContent="メッセージを送信しました！"
+        errContent={
+          data?.replyMessage?.__typename === 'Errors'
+            ? data.replyMessage.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
       />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputTextarea<ResponseMessageInput>
@@ -74,6 +55,7 @@ export const ReplyMessageForm: VFC<ResponseMessageProps> = ({
           cols={30}
           fieldLabel="メッセージ内容"
           label="textInput"
+          pattern={Any100chrRegExp}
           required
           register={register}
         />

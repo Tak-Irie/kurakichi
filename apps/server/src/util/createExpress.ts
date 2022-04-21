@@ -1,6 +1,7 @@
 import connectRedis from 'connect-redis';
 import express from 'express';
 import session from 'express-session';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 import type { Redis } from 'ioredis';
 import {
@@ -38,6 +39,9 @@ const createExpress = async ({ redis }: ExpressArgs) => {
       resave: false,
     }),
   );
+
+  // in bytes
+  app.use(graphqlUploadExpress({ maxFileSize: 1000 * 1000 * 1, maxFiles: 2 }));
 
   app.use('/google', googleRouter);
   app.use('/yahoo', yahooRouter);

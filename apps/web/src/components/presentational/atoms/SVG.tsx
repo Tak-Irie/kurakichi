@@ -28,7 +28,7 @@ export const LightningSVG: FC = () => {
   return (
     <div className="mr-2">
       <svg
-        className="w-6 h-6 sm:w-8 sm:h-8 text-deep-purple-accent-400"
+        className="w-6 h-6 sm:w-8 sm:h-8"
         stroke="currentColor"
         viewBox="0 0 52 52"
       >
@@ -83,7 +83,7 @@ export const DownArrowInCircleSVG: FC = () => {
     <Link href="/">
       <button
         aria-label="Scroll down"
-        className="flex justify-center items-center mx-auto w-10 h-10 text-black rounded-full border border-black hover:shadow duration-300 hover:scale-110 hover:text-teal-accent-400 hover:border-teal-accent-400"
+        className="flex justify-center items-center mx-auto w-10 h-10 text-black rounded-full border border-black hover:shadow duration-300 hover:scale-110"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

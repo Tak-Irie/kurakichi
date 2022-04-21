@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC, VFC } from 'react';
+import { FC, ReactChild } from 'react';
 
 type CardProps = {
   id?: string;
@@ -9,16 +9,17 @@ type CardProps = {
   linkAs?: string;
   image?: string;
   imageAlt?: string;
+  children?: ReactChild;
 };
 
 export const Card: FC<CardProps> = (props) => {
   const { image, title, content, children } = props;
   return (
     <div className="group overflow-hidden relative p-px max-w-lg rounded border shadow-sm hover:shadow-xl transition duration-300 hover:scale-105">
-      <div className="absolute bottom-0 left-0 w-full h-1 duration-300 scale-x-0 group-hover:scale-x-100 origin-left bg-deep-purple-accent-400" />
-      <div className="absolute bottom-0 left-0 w-1 h-full duration-300 scale-y-0 group-hover:scale-y-100 origin-bottom bg-deep-purple-accent-400" />
-      <div className="absolute top-0 left-0 w-full h-1 duration-300 scale-x-0 group-hover:scale-x-100 origin-right bg-deep-purple-accent-400" />
-      <div className="absolute right-0 bottom-0 w-1 h-full duration-300 scale-y-0 group-hover:scale-y-100 origin-top bg-deep-purple-accent-400" />
+      <div className="absolute bottom-0 left-0 w-full h-1 duration-300 scale-x-0 group-hover:scale-x-100 origin-left" />
+      <div className="absolute bottom-0 left-0 w-1 h-full duration-300 scale-y-0 group-hover:scale-y-100 origin-bottom" />
+      <div className="absolute top-0 left-0 w-full h-1 duration-300 scale-x-0 group-hover:scale-x-100 origin-right" />
+      <div className="absolute right-0 bottom-0 w-1 h-full duration-300 scale-y-0 group-hover:scale-y-100 origin-top" />
       <div className="relative p-5 bg-white rounded-sm">
         <div className="flex flex-col mb-2 lg:flex-row lg:items-center">
           <div className="flex justify-center items-center mr-2 mb-6 w-10 h-10 bg-indigo-50 rounded-full">
@@ -27,7 +28,7 @@ export const Card: FC<CardProps> = (props) => {
           <h6 className="font-semibold leading-5">{title}</h6>
         </div>
         <p className="mb-2 text-sm text-gray-900">{content}</p>
-        <div className="inline-flex items-center text-sm font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800">
+        <div className="inline-flex items-center text-sm font-semibold transition-colors duration-200">
           {children}
         </div>
       </div>
@@ -71,7 +72,7 @@ export const SmallCard: FC<CardProps> = ({
   );
 };
 
-export const CardWithPick: VFC<CardProps> = ({
+export const CardWithPick: FC<CardProps> = ({
   content,
   image,
   imageAlt,

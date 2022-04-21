@@ -1,5 +1,5 @@
 import { Disclosure as HeadlessDisclosure } from '@headlessui/react';
-import type { ReactNode, VFC } from 'react';
+import type { FC, ReactNode } from 'react';
 import { IconsDownChevron, IconsUpChevron } from '../atoms';
 
 type DisclosureProps = {
@@ -10,7 +10,7 @@ type DisclosureProps = {
   iconCSS?: string;
 };
 
-export const Disclosure: VFC<DisclosureProps> = ({
+export const Disclosure: FC<DisclosureProps> = ({
   label,
   content,
   contentCSS = 'text-gray-700',

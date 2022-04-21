@@ -2,9 +2,11 @@ import { FC } from 'react';
 import { GoogleButton } from '../../presentational/atoms';
 
 const GoogleLoginButton: FC = () => {
+  const GOOGLE_LOGIN =
+    process.env.GOOGLE_SSO || 'http://localhost:4000/google/login';
   const handleClick = async () => {
     try {
-      const res = await fetch('http://localhost:4000/google/login', {
+      const res = await fetch(GOOGLE_LOGIN, {
         method: 'GET',
         mode: 'cors',
         credentials: 'include',

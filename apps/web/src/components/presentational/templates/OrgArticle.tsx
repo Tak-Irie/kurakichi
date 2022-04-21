@@ -1,15 +1,15 @@
-import { ReactElement, VFC } from 'react';
+import { FC, ReactElement } from 'react';
 
-import { ImageLogo, TextH2 } from '..';
+import { TextH2 } from '..';
 
 type GeneralTemplateProps = {
   title: string;
   content: ReactElement;
 };
 
-export const OrgArticle: VFC<GeneralTemplateProps> = ({ content, title }) => {
+export const OrgArticle: FC<GeneralTemplateProps> = ({ content, title }) => {
   return (
-    <div className="bg-white p-8 shadow my-4">
+    <div className="p-8 my-4 bg-white shadow">
       <div className="flex col-span-5 items-center">
         <TextH2 content={title} />
       </div>

@@ -12,6 +12,7 @@ import {
   GRAPHQL_PATH,
   LOCAL_WEB,
 } from './Constants';
+import { pubsub } from './createRedis';
 
 import { getUserIdByCookie } from './getUserIdByCookie';
 
@@ -27,12 +28,13 @@ const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
     path: GRAPHQL_PATH,
   });
   const serverCleanup = useServer({ schema }, wsServer);
+  const redisPubSub = pubsub;
 
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => {
       const idOrUndefined = getUserIdByCookie({ req, res });
-      return { idInCookie: idOrUndefined, req };
+      return { idInCookie: idOrUndefined, req, pubsub: redisPubSub };
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),

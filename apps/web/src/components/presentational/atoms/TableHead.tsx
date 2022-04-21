@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, ReactChild } from 'react';
 
 type TableHeadProps = {
   left?: boolean;
+  children?: ReactChild;
 };
 
 const TableHead: FC<TableHeadProps> = (props) => {

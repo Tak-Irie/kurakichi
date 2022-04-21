@@ -13,26 +13,27 @@ const UserProfilePage: NextPage = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
-  if (data?.getUserById?.errors?.applicationError) {
-    <p>{data.getUserById.errors.applicationError.message}</p>;
+
+  const res = data?.getUserById;
+  if (res?.__typename === 'Errors') {
+    <p>{res.applicationError?.message}</p>;
   }
-  if (data?.getUserById?.user) {
-    const _user = data.getUserById.user;
+  if (res?.__typename === 'User') {
     return (
       <div>
         <UserProfile
           userId={uid}
-          avatar={_user?.avatarUrl || ''}
-          description={_user?.selfIntro || ''}
-          image={_user?.heroImageUrl || ''}
-          userName={_user?.name || ''}
+          avatar={res?.avatarUrl || ''}
+          description={res?.selfIntro || ''}
+          image={res?.heroImageUrl || ''}
+          userName={res?.name || ''}
           // orgs={belongOrgs}
           // loggedIn={!!clientData?.getUserByCookie.user}
         />
       </div>
     );
   }
-  return <p>wip</p>;
+  return <p>wip, something wrong</p>;
 };
 
 export default UserProfilePage;

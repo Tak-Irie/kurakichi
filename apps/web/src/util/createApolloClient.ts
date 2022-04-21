@@ -1,12 +1,12 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 
-import { splitLink } from "./createGraphQLSplitLink";
+import { splitLink } from './createGraphQLSplitLink';
 
 export const apolloClient = new ApolloClient({
-  ssrMode: typeof window === "undefined",
-  name: "kurakichi",
-  version: "0.0.1",
+  ssrMode: true,
+  name: 'kurakichi',
+  version: '0.0.1',
   link: splitLink,
-  credentials: "include",
+  credentials: 'include',
   cache: new InMemoryCache(),
 });

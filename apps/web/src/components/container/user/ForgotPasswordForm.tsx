@@ -1,36 +1,35 @@
+import { EmailRegExp } from '@kurakichi/modules';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { Form, Input } from '../../presentational/atoms';
-import {
-  ButtonOrLoading,
-  NotificationSet,
-} from '../../presentational/molecules';
+import { useForgetUserPasswordMutation } from '../../../graphql/generated';
+import { Form, Input, InputValue } from '../../presentational/atoms';
+import { ButtonOrLoading } from '../../presentational/molecules';
+import { NotificationSet } from '../../presentational/organisms';
 
-interface ForgetPasswordInput {
+interface ForgetPasswordInput extends InputValue {
   email: string;
 }
 
 export const ForgotPasswordForm: FC = () => {
   const [forgetPassword, { data, loading, error }] =
-    useUserForgetPasswordMutation();
+    useForgetUserPasswordMutation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ForgetPasswordInput>({
-    resolver: yupResolver(yupEmailSchema),
     mode: 'onBlur',
   });
 
   const handleMutation = async (value: ForgetPasswordInput) => {
-    console.log('value:', value);
+    // console.log('value:', value);
     try {
       await forgetPassword({
         variables: { forgetPasswordEmail: value.email },
         fetchPolicy: 'no-cache',
       });
-      console.log('forgotPassData:', data);
+      // console.log('forgotPassData:', data);
     } catch (err) {
       console.log('err:', err);
     }
@@ -38,11 +37,17 @@ export const ForgotPasswordForm: FC = () => {
   return (
     <>
       <NotificationSet
-        sysErr={error}
-        errData={data?.forgetPassword.result === false ? true : undefined}
-        data={data?.forgetPassword.result === true ? true : undefined}
-        dataLabel={data?.forgetPassword.message}
-        errDataLabel={data?.forgetPassword.message}
+        succeededContent={
+          data?.forgetPassword?.__typename === 'Succeeded'
+            ? data.forgetPassword.succeeded
+            : ''
+        }
+        errContent={
+          data?.forgetPassword?.__typename === 'Errors'
+            ? data.forgetPassword.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
       />
       <Form onSubmit={handleSubmit(handleMutation)} overWriteCSS="">
         <Input<ForgetPasswordInput>
@@ -50,6 +55,7 @@ export const ForgotPasswordForm: FC = () => {
           fieldLabel="メールアドレス"
           type="email"
           required
+          pattern={EmailRegExp}
           register={register}
           autoComplete="email"
           errMessage={errors.email && errors.email.message}

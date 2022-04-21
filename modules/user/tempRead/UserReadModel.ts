@@ -18,6 +18,6 @@ type Message = {
   senderId: string;
   receiverId: string;
   sentAt: string;
-  status: string;
+  status: 'SENT' | 'READ' | 'UNREAD' | 'DRAFT';
   messageTreeId: string;
 };

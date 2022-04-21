@@ -3,13 +3,18 @@ generates:
   ./apps/server/src/graphql/generated/generatedTypes.ts:
     config:
       useIndexSignature: true
-      mappers:
-        Hoge: \@kurakichi/modules/shared/infra/graphql/models#HogeModel
       scalars:
-        UserRole: string
-        MessageStatus: string
-        InquiryCategory: string
-        InquiryStatus: string
+        Upload: FileModel
+        UserRole: UserRoleModel
+        MessageStatus: MessageStatusModel
+        InquiryCategory: InquiryCategoryModel
+        InquiryStatus: InquiryStatusModel
+      mappers:
+        Upload: \@kurakichi/modules/shared/infra/graphql/MappingModels#FileModel
+        UserRole: \@kurakichi/modules/shared/infra/graphql/MappingModels#UserRoleModel
+        MessageStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#MessageStatusModel
+        InquiryCategory: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryCategoryModel
+        InquiryStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryStatusModel
     plugins:
       - typescript
       - typescript-resolvers
@@ -17,15 +22,23 @@ generates:
     documents: "./apps/web/src/graphql/**/*.graphql"
     plugins:
       - typescript
+      - typescript-resolvers
       - typescript-operations
       - typescript-react-apollo
     config:
       withHooks: true
       scalars:
-        UserRole: string
-        MessageStatus: string
-        InquiryCategory: string
-        InquiryStatus: string
+        Upload: FileModel
+        UserRole: UserRoleModel
+        MessageStatus: MessageStatusModel
+        InquiryCategory: InquiryCategoryModel
+        InquiryStatus: InquiryStatusModel
+      mappers:
+        Upload: \@kurakichi/modules/shared/infra/graphql/MappingModels#FileModel
+        UserRole: \@kurakichi/modules/shared/infra/graphql/MappingModels#UserRoleModel
+        MessageStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#MessageStatusModel
+        InquiryCategory: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryCategoryModel
+        InquiryStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryStatusModel
   ./apps/server/src/graphql/generated/generatedSchema.graphql:
     plugins:
       - schema-ast

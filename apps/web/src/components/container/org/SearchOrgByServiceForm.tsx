@@ -1,8 +1,9 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 
 import { ButtonWithIcon, IconsSearch } from '../../presentational';
 
-export const SearchOrgByServiceForm: VFC = () => {
+// FIXME: Not yet impl feature
+export const SearchOrgByServiceForm: FC = () => {
   return (
     <div className="p-2 rounded border border-gray-200">
       <ButtonWithIcon

@@ -1,3 +1,4 @@
+import idx from 'idx';
 import { FC } from 'react';
 
 import { GridItemWithPic, GridTemplate, TextLabeled } from '..';
@@ -20,6 +21,7 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
     members,
   } = org;
   const geo = { lat: address?.latitude || 0, lng: address?.longitude || 0 };
+  const _members = idx(members, (d) => d.edges);
 
   return (
     <>
@@ -47,21 +49,23 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
       <div className="mt-8">
         <h2 className="text-sm font-medium text-gray-500">団体メンバー</h2>
         <GridTemplate>
-          {members?.edges.map((edge) => {
-            const member = edge?.node;
-            return (
-              <div key={member?.id || ''}>
-                <GridItemWithPic
-                  name={member?.name || ''}
-                  description={member?.selfIntro || ''}
-                  imgSrc={member?.avatarUrl || ''}
-                  imgAlt={'メンバーアバター'}
-                  linkUrl="/user/[id]"
-                  linkAs={`/user/${member?.id || 'not_exist'}`}
-                />
-              </div>
-            );
-          }) || null}
+          {_members
+            ? _members.map((edge) => {
+                const member = edge.node;
+                return (
+                  <div key={member.id}>
+                    <GridItemWithPic
+                      name={member.name}
+                      description={member.selfIntro}
+                      imgSrc={member.avatarUrl}
+                      imgAlt={'メンバーアバター'}
+                      linkUrl="/user/[id]"
+                      linkAs={`/user/${member.id}`}
+                    />
+                  </div>
+                );
+              })
+            : null}
         </GridTemplate>
       </div>
     </>

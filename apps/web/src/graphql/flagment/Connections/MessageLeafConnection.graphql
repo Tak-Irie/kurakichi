@@ -1,4 +1,4 @@
-fragment MessageLeafConn on MessageLeafConnection {
+fragment MessageLeafConnection on MessageLeafConnection {
   edges {
     cursor
     isRoot
@@ -16,6 +16,6 @@ fragment MessageLeafConn on MessageLeafConnection {
     }
   }
   pageInfo {
-    ...PageInfos
+    ...PageInfo
   }
 }

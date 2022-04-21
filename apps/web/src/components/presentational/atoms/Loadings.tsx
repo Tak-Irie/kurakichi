@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 
 type LoadingProps = {
   color?: string;
@@ -6,7 +6,7 @@ type LoadingProps = {
   width?: string;
 };
 
-export const LoadingCard: VFC<LoadingProps> = ({ color }) => {
+export const LoadingCard: FC<LoadingProps> = () => {
   return (
     <div className="p-4 mx-auto w-full max-w-sm rounded-md border border-blue-300 shadow">
       <div className="flex space-x-4 animate-pulse">
@@ -23,7 +23,7 @@ export const LoadingCard: VFC<LoadingProps> = ({ color }) => {
   );
 };
 
-export const LoadingSpinner: VFC<LoadingProps> = ({
+export const LoadingSpinner: FC<LoadingProps> = ({
   color = 'gray',
   height = 'h-10',
   width = 'w-10',

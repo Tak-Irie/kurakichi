@@ -10,7 +10,7 @@ const HeaderDropDown: FC = () => {
       <button
         aria-label="Open Menu"
         title="Open Menu"
-        className="p-2 -mr-1 rounded focus:outline-none transition duration-200 focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
+        className="p-2 -mr-1 rounded focus:outline-none transition duration-200"
         onClick={() => setIsMenuOpen(true)}
       >
         <HamburgerMenuSVG />
@@ -23,7 +23,7 @@ const HeaderDropDown: FC = () => {
                 <button
                   aria-label="Close Menu"
                   title="Close Menu"
-                  className="top-0 right-0 p-2 hover:bg-gray-200 focus:bg-gray-200 rounded focus:outline-none transition duration-200 focus:shadow-outline"
+                  className="top-0 right-0 p-2 hover:bg-gray-200 focus:bg-gray-200 rounded focus:outline-none transition duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <XMarkSVG />

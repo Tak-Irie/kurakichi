@@ -24,7 +24,7 @@ fragment OrgPublicInfo on Org {
       }
     }
     pageInfo {
-      ...PageInfos
+      ...PageInfo
     }
   }
 }

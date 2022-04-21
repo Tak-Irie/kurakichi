@@ -2,7 +2,7 @@ query GetOrgsForMap {
   getOrgs {
     ... on Orgs {
       orgs {
-        ...OrgExceptConn
+        ...OrgExceptConnection
       }
     }
     ... on Errors {

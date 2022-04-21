@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { FC, ReactElement } from 'react';
+import { FC, ReactChild, ReactElement } from 'react';
 
 type TableBodyProps = {
   link: string;
   title?: string;
   icon?: ReactElement;
+  children?: ReactChild;
 };
 
 const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => {

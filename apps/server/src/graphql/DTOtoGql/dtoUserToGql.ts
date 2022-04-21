@@ -1,5 +1,6 @@
 /* eslint-disable no-constant-condition */
 import { DTOUser } from '@kurakichi/modules';
+import { UserRoleModel } from '@kurakichi/modules/shared/infra/graphql/MappingModels';
 import { UserReadModel } from '@kurakichi/modules/user/tempRead/UserReadModel';
 import {
   MessageConnection,
@@ -58,13 +59,15 @@ export const readUserToGql = (user: UserReadModel): User => {
   } = user;
 
   const edges: MessageEdges[] = receivedMessages.map((mes) => {
-    const { receiverId, senderId, content, messageTreeId, ...rest } = mes;
+    const { receiverId, senderId, content, messageTreeId, status, ...rest } =
+      mes;
     return {
       cursor: mes.id,
       node: {
         receiver: { id: receiverId },
         sender: { id: senderId },
         content,
+        status: status,
         ...rest,
       },
     };
@@ -80,10 +83,23 @@ export const readUserToGql = (user: UserReadModel): User => {
     id,
     name,
     email,
-    role: role,
+    role: convertUserRole(role),
     selfIntro,
     avatarUrl,
     heroImageUrl,
     messages: _messages,
   };
+};
+
+const convertUserRole = (role: string): UserRoleModel | undefined => {
+  switch (role) {
+    case 'CLIENT':
+      return role;
+    case 'EXPERT':
+      return role;
+    case 'VISITOR':
+      return role;
+    default:
+      return undefined;
+  }
 };

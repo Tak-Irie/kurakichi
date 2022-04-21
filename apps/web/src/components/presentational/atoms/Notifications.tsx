@@ -22,7 +22,6 @@ export const Notification: FC<NotificationProps> = ({
   icon,
   iconColor,
   showingMS = 1000 * 5,
-  onClick,
 }) => {
   const [isShowing, setIsShowing] = useState(true);
 

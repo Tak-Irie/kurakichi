@@ -29,10 +29,14 @@ export const dtoMessagesToTree = ({
   messages,
 }: TreeArg): MessageTree => {
   const edges = messages.map((message) => {
+    const { status, ...rest } = message;
     return {
       cursor: message.id,
       isRoot: message.id === treeId ? true : false,
-      node: message,
+      node: {
+        status,
+        ...rest,
+      },
     };
   });
 

@@ -24,12 +24,20 @@ export const OrgTemplate: VFC<OrgTemplateProps> = ({
     <div className="grid grid-cols-12 pb-10">
       <div className="col-span-full">
         {settingHeader ? (
-          <ProfileHeaderSetting avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+          <ProfileHeaderSetting
+            avatarSrc={avatar}
+            imageSrc={image}
+            buttons={headerButtons}
+          />
         ) : (
-          <ProfileHeader avatarSrc={avatar} imageSrc={image} buttons={headerButtons} />
+          <ProfileHeader
+            avatarSrc={avatar}
+            imageSrc={image}
+            buttons={headerButtons}
+          />
         )}
       </div>
-      <div className="col-start-3 bold underline mt-5">
+      <div className="col-start-3 mt-5 font-bold underline">
         <Text2xl content={orgName} />
       </div>
       <div className="col-start-3 col-end-11 mt-2">{pageTabs}</div>

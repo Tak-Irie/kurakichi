@@ -1,0 +1,10 @@
+mutation RegisterUser($input: registerUserInput!) {
+  registerUser(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on User {
+      ...UserPrivateInfo
+    }
+  }
+}

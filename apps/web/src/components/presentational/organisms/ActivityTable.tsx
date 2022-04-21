@@ -1,6 +1,11 @@
-import { FC } from 'react';
 import { DocumentTextIcon } from '@heroicons/react/outline';
-import { TableDataWithLink, TableHead, TableData, TablePagination } from '@next/ui';
+import { FC } from 'react';
+import {
+  TableData,
+  TableDataWithLink,
+  TableHead,
+  TablePagination,
+} from '../atoms';
 
 type ActivityProps = {
   title: string;
@@ -21,12 +26,12 @@ export const ActivityTable: FC<ActivityProps> = ({
 }) => {
   return (
     <div>
-      <div className="max-w-6xl my-4 mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-4 my-4 mx-auto max-w-6xl sm:px-6 lg:px-8">
         <div className="flex flex-col mt-2">
-          <div className="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+          <div className="overflow-hidden overflow-x-auto min-w-full align-middle shadow sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead>
-                <caption className="inline-flex max-w-6xl mx-6 py-4 text-lg font-medium text-gray-700">
+                <caption className="inline-flex py-4 mx-6 max-w-6xl text-lg font-medium text-gray-700">
                   {title}
                 </caption>
                 <tr>
@@ -38,10 +43,14 @@ export const ActivityTable: FC<ActivityProps> = ({
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr className="bg-white">
-                  <TableDataWithLink link="/" title={messageTitle} icon={<DocumentTextIcon />} />
+                  <TableDataWithLink
+                    link="/"
+                    title={messageTitle}
+                    icon={<DocumentTextIcon />}
+                  />
                   <TableData title="hogefuga" />
                   <TableData>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize">
+                    <span className="inline-flex items-center py-0.5 px-2.5 text-xs font-medium text-green-800 capitalize bg-green-100 rounded-full">
                       success
                     </span>
                   </TableData>

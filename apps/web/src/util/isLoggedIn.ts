@@ -4,14 +4,21 @@ import { useGetUserMyInfoQuery } from '../graphql';
 
 export const isLoggedIn = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
+    ssr: false,
     fetchPolicy: 'cache-only',
   });
   const router = useRouter();
   useEffect(() => {
-    if ((!loading && !data?.getUserByCookie?.user) || error) {
+    if (
+      (!loading && data?.getUserByCookie?.__typename === 'Errors') ||
+      (!loading && data?.getUserByCookie === null) ||
+      error
+    ) {
       router.replace('/login?next=' + router.pathname);
     }
   }, [loading, data, router]);
 
-  return { cachedUser: data?.getUserByCookie?.user, loadingCache: loading };
+  if (!loading && data?.getUserByCookie?.__typename === 'User') {
+    return { cachedUser: data.getUserByCookie, loadingCache: loading };
+  }
 };

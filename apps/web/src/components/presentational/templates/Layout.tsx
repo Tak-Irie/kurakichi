@@ -1,5 +1,5 @@
 import type { FC, ReactChild } from 'react';
-import { Footer, NavAlpha, NavBar } from '..';
+import { Footer, NavAlpha, NavBar } from '../organisms';
 
 type LayoutProps = {
   children: ReactChild;

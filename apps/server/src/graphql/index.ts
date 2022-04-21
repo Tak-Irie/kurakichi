@@ -8,6 +8,7 @@ import {
   MessageResolver,
   OrgResolver,
   ScalarResolverMap,
+  UploadResolver,
   UserResolver,
 } from './resolvers';
 
@@ -23,6 +24,7 @@ const schema = makeExecutableSchema({
     OrgResolver,
     BaseResolver,
     InquiryResolver,
+    UploadResolver,
     ScalarResolverMap,
   ],
 });

@@ -2,15 +2,18 @@ import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 
 import { useDropzone } from 'react-dropzone';
 
-import { IconsDocumentAdd, AvatarBig } from '@next/ui';
 import { UploadFiles } from '../../../util';
+import { AvatarBig, IconsDocumentAdd } from '../atoms';
 
 type AvatarChangeableProps = {
   setAvatar: Dispatch<SetStateAction<UploadFiles>>;
   files: UploadFiles;
 };
 
-export const AvatarChangeable: FC<AvatarChangeableProps> = ({ setAvatar, files }) => {
+export const AvatarChangeable: FC<AvatarChangeableProps> = ({
+  setAvatar,
+  files,
+}) => {
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
@@ -32,17 +35,21 @@ export const AvatarChangeable: FC<AvatarChangeableProps> = ({ setAvatar, files }
   }, [files.avatar]);
 
   return (
-    <div className="relative flex items-center justify-center h-32 w-32 ">
+    <div className="flex relative justify-center items-center w-32 h-32 ">
       <AvatarBig
-        src={typeof files.avatar === 'object' ? files.avatar[0].preview : files.avatar}
+        src={
+          typeof files.avatar === 'object'
+            ? files.avatar[0].preview
+            : files.avatar
+        }
         alt="プロフィールアバター"
       />
       <div
-        className="bg-black rounded-full ring-4 ring-white opacity-50 transition duration-500 group hover:opacity-75 min-h-full min-w-full flex flex-col justify-center items-center"
+        className="group flex flex-col justify-center items-center min-w-full min-h-full bg-black rounded-full ring-4 ring-white opacity-50 hover:opacity-75 transition duration-500"
         {...getRootProps()}
       >
         <input {...getInputProps()} />
-        <label className="z-10 h-16 w-16 group absolute flex flex-col justify-center items-center px-4 py-6 border rounded-full cursor-pointer">
+        <label className="group flex absolute z-10 flex-col justify-center items-center py-6 px-4 w-16 h-16 rounded-full border cursor-pointer">
           <IconsDocumentAdd overwriteCSS={'w-8 h-8 text-gray-400'} />
         </label>
       </div>

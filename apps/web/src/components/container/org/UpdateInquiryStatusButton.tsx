@@ -1,18 +1,15 @@
-import { gql } from '@apollo/client';
-import { VFC } from 'react';
+import { InquiryStatusModel } from '@kurakichi/modules';
+import { FC } from 'react';
+import { useUpdateInquiryStatusMutation } from '../../../graphql/generated';
 
-import {
-  InquiryStatus,
-  useUpdateInquiryStatusMutation,
-} from '../../../graphql';
 import { ButtonOrLoading, NotificationSet } from '../../presentational';
 
 type UpdateInquiryStatusButtonProps = {
   inquiryId: string;
-  inquiryStatus: InquiryStatus;
+  inquiryStatus: InquiryStatusModel;
 };
 
-export const UpdateInquiryStatusButton: VFC<UpdateInquiryStatusButtonProps> = ({
+export const UpdateInquiryStatusButton: FC<UpdateInquiryStatusButtonProps> = ({
   inquiryId,
   inquiryStatus,
 }) => {
@@ -22,35 +19,10 @@ export const UpdateInquiryStatusButton: VFC<UpdateInquiryStatusButtonProps> = ({
   const handleClick = async () => {
     await updateStatus({
       variables: {
-        inquiryId,
-        inquiryStatus,
-      },
-      update: (
-        cache,
-        {
-          data: {
-            updateInquiryStatus: { inquiry },
-          },
+        input: {
+          inquiryId,
+          inquiryStatus,
         },
-      ) => {
-        cache.modify({
-          id: 'Inquiry:' + inquiry.id,
-          fields: {
-            inquiryStatus() {
-              // console.log('existing:', existing);
-              // console.log('data:', inquiry);
-              const newStatus = cache.writeFragment({
-                data: inquiry,
-                fragment: gql`
-                  fragment _InquiryStatus on Inquiry {
-                    status
-                  }
-                `,
-              });
-              // console.log('new:', newStatus);
-            },
-          },
-        });
       },
     });
   };
@@ -58,13 +30,18 @@ export const UpdateInquiryStatusButton: VFC<UpdateInquiryStatusButtonProps> = ({
   return (
     <>
       <NotificationSet
-        data={data?.updateInquiryStatus.inquiry}
-        errData={data?.updateInquiryStatus.error}
-        sysErr={error}
-        dataLabel="対応状況を変更しました"
-        errDataLabel={data?.updateInquiryStatus.error?.message}
-        sysErrLabel={error?.message}
-        showingMS={1000 * 3}
+        succeededContent={
+          data?.updateInquiryStatus?.__typename === 'Inquiry'
+            ? '対応状況を更新しました'
+            : ''
+        }
+        errContent={
+          data?.updateInquiryStatus?.__typename === 'Errors'
+            ? data.updateInquiryStatus.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
+        sysErrLabel="システムトラブルが発生しました。管理者に連絡してください"
       />
       <ButtonOrLoading
         loading={loading}

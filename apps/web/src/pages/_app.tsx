@@ -20,11 +20,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
         />
         <title>くらきち~くらしのあんぜんきち~</title>
       </Head>
-      <AuthContext.Provider value={{ authStatus, setAuthStatus }}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </AuthContext.Provider>
     </ApolloProvider>
   );
 }

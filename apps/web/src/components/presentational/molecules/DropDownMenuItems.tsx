@@ -8,11 +8,11 @@ type DropDownMenuItemProps = {
   label: string;
   linkUrl: string;
   linkAs?: string;
-  onClick?: () => void | Promise<void>;
+  onClick: () => void | Promise<void>;
   // isOpen?: boolean;
 };
 
-export const DropDownMenuItem: FC<DropDownMenuItemProps> = ({
+export const DropDownMenuItem: FC<Omit<DropDownMenuItemProps, 'onClick'>> = ({
   linkUrl,
   linkAs,
   icon,
@@ -36,11 +36,9 @@ export const DropDownMenuItem: FC<DropDownMenuItemProps> = ({
   );
 };
 
-export const DropDownMenuItemButton: FC<DropDownMenuItemProps> = ({
-  onClick,
-  icon,
-  label,
-}) => {
+export const DropDownMenuItemButton: FC<
+  Omit<DropDownMenuItemProps, 'linkUrl'>
+> = ({ onClick, icon, label }) => {
   return (
     <Menu.Item>
       <button

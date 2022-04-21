@@ -1,4 +1,4 @@
-import { ReactElement, SyntheticEvent, VFC } from 'react';
+import { FC, ReactElement, SyntheticEvent } from 'react';
 
 type ButtonProps = {
   type: 'button' | 'submit';
@@ -12,7 +12,7 @@ type ButtonWithIconProps = ButtonProps & {
   icon: ReactElement;
 };
 
-export const ButtonBig: VFC<ButtonProps> = ({
+export const ButtonBig: FC<ButtonProps> = ({
   type,
   onClick,
   disabled,
@@ -33,7 +33,7 @@ export const ButtonBig: VFC<ButtonProps> = ({
   );
 };
 
-export const ButtonWithIcon: VFC<ButtonWithIconProps> = ({
+export const ButtonWithIcon: FC<ButtonWithIconProps> = ({
   type,
   label,
   icon,

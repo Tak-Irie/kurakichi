@@ -1,12 +1,17 @@
-import { FieldError, Path, UseFormRegister } from 'react-hook-form';
+import { Path, UseFormRegister } from 'react-hook-form';
 
 import { PopOnIcon } from '..';
 import { IconsCheckCircle, IconsQuestion } from './Icons';
 
-type InputProps<T> = {
+export type InputValue = {
+  [key: string]: string;
+};
+
+type InputProps<T extends InputValue> = {
   label: Path<T>;
   register: UseFormRegister<T>;
   required: boolean;
+  pattern: RegExp;
   fieldLabel?: string;
   type:
     | 'date'
@@ -29,20 +34,21 @@ type InputProps<T> = {
   minLength?: number;
   maxLength?: number;
   helperText?: string;
-  errMessage?: string | FieldError;
+  errMessage?: string;
   isValid?: boolean;
   overWriteCSS?: string;
   placeholder?: string;
 };
 
-type TextareaProps<T> = Omit<InputProps<T>, 'type'> & {
+type TextareaProps<T extends InputValue> = Omit<InputProps<T>, 'type'> & {
   rows: number;
   cols: number;
 };
 
-export const Input = <T extends any>({
+export const Input = <T extends InputValue>({
   label,
   type,
+  pattern,
   autoComplete,
   fieldLabel,
   register,
@@ -60,7 +66,7 @@ export const Input = <T extends any>({
   <>
     <div className="flex justify-start items-center">
       {fieldLabel ? (
-        <label className="text-gray-700 text-xs font-bold my-1">
+        <label className="my-1 text-xs font-bold text-gray-700">
           {fieldLabel}
         </label>
       ) : null}
@@ -72,29 +78,16 @@ export const Input = <T extends any>({
       {isValid ? (
         <IconsCheckCircle />
       ) : errMessage ? (
-        <span className="ml-1 text-red-800 bg-red-100 p-1 text-xs rounded">
+        <span className="p-1 ml-1 text-xs text-red-800 bg-red-100 rounded">
           {errMessage}
         </span>
       ) : (
-        <span className="ml-1 text-red-500 text-xs">
+        <span className="ml-1 text-xs text-red-500">
           {required === true ? '必須項目' : null}
         </span>
       )}
     </div>
-    {disable ? (
-      <fieldset disabled>
-        <input
-          className={overWriteCSS}
-          placeholder={placeholder}
-          type={type}
-          autoComplete={autoComplete}
-          max={max}
-          minLength={minLength}
-          maxLength={maxLength}
-          {...register(label, { required })}
-        />
-      </fieldset>
-    ) : (
+    <fieldset disabled={disable}>
       <input
         className={overWriteCSS}
         placeholder={placeholder}
@@ -103,15 +96,16 @@ export const Input = <T extends any>({
         max={max}
         minLength={minLength}
         maxLength={maxLength}
-        {...register(label, { required })}
+        {...register(label, { required, pattern })}
       />
-    )}
+    </fieldset>
   </>
 );
 
-export const InputTextarea = <T extends any>({
+export const InputTextarea = <T extends InputValue>({
   cols,
   rows,
+  pattern,
   errMessage,
   helperText,
   fieldLabel,
@@ -122,7 +116,7 @@ export const InputTextarea = <T extends any>({
   overWriteCSS = 'flex-grow w-full h-32 px-4 my-2 text-gray-800 border border-gray-400 rounded',
 }: TextareaProps<T>) => (
   <>
-    <label className="text-gray-700 text-xs font-bold my-1 mr-auto">
+    <label className="my-1 mr-auto text-xs font-bold text-gray-700">
       {fieldLabel}
     </label>
     {helperText ? (
@@ -134,7 +128,7 @@ export const InputTextarea = <T extends any>({
       cols={cols}
       rows={rows}
       className={overWriteCSS}
-      {...register(label, { required })}
+      {...register(label, { required, pattern })}
     />
   </>
 );

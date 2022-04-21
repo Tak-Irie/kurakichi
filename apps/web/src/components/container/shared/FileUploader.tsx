@@ -1,27 +1,41 @@
 import { ChangeEvent, FC, useState } from 'react';
+import { useUploadFileMutation } from '../../../graphql';
 
 type FileUploaderProps = {
   some?: string;
 };
 
 export const FileUploader: FC<FileUploaderProps> = () => {
-  const [image, setImage] = useState<File>(null);
+  const [image, setImage] = useState<File>();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const uploaded = e.target.files[0];
-    console.log('uploaded:', uploaded);
-    setImage(uploaded);
+    if (e.target.files) {
+      const uploaded = e.target.files[0];
+      console.log('uploaded:', uploaded);
+      setImage(uploaded);
+    }
   };
 
-  // const handleClick = async (e: MouseEvent<HTMLInputElement>) => {
-  //   const res = await uploadImage({avatar:""});
-  //   console.log('fetchRes:', res);
-  // };
+  const handleClick = async () => {
+    const [upload, { data, loading, error }] = useUploadFileMutation();
+    if (image) {
+      try {
+        await upload({
+          variables: { file: image },
+        });
+        if (data) {
+          console.log('image:', data.uploadFile.encoding);
+        }
+      } catch (err) {
+        console.log('err:', err);
+      }
+    }
+  };
 
   return (
-    <form className="space-y-5 py-10 max-w-sm flex flex-col">
+    <form className="flex flex-col py-10 space-y-5 max-w-sm">
       <input type="file" name="avatar" onChange={handleChange} />
-      {/* <input type="button" value="Send File" onClick={handleClick} /> */}
+      <button onClick={handleClick} />
     </form>
   );
 };

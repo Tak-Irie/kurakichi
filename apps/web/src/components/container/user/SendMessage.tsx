@@ -1,39 +1,35 @@
-import { Dispatch, SetStateAction, VFC } from 'react';
+import { Any100chrRegExp } from '@kurakichi/modules';
+import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSendMessageMutation } from '../../../graphql/generated/graphql';
+import { useSendMessageMutation } from '../../../graphql/generated';
 import { Form, InputTextarea } from '../../presentational/atoms';
-import {
-  ButtonOrLoading,
-  NotificationSet,
-} from '../../presentational/molecules';
+import { ButtonOrLoading } from '../../presentational/molecules';
+import { NotificationSet } from '../../presentational/organisms';
 
 type SendMessageProps = {
   receiverId: string;
   onClick?: () => void;
-  dispatcher?: Dispatch<SetStateAction<boolean>>;
 };
 
 type SendMessageInput = {
   textInput: string;
 };
-export const SendMessage: VFC<SendMessageProps> = ({
-  receiverId,
-  dispatcher,
-  onClick,
-}) => {
+export const SendMessage: FC<SendMessageProps> = ({ receiverId, onClick }) => {
   const { register, handleSubmit } = useForm<SendMessageInput>();
   const [sendMessage, { data, error, loading }] = useSendMessageMutation();
 
   const onSubmit = async (values: SendMessageInput) => {
-    console.log('sendMessageValues:', values);
+    // console.log('sendMessageValues:', values);
     try {
       await sendMessage({
         variables: {
-          TextInput: values.textInput,
-          ReceiverId: receiverId,
+          input: {
+            content: values.textInput,
+            receiverId,
+          },
         },
       });
-      console.log('returnData:', data);
+      // console.log('returnData:', data);
     } catch (err) {
       console.log('err:', err);
     }
@@ -42,11 +38,17 @@ export const SendMessage: VFC<SendMessageProps> = ({
   return (
     <div>
       <NotificationSet
-        data={data?.sendMessage.message}
-        errData={data?.sendMessage.error}
-        sysErr={error}
-        dataContent="メッセージを送信しました"
-        errDataContent={data?.sendMessage.error?.message}
+        succeededContent={
+          data?.sendMessage?.__typename === 'Message'
+            ? 'メッセージを送信しました！'
+            : ''
+        }
+        errContent={
+          data?.sendMessage?.__typename === 'Errors'
+            ? data.sendMessage.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
       />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputTextarea<SendMessageInput>
@@ -55,6 +57,7 @@ export const SendMessage: VFC<SendMessageProps> = ({
           fieldLabel="メッセージ内容"
           label="textInput"
           required
+          pattern={Any100chrRegExp}
           register={register}
         />
         <ButtonOrLoading

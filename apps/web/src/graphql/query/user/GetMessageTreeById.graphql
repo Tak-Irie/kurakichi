@@ -3,7 +3,7 @@ query GetMessagesByTreeId($treeId: String!) {
     ... on MessageTree {
       id
       leaves {
-        ...MessageLeafConn
+        ...MessageLeafConnection
       }
     }
     ... on Errors {

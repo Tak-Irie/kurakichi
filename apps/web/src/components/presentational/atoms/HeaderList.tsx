@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import { LinkNextjs } from '../../container';
 
 type HeaderListProps = {
@@ -11,7 +11,7 @@ type HeaderListProps = {
   onClick?: () => void;
 };
 
-const HeaderList: VFC<HeaderListProps> = ({
+const HeaderList: FC<HeaderListProps> = ({
   linkAs,
   linkLabel,
   linkUrl,

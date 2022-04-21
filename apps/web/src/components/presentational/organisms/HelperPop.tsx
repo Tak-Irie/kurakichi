@@ -1,13 +1,16 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 
-import { PopOnIcon, IconsQuestion } from '@next/ui';
 import { Placement } from '@popperjs/core';
+import { IconsQuestion } from '../atoms';
+import { PopOnIcon } from '../molecules';
 
 type HelperPopProps = {
   text: string;
   popPlace?: Placement;
 };
 
-export const HelperPop: VFC<HelperPopProps> = ({ text, popPlace }) => {
-  return <PopOnIcon placement={popPlace} icon={<IconsQuestion />} content={text} />;
+export const HelperPop: FC<HelperPopProps> = ({ text, popPlace }) => {
+  return (
+    <PopOnIcon placement={popPlace} icon={<IconsQuestion />} content={text} />
+  );
 };

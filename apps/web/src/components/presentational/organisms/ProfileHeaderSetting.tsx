@@ -1,7 +1,9 @@
-import { VFC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { AvatarChangeable, ImageHeroChangeable } from '.';
+import { useUploadFileMutation } from '../../../graphql';
 
-import { ImageHeroChangeable, AvatarChangeable, ButtonWithIcon, IconsCloudUpload } from '..';
-import { UploadFiles, uploadImage } from '../../../util';
+import { UploadFiles } from '../../../util';
+import { ButtonWithIcon, IconsCloudUpload } from '../atoms';
 
 type ProfileHeaderProps = {
   imageSrc: string;
@@ -9,13 +11,21 @@ type ProfileHeaderProps = {
   buttons?: ReactNode;
 };
 
-export const ProfileHeaderSetting: VFC<ProfileHeaderProps> = ({ avatarSrc, imageSrc, buttons }) => {
-  const [files, setFiles] = useState<UploadFiles>({ image: imageSrc, avatar: avatarSrc });
+export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({
+  avatarSrc,
+  imageSrc,
+  buttons,
+}) => {
+  const [files, setFiles] = useState<UploadFiles>({
+    image: imageSrc,
+    avatar: avatarSrc,
+  });
   const [isDisable, setIsDisable] = useState(true);
+  const [upload, { data, loading, error }] = useUploadFileMutation();
 
   const handleClick = async () => {
     // console.log('clicked:', files);
-    const res = await uploadImage(files);
+    const res = await upload(files as any);
     // console.log('res:', res);
   };
 
@@ -34,7 +44,7 @@ export const ProfileHeaderSetting: VFC<ProfileHeaderProps> = ({ avatarSrc, image
       <div className="col-start-3 -mt-20">
         <AvatarChangeable files={files} setAvatar={setFiles} />
       </div>
-      <div className="col-span-6 col-end-11 mt-4 flex justify-end space-x-1">
+      <div className="flex col-span-6 col-end-11 justify-end mt-4 space-x-1">
         {buttons}
         <ButtonWithIcon
           disabled={isDisable}

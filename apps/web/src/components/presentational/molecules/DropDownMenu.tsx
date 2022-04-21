@@ -1,4 +1,4 @@
-import { FC, Fragment, ReactElement, VFC } from 'react';
+import { FC, Fragment, ReactChild, ReactElement } from 'react';
 
 import { Menu, Transition } from '@headlessui/react';
 
@@ -7,6 +7,7 @@ type DropDownMenuProps = {
   menuIcon: ReactElement;
   menuItems: ReactElement;
   isOpen?: boolean;
+  children?: ReactChild;
 };
 
 export const DropDownMenu: FC<DropDownMenuProps> = (props) => {
@@ -41,7 +42,7 @@ export const DropDownMenu: FC<DropDownMenuProps> = (props) => {
     </div>
   );
 };
-export const DropDownMenu2: VFC<DropDownMenuProps> = ({
+export const DropDownMenu2: FC<DropDownMenuProps> = ({
   menuElement,
   menuIcon,
   menuItems,
@@ -64,7 +65,7 @@ export const DropDownMenu2: VFC<DropDownMenuProps> = ({
         >
           <Menu.Items
             static
-            className="absolute right-0 mt-2 w-auto bg-white rounded-md focus:outline-none ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
+            className="absolute right-0 mt-2 w-auto bg-white rounded-md focus:outline-none ring-black/5 shadow-lg origin-top-right"
           >
             {menuItems}
           </Menu.Items>

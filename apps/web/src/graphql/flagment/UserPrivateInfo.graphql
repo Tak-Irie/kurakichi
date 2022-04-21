@@ -27,4 +27,13 @@ fragment UserPrivateInfo on User {
       hasPrevious
     }
   }
+  orgs {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+  }
 }
