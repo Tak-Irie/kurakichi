@@ -1,4 +1,4 @@
-import { Any100chrRegExp } from '@kurakichi/modules';
+import { Any100chrRegExp } from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 

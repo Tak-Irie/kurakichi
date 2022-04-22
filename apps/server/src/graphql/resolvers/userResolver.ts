@@ -1,6 +1,6 @@
 import { Resolvers } from '../generated/generatedTypes';
 
-import { getUserMyInfo } from '@kurakichi/modules';
+import { getUserMyInfo } from '@kurakichi/domain';
 import {
   useDeleteUserUsecase,
   useForgotPasswordUsecase,
@@ -10,7 +10,7 @@ import {
   useLogoutUserUsecase,
   useRegisterUserUsecase,
   useUpdateUserUsecase,
-} from '@kurakichi/modules/user/usecase';
+} from '@kurakichi/domain/user/usecase';
 import { ApolloContext } from '../../types';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';

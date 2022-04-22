@@ -1,7 +1,6 @@
 /* eslint-disable no-constant-condition */
-import { DTOUser } from '@kurakichi/modules';
-import { UserRoleModel } from '@kurakichi/modules/shared/infra/graphql/MappingModels';
-import { UserReadModel } from '@kurakichi/modules/user/tempRead/UserReadModel';
+import { DTOUser, UserRoleModel } from '@kurakichi/domain';
+import { UserReadModel } from '@kurakichi/domain/src/user/tempRead/UserReadModel';
 import {
   MessageConnection,
   MessageEdges,

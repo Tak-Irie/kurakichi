@@ -5,7 +5,7 @@ import {
   useRegisterInquiryUsecase,
   useReplyInquiryUsecase,
   useUpdateInquiryStatusUsecase,
-} from '@kurakichi/modules';
+} from '@kurakichi/domain';
 import { ApolloContext } from '../../types';
 import {
   returnErrorToGQL,

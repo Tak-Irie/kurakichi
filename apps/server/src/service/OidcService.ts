@@ -1,9 +1,9 @@
-import { Request } from "express";
-import { Redis } from "ioredis";
-import { Client, TokenSet, generators, UserinfoResponse } from "openid-client";
+import { Request } from 'express';
+import { Redis } from 'ioredis';
+import { Client, generators, TokenSet } from 'openid-client';
 
-import { Cryptograph } from "@kurakichi/modules";
-import { AuthService } from "./AuthService";
+import { Cryptograph } from '@kurakichi/domain';
+import { AuthService } from './AuthService';
 
 // FIXME:These services temporally created.it must be written in modules/*
 
@@ -69,7 +69,7 @@ class OidcAuthService {
 
   public async createAuthReq(
     client: Client,
-    sessionId: string
+    sessionId: string,
   ): Promise<string> {
     const { state, nonce, code_verifier, code_challenge } =
       this.generateParams();
@@ -99,7 +99,7 @@ class OidcAuthService {
     //
     if (!req.session.authSession) return false;
     const storedParams = await this.authService.getStoredAuthParam(
-      req.session.authSession
+      req.session.authSession,
     );
 
     if (storedParams === false) return false;
@@ -143,12 +143,12 @@ class OidcAuthService {
   public async getAndDecryptTokenSet(sub: string) {
     try {
       const cryptedToken = await this.authService.getTokenSet(sub);
-      if (cryptedToken === undefined) throw Error("no match token");
+      if (cryptedToken === undefined) throw Error('no match token');
       const { iv, token } = cryptedToken;
       const plainToken = this.crypt.decrypt(iv as string, token as string);
       return JSON.parse(plainToken);
     } catch (err) {
-      console.log("err:", err);
+      console.log('err:', err);
     }
   }
 
@@ -164,13 +164,13 @@ class OidcAuthService {
   private getAuthUrl(arg: GetAuthUrlArg): string {
     const { client, code_challenge, nonce, state } = arg;
     const authUrl = client.authorizationUrl({
-      scope: "openid email",
+      scope: 'openid email',
       state,
       nonce,
       code_challenge,
-      code_challenge_method: "S256",
-      prompt: "consent",
-      display: "page",
+      code_challenge_method: 'S256',
+      prompt: 'consent',
+      display: 'page',
       max_age: 3600,
     });
     return authUrl;

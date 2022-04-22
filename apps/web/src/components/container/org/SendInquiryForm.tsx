@@ -2,7 +2,7 @@ import {
   Any100chrRegExp,
   InquiryCategoryModel,
   InquiryStatusModel,
-} from '@kurakichi/modules';
+} from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendInquiryMutation } from '../../../graphql/generated';

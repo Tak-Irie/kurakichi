@@ -1,4 +1,4 @@
-import { DTOInquiry, InquiryModel } from '@kurakichi/modules';
+import { DTOInquiry, InquiryModel } from '@kurakichi/domain';
 import {
   Inquiry,
   InquiryConnection,

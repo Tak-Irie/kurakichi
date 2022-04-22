@@ -6,7 +6,7 @@ import {
   useRegisterOrgUsecase,
   useRequestJoinOrgUsecase,
   useUpdateOrgUsecase,
-} from '@kurakichi/modules';
+} from '@kurakichi/domain';
 import { ApolloContext } from '../../types';
 import {
   returnErrorToGQL,

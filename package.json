@@ -18,7 +18,7 @@
     "dev:server": "yarn workspace @kurakichi/server dev",
     "build:server": "yarn workspace @kurakichi/server build",
     "dev:all": "sh dev.sh",
-    "build:modules": "yarn workspace @kurakichi/modules build",
+    "build:modules": "yarn workspace @kurakichi/domain build & yarn workspace @kurakichi/prisma build & yarn workspace @kurakichi/third-api build",
     "gen:gql": "graphql-codegen",
     "gen:prisma:migrate": "yarn workspace @kurakichi/prisma migrate",
     "gen:prisma:migrate-create": "yarn workspace @kurakichi/prisma migrate-create",

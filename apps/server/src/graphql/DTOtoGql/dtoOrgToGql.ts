@@ -1,4 +1,4 @@
-import { DTOOrg, OrgReadModel } from '@kurakichi/modules';
+import { DTOOrg, OrgReadModel } from '@kurakichi/domain';
 import { Address, MemberConnection, Org } from '../generated/generatedTypes';
 import { createGqlConn } from './createConnection';
 

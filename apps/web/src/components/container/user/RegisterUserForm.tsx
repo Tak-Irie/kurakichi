@@ -1,4 +1,4 @@
-import { EmailRegExp, PasswordRegExp } from '@kurakichi/modules';
+import { EmailRegExp, PasswordRegExp } from '@kurakichi/domain';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';

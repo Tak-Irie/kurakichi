@@ -5,7 +5,7 @@ import {
   OrgNameRegExp,
   PhoneNumberRegExp,
   URLRegExp,
-} from '@kurakichi/modules';
+} from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUpdateOrgInfoMutation } from '../../../graphql/generated';

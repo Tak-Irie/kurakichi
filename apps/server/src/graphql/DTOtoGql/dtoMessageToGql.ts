@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
-import { DTOMessage } from '@kurakichi/modules';
-import { UserReadModel } from '@kurakichi/modules/user/tempRead/UserReadModel';
+import { DTOMessage } from '@kurakichi/domain';
+import { UserReadModel } from '@kurakichi/domain/src/user/tempRead/UserReadModel';
 import { Message, MessageTree } from '../generated/generatedTypes';
 
 type TreeArg = {

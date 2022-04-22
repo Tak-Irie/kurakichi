@@ -2,7 +2,7 @@ import {
   Any100chrRegExp,
   EmailRegExp,
   UserNameRegExp,
-} from '@kurakichi/modules';
+} from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUpdateUserMutation } from '../../../graphql/generated';

@@ -1,4 +1,4 @@
-import { EmailRegExp } from '@kurakichi/modules';
+import { EmailRegExp } from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useForgetUserPasswordMutation } from '../../../graphql/generated';

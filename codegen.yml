@@ -1,4 +1,4 @@
-schema: ./modules/shared/infra/graphql/schemas/*.graphql
+schema: modules/domain/src/shared/infra/graphql/schemas/*.graphql
 generates:
   ./apps/server/src/graphql/generated/generatedTypes.ts:
     config:
@@ -10,11 +10,11 @@ generates:
         InquiryCategory: InquiryCategoryModel
         InquiryStatus: InquiryStatusModel
       mappers:
-        Upload: \@kurakichi/modules/shared/infra/graphql/MappingModels#FileModel
-        UserRole: \@kurakichi/modules/shared/infra/graphql/MappingModels#UserRoleModel
-        MessageStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#MessageStatusModel
-        InquiryCategory: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryCategoryModel
-        InquiryStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryStatusModel
+        Upload: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#FileModel
+        UserRole: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#UserRoleModel
+        MessageStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#MessageStatusModel
+        InquiryCategory: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryCategoryModel
+        InquiryStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryStatusModel
     plugins:
       - typescript
       - typescript-resolvers
@@ -34,11 +34,11 @@ generates:
         InquiryCategory: InquiryCategoryModel
         InquiryStatus: InquiryStatusModel
       mappers:
-        Upload: \@kurakichi/modules/shared/infra/graphql/MappingModels#FileModel
-        UserRole: \@kurakichi/modules/shared/infra/graphql/MappingModels#UserRoleModel
-        MessageStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#MessageStatusModel
-        InquiryCategory: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryCategoryModel
-        InquiryStatus: \@kurakichi/modules/shared/infra/graphql/MappingModels#InquiryStatusModel
+        Upload: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#FileModel
+        UserRole: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#UserRoleModel
+        MessageStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#MessageStatusModel
+        InquiryCategory: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryCategoryModel
+        InquiryStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryStatusModel
   ./apps/server/src/graphql/generated/generatedSchema.graphql:
     plugins:
       - schema-ast

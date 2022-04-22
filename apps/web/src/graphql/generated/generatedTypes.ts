@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { FileModel, UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/modules/shared/infra/graphql/MappingModels';
+import { FileModel, UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/domain/src/shared/infra/graphql/MappingModels';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;

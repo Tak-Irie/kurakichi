@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { FileModel, UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '@kurakichi/modules/domain/shared/infra/graphql/MappingModels';
+import { FileModel, UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/domain/src/shared/infra/graphql/MappingModels';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };

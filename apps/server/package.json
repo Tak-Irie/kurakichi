@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.12",
-    "@kurakichi/modules": "^0.0.1",
+    "@kurakichi/domain": "^0.0.1",
     "@sendgrid/mail": "^7.6.2",
     "apollo-server-core": "^3.6.7",
     "apollo-server-express": "^3.6.7",

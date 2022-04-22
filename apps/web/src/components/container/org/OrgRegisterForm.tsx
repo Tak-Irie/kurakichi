@@ -1,14 +1,13 @@
-import { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-
 import {
   Any100chrRegExp,
   EmailRegExp,
   OrgNameRegExp,
   PhoneNumberRegExp,
   PostcodeRegExp,
-} from '@kurakichi/modules';
-import { PostcodeAPI } from '@kurakichi/modules/shared/infra';
+} from '@kurakichi/domain';
+import { FC, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { useRegisterOrgMutation } from '../../../graphql/generated';
 import { ButtonBig, Form, Input, TextSmall } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';

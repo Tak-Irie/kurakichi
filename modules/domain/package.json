@@ -7,9 +7,7 @@
     "build": "tsc --build"
   },
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.3.12",
     "@kurakichi/prisma": "^0.0.1",
-    "@sendgrid/mail": "^7.6.2",
     "argon2": "^0.28.5",
     "dompurify": "^2.3.6",
     "ioredis": "^5.0.4",

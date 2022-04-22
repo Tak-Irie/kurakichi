@@ -1,4 +1,4 @@
-import { DTOBase } from '@kurakichi/modules';
+import { DTOBase } from '@kurakichi/domain';
 import { Base } from '../generated/generatedTypes';
 import { createGqlConn } from './createConnection';
 

@@ -1,4 +1,4 @@
-import { InquiryCategoryModel, InquiryStatusModel } from '@kurakichi/modules';
+import { InquiryCategoryModel, InquiryStatusModel } from '@kurakichi/domain';
 import { FC } from 'react';
 
 import { Badge, BadgeLarge } from '../atoms';

@@ -1,5 +1,5 @@
-import { Client } from "@googlemaps/google-maps-services-js";
-import { JapaneseAddressRegExp } from "@kurakichi/modules";
+import { Client } from '@googlemaps/google-maps-services-js';
+import { JapaneseAddressRegExp } from '@kurakichi/domain';
 
 // FIXME:These services temporally created.it must be written in modules/*
 
@@ -10,7 +10,7 @@ interface GeoCode {
 
 export class GoogleMapAPIService {
   public static async getGeoCodeByAddress(
-    address: string
+    address: string,
   ): Promise<GeoCode | false> {
     // console.log('address:', address);
     const modified = GoogleMapAPIService.modifyAddress(address);
@@ -20,7 +20,7 @@ export class GoogleMapAPIService {
       params: {
         address: modified,
         key: process.env.GOOGLE_GEO_API_KEY as string,
-        region: "jp",
+        region: 'jp',
       },
     });
     if (response.status != 200) {
@@ -31,7 +31,7 @@ export class GoogleMapAPIService {
     return { lat: data.lat, lng: data.lng };
   }
   public static async getGeoCodeByPostcode(
-    postcode: string
+    postcode: string,
   ): Promise<GeoCode | false> {
     // const postRegExp = //
 
@@ -40,7 +40,7 @@ export class GoogleMapAPIService {
       params: {
         address: postcode,
         key: process.env.GOOGLE_GEO_API_KEY as string,
-        region: "jp",
+        region: 'jp',
       },
     });
     if (response.status != 200) {
@@ -52,6 +52,6 @@ export class GoogleMapAPIService {
   }
 
   private static modifyAddress(address: string): string {
-    return address.replace(JapaneseAddressRegExp, "$1$2");
+    return address.replace(JapaneseAddressRegExp, '$1$2');
   }
 }
