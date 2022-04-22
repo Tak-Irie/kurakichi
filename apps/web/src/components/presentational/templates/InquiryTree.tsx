@@ -19,10 +19,9 @@ type InquiryTreeProps = {
   orgId: string;
 };
 
-type LocalInquiryStatus = InquiryStatusModel | undefined;
-
+// FIXME:fix useState, they dont accept undefined
 export const InquiryTree: FC<InquiryTreeProps> = ({ inquiries, orgId }) => {
-  const [isStatus, setIsStatus] = useState<LocalInquiryStatus>();
+  const [isStatus, setIsStatus] = useState<InquiryStatusModel>('UNREAD');
 
   return (
     <div className="space-y-2">
@@ -45,12 +44,12 @@ export const InquiryTree: FC<InquiryTreeProps> = ({ inquiries, orgId }) => {
           <BadgeInquiryStatusChangeable
             handleChange={setIsStatus}
             size="large"
-            status={isStatus}
+            status={isStatus || 'UNREAD'}
           />
           <span className="flex justify-center">
             <UpdateInquiryStatusButton
               inquiryId={inquiries[0].id}
-              inquiryStatus={isStatus}
+              inquiryStatus={isStatus || 'UNREAD'}
             />
           </span>
         </div>

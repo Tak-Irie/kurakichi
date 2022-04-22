@@ -9,8 +9,7 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "modules",
-      "prisma"
+      "modules/*"
     ]
   },
   "scripts": {
@@ -19,6 +18,7 @@
     "dev:server": "yarn workspace @kurakichi/server dev",
     "build:server": "yarn workspace @kurakichi/server build",
     "dev:all": "sh dev.sh",
+    "build:modules": "yarn workspace @kurakichi/modules build",
     "gen:gql": "graphql-codegen",
     "gen:prisma:migrate": "yarn workspace @kurakichi/prisma migrate",
     "gen:prisma:migrate-create": "yarn workspace @kurakichi/prisma migrate-create",
