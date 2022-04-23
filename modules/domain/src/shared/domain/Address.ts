@@ -1,4 +1,5 @@
 import { Result } from '../core';
+import prefectures from '../staticData/prefectures';
 import { JapaneseAddressRegExp, PostcodeRegExp } from '../util';
 import { ValueObject } from './ValueObject';
 
@@ -29,15 +30,26 @@ export class Address extends ValueObject<AddressProps> {
     return Result.success<Address>(_Address);
   }
 
+  // FIXME: temp impl, will convert to in-mem redis store
   public static async getAddressFromPostcode(
     postcode: string,
   ): Promise<string | false> {
-    if (postcode.length > 8) return false;
-    if (PostcodeRegExp.test(postcode) === false) return false;
-    const pref = postcode.slice(0, 3);
-    const local = await import(`../data/${pref}.js`);
+    try {
+      if (postcode.length > 8) return false;
+      if (PostcodeRegExp.test(postcode) === false) return false;
+      const prefCode = postcode.slice(0, 3);
+      const localCode = postcode.slice(-4);
+      const addresses = await import(`./data/${prefCode}`);
+      const data = addresses.default[localCode];
+      const pref = prefectures[data[0]];
+      const result = pref + data[1] + data[2] + (data[3] || '');
+      if (typeof result !== 'string') false;
 
-    return '';
+      return result;
+    } catch (err: any) {
+      console.log('err:', err);
+      return false;
+    }
   }
 
   private static validateAndModifyProps(
