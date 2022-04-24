@@ -2,7 +2,9 @@
 // in usecase, implement error type in result object.
 // like type: "UserError", "ApplicationError"
 const returnErrorToGQL = (message: string) => {
-  return { applicationError: { message } };
+  return {
+    applicationError: { message },
+  };
 };
 
 const returnNotLoggedIn = () => {

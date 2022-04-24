@@ -1,9 +1,9 @@
-import { Either, left, Result, right } from "../../../shared/core";
-import { UniqueEntityId } from "../../../shared/domain";
-import { RedisAuthAPI, SendGridAPI } from "../../../shared/infra";
-import { IUsecase, UnexpectedError } from "../../../shared/usecase";
-import { IUserRepository, UserEmail } from "../../domain";
-import { InvalidEmailError } from "./ForgotPasswordError";
+import { RedisAuthAPI, SendGridAPI } from '@kurakichi/third-api';
+import { Either, left, Result, right } from '../../../shared/core';
+import { UniqueEntityId } from '../../../shared/domain';
+import { IUsecase, UnexpectedError } from '../../../shared/usecase';
+import { IUserRepository, UserEmail } from '../../domain';
+import { InvalidEmailError } from './ForgotPasswordError';
 
 type ForgetPasswordResponse = Either<
   InvalidEmailError | UnexpectedError,
@@ -20,11 +20,11 @@ export class ForgotPasswordUsecase
   public async execute(email: string): Promise<ForgetPasswordResponse> {
     const userEmail = UserEmail.create({ email });
 
-    if (userEmail.isFailure) return left(new InvalidEmailError(""));
+    if (userEmail.isFailure) return left(new InvalidEmailError(''));
 
     try {
       const result = await this.userRepository.getUserByEmail(
-        userEmail.getValue()
+        userEmail.getValue(),
       );
 
       if (result === undefined) return right(Result.success<true>(true));
@@ -33,18 +33,18 @@ export class ForgotPasswordUsecase
 
       const stored = await RedisAuthAPI.storePasswordToken(
         result.getId(),
-        token
+        token,
       );
 
       // TODO: should be storeConnectionError, make this err for redis later
-      if (stored === false) return left(new UnexpectedError(""));
+      if (stored === false) return left(new UnexpectedError(''));
 
       // TODO:implement interface?
       await SendGridAPI.sendMail(result.getEmail(), token);
 
       return right(Result.success<true>(true));
     } catch (err) {
-      return left(new UnexpectedError(""));
+      return left(new UnexpectedError(''));
     }
   }
 }

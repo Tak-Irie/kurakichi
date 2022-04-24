@@ -14,11 +14,12 @@
   },
   "scripts": {
     "postinstall": "husky install",
+    "dev:all": "sh dev.sh",
     "dev:web": "yarn workspace @kurakichi/web dev",
     "dev:server": "yarn workspace @kurakichi/server dev",
     "build:server": "yarn workspace @kurakichi/server build",
-    "dev:all": "sh dev.sh",
     "build:modules": "yarn workspace @kurakichi/domain build & yarn workspace @kurakichi/prisma build & yarn workspace @kurakichi/third-api build",
+    "build:third": "yarn workspace @kurakichi/third-api build",
     "gen:gql": "graphql-codegen",
     "gen:prisma:migrate": "yarn workspace @kurakichi/prisma migrate",
     "gen:prisma:migrate-create": "yarn workspace @kurakichi/prisma migrate-create",
@@ -39,6 +40,7 @@
     "@types/jsdom": "^16.2.14",
     "@types/multer": "^1.4.7",
     "@types/node": "^17.0.24",
+    "@types/react": "^18.0.6",
     "@types/uuid": "^8.3.4",
     "@types/validator": "^13.7.2",
     "@types/ws": "^8.5.3",
@@ -62,8 +64,5 @@
   "dependencies": {
     "date-fns": "^2.28.0",
     "graphql": "^16.3.0"
-  },
-  "installConfig": {
-    "hoistingLimits": "dependencies"
   }
 }

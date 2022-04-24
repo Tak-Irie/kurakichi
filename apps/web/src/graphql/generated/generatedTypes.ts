@@ -31,9 +31,11 @@ export type Scalars = {
 export type Address = {
   __typename?: 'Address';
   address: Scalars['String'];
-  latitude: Scalars['Float'];
-  longitude: Scalars['Float'];
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
 };
+
+export type AddressResult = Address | Errors;
 
 export type ApplicationError = Error & {
   __typename?: 'ApplicationError';
@@ -385,6 +387,7 @@ export type PostDialogResult = Dialog | Errors;
 
 export type Query = {
   __typename?: 'Query';
+  getAddressByPostcode?: Maybe<AddressResult>;
   getBase?: Maybe<BaseResult>;
   getDialogsByBaseId?: Maybe<DialogsResult>;
   getInquiriesByOrgId?: Maybe<InquiriesResult>;
@@ -401,6 +404,11 @@ export type Query = {
   getUsers?: Maybe<UsersResult>;
   node?: Maybe<Node>;
   nodes?: Maybe<Array<Maybe<Node>>>;
+};
+
+
+export type QueryGetAddressByPostcodeArgs = {
+  postcode: Scalars['String'];
 };
 
 
@@ -645,6 +653,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Address: ResolverTypeWrapper<Address>;
+  AddressResult: ResolversTypes['Address'] | ResolversTypes['Errors'];
   ApplicationError: ResolverTypeWrapper<ApplicationError>;
   Base: ResolverTypeWrapper<Base>;
   BaseResult: ResolversTypes['Base'] | ResolversTypes['Errors'];
@@ -728,6 +737,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Address: Address;
+  AddressResult: ResolversParentTypes['Address'] | ResolversParentTypes['Errors'];
   ApplicationError: ApplicationError;
   Base: Base;
   BaseResult: ResolversParentTypes['Base'] | ResolversParentTypes['Errors'];
@@ -810,9 +820,13 @@ export type ResolversParentTypes = {
 
 export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = {
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  latitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  longitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AddressResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddressResult'] = ResolversParentTypes['AddressResult']> = {
+  __resolveType: TypeResolveFn<'Address' | 'Errors', ParentType, ContextType>;
 };
 
 export type ApplicationErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ApplicationError'] = ResolversParentTypes['ApplicationError']> = {
@@ -1125,6 +1139,7 @@ export type PostDialogResultResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getAddressByPostcode?: Resolver<Maybe<ResolversTypes['AddressResult']>, ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
   getBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
   getDialogsByBaseId?: Resolver<Maybe<ResolversTypes['DialogsResult']>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
   getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
@@ -1193,6 +1208,7 @@ export type UsersResultResolvers<ContextType = any, ParentType extends Resolvers
 
 export type Resolvers<ContextType = any> = {
   Address?: AddressResolvers<ContextType>;
+  AddressResult?: AddressResultResolvers<ContextType>;
   ApplicationError?: ApplicationErrorResolvers<ContextType>;
   Base?: BaseResolvers<ContextType>;
   BaseResult?: BaseResultResolvers<ContextType>;
@@ -1263,11 +1279,11 @@ export type MessageLeafConnectionFragment = { __typename?: 'MessageLeafConnectio
 
 export type ErrorsFragment = { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null };
 
-export type OrgExceptConnectionFragment = { __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null };
+export type OrgExceptConnectionFragment = { __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null };
 
-export type OrgPrivateInfoFragment = { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null };
+export type OrgPrivateInfoFragment = { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null };
 
-export type OrgPublicInfoFragment = { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null };
+export type OrgPublicInfoFragment = { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null };
 
 export type PageInfoFragment = { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null };
 
@@ -1280,14 +1296,14 @@ export type AcceptToJoinOrgMutationVariables = Exact<{
 }>;
 
 
-export type AcceptToJoinOrgMutation = { __typename?: 'Mutation', acceptJoinOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type AcceptToJoinOrgMutation = { __typename?: 'Mutation', acceptJoinOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
 
 export type RegisterOrgMutationVariables = Exact<{
   input: RegisterOrgInput;
 }>;
 
 
-export type RegisterOrgMutation = { __typename?: 'Mutation', registerOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type RegisterOrgMutation = { __typename?: 'Mutation', registerOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
 
 export type ReplyInquiryMutationVariables = Exact<{
   input: ReplyInquiryInput;
@@ -1315,7 +1331,7 @@ export type UpdateOrgInfoMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOrgInfoMutation = { __typename?: 'Mutation', updateOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type UpdateOrgInfoMutation = { __typename?: 'Mutation', updateOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
 
 export type UploadFileMutationVariables = Exact<{
   file: Scalars['Upload'];
@@ -1383,6 +1399,13 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } | null };
 
+export type GetAddressByPostcodeQueryVariables = Exact<{
+  postcode: Scalars['String'];
+}>;
+
+
+export type GetAddressByPostcodeQuery = { __typename?: 'Query', getAddressByPostcode?: { __typename?: 'Address', address: string } | { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null };
+
 export type GetInquiriesByOrgIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
@@ -1395,19 +1418,19 @@ export type GetOrgPrivateInfoByCookieAndIdQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgPrivateInfoByCookieAndIdQuery = { __typename?: 'Query', getOrgInfoByMemberCookieAndId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type GetOrgPrivateInfoByCookieAndIdQuery = { __typename?: 'Query', getOrgInfoByMemberCookieAndId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
 
 export type GetOrgPublicInfoByIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetOrgPublicInfoByIdQuery = { __typename?: 'Query', getOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
+export type GetOrgPublicInfoByIdQuery = { __typename?: 'Query', getOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
 
 export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude: number, longitude: number } | null }> | null } | null };
+export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null }> | null } | null };
 
 export type GetMessagesByTreeIdQueryVariables = Exact<{
   treeId: Scalars['String'];
@@ -2329,6 +2352,46 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const GetAddressByPostcodeDocument = gql`
+    query GetAddressByPostcode($postcode: String!) {
+  getAddressByPostcode(postcode: $postcode) {
+    ... on Address {
+      address
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}
+    ${ErrorsFragmentDoc}`;
+
+/**
+ * __useGetAddressByPostcodeQuery__
+ *
+ * To run a query within a React component, call `useGetAddressByPostcodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAddressByPostcodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAddressByPostcodeQuery({
+ *   variables: {
+ *      postcode: // value for 'postcode'
+ *   },
+ * });
+ */
+export function useGetAddressByPostcodeQuery(baseOptions: Apollo.QueryHookOptions<GetAddressByPostcodeQuery, GetAddressByPostcodeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAddressByPostcodeQuery, GetAddressByPostcodeQueryVariables>(GetAddressByPostcodeDocument, options);
+      }
+export function useGetAddressByPostcodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAddressByPostcodeQuery, GetAddressByPostcodeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAddressByPostcodeQuery, GetAddressByPostcodeQueryVariables>(GetAddressByPostcodeDocument, options);
+        }
+export type GetAddressByPostcodeQueryHookResult = ReturnType<typeof useGetAddressByPostcodeQuery>;
+export type GetAddressByPostcodeLazyQueryHookResult = ReturnType<typeof useGetAddressByPostcodeLazyQuery>;
+export type GetAddressByPostcodeQueryResult = Apollo.QueryResult<GetAddressByPostcodeQuery, GetAddressByPostcodeQueryVariables>;
 export const GetInquiriesByOrgIdDocument = gql`
     query GetInquiriesByOrgId($orgId: String!) {
   getInquiriesByOrgId(orgId: $orgId) {

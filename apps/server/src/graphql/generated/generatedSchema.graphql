@@ -1,8 +1,10 @@
 type Address {
   address: String!
-  latitude: Float!
-  longitude: Float!
+  latitude: Float
+  longitude: Float
 }
+
+union AddressResult = Address | Errors
 
 type ApplicationError implements Error {
   message: String!
@@ -250,6 +252,7 @@ type PageInfo {
 union PostDialogResult = Dialog | Errors
 
 type Query {
+  getAddressByPostcode(postcode: String!): AddressResult
   getBase(id: String!): BaseResult
   getDialogsByBaseId(id: String!): DialogsResult
   getInquiriesByOrgId(orgId: String!): InquiriesResult

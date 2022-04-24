@@ -8,7 +8,10 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useRegisterOrgMutation } from '../../../graphql/generated';
+import {
+  useGetAddressByPostcodeLazyQuery,
+  useRegisterOrgMutation,
+} from '../../../graphql/generated';
 import { ButtonBig, Form, Input, TextSmall } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
@@ -26,6 +29,10 @@ export const OrgRegisterForm: FC = () => {
   const [isPostcode, setIsPostcode] = useState('');
   const [isLocation, setIsLocation] = useState('');
   const [orgRegister, { data, loading, error }] = useRegisterOrgMutation();
+  const [
+    getAddress,
+    { data: addressData, loading: addressLoading, error: addressError },
+  ] = useGetAddressByPostcodeLazyQuery();
 
   const {
     register,
@@ -39,8 +46,7 @@ export const OrgRegisterForm: FC = () => {
 
   useEffect(() => {
     const getLocation = async () => {
-      const address = await PostcodeAPI(isPostcode);
-      setIsLocation(address);
+      await getAddress({ variables: { postcode: isPostcode } });
     };
     getLocation();
   }, [isPostcode]);
@@ -48,6 +54,12 @@ export const OrgRegisterForm: FC = () => {
   useEffect(() => {
     setValue('location', isLocation);
   }, [isLocation, setValue]);
+
+  useEffect(() => {
+    if (addressData?.getAddressByPostcode?.__typename === 'Address') {
+      setIsLocation(addressData.getAddressByPostcode.address);
+    }
+  }, [addressData]);
 
   const onSubmit = async (input: OrgRegisterInput) => {
     // console.log('orgRegisterInput:', input);

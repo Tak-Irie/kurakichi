@@ -911,9 +911,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@eslint/eslintrc@npm:1.2.1"
+"@eslint/eslintrc@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@eslint/eslintrc@npm:1.2.2"
   dependencies:
     ajv: ^6.12.4
     debug: ^4.3.2
@@ -924,7 +924,7 @@ __metadata:
     js-yaml: ^4.1.0
     minimatch: ^3.0.4
     strip-json-comments: ^3.1.1
-  checksum: 1f797b9f94d71b965992cf6c44e3bcb574643014fd1e3d4862d25056bd5568f59c488461a7e9a1c1758ca7f0def5d3cb69c3d8b38581bcf4a53af74371243797
+  checksum: d891036bbffb0efec1462aa4a603ed6e349d546b1632dde7d474ddd15c2a8b6895671b25293f1d3ba10ff629c24a3649ad049373fe695a0e44b612537088563c
   languageName: node
   linkType: hard
 
@@ -958,13 +958,13 @@ __metadata:
   linkType: hard
 
 "@googlemaps/react-wrapper@npm:^1.1.31":
-  version: 1.1.31
-  resolution: "@googlemaps/react-wrapper@npm:1.1.31"
+  version: 1.1.32
+  resolution: "@googlemaps/react-wrapper@npm:1.1.32"
   dependencies:
     "@googlemaps/js-api-loader": ^1.13.2
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 6f6fe754285e7c62f292772a5d1120788146f01f67feb1c810dceb1b123bea0ebd983c253609fb7c454b25d344584694ba9e4f3bab494f793d4613207025a22e
+  checksum: 6f2f21c02445d80d00305374d0114918ab41261109a1cb7963deb86cda1fef15ed3536d50b6cd6cbbeebdcdcdfedc201edf8e2842f2469c7ff43ef8fa8a9441d
   languageName: node
   linkType: hard
 
@@ -1800,9 +1800,9 @@ __metadata:
   linkType: hard
 
 "@jridgewell/resolve-uri@npm:^3.0.3":
-  version: 3.0.5
-  resolution: "@jridgewell/resolve-uri@npm:3.0.5"
-  checksum: 1ee652b693da7979ac4007926cc3f0a32b657ffeb913e111f44e5b67153d94a2f28a1d560101cc0cf8087625468293a69a00f634a2914e1a6d0817ba2039a913
+  version: 3.0.6
+  resolution: "@jridgewell/resolve-uri@npm:3.0.6"
+  checksum: e57cc08d2aaea6bd55e77e7a124beb2fcca87be28c0db6c2d69b7cb2cb4e14109bbef1d57ae6250bf5f4a4ad950f094ed99c8925adaf82336b66dab0ad6906e6
   languageName: node
   linkType: hard
 
@@ -1828,6 +1828,7 @@ __metadata:
   resolution: "@kurakichi/domain@workspace:modules/domain"
   dependencies:
     "@kurakichi/prisma": ^0.0.1
+    "@kurakichi/third-api": ^0.0.1
     argon2: ^0.28.5
     dompurify: ^2.3.6
     ioredis: ^5.0.4
@@ -1897,7 +1898,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurakichi/third-api@workspace:modules/third-api":
+"@kurakichi/third-api@^0.0.1, @kurakichi/third-api@workspace:modules/third-api":
   version: 0.0.0-use.local
   resolution: "@kurakichi/third-api@workspace:modules/third-api"
   dependencies:
@@ -1918,7 +1919,7 @@ __metadata:
     "@heroicons/react": ^1.0.6
     "@kurakichi/domain": ^0.0.1
     "@popperjs/core": ^2.11.5
-    "@types/react": ^18.0.5
+    "@types/react": ^18.0.6
     autoprefixer: ^10.4.4
     graphql: ^16.3.0
     graphql-ws: ^5.7.0
@@ -2780,7 +2781,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.0.5":
+"@types/react@npm:^18.0.6":
   version: 18.0.6
   resolution: "@types/react@npm:18.0.6"
   dependencies:
@@ -5305,9 +5306,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.84":
-  version: 1.4.117
-  resolution: "electron-to-chromium@npm:1.4.117"
-  checksum: 9a0147824b52b25bdac9e6c70f35810f007bf9c55d72e1b646417a7797cf51e6120c585f220728f8de16ad2b033adfd8d92dbb11f43af1ebdcc085427ae57064
+  version: 1.4.118
+  resolution: "electron-to-chromium@npm:1.4.118"
+  checksum: b1941bdff3ff8cb10a6f75f60527bff37fc43878b2ff4e0c1b5d6aa5062ea97df4e8c75e6d4c6eb97f0bab1cac6f8f1d799b7316e69f66b6a4b9b6773af97de2
   languageName: node
   linkType: hard
 
@@ -5526,10 +5527,10 @@ __metadata:
   linkType: hard
 
 "eslint@npm:^8.13.0":
-  version: 8.13.0
-  resolution: "eslint@npm:8.13.0"
+  version: 8.14.0
+  resolution: "eslint@npm:8.14.0"
   dependencies:
-    "@eslint/eslintrc": ^1.2.1
+    "@eslint/eslintrc": ^1.2.2
     "@humanwhocodes/config-array": ^0.9.2
     ajv: ^6.10.0
     chalk: ^4.0.0
@@ -5566,7 +5567,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: bc7d2fc9a046d42cb2c8987573ecaf534c1fae14747c4695e32388e179c5f21b83eefdb3e4f35924bf76152e226d7cc9dfb21f12348baf12c803109005b17439
+  checksum: 87d2e3e5eb93216d4ab36006e7b8c0bfad02f40b0a0f193f1d42754512cd3a9d8244152f1c69df5db2e135b3c4f1c10d0ed2f0881fe8a8c01af55465968174c1
   languageName: node
   linkType: hard
 
@@ -8222,6 +8223,7 @@ __metadata:
     "@types/jsdom": ^16.2.14
     "@types/multer": ^1.4.7
     "@types/node": ^17.0.24
+    "@types/react": ^18.0.6
     "@types/uuid": ^8.3.4
     "@types/validator": ^13.7.2
     "@types/ws": ^8.5.3

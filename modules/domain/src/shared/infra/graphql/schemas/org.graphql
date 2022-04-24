@@ -14,8 +14,8 @@ type Org implements Node {
 
 type Address {
   address: String!
-  latitude: Float!
-  longitude: Float!
+  latitude: Float
+  longitude: Float
 }
 
 type MemberConnection {
@@ -83,6 +83,7 @@ type Query {
   getInquiry(inquiryId: String!): InquiryResult
   getInquiriesByOrgId(orgId: String!): InquiriesResult
   getInquiriesByTreeId(treeId: String!): InquiryTreeResult
+  getAddressByPostcode(postcode: String!): AddressResult
 }
 
 type Mutation {
@@ -100,6 +101,7 @@ union OrgsResult = Orgs | Errors
 union InquiryResult = Inquiry | Errors
 union InquiriesResult = InquiryConnection | Errors
 union InquiryTreeResult = InquiryTree | Errors
+union AddressResult = Address | Errors
 
 type Orgs {
   orgs: [Org!]

@@ -1,9 +1,9 @@
-import { getMessagesByCookie } from '@kurakichi/domain';
 import {
+  getMessagesByCookie,
   useGetMessagesByTreeIdUsecase,
   useReplyMessageUsecase,
   useSendMessageUsecase,
-} from '@kurakichi/domain/user/usecase';
+} from '@kurakichi/domain';
 import { ApolloContext } from '../../types';
 import {
   returnErrorToGQL,

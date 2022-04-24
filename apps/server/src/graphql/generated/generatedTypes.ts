@@ -28,9 +28,11 @@ export type Scalars = {
 export type Address = {
   __typename?: 'Address';
   address: Scalars['String'];
-  latitude: Scalars['Float'];
-  longitude: Scalars['Float'];
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
 };
+
+export type AddressResult = Address | Errors;
 
 export type ApplicationError = Error & {
   __typename?: 'ApplicationError';
@@ -382,6 +384,7 @@ export type PostDialogResult = Dialog | Errors;
 
 export type Query = {
   __typename?: 'Query';
+  getAddressByPostcode?: Maybe<AddressResult>;
   getBase?: Maybe<BaseResult>;
   getDialogsByBaseId?: Maybe<DialogsResult>;
   getInquiriesByOrgId?: Maybe<InquiriesResult>;
@@ -398,6 +401,11 @@ export type Query = {
   getUsers?: Maybe<UsersResult>;
   node?: Maybe<Node>;
   nodes?: Maybe<Array<Maybe<Node>>>;
+};
+
+
+export type QueryGetAddressByPostcodeArgs = {
+  postcode: Scalars['String'];
 };
 
 
@@ -643,6 +651,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Address: ResolverTypeWrapper<Address>;
+  AddressResult: ResolversTypes['Address'] | ResolversTypes['Errors'];
   ApplicationError: ResolverTypeWrapper<ApplicationError>;
   Base: ResolverTypeWrapper<Base>;
   BaseResult: ResolversTypes['Base'] | ResolversTypes['Errors'];
@@ -726,6 +735,7 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Address: Address;
+  AddressResult: ResolversParentTypes['Address'] | ResolversParentTypes['Errors'];
   ApplicationError: ApplicationError;
   Base: Base;
   BaseResult: ResolversParentTypes['Base'] | ResolversParentTypes['Errors'];
@@ -808,9 +818,13 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = ResolversObject<{
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  latitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  longitude?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  latitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  longitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AddressResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddressResult'] = ResolversParentTypes['AddressResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Address' | 'Errors', ParentType, ContextType>;
 }>;
 
 export type ApplicationErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ApplicationError'] = ResolversParentTypes['ApplicationError']> = ResolversObject<{
@@ -1123,6 +1137,7 @@ export type PostDialogResultResolvers<ContextType = any, ParentType extends Reso
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  getAddressByPostcode?: Resolver<Maybe<ResolversTypes['AddressResult']>, ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
   getBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
   getDialogsByBaseId?: Resolver<Maybe<ResolversTypes['DialogsResult']>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
   getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
@@ -1191,6 +1206,7 @@ export type UsersResultResolvers<ContextType = any, ParentType extends Resolvers
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Address?: AddressResolvers<ContextType>;
+  AddressResult?: AddressResultResolvers<ContextType>;
   ApplicationError?: ApplicationErrorResolvers<ContextType>;
   Base?: BaseResolvers<ContextType>;
   BaseResult?: BaseResultResolvers<ContextType>;

@@ -2,6 +2,7 @@ import {
   getOrgPrivateInfoByCookieAndId,
   getOrgPublicInfoById,
   useAcceptJoinOrgUsecase,
+  useGetAddressByPostcode,
   useGetOrgsUsecase,
   useRegisterOrgUsecase,
   useRequestJoinOrgUsecase,
@@ -58,6 +59,21 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       const _inq = readInquiresToConn(inquiries);
 
       return { inquiries: _inq, ..._org };
+    },
+    getAddressByPostcode: async (_, { postcode }) => {
+      console.log('postcode:', postcode);
+      const usecaseResult = await useGetAddressByPostcode.execute({ postcode });
+      // console.log('ucresult:', usecaseResult);
+      if (usecaseResult.isLeft())
+        return {
+          __typename: 'Errors',
+          applicationError: { message: usecaseResult.value.getErrorValue() },
+        };
+      console.log('ucresult:', usecaseResult.value);
+      return {
+        __typename: 'Address',
+        address: usecaseResult.value,
+      };
     },
   },
   Mutation: {

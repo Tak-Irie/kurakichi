@@ -75,12 +75,4 @@ export class Address extends ValueObject<AddressProps> {
       return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
     });
   }
-
-  /**
-   * only used for data mapper in infra layer
-   */
-  public static restoreFromRepo(props: AddressProps): Address {
-    const _Address = new Address(props);
-    return _Address;
-  }
 }
