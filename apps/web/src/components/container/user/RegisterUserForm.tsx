@@ -1,8 +1,8 @@
 import { EmailRegExp, PasswordRegExp } from '@kurakichi/domain';
+import { NotificationSet } from 'components/presentational/organisms';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { NotificationSet } from 'src/components/presentational/organisms';
 import {
   useGetUserMyInfoQuery,
   useRegisterUserMutation,

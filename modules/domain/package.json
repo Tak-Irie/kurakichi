@@ -7,8 +7,7 @@
     "build": "tsc --build"
   },
   "dependencies": {
-    "@kurakichi/prisma": "^0.0.1",
-    "@kurakichi/third-api": "^0.0.1",
+    "@kurakichi/prisma": "workspace:^",
     "argon2": "^0.28.5",
     "dompurify": "^2.3.6",
     "ioredis": "^5.0.4",

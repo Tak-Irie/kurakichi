@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.13",
-    "@kurakichi/domain": "^0.0.1",
+    "@kurakichi/domain": "workspace:^",
     "@sendgrid/mail": "^7.6.2",
     "ioredis": "^5.0.4"
   }

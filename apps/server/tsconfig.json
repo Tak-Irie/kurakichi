@@ -1,10 +1,21 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "typeRoots": [
       "../../node_modules/@types",
       "./src/@types/"
-    ]
+    ],
+    "paths": {
+      "@kurakichi/domain": [
+        "../../../modules/domain"
+      ],
+      "@kurakichi/third-api": [
+        "../../../modules/third-api"
+      ]
+    }
   },
   "include": [
     "./src"
@@ -13,12 +24,4 @@
     "dist",
     "node_modules"
   ],
-  "references": [
-    {
-      "path": "../../modules/domain"
-    },
-    {
-      "path": "../../modules/third-api"
-    }
-  ]
 }

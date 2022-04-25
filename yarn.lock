@@ -1823,12 +1823,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kurakichi/domain@^0.0.1, @kurakichi/domain@workspace:modules/domain":
+"@kurakichi/domain@workspace:^, @kurakichi/domain@workspace:modules/domain":
   version: 0.0.0-use.local
   resolution: "@kurakichi/domain@workspace:modules/domain"
   dependencies:
-    "@kurakichi/prisma": ^0.0.1
-    "@kurakichi/third-api": ^0.0.1
+    "@kurakichi/prisma": "workspace:^"
     argon2: ^0.28.5
     dompurify: ^2.3.6
     ioredis: ^5.0.4
@@ -1848,7 +1847,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurakichi/prisma@^0.0.1, @kurakichi/prisma@workspace:modules/prisma":
+"@kurakichi/prisma@workspace:^, @kurakichi/prisma@workspace:modules/prisma":
   version: 0.0.0-use.local
   resolution: "@kurakichi/prisma@workspace:modules/prisma"
   dependencies:
@@ -1864,8 +1863,8 @@ __metadata:
   resolution: "@kurakichi/server@workspace:apps/server"
   dependencies:
     "@googlemaps/google-maps-services-js": ^3.3.12
-    "@kurakichi/domain": ^0.0.1
-    "@kurakichi/third-api": ^0.0.1
+    "@kurakichi/domain": "workspace:^"
+    "@kurakichi/third-api": "workspace:^"
     "@sendgrid/mail": ^7.6.2
     "@types/connect-redis": ^0.0.18
     "@types/cors": ^2.8.12
@@ -1899,12 +1898,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kurakichi/third-api@^0.0.1, @kurakichi/third-api@workspace:modules/third-api":
+"@kurakichi/third-api@workspace:^, @kurakichi/third-api@workspace:modules/third-api":
   version: 0.0.0-use.local
   resolution: "@kurakichi/third-api@workspace:modules/third-api"
   dependencies:
     "@googlemaps/google-maps-services-js": ^3.3.13
-    "@kurakichi/domain": ^0.0.1
+    "@kurakichi/domain": "workspace:^"
     "@sendgrid/mail": ^7.6.2
     ioredis: ^5.0.4
   languageName: unknown
@@ -1918,7 +1917,7 @@ __metadata:
     "@googlemaps/react-wrapper": ^1.1.31
     "@headlessui/react": ^1.5.0
     "@heroicons/react": ^1.0.6
-    "@kurakichi/domain": ^0.0.1
+    "@kurakichi/domain": "workspace:^"
     "@popperjs/core": ^2.11.5
     "@types/react": ^18.0.6
     apollo-upload-client: ^17.0.0
@@ -8304,6 +8303,7 @@ __metadata:
     "@types/ws": ^8.5.3
     "@typescript-eslint/eslint-plugin": ^5.19.0
     "@typescript-eslint/parser": ^5.19.0
+    argon2: ^0.28.5
     date-fns: ^2.28.0
     dotenv: ^16.0.0
     eslint: ^8.13.0
