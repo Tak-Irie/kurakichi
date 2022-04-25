@@ -1,6 +1,0 @@
-subscription DialogPosted {
-  dialogPosted {
-    id
-    content
-  }
-}

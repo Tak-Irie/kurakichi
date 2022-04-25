@@ -1,8 +1,0 @@
-fragment Errors on Errors {
-  applicationError {
-    message
-  }
-  userError {
-    message
-  }
-}

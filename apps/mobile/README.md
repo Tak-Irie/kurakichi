@@ -1,3 +1,0 @@
-# kurakichi_mobile
-
-WIP
