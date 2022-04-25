@@ -16,6 +16,7 @@
     "@heroicons/react": "^1.0.6",
     "@kurakichi/domain": "^0.0.1",
     "@popperjs/core": "^2.11.5",
+    "apollo-upload-client": "^17.0.0",
     "graphql": "^16.3.0",
     "graphql-ws": "^5.7.0",
     "idx": "^2.5.6",

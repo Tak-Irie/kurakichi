@@ -16,6 +16,9 @@
   "references": [
     {
       "path": "../../modules/domain"
+    },
+    {
+      "path": "../../modules/third-api"
     }
   ]
 }

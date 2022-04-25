@@ -37,18 +37,18 @@ const OrgInfoPage: NextPage = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error?.message}</p>;
-  if (data?.getOrg?.errors?.applicationError)
-    return <p>{data.getOrg.errors.applicationError.message}</p>;
+  if (data?.getOrg?.__typename === 'Errors')
+    return <p>{data.getOrg.applicationError?.message}</p>;
 
-  if (!loading && data?.getOrg?.org) {
-    const _org = data.getOrg.org;
+  if (data?.getOrg?.__typename === 'Org') {
+    const _org = data.getOrg;
     return (
       <OrgTemplate
         avatar={_org.avatarUrl || ''}
         image={_org.heroImageUrl || ''}
         orgName={_org.name || ''}
         headerButtons={
-          userData?.getUserByCookie?.user ? (
+          userData?.getUserByCookie?.__typename === 'User' ? (
             <Disclosure
               label={
                 <ButtonWithIcon

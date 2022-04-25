@@ -1,3 +1,4 @@
+import idx from 'idx';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
@@ -29,16 +30,15 @@ const MessageTreePage: NextPage = () => {
   // console.log('user:', userData.getUserByCookie.user);
   if (loadingCache || loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
-  if (data?.getMessagesByTreeId?.errors)
-    return <p>{data.getMessagesByTreeId.errors.applicationError?.message}</p>;
+  if (data?.getMessagesByTreeId?.__typename === 'Errors')
+    return <p>{data.getMessagesByTreeId.applicationError?.message}</p>;
 
-  if (!loading && data?.getMessagesByTreeId?.messageTree && cachedUser) {
-    const _tree = data.getMessagesByTreeId.messageTree;
-
-    const _messages: any[] = [];
-    if (_tree.leaves && _tree.leaves?.edges?.length !== 0) {
-      _messages.concat(_tree.leaves?.edges?.map((arr) => arr.node || ''));
-    }
+  if (
+    cachedUser?.__typename === 'User' &&
+    data?.getMessagesByTreeId?.__typename === 'MessageTree'
+  ) {
+    const _tree = data.getMessagesByTreeId;
+    const messages = idx(_tree, (idx) => idx.leaves.edges);
 
     return (
       <UserTemplate
@@ -67,7 +67,12 @@ const MessageTreePage: NextPage = () => {
             </Link>
           </>
         }
-        pageContents={<MessageTree treeId={_tree.id} messages={_messages} />}
+        pageContents={
+          <MessageTree
+            treeId={_tree.id}
+            messages={messages?.map((_) => _.node) || []}
+          />
+        }
       />
     );
   }

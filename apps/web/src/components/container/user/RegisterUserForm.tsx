@@ -2,6 +2,7 @@ import { EmailRegExp, PasswordRegExp } from '@kurakichi/domain';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { NotificationSet } from 'src/components/presentational/organisms';
 import {
   useGetUserMyInfoQuery,
   useRegisterUserMutation,
@@ -13,10 +14,7 @@ import {
   InputValue,
   LoadingSpinner,
 } from '../../presentational/atoms';
-import {
-  ButtonOrLoading,
-  NotificationSet,
-} from '../../presentational/molecules';
+import { ButtonOrLoading } from '../../presentational/molecules';
 
 interface UserRegisterInput extends InputValue {
   email: string;

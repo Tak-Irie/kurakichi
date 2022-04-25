@@ -4,13 +4,11 @@ generates:
     config:
       useIndexSignature: true
       scalars:
-        Upload: FileModel
         UserRole: UserRoleModel
         MessageStatus: MessageStatusModel
         InquiryCategory: InquiryCategoryModel
         InquiryStatus: InquiryStatusModel
       mappers:
-        Upload: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#FileModel
         UserRole: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#UserRoleModel
         MessageStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#MessageStatusModel
         InquiryCategory: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryCategoryModel
@@ -28,13 +26,11 @@ generates:
     config:
       withHooks: true
       scalars:
-        Upload: FileModel
         UserRole: UserRoleModel
         MessageStatus: MessageStatusModel
         InquiryCategory: InquiryCategoryModel
         InquiryStatus: InquiryStatusModel
       mappers:
-        Upload: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#FileModel
         UserRole: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#UserRoleModel
         MessageStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#MessageStatusModel
         InquiryCategory: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryCategoryModel

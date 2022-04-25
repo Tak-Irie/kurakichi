@@ -19,14 +19,13 @@ import {
   AlreadyRegisteredNameError,
 } from './RegisterOrgError';
 
-import { GoogleMapAPI } from '@kurakichi/third-api';
-
 type RegisterOrgArg = {
   adminId: string;
   name: string;
   address: string;
   phoneNumber: string;
   email: string;
+  MapAPI(address: string): Promise<GeoCode | false>;
 };
 
 type RegisterOrgResponse = Either<
@@ -37,6 +36,10 @@ type RegisterOrgResponse = Either<
   | StoreConnectionError,
   Result<DTOOrg>
 >;
+interface GeoCode {
+  lat: number;
+  lng: number;
+}
 
 export class RegisterOrgUsecase
   implements IUsecase<RegisterOrgArg, Promise<RegisterOrgResponse>>
@@ -46,7 +49,7 @@ export class RegisterOrgUsecase
   }
   public async execute(arg: RegisterOrgArg): Promise<RegisterOrgResponse> {
     try {
-      const { address, adminId, email, name, phoneNumber } = arg;
+      const { address, adminId, email, name, phoneNumber, MapAPI } = arg;
 
       // TODO:unify them
       const isId = UniqueEntityId.createFromArg({ id: adminId });
@@ -75,9 +78,7 @@ export class RegisterOrgUsecase
       );
       if (duplicateCheck) return left(new AlreadyRegisteredNameError(''));
 
-      const geocode = await GoogleMapAPI.getGeoCodeByAddress(
-        isAddress.getValue().getValue(),
-      );
+      const geocode = await MapAPI(isAddress.getValue().getValue());
       if (geocode === false) return left(new AddressNotExistError(''));
 
       const lat = Geocode.create({ code: geocode.lat });

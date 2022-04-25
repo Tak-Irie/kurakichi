@@ -1,4 +1,4 @@
-import { RedisAuthAPI, SendGridAPI } from '@kurakichi/third-api';
+// FIXME:api feature should transplant to server
 import { Either, left, Result, right } from '../../../shared/core';
 import { UniqueEntityId } from '../../../shared/domain';
 import { IUsecase, UnexpectedError } from '../../../shared/usecase';
@@ -31,16 +31,16 @@ export class ForgotPasswordUsecase
 
       const token = UniqueEntityId.createULID().getId();
 
-      const stored = await RedisAuthAPI.storePasswordToken(
-        result.getId(),
-        token,
-      );
+      // const stored = await RedisAuthAPI.storePasswordToken(
+      //   result.getId(),
+      //   token,
+      // );
 
       // TODO: should be storeConnectionError, make this err for redis later
-      if (stored === false) return left(new UnexpectedError(''));
+      // if (stored === false) return left(new UnexpectedError(''));
 
       // TODO:implement interface?
-      await SendGridAPI.sendMail(result.getEmail(), token);
+      // await SendGridAPI.sendMail(result.getEmail(), token);
 
       return right(Result.success<true>(true));
     } catch (err) {

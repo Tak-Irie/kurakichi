@@ -3,6 +3,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@next/next/recommended",
     "plugin:tailwindcss/recommended",
     "prettier"
   ],
@@ -25,5 +26,10 @@
     "public",
     "*.config.js",
     "**/generated/*"
-  ]
+  ],
+  "settings": {
+    "next": {
+      "rootDir": "./apps/web"
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { FileModel, UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/domain/src/shared/infra/graphql/MappingModels';
+import { UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/domain/src/shared/infra/graphql/MappingModels';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -23,7 +23,7 @@ export type Scalars = {
   InquiryStatus: InquiryStatusModel;
   /** SENT | READ | UNREAD | DRAFT */
   MessageStatus: MessageStatusModel;
-  Upload: FileModel;
+  Upload: any;
   /** VISITOR | CLIENT | EXPERT */
   UserRole: UserRoleModel;
 };
@@ -716,7 +716,7 @@ export type ResolversTypes = {
   Succeeded: ResolverTypeWrapper<Succeeded>;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: ResolverTypeWrapper<FileModel>;
+  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<Omit<User, 'role'> & { role?: Maybe<ResolversTypes['UserRole']> }>;
   UserError: ResolverTypeWrapper<UserError>;
   UserResult: ResolversTypes['Errors'] | ResolversTypes['User'];
@@ -800,7 +800,7 @@ export type ResolversParentTypes = {
   Succeeded: Succeeded;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: FileModel;
+  Upload: Scalars['Upload'];
   User: Omit<User, 'role'> & { role?: Maybe<ResolversParentTypes['UserRole']> };
   UserError: UserError;
   UserResult: ResolversParentTypes['Errors'] | ResolversParentTypes['User'];
@@ -1275,6 +1275,8 @@ export type Resolvers<ContextType = any> = {
 
 export type InquiryConnectionFragment = { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null };
 
+export type InquiryLeafConnectionFragment = { __typename?: 'InquiryLeafConnection', edges: Array<{ __typename?: 'InquiryLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null } } | null>, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null };
+
 export type MessageLeafConnectionFragment = { __typename?: 'MessageLeafConnection', edges?: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null };
 
 export type ErrorsFragment = { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null };
@@ -1413,6 +1415,13 @@ export type GetInquiriesByOrgIdQueryVariables = Exact<{
 
 export type GetInquiriesByOrgIdQuery = { __typename?: 'Query', getInquiriesByOrgId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null };
 
+export type GetInquiriesByTreeIdQueryVariables = Exact<{
+  treeId: Scalars['String'];
+}>;
+
+
+export type GetInquiriesByTreeIdQuery = { __typename?: 'Query', getInquiriesByTreeId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'InquiryTree', id: string, leaves?: { __typename?: 'InquiryLeafConnection', edges: Array<{ __typename?: 'InquiryLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null } } | null>, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
+
 export type GetOrgPrivateInfoByCookieAndIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
@@ -1487,6 +1496,35 @@ export const InquiryConnectionFragmentDoc = gql`
       }
       sender {
         id
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}
+    ${PageInfoFragmentDoc}`;
+export const InquiryLeafConnectionFragmentDoc = gql`
+    fragment InquiryLeafConnection on InquiryLeafConnection {
+  edges {
+    cursor
+    isRoot
+    node {
+      id
+      content
+      category
+      inquiryStatus
+      sentAt
+      receivedOrg {
+        id
+      }
+      replier {
+        id
+        avatarUrl
+      }
+      sender {
+        id
+        avatarUrl
       }
     }
   }
@@ -2433,6 +2471,50 @@ export function useGetInquiriesByOrgIdLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetInquiriesByOrgIdQueryHookResult = ReturnType<typeof useGetInquiriesByOrgIdQuery>;
 export type GetInquiriesByOrgIdLazyQueryHookResult = ReturnType<typeof useGetInquiriesByOrgIdLazyQuery>;
 export type GetInquiriesByOrgIdQueryResult = Apollo.QueryResult<GetInquiriesByOrgIdQuery, GetInquiriesByOrgIdQueryVariables>;
+export const GetInquiriesByTreeIdDocument = gql`
+    query GetInquiriesByTreeId($treeId: String!) {
+  getInquiriesByTreeId(treeId: $treeId) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on InquiryTree {
+      id
+      leaves {
+        ...InquiryLeafConnection
+      }
+    }
+  }
+}
+    ${ErrorsFragmentDoc}
+${InquiryLeafConnectionFragmentDoc}`;
+
+/**
+ * __useGetInquiriesByTreeIdQuery__
+ *
+ * To run a query within a React component, call `useGetInquiriesByTreeIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInquiriesByTreeIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInquiriesByTreeIdQuery({
+ *   variables: {
+ *      treeId: // value for 'treeId'
+ *   },
+ * });
+ */
+export function useGetInquiriesByTreeIdQuery(baseOptions: Apollo.QueryHookOptions<GetInquiriesByTreeIdQuery, GetInquiriesByTreeIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetInquiriesByTreeIdQuery, GetInquiriesByTreeIdQueryVariables>(GetInquiriesByTreeIdDocument, options);
+      }
+export function useGetInquiriesByTreeIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetInquiriesByTreeIdQuery, GetInquiriesByTreeIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetInquiriesByTreeIdQuery, GetInquiriesByTreeIdQueryVariables>(GetInquiriesByTreeIdDocument, options);
+        }
+export type GetInquiriesByTreeIdQueryHookResult = ReturnType<typeof useGetInquiriesByTreeIdQuery>;
+export type GetInquiriesByTreeIdLazyQueryHookResult = ReturnType<typeof useGetInquiriesByTreeIdLazyQuery>;
+export type GetInquiriesByTreeIdQueryResult = Apollo.QueryResult<GetInquiriesByTreeIdQuery, GetInquiriesByTreeIdQueryVariables>;
 export const GetOrgPrivateInfoByCookieAndIdDocument = gql`
     query GetOrgPrivateInfoByCookieAndId($orgId: String!) {
   getOrgInfoByMemberCookieAndId(orgId: $orgId) {

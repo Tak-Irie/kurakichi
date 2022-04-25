@@ -1,0 +1,27 @@
+fragment InquiryLeafConnection on InquiryLeafConnection {
+  edges {
+    cursor
+    isRoot
+    node {
+      id
+      content
+      category
+      inquiryStatus
+      sentAt
+      receivedOrg {
+        id
+      }
+      replier {
+        id
+        avatarUrl
+      }
+      sender {
+        id
+        avatarUrl
+      }
+    }
+  }
+  pageInfo {
+    ...PageInfo
+  }
+}

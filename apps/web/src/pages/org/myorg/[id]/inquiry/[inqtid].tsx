@@ -1,63 +1,65 @@
+import idx from 'idx';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
+import { useRouter } from 'next/router';
+import { FAIL_TO_FETCH } from 'util/Constants';
 import {
-  OrgTemplate,
+  ButtonWithIcon,
+  IconsMail,
+  IconsUsers,
   InquiryTree,
   LoadingSpinner,
-  ButtonWithIcon,
-  IconsUsers,
-  IconsMail,
+  OrgTemplate,
 } from '../../../../../components/presentational';
 import {
-  useGetOrgPrivateInfoByIdAndCookieQuery,
-  useGetInquiriesByTreeIdAndCookieQuery,
-  useAcceptJoinOrgMutation,
-  useUpdateInquiryStatusMutation,
+  useGetInquiriesByTreeIdQuery,
+  useGetOrgPrivateInfoByCookieAndIdQuery,
 } from '../../../../../graphql';
-import { isServer } from '../../../../../util';
-import { useRouter } from 'next/router';
 
 const InquiryTreePrivatePage: NextPage = () => {
   const router = useRouter();
   const orgId = router.query.id as string;
   const inqtId = router.query.inqtid as string;
-  const { data: orgData } = useGetOrgPrivateInfoByIdAndCookieQuery({
+  const { data: orgData } = useGetOrgPrivateInfoByCookieAndIdQuery({
     fetchPolicy: 'cache-first',
     variables: { orgId },
-    // skip: isServer(),
-    // ssr: false,
+    ssr: false,
   });
-  const { data, loading, error } = useGetInquiriesByTreeIdAndCookieQuery({
+  const { data, loading, error } = useGetInquiriesByTreeIdQuery({
     variables: { treeId: inqtId },
-    // skip: isServer(),
-    // ssr: false,
+    ssr: false,
   });
 
   // console.log('.org:', orgData.org);
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  if (data?.getInquiriesByTreeIdAndCookie.error) {
-    return <p>{data.getInquiriesByTreeIdAndCookie.error.message}</p>;
+  if (data?.getInquiriesByTreeId?.__typename === 'Errors') {
+    return <p>{data.getInquiriesByTreeId.applicationError?.message}</p>;
   }
 
   if (
-    data?.getInquiriesByTreeIdAndCookie.inquiryTree &&
-    orgData?.getOrgPrivateInfoByIdAndCookie.org
+    data?.getInquiriesByTreeId?.__typename === 'InquiryTree' &&
+    orgData?.getOrgInfoByMemberCookieAndId?.__typename === 'Org'
   ) {
-    const inqData = data.getInquiriesByTreeIdAndCookie.inquiryTree;
-    const orgCachedData = orgData.getOrgPrivateInfoByIdAndCookie.org;
+    const inqTree = data.getInquiriesByTreeId;
+    const _org = orgData.getOrgInfoByMemberCookieAndId;
+    const inquiries = idx(inqTree, (idx) => idx.leaves.edges);
     return (
       <OrgTemplate
-        avatar={orgCachedData.avatar}
-        image={orgCachedData.image}
-        orgName={orgCachedData.orgName}
+        avatar={_org.avatarUrl || FAIL_TO_FETCH}
+        image={_org.heroImageUrl || FAIL_TO_FETCH}
+        orgName={_org.name || FAIL_TO_FETCH}
         headerButtons={
           <>
             <Link href="/org/myorg/[id]" as={`/org/myorg/${orgId}`} passHref>
               <a href="replace">
-                <ButtonWithIcon type="button" label="団体ページに戻る" icon={<IconsUsers />} />
+                <ButtonWithIcon
+                  type="button"
+                  label="団体ページに戻る"
+                  icon={<IconsUsers />}
+                />
               </a>
             </Link>
             <Link
@@ -67,12 +69,21 @@ const InquiryTreePrivatePage: NextPage = () => {
               passHref
             >
               <a href="replace">
-                <ButtonWithIcon type="button" label="お問い合わせボックス" icon={<IconsMail />} />
+                <ButtonWithIcon
+                  type="button"
+                  label="お問い合わせボックス"
+                  icon={<IconsMail />}
+                />
               </a>
             </Link>
           </>
         }
-        pageContents={<InquiryTree orgId={orgCachedData.id} inquiries={inqData.treedInquiry} />}
+        pageContents={
+          <InquiryTree
+            orgId={_org.id}
+            inquiries={inquiries?.map((inq) => inq.node) || []}
+          />
+        }
       />
     );
   }

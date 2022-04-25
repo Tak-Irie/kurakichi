@@ -1,4 +1,3 @@
-type FileModel = File;
 type UserRoleModel = 'VISITOR' | 'CLIENT' | 'EXPERT';
 type InquiryCategoryModel =
   | 'APPLICATION'
@@ -9,8 +8,7 @@ type InquiryCategoryModel =
 type InquiryStatusModel = 'DONE' | 'DRAFT' | 'UNREAD' | 'WORKING';
 type MessageStatusModel = 'SENT' | 'READ' | 'UNREAD' | 'DRAFT';
 
-export {
-  FileModel,
+export type {
   UserRoleModel,
   InquiryCategoryModel,
   InquiryStatusModel,

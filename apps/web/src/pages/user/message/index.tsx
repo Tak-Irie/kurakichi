@@ -19,15 +19,14 @@ const MessageBoxPage: NextPage = () => {
   if (loading && loadingCache) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  if (data?.getMessagesByCookie?.errors?.applicationError) {
-    return <p>{data.getMessagesByCookie.errors.applicationError.message}</p>;
+  if (data?.getMessagesByCookie?.__typename === 'Errors') {
+    return <p>{data.getMessagesByCookie.applicationError?.message}</p>;
   }
-  if (!loadingCache && data?.getMessagesByCookie?.messages && cachedUser) {
+  if (
+    cachedUser?.__typename === 'User' &&
+    data?.getMessagesByCookie?.__typename === 'Messages'
+  ) {
     const messages = data.getMessagesByCookie.messages;
-    const _messages: any[] = [];
-    if (messages.length !== 0) {
-      _messages.concat(messages);
-    }
 
     return (
       <UserTemplate
@@ -49,7 +48,7 @@ const MessageBoxPage: NextPage = () => {
           <TableMessage
             tableLabel="メッセージボックス"
             textOfNotExist="メッセージはありません"
-            messages={_messages}
+            messages={messages || []}
           />
         }
       />

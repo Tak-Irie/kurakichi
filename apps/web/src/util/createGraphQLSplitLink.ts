@@ -1,6 +1,7 @@
 import { HttpLink, split } from '@apollo/client';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createUploadLink } from 'apollo-upload-client';
 import { createClient } from 'graphql-ws';
 
 const httpLink = new HttpLink({
@@ -15,6 +16,10 @@ const wsLink = new GraphQLWsLink(
     // },
   }),
 );
+
+const uploadLink = createUploadLink({
+  uri: process.env.GRAPHQL_HTTP_LINK || 'http://localhost:4000/graphql',
+});
 
 // TODO:add client error handling
 // const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -37,7 +42,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink,
+  uploadLink,
 );
 
 export { splitLink };

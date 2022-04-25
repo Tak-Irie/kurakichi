@@ -6,7 +6,7 @@ interface GeoCode {
 }
 
 export class GoogleMapAPI {
-  public static async getGeoCodeByAddress(
+  public static async getGeocodeByAddress(
     address: string,
   ): Promise<GeoCode | false> {
     // console.log("address:", address);

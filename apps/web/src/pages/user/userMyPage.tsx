@@ -1,3 +1,4 @@
+import idx from 'idx';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import {
@@ -22,9 +23,13 @@ const userMyPage: NextPage = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  if (data?.getUserByCookie?.user) {
+  if (data?.getUserByCookie?.__typename === 'Errors') {
+    return <p>{data?.getUserByCookie?.applicationError?.message}</p>;
+  }
+  if (data?.getUserByCookie?.__typename === 'User') {
     // console.log('MyPageData:', data.me.user);
-    const _user = data.getUserByCookie.user;
+    const _user = data.getUserByCookie;
+    const messages = idx(_user, (idx) => idx.messages.edges);
 
     return (
       <UserTemplate
@@ -57,15 +62,15 @@ const userMyPage: NextPage = () => {
           <UserMyPage
             description={_user.selfIntro || ''}
             orgs={[]}
-            messages={_user.messages?.edges || []}
+            messages={messages?.map((_) => _.node) || []}
             email={_user.email || ''}
-            secureBases={[]}
+            bases={[]}
           />
         }
       />
     );
   }
-  return <p>{data?.getUserByCookie?.errors?.applicationError?.message}</p>;
+  return <p>something wrong</p>;
 };
 
 export default userMyPage;

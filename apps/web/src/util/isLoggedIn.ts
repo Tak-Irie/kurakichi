@@ -18,7 +18,5 @@ export const isLoggedIn = () => {
     }
   }, [loading, data, router]);
 
-  if (!loading && data?.getUserByCookie?.__typename === 'User') {
-    return { cachedUser: data.getUserByCookie, loadingCache: loading };
-  }
+  return { cachedUser: data?.getUserByCookie, loadingCache: loading };
 };

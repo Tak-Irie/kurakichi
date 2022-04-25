@@ -20,7 +20,7 @@ const OrgSetting: NextPage = () => {
     ssr: false,
   });
 
-  if (data?.getOrgInfoByMemberCookieAndId?.org) {
+  if (data?.getOrgInfoByMemberCookieAndId?.__typename === 'Org') {
     const {
       avatarUrl,
       heroImageUrl,
@@ -31,7 +31,7 @@ const OrgSetting: NextPage = () => {
       phoneNumber,
       address,
       id,
-    } = data.getOrgInfoByMemberCookieAndId.org;
+    } = data.getOrgInfoByMemberCookieAndId;
     return (
       <OrgTemplate
         avatar={avatarUrl || FAIL_TO_FETCH}

@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { GridItemWithPic, GridTemplate, TextLabeled } from '..';
 import { Org } from '../../../graphql';
-import { MapViewer } from '../../container';
+// import { MapViewer } from '../../container';
 
 type OrgProfileProps = {
   org: Org;
@@ -37,13 +37,13 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
           label="私達について"
           content={description || '団体の概要を記入して下さい'}
         />
-        <span className="col-span-2 mt-1">
+        {/* <span className="col-span-2 mt-1">
           <MapViewer
             center={geo}
             mapContainerCSS={{ width: 'auto', height: 300 }}
             zoomLevel={15}
           />
-        </span>
+        </span> */}
       </div>
 
       <div className="mt-8">

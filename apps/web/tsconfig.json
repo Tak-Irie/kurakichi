@@ -1,7 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./",
+    "baseUrl": "./src",
+    "rootDir": "./src",
     "outDir": "./dist",
     "target": "es5",
     "lib": [
@@ -18,12 +19,21 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "isolatedModules": true,
+    "paths": {
+      "@kurakichi/domain": [
+        "../../../modules/domain"
+      ]
+    },
   },
   "include": [
-    "./**/*.ts",
-    "./**/*.tsx"
+    "./next-env.d.ts",
+    ".src/**/*.ts",
+    ".src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

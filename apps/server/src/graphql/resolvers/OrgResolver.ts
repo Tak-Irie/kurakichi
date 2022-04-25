@@ -2,12 +2,12 @@ import {
   getOrgPrivateInfoByCookieAndId,
   getOrgPublicInfoById,
   useAcceptJoinOrgUsecase,
-  useGetAddressByPostcode,
   useGetOrgsUsecase,
   useRegisterOrgUsecase,
   useRequestJoinOrgUsecase,
   useUpdateOrgUsecase,
 } from '@kurakichi/domain';
+import { GoogleMapAPI, PostcodeAPI } from '@kurakichi/third-api';
 import { ApolloContext } from '../../types';
 import {
   returnErrorToGQL,
@@ -62,17 +62,24 @@ export const OrgResolver: Resolvers<ApolloContext> = {
     },
     getAddressByPostcode: async (_, { postcode }) => {
       console.log('postcode:', postcode);
-      const usecaseResult = await useGetAddressByPostcode.execute({ postcode });
-      // console.log('ucresult:', usecaseResult);
-      if (usecaseResult.isLeft())
+
+      const address = await PostcodeAPI.getAddressByPostcode(postcode);
+      if (address === false)
         return {
           __typename: 'Errors',
-          applicationError: { message: usecaseResult.value.getErrorValue() },
+          applicationError: { message: '郵便番号が存在しません' },
         };
-      console.log('ucresult:', usecaseResult.value);
+      // const usecaseResult = await useGetAddressByPostcode.execute({ postcode });
+      // // console.log('ucresult:', usecaseResult);
+      // if (usecaseResult.isLeft())
+      //   return {
+      //     __typename: 'Errors',
+      //     applicationError: { message: usecaseResult.value.getErrorValue() },
+      //   };
+      // console.log('ucresult:', usecaseResult.value);
       return {
         __typename: 'Address',
-        address: usecaseResult.value,
+        address,
       };
     },
   },
@@ -81,6 +88,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       if (idInCookie === undefined) return returnNotLoggedIn();
       const usecaseResult = await useRegisterOrgUsecase.execute({
         adminId: idInCookie,
+        MapAPI: GoogleMapAPI.getGeocodeByAddress,
         ...input,
       });
       if (usecaseResult.isLeft())

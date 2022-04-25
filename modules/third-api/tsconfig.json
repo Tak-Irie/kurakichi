@@ -17,4 +17,9 @@
     "**/*.spec.ts",
     "dist"
   ],
+  "references": [
+    {
+      "path": "../domain"
+    },
+  ]
 }

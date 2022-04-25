@@ -19,11 +19,11 @@ const userSettingPage: NextPage = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
-  if (data?.getUserByCookie?.errors)
-    return <p>{data.getUserByCookie.errors.applicationError?.message}</p>;
+  if (data?.getUserByCookie?.__typename === 'Errors')
+    return <p>{data.getUserByCookie.applicationError?.message}</p>;
 
-  if (data?.getUserByCookie?.user) {
-    const _user = data.getUserByCookie.user;
+  if (data?.getUserByCookie?.__typename === 'User') {
+    const _user = data.getUserByCookie;
     return (
       <UserTemplate
         avatar={_user.avatarUrl || ''}

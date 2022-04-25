@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { FileModel, UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/domain/src/shared/infra/graphql/MappingModels';
+import { UserRoleModel, MessageStatusModel, InquiryCategoryModel, InquiryStatusModel } from '\@kurakichi/domain/src/shared/infra/graphql/MappingModels';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -20,7 +20,7 @@ export type Scalars = {
   InquiryStatus: InquiryStatusModel;
   /** SENT | READ | UNREAD | DRAFT */
   MessageStatus: MessageStatusModel;
-  Upload: FileModel;
+  Upload: any;
   /** VISITOR | CLIENT | EXPERT */
   UserRole: UserRoleModel;
 };
@@ -714,7 +714,7 @@ export type ResolversTypes = ResolversObject<{
   Succeeded: ResolverTypeWrapper<Succeeded>;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: ResolverTypeWrapper<FileModel>;
+  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<Omit<User, 'role'> & { role?: Maybe<ResolversTypes['UserRole']> }>;
   UserError: ResolverTypeWrapper<UserError>;
   UserResult: ResolversTypes['Errors'] | ResolversTypes['User'];
@@ -798,7 +798,7 @@ export type ResolversParentTypes = ResolversObject<{
   Succeeded: Succeeded;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: FileModel;
+  Upload: Scalars['Upload'];
   User: Omit<User, 'role'> & { role?: Maybe<ResolversParentTypes['UserRole']> };
   UserError: UserError;
   UserResult: ResolversParentTypes['Errors'] | ResolversParentTypes['User'];

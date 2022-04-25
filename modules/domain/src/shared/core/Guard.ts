@@ -1,5 +1,5 @@
 export interface IGuardArgument {
-  argument: unknown;
+  argument: any;
   argumentName: string;
 }
 
@@ -15,15 +15,15 @@ export class Guard {
       if (result.succeeded === false) return result;
     }
 
-    return { succeeded: true, message: "Success!" };
+    return { succeeded: true, message: 'Success!' };
   }
 
   public static greaterThan(
     minValue: number,
-    actualValue: number
+    actualValue: number,
   ): IGuardResult {
     return actualValue > minValue
-      ? { succeeded: true, message: "Success!" }
+      ? { succeeded: true, message: 'Success!' }
       : {
           succeeded: false,
           message: `Number given {${actualValue}} is not greater than {${minValue}}`,
@@ -32,10 +32,10 @@ export class Guard {
 
   public static againstAtLeast(
     atLeastNum: number,
-    actualValue: string
+    actualValue: string,
   ): IGuardResult {
     return actualValue.length >= atLeastNum
-      ? { succeeded: true, message: "Success!" }
+      ? { succeeded: true, message: 'Success!' }
       : {
           succeeded: false,
           message: `Text is not at least ${atLeastNum} chars.`,
@@ -44,10 +44,10 @@ export class Guard {
 
   public static againstAtMost(
     atMostNum: number,
-    actualValue: string
+    actualValue: string,
   ): IGuardResult {
     return actualValue.length <= atMostNum
-      ? { succeeded: true, message: "Success!" }
+      ? { succeeded: true, message: 'Success!' }
       : {
           succeeded: false,
           message: `Text is greater than ${atMostNum} chars.`,
@@ -55,8 +55,8 @@ export class Guard {
   }
 
   public static againstNullOrUndefined(
-    argument: unknown,
-    argumentName: string
+    argument: any,
+    argumentName: string,
   ): IGuardResult {
     if (argument === null || argument === undefined) {
       return {
@@ -64,28 +64,28 @@ export class Guard {
         message: `${argumentName} is null or undefined`,
       };
     } else {
-      return { succeeded: true, message: "Exists!" };
+      return { succeeded: true, message: 'Exists!' };
     }
   }
 
   public static againstNullOrUndefinedBulk(
-    args: GuardArgumentCollection
+    args: GuardArgumentCollection,
   ): IGuardResult {
     for (const arg of args) {
       const result = this.againstNullOrUndefined(
         arg.argument,
-        arg.argumentName
+        arg.argumentName,
       );
       if (!result.succeeded) return result;
     }
 
-    return { succeeded: true, message: "Exists!" };
+    return { succeeded: true, message: 'Exists!' };
   }
 
   public static isOneOf(
-    value: unknown,
-    validValues: unknown[],
-    argumentName: string
+    value: any,
+    validValues: any[],
+    argumentName: string,
   ): IGuardResult {
     let isValid = false;
     for (const validValue of validValues) {
@@ -95,12 +95,12 @@ export class Guard {
     }
 
     if (isValid) {
-      return { succeeded: true, message: "Success!" };
+      return { succeeded: true, message: 'Success!' };
     } else {
       return {
         succeeded: false,
         message: `${argumentName} isn't oneOf the correct types in ${JSON.stringify(
-          validValues
+          validValues,
         )}. Got "${value}".`,
       };
     }
@@ -110,7 +110,7 @@ export class Guard {
     num: number,
     min: number,
     max: number,
-    argumentName: string
+    argumentName: string,
   ): IGuardResult {
     const isInRange = num >= min && num <= max;
     if (!isInRange) {
@@ -119,7 +119,7 @@ export class Guard {
         message: `${argumentName} is not within range ${min} to ${max}.`,
       };
     } else {
-      return { succeeded: true, message: "Success!" };
+      return { succeeded: true, message: 'Success!' };
     }
   }
 
@@ -127,11 +127,11 @@ export class Guard {
     numbers: number[],
     min: number,
     max: number,
-    argumentName: string
+    argumentName: string,
   ): IGuardResult {
     let failingResult: IGuardResult = {
       succeeded: false,
-      message: "",
+      message: '',
     };
     for (const num of numbers) {
       const numIsInRangeResult = this.inRange(num, min, max, argumentName);
@@ -144,7 +144,7 @@ export class Guard {
         message: `${argumentName} is not within the range.`,
       };
     } else {
-      return { succeeded: true, message: "" };
+      return { succeeded: true, message: '' };
     }
   }
 }

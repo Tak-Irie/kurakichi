@@ -47,6 +47,7 @@ const UserResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(result.value.getErrorValue());
       const users = dtoUsersToGql(result.value.getValue());
       return {
+        __typename: 'Users',
         users,
       };
     },
