@@ -1,6 +1,6 @@
-import { InquiryStatusModel } from '@kurakichi/domain';
 import { FC } from 'react';
 import { useUpdateInquiryStatusMutation } from '../../../graphql/generated';
+import { InquiryStatusModel } from '../../../util';
 
 import { ButtonOrLoading, NotificationSet } from '../../presentational';
 

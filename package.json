@@ -36,6 +36,7 @@
     "@next/eslint-plugin-next": "^12.1.5",
     "@types/apollo-upload-client": "^17.0.0",
     "@types/dompurify": "^2.3.3",
+    "@types/graphql": "^14.5.0",
     "@types/graphql-upload": "^8.0.11",
     "@types/imagemin": "^8.0.0",
     "@types/imagemin-webp": "^7.0.0",

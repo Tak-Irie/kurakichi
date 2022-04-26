@@ -1,3 +1,6 @@
+import { FC } from 'react';
+import { useForm } from 'react-hook-form';
+import { useUpdateOrgInfoMutation } from '../../../graphql/generated';
 import {
   Any100chrRegExp,
   EmailRegExp,
@@ -5,10 +8,7 @@ import {
   OrgNameRegExp,
   PhoneNumberRegExp,
   URLRegExp,
-} from '@kurakichi/domain';
-import { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { useUpdateOrgInfoMutation } from '../../../graphql/generated';
+} from '../../../util';
 import {
   Form,
   Input,

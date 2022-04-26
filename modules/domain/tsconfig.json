@@ -24,7 +24,8 @@
       }
     },
     "include": [
-      "src/**/*"
+      "src/**/*",
+      "../../apps/web/src/util/ReadModel.ts"
     ],
     "exclude": [
       "dist",

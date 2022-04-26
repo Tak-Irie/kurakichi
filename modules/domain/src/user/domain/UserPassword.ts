@@ -1,8 +1,6 @@
-import * as argon2 from "argon2";
-
-import { Result, Guard } from "../../shared/core";
-import { ValueObject } from "../../shared/domain";
-import { Hash } from "../../shared/util";
+import { Guard, Result } from '../../shared/core';
+import { ValueObject } from '../../shared/domain';
+import { Hash } from '../../shared/util';
 
 type UserPasswordProps = {
   password: string;
@@ -20,16 +18,16 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
 
   // TODO:need to separate User and SSOUser?
   public static createForSSO(): UserPassword {
-    return new UserPassword({ password: "IT_IS_SSO_USER", isHashed: false });
+    return new UserPassword({ password: 'IT_IS_SSO_USER', isHashed: false });
   }
 
   public static async create(
-    props: UserPasswordProps
+    props: UserPasswordProps,
   ): Promise<Result<UserPassword>> {
     const AT_LEAST_NUM = 8;
     const propsResult = Guard.againstNullOrUndefined(
       props.password,
-      "password"
+      'password',
     );
 
     if (!propsResult.succeeded) {
@@ -40,7 +38,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
 
     if (!props.isHashed && !result.succeeded) {
       return Result.fail<UserPassword>(
-        "パスワードは8文字以上に設定してください"
+        'パスワードは8文字以上に設定してください',
       );
     }
 
@@ -52,21 +50,24 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
       new UserPassword({
         password: props.password,
         isHashed: true,
-      })
+      }),
     );
   }
 
   private static async hashPassword(password: string): Promise<string> {
-    const hashedPassword = await Hash.hashByArgon2({ plainText: password });
+    const hashedPassword = await Hash.hashByArgon2({ rawPassword: password });
 
     return hashedPassword;
   }
 
   public static async verifyPassword(
     plainText: string,
-    hashed: string
+    hashed: string,
   ): Promise<boolean> {
-    const result = await argon2.verify(hashed, plainText);
+    const result = await Hash.verifyByArgon2({
+      rawPassword: plainText,
+      storedHash: hashed,
+    });
 
     return result;
   }

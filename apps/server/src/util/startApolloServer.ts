@@ -1,8 +1,8 @@
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import type Express from 'express';
-import type { GraphQLSchema } from 'graphql';
 import { useServer } from 'graphql-ws/lib/use/ws';
+import { GraphQLSchema } from 'graphql/type';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 import {

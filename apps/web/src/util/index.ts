@@ -5,4 +5,6 @@ export * from './fixClassNameForTailwind';
 export * from './isLoggedIn';
 export * from './isServer';
 export * from './reactNewLineToBr';
+export * from './ReadModel';
+export * from './RegExp';
 export * from './types';

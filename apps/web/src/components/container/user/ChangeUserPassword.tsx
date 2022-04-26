@@ -1,7 +1,7 @@
-import { PasswordRegExp } from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useChangeUserPasswordMutation } from '../../../graphql';
+import { PasswordRegExp } from '../../../util';
 
 import {
   Form,

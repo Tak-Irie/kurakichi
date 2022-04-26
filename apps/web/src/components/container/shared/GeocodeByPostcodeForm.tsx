@@ -1,7 +1,7 @@
-import { PostcodeRegExp } from '@kurakichi/domain';
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
+import { PostcodeRegExp } from '../../../util';
 
 import {
   ButtonWithIcon,

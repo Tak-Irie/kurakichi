@@ -1,8 +1,8 @@
-import { EmailRegExp, PasswordRegExp } from '@kurakichi/domain';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useGetUserMyInfoQuery, useLoginUserMutation } from '../../../graphql';
+import { EmailRegExp, PasswordRegExp } from '../../../util';
 
 import {
   Form,

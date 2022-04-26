@@ -1,11 +1,11 @@
+import { FC } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSendInquiryMutation } from '../../../graphql/generated';
 import {
   Any100chrRegExp,
   InquiryCategoryModel,
   InquiryStatusModel,
-} from '@kurakichi/domain';
-import { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { useSendInquiryMutation } from '../../../graphql/generated';
+} from '../../../util';
 import { Form, InputTextarea, Select } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';

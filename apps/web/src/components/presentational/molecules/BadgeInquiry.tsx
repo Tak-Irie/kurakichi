@@ -1,5 +1,5 @@
-import { InquiryCategoryModel, InquiryStatusModel } from '@kurakichi/domain';
 import { FC } from 'react';
+import { InquiryCategoryModel, InquiryStatusModel } from '../../../util';
 
 import { Badge, BadgeLarge } from '../atoms';
 

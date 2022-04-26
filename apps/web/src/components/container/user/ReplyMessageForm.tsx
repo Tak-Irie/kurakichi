@@ -1,6 +1,6 @@
-import { Any100chrRegExp } from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { Any100chrRegExp } from '../../../util';
 
 import { useReplyMessageMutation } from '../../../graphql';
 import { Form, InputTextarea } from '../../presentational/atoms';

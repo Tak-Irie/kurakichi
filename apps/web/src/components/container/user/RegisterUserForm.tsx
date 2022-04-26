@@ -1,18 +1,17 @@
-import { EmailRegExp, PasswordRegExp } from '@kurakichi/domain';
-import { NotificationSet } from 'components/presentational/organisms';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   useGetUserMyInfoQuery,
-  useRegisterUserMutation,
+  useRegisterUserMutation
 } from '../../../graphql';
+import { EmailRegExp, PasswordRegExp } from '../../../util';
 
 import {
   Form,
   Input,
   InputValue,
-  LoadingSpinner,
+  LoadingSpinner
 } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';
 
@@ -62,7 +61,6 @@ export const RegisterUserForm: FC = () => {
   if (userData?.getUserByCookie?.__typename === 'Errors' || null) {
     return (
       <>
-        <NotificationSet
           succeededContent=""
           succeededLabel={
             data?.registerUser?.__typename === 'User'

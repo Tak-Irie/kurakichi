@@ -1,7 +1,7 @@
-import { Any100chrRegExp } from '@kurakichi/domain';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../../graphql/generated';
+import { Any100chrRegExp } from '../../../util';
 import { Form, InputTextarea } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';

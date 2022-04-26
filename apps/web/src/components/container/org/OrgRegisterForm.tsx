@@ -1,12 +1,12 @@
+import { FC, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Any100chrRegExp,
   EmailRegExp,
   OrgNameRegExp,
   PhoneNumberRegExp,
   PostcodeRegExp,
-} from '@kurakichi/domain';
-import { FC, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+} from '../../../util';
 
 import {
   useGetAddressByPostcodeLazyQuery,

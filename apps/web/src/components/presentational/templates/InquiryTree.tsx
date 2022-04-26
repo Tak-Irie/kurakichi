@@ -1,5 +1,5 @@
-import { InquiryStatusModel } from '@kurakichi/domain';
 import { FC, useState } from 'react';
+import { InquiryStatusModel } from '../../../util';
 
 import {
   AvatarSmall,
