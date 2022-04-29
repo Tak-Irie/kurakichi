@@ -8,6 +8,8 @@ const tokyoPublicOffice = {
   lng: 139.6921007,
 };
 
+const apiKey = process.env.MAP_API_KEY || 'hoge';
+
 // zoomLevelInfo, 10:beyondPref, 11:pref, 12-13:cities 14:city 15:likeAroundStation
 
 export const GoogleMap: FC = () => {
@@ -16,7 +18,7 @@ export const GoogleMap: FC = () => {
   };
 
   return (
-    <Wrapper apiKey={'AIzaSyAb3RoPZmqfNdsD4ts1tv7MWkXwrB7vxa0'} render={render}>
+    <Wrapper apiKey={apiKey} render={render}>
       <Map className="flex w-full h-96" center={tokyoPublicOffice} zoom={12} />
     </Wrapper>
   );
