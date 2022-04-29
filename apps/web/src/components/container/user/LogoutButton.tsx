@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import { useLogoutUserMutation } from '../../../graphql';
 
-import { AuthContext } from '../../../util';
 import { ButtonBig, IconsLogout } from '../../presentational/atoms';
 import { DropDownMenuItemButton } from '../../presentational/molecules';
 
@@ -27,7 +26,6 @@ export const LogoutButton: FC = () => {
 
 export const LogoutMenuItem: FC = () => {
   const router = useRouter();
-  const { setAuthStatus } = useContext(AuthContext);
   const [logout, { client }] = useLogoutUserMutation();
 
   return (
@@ -37,7 +35,6 @@ export const LogoutMenuItem: FC = () => {
       onClick={async () => {
         await logout();
         await client.resetStore();
-        setAuthStatus(false);
         router.replace('/');
       }}
     />

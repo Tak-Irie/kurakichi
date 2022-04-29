@@ -1,8 +1,6 @@
 import { ApolloContext } from '../../types';
 import { Resolvers } from '../generated/generatedTypes';
 
-const DIALOG_POSTED_TOPIC = 'dialog_posted';
-
 export const BaseResolver: Resolvers<ApolloContext> = {
   Query: {
     // getBase:async(_,{id},{idInCookie}) => {
@@ -26,14 +24,6 @@ export const BaseResolver: Resolvers<ApolloContext> = {
       console.log('cache:', { content, idInCookie });
       const mock = { id: '123', content: 'hoge' };
       return { ...mock };
-    },
-  },
-  Subscription: {
-    dialogPosted: {
-      subscribe: (_, __, { pubsub }) => {
-        console.log('pubsub:', pubsub);
-        return pubsub.asyncIterator(DIALOG_POSTED_TOPIC) as any;
-      },
     },
   },
 };

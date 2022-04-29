@@ -1,17 +1,22 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
+import { GoogleMap } from '../components/container/shared';
 import { TextH2 } from '../components/presentational/atoms';
 import { HelperPop } from '../components/presentational/organisms';
-import { useGetOrgsForMapQuery } from '../graphql';
 import { DEFAULT_MAP_PIN } from '../util/Constants';
 
 const Index: NextPage = () => {
   const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);
-  const { data, loading, error } = useGetOrgsForMapQuery();
+  // const { data, loading, error } = useGetOrgsForMapQuery({
+  //   ssr: false,
+  // });
 
   return (
     <div className="grid grid-cols-12">
       <div className="col-start-2 col-end-12 p-5 mt-10 bg-white border border-gray-200 shadow-sm">
+        <div className="h-10 bg-red-300">
+          <GoogleMap />
+        </div>
         <div className="flex justify-items-start">
           <TextH2 content="身近の専門家を探してみましょう！" />
           <span className="flex items-center">

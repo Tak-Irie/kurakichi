@@ -9,12 +9,11 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(
-  createClient({
-    url: process.env.GRAPHQL_WS_LINK || 'ws://localhost:4000/subscriptions',
-    // connectionParams: {
-    //   authToken: user.authToken,
-    // },
-  }),
+  typeof window !== 'undefined'
+    ? createClient({
+        url: 'ws://localhost:4000/graphql',
+      })
+    : null,
 );
 
 const uploadLink = createUploadLink({
@@ -42,7 +41,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  uploadLink,
+  httpLink,
 );
 
 export { splitLink };

@@ -1,9 +1,9 @@
 import idx from 'idx';
 import Link from 'next/link';
-import { FC, useContext, useEffect } from 'react';
+import { FC } from 'react';
 
 import { useGetUserMyInfoQuery } from '../../../graphql';
-import { AuthContext } from '../../../util';
+import { isServer } from '../../../util';
 import { FAIL_TO_FETCH } from '../../../util/Constants';
 import { LogoutMenuItem } from '../../container';
 import {
@@ -17,15 +17,11 @@ import {
 import { DropDownMenu2, DropDownMenuItem } from '../molecules';
 
 const NavAuthSection: FC = () => {
-  const { authStatus } = useContext(AuthContext);
-  const { data, loading, refetch } = useGetUserMyInfoQuery({
-    fetchPolicy: 'cache-first',
+  const { data, loading, error } = useGetUserMyInfoQuery({
+    fetchPolicy: 'cache-only',
     ssr: false,
+    skip: isServer(),
   });
-
-  useEffect(() => {
-    refetch();
-  }, [authStatus, refetch]);
 
   if (loading)
     return (
@@ -34,7 +30,9 @@ const NavAuthSection: FC = () => {
       </div>
     );
 
-  if (data && data.getUserByCookie?.__typename === 'Errors')
+  if (error) return <div>{error.message}</div>;
+
+  if (!data)
     return (
       <div className="flex absolute space-x-1">
         <Link href="/auth/register" passHref>

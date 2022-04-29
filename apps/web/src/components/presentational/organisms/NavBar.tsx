@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { HeaderList, NavAuthSection } from '..';
+import { HeaderList } from '..';
 
 export const NavBar: FC = () => {
   return (
@@ -47,9 +47,9 @@ export const NavBar: FC = () => {
           linkLabel="福祉職の皆様へ"
         />
       </ul>
-      <span className="flex  col-start-12 justify-end mr-2">
+      {/* <span className="flex  col-start-12 justify-end mr-2">
         <NavAuthSection />
-      </span>
+      </span> */}
     </div>
   );
 };
