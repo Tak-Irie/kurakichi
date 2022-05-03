@@ -24,7 +24,7 @@ export const NavBar: FC = () => {
               className="inline-flex items-center"
             >
               <span className="ml-6 text-xl font-bold text-gray-800">
-                くらきち ~くらしのあんぜんきち.Alpha~
+                くらきち ~くらしのあんぜんきち~ α版
               </span>
             </a>
           </Link>

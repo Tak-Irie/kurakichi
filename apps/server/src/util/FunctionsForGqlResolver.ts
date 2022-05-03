@@ -3,6 +3,7 @@
 // like type: "UserError", "ApplicationError"
 const returnErrorToGQL = (message: string) => {
   return {
+    __typename: 'Errors' as const,
     applicationError: { message },
   };
 };

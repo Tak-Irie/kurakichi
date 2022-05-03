@@ -9,9 +9,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": [
-      "./tsconfig.json"
-    ]
+    "tsconfigRootDir": "./tsconfig.json",
   },
   "plugins": [
     "@typescript-eslint",
@@ -26,10 +24,5 @@
     "public",
     "*.config.js",
     "**/generated/*"
-  ],
-  "settings": {
-    "next": {
-      "rootDir": "./apps/web"
-    }
-  }
+  ]
 }

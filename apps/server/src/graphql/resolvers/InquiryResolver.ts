@@ -29,7 +29,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResponse.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResponse.value.getValue());
-      return { ...inquiry };
+      return { __typename: 'Inquiry', ...inquiry };
     },
     getInquiriesByOrgId: async (_, { orgId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -45,9 +45,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         useCaseResult.value.getValue(),
       );
 
-      return {
-        ...inquiries,
-      };
+      return { __typename: 'InquiryConnection', ...inquiries };
     },
     getInquiriesByTreeId: async (_, { treeId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -63,7 +61,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         treeId,
       );
 
-      return { ...inquiryTree };
+      return { __typename: 'InquiryTree', ...inquiryTree };
     },
   },
   Mutation: {
@@ -82,7 +80,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResult.value.getValue());
-      return { ...inquiry };
+      return { __typename: 'Inquiry', ...inquiry };
     },
     replyInquiry: async (_, { input }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -96,7 +94,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResult.value.getValue());
-      return { ...inquiry };
+      return { __typename: 'Inquiry', ...inquiry };
     },
     updateInquiryStatus: async (
       _,
@@ -113,7 +111,7 @@ export const InquiryResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const inquiry = dtoInquiryToGql(usecaseResult.value.getValue());
-      return { ...inquiry };
+      return { __typename: 'Inquiry', ...inquiry };
     },
   },
 };

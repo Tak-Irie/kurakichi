@@ -23,7 +23,7 @@ export const BaseResolver: Resolvers<ApolloContext> = {
     postDialog: async (_, { input: { content } }, { idInCookie }) => {
       console.log('cache:', { content, idInCookie });
       const mock = { id: '123', content: 'hoge' };
-      return { ...mock };
+      return { __typename: 'Dialog', ...mock };
     },
   },
 };

@@ -22,7 +22,7 @@ export class GetOrgsUsecase
   public async execute(): Promise<GetOrgsResponse> {
     try {
       const dbOrgs = await this.OrgsRepo.getOrgs();
-      console.log('dbOrgs:', dbOrgs);
+      // console.log('dbOrgs:', dbOrgs);
 
       const dtoOrgs = createDTOOrgsFromDomain(dbOrgs);
 

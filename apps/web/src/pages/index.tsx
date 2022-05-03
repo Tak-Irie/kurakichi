@@ -1,8 +1,19 @@
-import type { NextPage } from 'next';
+import { NextPage } from 'next';
 import { useState } from 'react';
-import { GoogleMap } from '../components/container/shared';
+import {
+  SearchOrgByPrefForm,
+  SearchOrgByServiceForm,
+} from '../components/container/org';
+import {
+  GeocodeByBrowserButton,
+  GeocodeByPostcodeForm,
+  GoogleMap,
+} from '../components/container/shared';
 import { TextH2 } from '../components/presentational/atoms';
-import { HelperPop } from '../components/presentational/organisms';
+import {
+  ArticlesWelfareGuide,
+  HelperPop,
+} from '../components/presentational/organisms';
 import { DEFAULT_MAP_PIN } from '../util/Constants';
 
 const Index: NextPage = () => {
@@ -14,9 +25,6 @@ const Index: NextPage = () => {
   return (
     <div className="grid grid-cols-12">
       <div className="col-start-2 col-end-12 p-5 mt-10 bg-white border border-gray-200 shadow-sm">
-        <div className="h-10 bg-red-300">
-          <GoogleMap />
-        </div>
         <div className="flex justify-items-start">
           <TextH2 content="身近の専門家を探してみましょう！" />
           <span className="flex items-center">
@@ -29,7 +37,8 @@ const Index: NextPage = () => {
         </div>
         <div className="grid grid-cols-10 mt-5">
           <div className="col-span-8">
-            <div>placer</div>
+            <GoogleMap />
+
             {/* {loading && !data?.getOrgs.orgs ? (
               <LoadingSpinner />
             ) : (
@@ -42,12 +51,16 @@ const Index: NextPage = () => {
             )} */}
           </div>
           <div className="flex flex-col col-span-2 ml-10 space-y-10">
-            <div>placer</div>
-
-            {/* <GeocodeByBrowserButton dispatcher={setIsAddress} buttonLabel="位置情報から検索" />
-            <GeocodeByPostcodeForm dispatcher={setIsAddress} buttonLabel="郵便番号から検索" />
+            <GeocodeByBrowserButton
+              dispatcher={setIsLocation}
+              buttonLabel="位置情報から検索"
+            />
+            <GeocodeByPostcodeForm
+              dispatcher={setIsLocation}
+              buttonLabel="郵便番号から検索"
+            />
             <SearchOrgByPrefForm />
-            <SearchOrgByServiceForm /> */}
+            <SearchOrgByServiceForm />
           </div>
         </div>
       </div>
@@ -62,9 +75,7 @@ const Index: NextPage = () => {
             />
           </span>
         </div>
-        <div>placer</div>
-
-        {/* <ArticlesWelfareGuide /> */}
+        <ArticlesWelfareGuide />
         <div></div>
       </div>
     </div>

@@ -31,7 +31,11 @@ const UserResolver: Resolvers<ApolloContext> = {
       const res = await getUserMyInfo(idInCookie);
       if (res === false) return returnErrorToGQL('wip');
 
-      return readUserToGql(res);
+      const user = readUserToGql(res);
+      return {
+        __typename: 'User',
+        ...user,
+      };
     },
 
     getUserById: async (_, { userId }) => {
@@ -39,7 +43,11 @@ const UserResolver: Resolvers<ApolloContext> = {
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
-      return dtoUserToGql(usecaseResult.value.getValue());
+      const user = dtoUserToGql(usecaseResult.value.getValue());
+      return {
+        __typename: 'User',
+        ...user,
+      };
     },
     getUsers: async () => {
       const result = await useGetUsersUsecase.execute();
@@ -63,7 +71,11 @@ const UserResolver: Resolvers<ApolloContext> = {
       // console.log('stoUser:', dtoUser);
       context.req.session.userId = dtoUser.id;
       // console.log('session:', context.req.session.userId);
-      return dtoUserToGql(dtoUser);
+      const user = dtoUserToGql(usecaseResult.value.getValue());
+      return {
+        __typename: 'User',
+        ...user,
+      };
     },
     loginUser: async (_, { input }, context) => {
       // console.log('arg:', args);
@@ -73,7 +85,10 @@ const UserResolver: Resolvers<ApolloContext> = {
       const gqlUser = dtoUserToGql(useCaseResult.value.getValue());
       context.req.session.userId = gqlUser.id;
       // console.log('gqluser:', gqlUser);
-      return { ...gqlUser };
+      return {
+        __typename: 'User',
+        ...gqlUser,
+      };
     },
     logoutUser: async (_, __, { idInCookie, req, res }) => {
       if (idInCookie === undefined)
@@ -92,7 +107,7 @@ const UserResolver: Resolvers<ApolloContext> = {
         console.log('err:', err);
       });
       res.clearCookie(COOKIE_NAME);
-      return { succeeded: 'ログアウトしました' };
+      return { __typename: 'Succeeded', succeeded: 'ログアウトしました' };
     },
     deleteUser: async (_, __, { idInCookie, req, res }) => {
       // TODO:set up logger sentry or winston
@@ -108,6 +123,7 @@ const UserResolver: Resolvers<ApolloContext> = {
 
       res.clearCookie(COOKIE_NAME);
       return {
+        __typename: 'Succeeded',
         succeeded: 'アカウントの削除に成功しました',
       };
     },
@@ -115,7 +131,10 @@ const UserResolver: Resolvers<ApolloContext> = {
       const result = await useForgotPasswordUsecase.execute(email);
       if (result.isLeft())
         return returnErrorToGQL(result.value.getErrorValue());
-      return { succeeded: 'パスワード再登録メールを送信しました' };
+      return {
+        __typename: 'Succeeded',
+        succeeded: 'パスワード再登録メールを送信しました',
+      };
     },
     updateUser: async (_, { input }, { idInCookie }) => {
       if (idInCookie === undefined) {
@@ -135,7 +154,11 @@ const UserResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(useCaseResult.value.getErrorValue());
 
       const dtoUser = useCaseResult.value.getValue();
-      return dtoUserToGql(dtoUser);
+      const user = dtoUserToGql(dtoUser);
+      return {
+        __typename: 'User',
+        ...user,
+      };
     },
     // replyMessage:async () => {},
     // sendMessage: async() => {},

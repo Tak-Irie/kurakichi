@@ -1,5 +1,15 @@
 import { createCustomEqual } from 'fast-equals';
-import React, { ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  EffectCallback,
+  FC,
+  isValidElement,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 interface MapProps extends google.maps.MapOptions {
   className: string;
@@ -8,17 +18,17 @@ interface MapProps extends google.maps.MapOptions {
   children?: ReactNode;
 }
 
-export const Map: React.FC<MapProps> = ({
+export const Map: FC<MapProps> = ({
   onClick,
   onIdle,
   children,
   className,
   ...options
 }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [map, setMap] = React.useState<google.maps.Map>();
+  const ref = useRef<HTMLDivElement>(null);
+  const [map, setMap] = useState<google.maps.Map>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
@@ -30,7 +40,17 @@ export const Map: React.FC<MapProps> = ({
     }
   }, [map, options]);
 
-  return <div ref={ref} className={className} />;
+  return (
+    <>
+      <div ref={ref} className={className} />
+      {Children.map(children, (child) => {
+        if (isValidElement(child)) {
+          // set the map prop on the child component
+          return cloneElement(child, { map });
+        }
+      })}
+    </>
+  );
 };
 
 const deepCompareEqualsForMaps = createCustomEqual(
@@ -48,7 +68,7 @@ const deepCompareEqualsForMaps = createCustomEqual(
 );
 
 function useDeepCompareMemoize(value: any) {
-  const ref = React.useRef();
+  const ref = useRef();
 
   if (!deepCompareEqualsForMaps(value, ref.current)) {
     ref.current = value;
@@ -58,10 +78,10 @@ function useDeepCompareMemoize(value: any) {
 }
 
 function useDeepCompareEffectForMaps(
-  callback: React.EffectCallback,
+  callback: EffectCallback,
   dependencies: any[],
 ) {
-  React.useEffect(callback, dependencies.map(useDeepCompareMemoize));
+  useEffect(callback, dependencies.map(useDeepCompareMemoize));
 }
 
 function isLatLngLiteral(obj: any): obj is google.maps.LatLngLiteral {

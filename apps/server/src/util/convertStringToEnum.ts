@@ -1,4 +1,4 @@
-const convertCapitalStringToEnum = (string: String) => {
+const convertCapitalStringToEnum = (string: string) => {
   // wip
 };
 
@@ -15,7 +15,7 @@ function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
  */
 
 /** Create a K:V */
-const Direction = strEnum(["North", "South", "East", "West"]);
+const Direction = strEnum(['North', 'South', 'East', 'West']);
 /** Create a Type */
 type Direction = keyof typeof Direction;
 
@@ -25,5 +25,5 @@ type Direction = keyof typeof Direction;
 let sample: Direction;
 
 sample = Direction.North; // Okay
-sample = "North"; // Okay
+sample = 'North'; // Okay
 // sample = "AnythingElse"; // ERROR!

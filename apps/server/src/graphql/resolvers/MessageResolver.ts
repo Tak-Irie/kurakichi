@@ -31,7 +31,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
 
       const messages = readMessagesToGql(result);
 
-      return { messages };
+      return { __typename: 'Messages', messages };
     },
     getMessagesByTreeId: async (_, { treeId }, { idInCookie }) => {
       if (idInCookie === undefined)
@@ -47,7 +47,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
         treeId: treeId,
         messages: usecaseResult.value.getValue(),
       });
-      return { ...messageTree };
+      return { __typename: 'MessageTree', ...messageTree };
     },
   },
   Mutation: {
@@ -67,7 +67,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const message = dtoMessageToGql(usecaseResult.value.getValue());
-      return { ...message };
+      return { __typename: 'Message', ...message };
     },
     replyMessage: async (
       _,
@@ -84,7 +84,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const message = dtoMessageToGql(usecaseResult.value.getValue());
-      return { ...message };
+      return { __typename: 'Message', ...message };
     },
   },
 };

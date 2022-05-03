@@ -31,8 +31,11 @@ export const OrgResolver: Resolvers<ApolloContext> = {
 
       // temp
       const readResult = await getOrgPublicInfoById(id);
-      if (readResult === false) return returnErrorToGQL('wip');
-      return readOrgToGql(readResult);
+      if (readResult === false) {
+        return returnErrorToGQL('wip');
+      }
+      const org = readOrgToGql(readResult);
+      return { __typename: 'Org', ...org };
     },
     getOrgs: async () => {
       // console.log('catch:');
@@ -41,7 +44,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
       // console.log('resRes:', usecaseResult.value.getValue());
       const orgs = dtoOrgsToGql(usecaseResult.value.getValue());
-      return { orgs };
+      return { __typename: 'Orgs', orgs };
     },
     getOrgInfoByMemberCookieAndId: async (_, { orgId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -58,7 +61,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       const _org = readOrgToGql(rest);
       const _inq = readInquiresToConn(inquiries);
 
-      return { inquiries: _inq, ..._org };
+      return { __typename: 'Org', inquiries: _inq, ..._org };
     },
     getAddressByPostcode: async (_, { postcode }) => {
       console.log('postcode:', postcode);
@@ -93,7 +96,8 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       });
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
-      return dtoOrgToGql(usecaseResult.value.getValue());
+      const org = dtoOrgToGql(usecaseResult.value.getValue());
+      return { __typename: 'Org', ...org };
     },
     requestJoinOrg: async (_, { orgId }, { idInCookie }) => {
       if (idInCookie === undefined) return returnNotLoggedIn();
@@ -104,8 +108,8 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       // console.log('usecaseResult:', usecaseResult);
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
-
-      return dtoOrgToGql(usecaseResult.value.getValue());
+      const org = dtoOrgToGql(usecaseResult.value.getValue());
+      return { __typename: 'Org', ...org };
     },
     acceptJoinOrg: async (
       _,
@@ -120,8 +124,8 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       });
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
-
-      return dtoOrgToGql(usecaseResult.value.getValue());
+      const org = dtoOrgToGql(usecaseResult.value.getValue());
+      return { __typename: 'Org', ...org };
     },
     // FIXME:need separate them, implement feature of control admin
     updateOrg: async (_, { input }, { idInCookie }) => {
@@ -150,8 +154,8 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       });
       if (usecaseResult.isLeft())
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
-
-      return dtoOrgToGql(usecaseResult.value.getValue());
+      const org = dtoOrgToGql(usecaseResult.value.getValue());
+      return { __typename: 'Org', ...org };
     },
   },
 };
