@@ -14,7 +14,7 @@ import {
   ArticlesWelfareGuide,
   HelperPop,
 } from '../components/presentational/organisms';
-import { DEFAULT_MAP_PIN } from '../util/Constants';
+import { DEFAULT_MAP_PIN } from '../lib/Constants';
 
 const Index: NextPage = () => {
   const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);

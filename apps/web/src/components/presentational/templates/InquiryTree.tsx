@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { InquiryStatusModel } from '../../../util';
+import { InquiryStatusModel } from '../../../lib';
 
 import {
   AvatarSmall,

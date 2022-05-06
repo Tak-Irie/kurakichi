@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { useGetUserMyInfoQuery } from '../../../graphql';
-import { isServer } from '../../../util';
-import { FAIL_TO_FETCH } from '../../../util/Constants';
+import { isServer } from '../../../lib';
+import { FAIL_TO_FETCH } from '../../../lib/Constants';
 import { LogoutMenuItem } from '../../container';
 import {
   AvatarSmall,

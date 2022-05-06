@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useChangeUserPasswordMutation } from '../../../graphql';
-import { PasswordRegExp } from '../../../util';
+import { PasswordRegExp } from '../../../lib';
 
 import {
   Form,

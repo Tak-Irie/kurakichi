@@ -8,7 +8,7 @@ import {
   OrgNameRegExp,
   PhoneNumberRegExp,
   URLRegExp,
-} from '../../../util';
+} from '../../../lib';
 import {
   Form,
   Input,

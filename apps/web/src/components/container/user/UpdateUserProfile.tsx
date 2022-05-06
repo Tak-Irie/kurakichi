@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUpdateUserMutation } from '../../../graphql/generated';
-import { Any100chrRegExp, EmailRegExp, UserNameRegExp } from '../../../util';
+import { Any100chrRegExp, EmailRegExp, UserNameRegExp } from '../../../lib';
 
 import {
   ButtonOrLoading,

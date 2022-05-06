@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
-import { PostcodeRegExp } from '../../../util';
+import { PostcodeRegExp } from '../../../lib';
 
 import {
   ButtonWithIcon,

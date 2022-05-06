@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { fixClassNameForTailwind } from '../../../util';
+import { fixClassNameForTailwind } from '../../../lib';
 
 type TabsProps = {
   clickHandler: Dispatch<SetStateAction<number>>;

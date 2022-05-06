@@ -5,7 +5,7 @@ import {
   Any100chrRegExp,
   InquiryCategoryModel,
   InquiryStatusModel,
-} from '../../../util';
+} from '../../../lib';
 import { Form, InputTextarea, Select } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';

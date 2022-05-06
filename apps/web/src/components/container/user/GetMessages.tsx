@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useGetMessagesByCookieQuery } from '../../../graphql';
-import { FAIL_TO_FETCH } from '../../../util/Constants';
+import { FAIL_TO_FETCH } from '../../../lib/Constants';
 import { LoadingSpinner, SmallCard } from '../../presentational/atoms';
 
 export const GetMessages: FC = () => {

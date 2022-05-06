@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useUpdateInquiryStatusMutation } from '../../../graphql/generated';
-import { InquiryStatusModel } from '../../../util';
+import { InquiryStatusModel } from '../../../lib';
 
 import { ButtonOrLoading, NotificationSet } from '../../presentational';
 

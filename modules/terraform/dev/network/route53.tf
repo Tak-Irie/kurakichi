@@ -14,7 +14,7 @@ resource "aws_route53_record" "kurakichi_top_level_domain" {
   }
 }
 
-resource "aws_route53_record" "kurakichi_next_sub_domain" {
+resource "aws_route53_record" "kurakichi_nextjs_sub_domain" {
   zone_id = data.aws_route53_zone.kurakichi.zone_id
   name    = "www"
   type    = "CNAME"

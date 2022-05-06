@@ -24,5 +24,10 @@
     "public",
     "*.config.js",
     "**/generated/*"
-  ]
+  ],
+  "settings": {
+    "next": {
+      "rootDir": "apps/web"
+    }
+  }
 }

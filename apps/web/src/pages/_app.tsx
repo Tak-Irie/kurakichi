@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import '../../globals.css';
 
 import { Layout } from '../components/presentational/templates';
-import { apolloClient } from '../util/createApolloClient';
+import { apolloClient } from '../lib/createApolloClient';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (

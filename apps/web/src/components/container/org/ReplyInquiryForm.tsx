@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { Any100chrRegExp } from '../../../util';
+import { Any100chrRegExp } from '../../../lib';
 
 import { useReplyInquiryMutation } from '../../../graphql';
 import {

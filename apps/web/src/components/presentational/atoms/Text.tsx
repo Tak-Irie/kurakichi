@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { reactNewLineToBr } from '../../../util/reactNewLineToBr';
+import { reactNewLineToBr } from '../../../lib/reactNewLineToBr';
 
 type TextProps = {
   content: string;

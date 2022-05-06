@@ -1,7 +1,7 @@
 import { Placement } from '@popperjs/core';
 import { FC, ReactElement, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
-import { reactNewLineToBr } from '../../../util';
+import { reactNewLineToBr } from '../../../lib';
 
 type PopOnIconProps = {
   icon: ReactElement;

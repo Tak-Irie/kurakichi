@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { AvatarChangeable, ImageHeroChangeable } from '.';
 import { useUploadFileMutation } from '../../../graphql';
 
-import { UploadFiles } from '../../../util';
+import { UploadFiles } from '../../../lib';
 import { ButtonWithIcon, IconsCloudUpload } from '../atoms';
 
 type ProfileHeaderProps = {

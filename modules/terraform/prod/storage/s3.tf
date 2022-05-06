@@ -26,7 +26,7 @@ resource "aws_s3_bucket" "public" {
   bucket = "kurakichi-public-data"
   acl    = "public-read"
   cors_rule {
-    allowed_origins  = ["https://kurakichi.org"]
+    allowed_origins  = ["https://www.kurakichi.org"]
     allowed_methods  = ["GET"]
     allowed_headers  = ["*"]
     max_age_seconds = 3000

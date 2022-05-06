@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import { UploadFiles } from '../../../util';
+import { UploadFiles } from '../../../lib';
 import { IconsDocumentAdd, ImageHero } from '../atoms';
 
 type ImageHeroDroppableProps = {

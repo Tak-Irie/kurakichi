@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Dispatch, FC, Fragment, SetStateAction } from 'react';
-import { InquiryStatusModel } from '../../../util';
+import { InquiryStatusModel } from '../../../lib';
 
 import { BadgeInquiryStatus } from '..';
 import { IconsCheck, IconsSelector } from '../atoms';

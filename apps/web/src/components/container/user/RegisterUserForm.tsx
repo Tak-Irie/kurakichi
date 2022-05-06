@@ -5,7 +5,7 @@ import {
   useGetUserMyInfoQuery,
   useRegisterUserMutation,
 } from '../../../graphql';
-import { EmailRegExp, PasswordRegExp } from '../../../util';
+import { EmailRegExp, PasswordRegExp } from '../../../lib';
 import { NotificationSet } from '../../presentational/organisms';
 
 import {

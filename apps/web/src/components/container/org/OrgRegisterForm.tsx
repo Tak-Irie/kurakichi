@@ -6,7 +6,7 @@ import {
   OrgNameRegExp,
   PhoneNumberRegExp,
   PostcodeRegExp,
-} from '../../../util';
+} from '../../../lib';
 
 import {
   useGetAddressByPostcodeLazyQuery,

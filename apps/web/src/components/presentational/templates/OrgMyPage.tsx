@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Inquiry, Org as GqlOrg, User } from '../../../graphql';
-import { FAIL_TO_FETCH } from '../../../util/Constants';
+import { FAIL_TO_FETCH } from '../../../lib/Constants';
 // import { InquiryInfiniteTableWithStatus } from '../../container';
 import { GridItem, GridTemplate, TextLabel, TextSmall } from '../atoms';
 import { TableInquiry, TableOrgMember } from '../molecules';

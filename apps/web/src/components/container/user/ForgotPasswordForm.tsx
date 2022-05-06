@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useForgetUserPasswordMutation } from '../../../graphql/generated';
-import { EmailRegExp } from '../../../util';
+import { EmailRegExp } from '../../../lib';
 import { Form, Input, InputValue } from '../../presentational/atoms';
 import { ButtonOrLoading } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';

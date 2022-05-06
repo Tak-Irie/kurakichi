@@ -10,7 +10,7 @@ import {
   TextSmall,
 } from '..';
 import { Base, Inquiry, Message, Org, User } from '../../../graphql';
-import { FAIL_TO_FETCH } from '../../../util/Constants';
+import { FAIL_TO_FETCH } from '../../../lib/Constants';
 
 type TableProps = {
   tableLabel?: string;

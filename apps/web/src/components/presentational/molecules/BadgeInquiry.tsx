@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { InquiryCategoryModel, InquiryStatusModel } from '../../../util';
+import { InquiryCategoryModel, InquiryStatusModel } from '../../../lib';
 
 import { Badge, BadgeLarge } from '../atoms';
 
