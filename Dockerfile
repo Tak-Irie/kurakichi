@@ -1,7 +1,8 @@
 FROM node:14 AS Build
 WORKDIR /app
 COPY . .
-RUN yarn install --prod
+ENV NODE_ENV=production
+RUN yarn install
 
 # COPY modules/domain /modules/domain
 # COPY modules/prisma /modules/prisma
