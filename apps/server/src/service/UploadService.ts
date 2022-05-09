@@ -1,16 +1,18 @@
-import multer from "multer";
-import path from "path";
+import multer from 'multer';
+import path from 'path';
 
-import imagemin from "imagemin";
-import imageminWebp from "imagemin-webp";
+// import imagemin from "imagemin";
+// import imageminWebp from "imagemin-webp";
+
 // FIXME:These services temporally created.it must be written in modules/*
 // FIXME: add validation, minimize to webp(do it at front?)
 // FIXME: delete Exif info
 const storage = multer.diskStorage({
   destination: (_, file, cb) => {
-    const url = process.env.S3 || "apps/express/src/public/uploaded";
+    const url =
+      process.env.S3_PUBLIC_BUCKET || 'apps/express/src/public/uploaded';
     // console.log('destination:', url);
-    if (file.fieldname === "avatar") {
+    if (file.fieldname === 'avatar') {
       cb(null, `${url}/avatar`);
     } else cb(null, `${url}/image`);
   },
@@ -19,11 +21,11 @@ const storage = multer.diskStorage({
     cb(
       null,
       file.fieldname +
-        "_" +
+        '_' +
         Date.now() +
-        "_" +
+        '_' +
         req.session.userId +
-        path.extname(file.originalname)
+        path.extname(file.originalname),
     );
   },
 });
@@ -34,6 +36,6 @@ const upload = multer({
 });
 
 export const profileUploader = upload.fields([
-  { name: "avatar", maxCount: 1 },
-  { name: "image", maxCount: 1 },
+  { name: 'avatar', maxCount: 1 },
+  { name: 'image', maxCount: 1 },
 ]);

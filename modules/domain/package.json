@@ -1,19 +1,19 @@
 {
   "name": "@kurakichi/domain",
   "version": "0.0.1",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "license": "Apache License 2.0",
   "scripts": {
     "build": "tsc --build"
   },
   "dependencies": {
-    "@kurakichi/prisma": "workspace:^",
+    "@kurakichi/prisma": "*",
     "argon2": "^0.28.5",
     "dompurify": "^2.3.6",
     "ioredis": "^5.0.4",
     "jsdom": "^19.0.0",
     "mongodb": "^4.5.0",
-    "node-fetch": "^3.2.3",
+    "node-fetch": "^3.2.4",
     "ulid": "^2.3.0",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",

@@ -1,30 +1,26 @@
-provider "aws" {
-  profile = "dev"
-  region  = "ap-northeast-1"
-}
-
-module "storage" {
-  source            = "./storage"
-  private_subnet_1a = module.network.private_subnet_1a
-  private_subnet_1c = module.network.private_subnet_1c
-  kms               = module.security.kms
-  vpc               = module.network.vpc
-}
-
-module "security" {
-  source              = "./security"
-  docdb_cluster       = module.storage.docdb_cluster
-  elasticache_cluster = module.storage.elasticache_cluster
+module "container" {
+  source               = "./container"
+  lb_target_group      = module.network.lb_target_group
+  domain_name          = var.domain_name
+  vpc_id               = var.vpc_id
+  cidr_block           = var.cidr_block
+  private_subnet_1a_id = var.private_subnet_1a_id
+  kms_arn              = var.kms_arn
+  secrets_manager_name = var.secrets_manager_name
 }
 
 module "network" {
-  source = "./network"
-  s3_log = module.storage.s3_log
+  source              = "./network"
+  domain_address      = var.domain_address
+  vpc_id              = var.vpc_id
+  acm_arn             = var.acm_arn
+  public_subnet_1a_id = var.public_subnet_1a_id
+  public_subnet_1c_id = var.public_subnet_1c_id
 }
 
-module "container" {
-  source            = "./container"
-  vpc               = module.network.vpc
-  private_subnet_1a = module.network.private_subnet_1a
-  lb_target_group   = module.network.lb_target_group
+module "iam" {
+  source     = "./iam"
+  name       = "ecs-task-execution"
+  identifier = "ecs-tasks.amazonaws.com"
+  policy     = module.container.ecs_policy
 }

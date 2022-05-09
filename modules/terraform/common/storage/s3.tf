@@ -10,7 +10,7 @@ resource "aws_s3_bucket_versioning" "private" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "private" {
-    bucket = aws_s3_bucket.private.bucket
+  bucket = aws_s3_bucket.private.bucket
 
   rule {
     apply_server_side_encryption_by_default {
@@ -37,7 +37,7 @@ resource "aws_s3_bucket_cors_configuration" "public" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["GET","PUT","POST"]
+    allowed_methods = ["GET", "PUT", "POST"]
     allowed_origins = ["https://www.kurakichi.org"]
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
@@ -66,13 +66,13 @@ resource "aws_s3_bucket_public_access_block" "log" {
 resource "aws_s3_bucket_lifecycle_configuration" "log" {
   bucket = aws_s3_bucket.log.bucket
   rule {
-    id="log"
+    id     = "log"
     status = "Enabled"
     expiration {
-      days ="180"
+      days = "180"
     }
   }
-  }
+}
 
 resource "aws_s3_bucket_policy" "log" {
   bucket = aws_s3_bucket.log.id
@@ -97,7 +97,7 @@ resource "aws_s3_bucket" "tfstate" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "tfstate" {
-    bucket = aws_s3_bucket.tfstate.bucket
+  bucket = aws_s3_bucket.tfstate.bucket
   rule {
     apply_server_side_encryption_by_default {
       kms_master_key_id = var.kms

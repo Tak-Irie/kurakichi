@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import {
+  OrgMapMarker,
   SearchOrgByPrefForm,
   SearchOrgByServiceForm,
 } from '../components/container/org';
@@ -26,7 +27,7 @@ const Index: NextPage = () => {
     <div className="grid grid-cols-12">
       <div className="col-start-2 col-end-12 p-5 mt-10 bg-white border border-gray-200 shadow-sm">
         <div className="flex justify-items-start">
-          <TextH2 content="身近の専門家を探してみましょう！" />
+          <TextH2 content="身近の支援者を探してみましょう！" />
           <span className="flex items-center">
             <HelperPop
               text={
@@ -37,7 +38,9 @@ const Index: NextPage = () => {
         </div>
         <div className="grid grid-cols-10 mt-5">
           <div className="col-span-8">
-            <GoogleMap />
+            <GoogleMap>
+              <OrgMapMarker />
+            </GoogleMap>
 
             {/* {loading && !data?.getOrgs.orgs ? (
               <LoadingSpinner />

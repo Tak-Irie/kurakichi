@@ -3,7 +3,8 @@
     "outDir": "dist",
     "baseUrl": "src",
     "rootDir": "src",
-    "composite": true
+    "composite": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src"

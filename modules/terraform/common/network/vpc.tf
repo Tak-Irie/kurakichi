@@ -7,6 +7,8 @@ resource "aws_vpc" "kurakichi" {
     Name = "kurakichi_VPC"
   }
 }
+
+
 resource "aws_internet_gateway" "kurakichi" {
   vpc_id = aws_vpc.kurakichi.id
   tags = {

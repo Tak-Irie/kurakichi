@@ -17,6 +17,7 @@
       "emitDecoratorMetadata": true,
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
+      "allowSyntheticDefaultImports": true,
       "paths": {
         "@kurakichi/prisma": [
           "../prisma/src/index.ts"
@@ -28,7 +29,8 @@
     ],
     "exclude": [
       "dist",
-      "node_modules"
+      "node_modules",
+      "**/*.spec.ts"
     ],
     "compileOnSave": false,
     "references": [

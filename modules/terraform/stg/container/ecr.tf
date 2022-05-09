@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "kurakichi" {
   name = "kurakichi"
+
 }
 
 resource "aws_ecr_lifecycle_policy" "kurakichi" {

@@ -1,23 +1,14 @@
-data "aws_route53_zone" "kurakichi" {
-  name = "kurakichi.org"
+data "aws_route53_zone" "this" {
+  name = var.domain_address
 }
 
-resource "aws_route53_record" "kurakichi_top_level_domain" {
-  zone_id = data.aws_route53_zone.kurakichi.zone_id
-  name    = data.aws_route53_zone.kurakichi.name
+resource "aws_route53_record" "dev" {
+  zone_id = data.aws_route53_zone.this.zone_id
+  name    = "dev.kurakichi.org"
   type    = "A"
-
   alias {
-    name                   = aws_lb.kurakichi.dns_name
-    zone_id                = aws_lb.kurakichi.zone_id
+    name                   = aws_lb.this.dns_name
+    zone_id                = aws_lb.this.zone_id
     evaluate_target_health = true
   }
-}
-
-resource "aws_route53_record" "kurakichi_nextjs_sub_domain" {
-  zone_id = data.aws_route53_zone.kurakichi.zone_id
-  name    = "www"
-  type    = "CNAME"
-  ttl     = "5"
-  records = ["cname.vercel-dns.com"]
 }

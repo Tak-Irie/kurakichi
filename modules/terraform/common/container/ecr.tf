@@ -1,5 +1,9 @@
 resource "aws_ecr_repository" "kurakichi" {
-  name = "kurakichi"
+  name                 = "kurakichi"
+  image_tag_mutability = "MUTABLE"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 }
 
 resource "aws_ecr_lifecycle_policy" "kurakichi" {
