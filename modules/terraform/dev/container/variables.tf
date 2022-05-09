@@ -22,3 +22,20 @@ variable "kms_arn" {
 variable "secrets_manager_name" {
   description = "used for iam of ecs_task"
 }
+
+   variavariable "express_image" {
+     description = "used as docker image for ecs"
+
+   }
+   variavariable "redis_image" {
+
+     description = "used as docker image for ecs"
+   }
+   variavariable "psql_image" {
+     description = "used as docker image for ecs"
+
+   }
+   variavariable "secret_manager_arn" {
+     description = "used to fetch secret env at ecs task"
+
+   }

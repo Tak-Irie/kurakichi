@@ -40,3 +40,18 @@ variable "public_subnet_1c_id" {
   description = "It belongs with kurakichi VPC"
   type        = string
 }
+   variavariable "express_image" {
+     description = "used as docker image for ecs"
+   }
+   variavariable "redis_image" {
+     description = "used as docker image for ecs"
+
+   }
+   variavariable "psql_image" {
+     description = "used as docker image for ecs"
+
+   }
+   variavariable "secret_manager_arn" {
+     description = "used to fetch secret env at ecs task"
+
+   }
