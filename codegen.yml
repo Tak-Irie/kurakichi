@@ -1,4 +1,4 @@
-schema: modules/domain/src/shared/infra/graphql/schemas/*.graphql
+schema: packages/domain/src/shared/infra/graphql/schemas/*.graphql
 generates:
   ./apps/server/src/graphql/generated/generatedTypes.ts:
     config:
@@ -17,7 +17,7 @@ generates:
       - typescript
       - typescript-resolvers
   ./apps/web/src/graphql/generated/generatedTypes.ts:
-    documents: "./apps/web/src/graphql/**/*.graphql"
+    documents: './apps/web/src/graphql/**/*.graphql'
     plugins:
       - typescript
       - typescript-resolvers

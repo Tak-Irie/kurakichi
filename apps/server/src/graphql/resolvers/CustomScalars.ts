@@ -1,7 +1,9 @@
+import { GraphQLScalarType, Kind } from 'graphql';
 import { GraphQLUpload } from 'graphql-upload';
-import { Kind } from 'graphql/language';
-import { GraphQLScalarType } from 'graphql/type';
 
+type ScalarMap = {
+  [key: string]: GraphQLScalarType;
+};
 // FIXME: add validation
 const UserRoleScalar = new GraphQLScalarType({
   name: 'UserRole',
@@ -55,7 +57,7 @@ const InquiryStatusScalar = new GraphQLScalarType({
 
 const UploadScalar = GraphQLUpload;
 
-const ScalarResolverMap = {
+const ScalarResolverMap: ScalarMap = {
   UserRole: UserRoleScalar,
   MessageStatus: MessageStatusScalar,
   InquiryCategory: InquiryCategoryScalar,

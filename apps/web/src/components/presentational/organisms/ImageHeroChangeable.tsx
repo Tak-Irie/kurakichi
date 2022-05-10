@@ -14,7 +14,7 @@ export const ImageHeroChangeable: FC<ImageHeroDroppableProps> = ({
   setImage,
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    accept: { 'image/png': ['.png'], 'image/jpeg': ['.jpeg', '.png'] },
     onDrop: (acceptedFiles) => {
       setImage({
         ...files,

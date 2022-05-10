@@ -9,7 +9,7 @@ import {
 import { TableMessage } from '../../../components/presentational/molecules';
 import { UserTemplate } from '../../../components/presentational/templates';
 import { useGetMessagesByCookieQuery } from '../../../graphql';
-import { isLoggedIn } from '../../../util';
+import { isLoggedIn } from '../../../lib';
 
 const MessageBoxPage: NextPage = () => {
   const { cachedUser, loadingCache } = isLoggedIn();

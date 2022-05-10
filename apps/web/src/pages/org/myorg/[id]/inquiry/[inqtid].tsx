@@ -3,7 +3,6 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
-import { FAIL_TO_FETCH } from 'util/Constants';
 import {
   ButtonWithIcon,
   IconsMail,
@@ -16,6 +15,7 @@ import {
   useGetInquiriesByTreeIdQuery,
   useGetOrgPrivateInfoByCookieAndIdQuery,
 } from '../../../../../graphql';
+import { FAIL_TO_FETCH } from '../../../../../lib/Constants';
 
 const InquiryTreePrivatePage: NextPage = () => {
   const router = useRouter();

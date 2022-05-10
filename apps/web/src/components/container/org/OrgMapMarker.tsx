@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useGetOrgsForMapQuery } from '../../../graphql';
-import { LoadingSpinner } from '../../presentational';
+import { LoadingSpinner } from '../../presentational/atoms';
 import { Marker } from '../shared/GoogleMap/Marker';
 
 export const OrgMapMarker: FC = () => {
@@ -14,26 +14,24 @@ export const OrgMapMarker: FC = () => {
     return <p>wip</p>;
   }
 
-  if (data.getOrgs.__typename === 'Errors') {
+  if (data?.getOrgs?.__typename === 'Errors') {
     return <p>wip</p>;
   }
 
-  if (data.getOrgs.__typename === 'Orgs') {
-    const orgs = data.getOrgs.orgs;
+  if (data?.getOrgs?.__typename === 'Orgs' && data.getOrgs.orgs) {
+    const { orgs } = data.getOrgs;
     return (
       <>
-        {orgs.map((org) => {
-          return (
-            <Marker
-              key={org.id}
-              label={org.name}
-              position={{
-                lat: org.address.latitude,
-                lng: org.address.longitude,
-              }}
-            />
-          );
-        })}
+        {orgs.map((org) => (
+          <Marker
+            key={org.id}
+            label={org.name}
+            position={{
+              lat: org.address?.latitude || 0,
+              lng: org.address?.longitude || 0,
+            }}
+          />
+        ))}
       </>
     );
   }

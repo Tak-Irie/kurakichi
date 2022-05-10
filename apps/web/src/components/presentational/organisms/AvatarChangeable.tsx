@@ -15,7 +15,7 @@ export const AvatarChangeable: FC<AvatarChangeableProps> = ({
   files,
 }) => {
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    accept: { 'image/png': ['.png'], 'image/jpeg': ['.jpeg', '.png'] },
     onDrop: (acceptedFiles) => {
       setAvatar({
         ...files,

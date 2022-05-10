@@ -9,10 +9,10 @@ module.exports = {
     'airbnb-typescript',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    "plugin:tailwindcss/recommended",
+    'plugin:tailwindcss/recommended',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'import',"tailwindcss"],
+  plugins: ['@typescript-eslint', 'import', 'tailwindcss'],
   settings: {
     next: {
       rootDir: ['apps/*/', 'packages/*/'],
@@ -35,6 +35,8 @@ module.exports = {
         namedComponents: 'arrow-function',
       },
     ],
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
 
     // next
     '@next/next/no-html-link-for-pages': 'off',
@@ -66,4 +68,4 @@ module.exports = {
     'dist',
     '.turbo',
   ],
-}
+};

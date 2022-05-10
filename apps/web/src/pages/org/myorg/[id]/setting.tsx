@@ -8,7 +8,7 @@ import {
 } from '../../../../components/presentational/atoms';
 import { OrgTemplate } from '../../../../components/presentational/templates';
 import { useGetOrgPrivateInfoByCookieAndIdQuery } from '../../../../graphql';
-import { FAIL_TO_FETCH } from '../../../../util/Constants';
+import { FAIL_TO_FETCH } from '../../../../lib/Constants';
 
 const OrgSetting: NextPage = () => {
   const router = useRouter();

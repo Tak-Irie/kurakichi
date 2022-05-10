@@ -14,7 +14,7 @@ import {
   UserTemplate,
 } from '../../../components/presentational/templates';
 import { useGetMessagesByTreeIdQuery } from '../../../graphql';
-import { isLoggedIn } from '../../../util';
+import { isLoggedIn } from '../../../lib';
 
 const MessageTreePage: NextPage = () => {
   const router = useRouter();

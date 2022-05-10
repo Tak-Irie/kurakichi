@@ -9,6 +9,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new GraphQLWsLink(
+  //@ts-ignore
   typeof window !== 'undefined'
     ? createClient({
         url: 'ws://localhost:4000/graphql',

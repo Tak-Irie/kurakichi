@@ -1,9 +1,11 @@
 *
 
 !apps/server
-!modules/domain
-!modules/prisma
-!modules/third-api
+!packages/domain
+!packages/prisma
+!packages/third-api
+!packages/config
+!packages/tsconfig
 
 !package.json
-!tsconfig.json
+!turbo.json

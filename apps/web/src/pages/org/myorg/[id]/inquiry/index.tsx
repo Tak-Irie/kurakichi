@@ -2,8 +2,6 @@ import idx from 'idx';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FAIL_TO_FETCH } from 'util/Constants';
-
 import { InquiryInfiniteTable } from '../../../../../components/container';
 import {
   ButtonWithIcon,
@@ -17,6 +15,7 @@ import {
   useGetInquiriesByOrgIdQuery,
   useGetOrgPrivateInfoByCookieAndIdQuery,
 } from '../../../../../graphql';
+import { FAIL_TO_FETCH } from '../../../../../lib/Constants';
 
 const InquiryBoxPrivatePage: NextPage = () => {
   const router = useRouter();

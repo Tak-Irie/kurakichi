@@ -16,7 +16,7 @@ import {
   TextSmall,
 } from '../../../../components/presentational';
 import { useGetOrgPrivateInfoByCookieAndIdQuery } from '../../../../graphql';
-import { FAIL_TO_FETCH } from '../../../../util/Constants';
+import { FAIL_TO_FETCH } from '../../../../lib/Constants';
 
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();

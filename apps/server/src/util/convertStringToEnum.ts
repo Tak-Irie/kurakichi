@@ -1,4 +1,4 @@
-const convertCapitalStringToEnum = (string: string) => {
+export const convertCapitalStringToEnum = (string: string) => {
   // wip
 };
 
