@@ -1,12 +1,21 @@
+# general
+node_modules
+dist
+.DS_Store
+*.pem
+
+# docker
 redis
 eventstore
 rabbitmq
 postgres
 
-node_modules
+# turbo
+.turbo
 
-**/dist
-.DS_Store
+# next
+.next
+.vercel
 
 # terraform
 **/.terraform
@@ -25,10 +34,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 show.json
-
-# yarn (using Zero-Installs)
-.yarn/
-!.yarn/releases/*
 
 # generated
 logs
@@ -57,5 +62,3 @@ node_modules/
 .env
 .env.test
 .env.local
-# Next.js build output
-.next

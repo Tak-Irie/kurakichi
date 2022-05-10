@@ -2,7 +2,7 @@
   "name": "@kurakichi/third-api",
   "version": "0.0.1",
   "main": "dist/index.js",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --build"
   },

@@ -1,0 +1,14 @@
+{
+  "name": "@kurakichi/prisma",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@prisma/client": "^3.13.0"
+  },
+  "devDependencies": {
+    "@kurakichi/tsconfig": "*",
+    "prisma": "^3.13.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.4"
+  }
+}

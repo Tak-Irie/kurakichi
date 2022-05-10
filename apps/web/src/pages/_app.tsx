@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { ApolloProvider } from '@apollo/client';
-import '../../globals.css';
+import '../../styles/globals.css';
 
 import { Layout } from '../components/presentational/templates';
 import { apolloClient } from '../lib/createApolloClient';

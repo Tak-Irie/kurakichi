@@ -1,0 +1,11 @@
+{
+  "extends": "@kurakichi/tsconfig/server.json",
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ]
+}
