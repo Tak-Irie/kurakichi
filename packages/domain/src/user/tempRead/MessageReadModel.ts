@@ -1,3 +1,3 @@
-type MessageReadModel = {
+export type MessageReadModel = {
   placer: '';
 };

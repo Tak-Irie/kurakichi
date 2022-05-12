@@ -2,7 +2,7 @@
   "extends": "@kurakichi/tsconfig/server.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "dist"
+    "outDir": "dist",
   },
   "include": [
     "src/"
@@ -12,6 +12,8 @@
     ".turbo",
     "coverage",
     "dist",
-    "src/**/*.test.ts"
-  ]
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "**/generated/*.ts"
+  ],
 }

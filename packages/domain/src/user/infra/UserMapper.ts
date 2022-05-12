@@ -1,4 +1,4 @@
-import { User as StoredUser } from '@kurakichi/prisma/src';
+import { User as StoredUser } from '@prisma/client';
 import { getIdFromObjectInArray } from '../../shared/util';
 import { User } from '../domain';
 

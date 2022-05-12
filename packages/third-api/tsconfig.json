@@ -1,11 +1,17 @@
 {
   "extends": "@kurakichi/tsconfig/server.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist"
+  },
   "include": [
-    "."
+    "src"
   ],
   "exclude": [
     "dist",
     "build",
-    "node_modules"
+    "node_modules",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts"
   ]
 }

@@ -1,6 +1,6 @@
-/* eslint-disable no-constant-condition */
 import { DTOUser, UserRoleModel } from '@kurakichi/domain';
 import { UserReadModel } from '@kurakichi/domain/src/user/tempRead/UserReadModel';
+// eslint-disable-next-line import/no-cycle
 import {
   MessageConnection,
   MessageEdges,
@@ -10,8 +10,6 @@ import {
 export const dtoUserToGql = (user: DTOUser): User => {
   const {
     avatarUrl,
-    belongOrgs,
-    belongBases,
     selfIntro,
     email,
     id,
@@ -21,27 +19,43 @@ export const dtoUserToGql = (user: DTOUser): User => {
     userName,
   } = user;
 
-  const edges = messages.map((id) => {
-    return { cursor: id, node: { id } };
-  });
+  const edges = messages.map((messageId) => ({
+    cursor: messageId,
+    node: { id: messageId },
+  }));
 
-  const _messages = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
+  const modifiedMessages = {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges,
+  };
 
   return {
     __typename: 'User',
     id,
     name: userName,
     email,
-    role: role,
+    role,
     selfIntro,
     avatarUrl,
     heroImageUrl,
-    messages: _messages,
+    messages: modifiedMessages,
   };
 };
 
-export const dtoUsersToGql = (users: DTOUser[]): User[] => {
-  return users.map((user) => dtoUserToGql(user));
+export const dtoUsersToGql = (users: DTOUser[]): User[] =>
+  users.map((user) => dtoUserToGql(user));
+
+const convertUserRole = (role: string): UserRoleModel | undefined => {
+  switch (role) {
+    case 'CLIENT':
+      return role;
+    case 'EXPERT':
+      return role;
+    case 'VISITOR':
+      return role;
+    default:
+      return undefined;
+  }
 };
 
 export const readUserToGql = (user: UserReadModel): User => {
@@ -54,7 +68,6 @@ export const readUserToGql = (user: UserReadModel): User => {
     selfIntro,
     heroImageUrl,
     receivedMessages,
-    sentMessages,
   } = user;
 
   const edges: MessageEdges[] = receivedMessages.map((mes) => {
@@ -66,13 +79,13 @@ export const readUserToGql = (user: UserReadModel): User => {
         receiver: { id: receiverId },
         sender: { id: senderId },
         content,
-        status: status,
+        status,
         ...rest,
       },
     };
   });
 
-  const _messages: MessageConnection = {
+  const messages: MessageConnection = {
     pageInfo: { hasNext: false, hasPrevious: false },
     edges,
   };
@@ -86,19 +99,6 @@ export const readUserToGql = (user: UserReadModel): User => {
     selfIntro,
     avatarUrl,
     heroImageUrl,
-    messages: _messages,
+    messages,
   };
-};
-
-const convertUserRole = (role: string): UserRoleModel | undefined => {
-  switch (role) {
-    case 'CLIENT':
-      return role;
-    case 'EXPERT':
-      return role;
-    case 'VISITOR':
-      return role;
-    default:
-      return undefined;
-  }
 };

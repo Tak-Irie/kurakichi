@@ -1,5 +1,3 @@
-import { Resolvers } from '../generated/generatedTypes';
-
 import {
   getUserMyInfo,
   useDeleteUserUsecase,
@@ -11,9 +9,14 @@ import {
   useRegisterUserUsecase,
   useUpdateUserUsecase,
 } from '@kurakichi/domain';
+
+// eslint-disable-next-line import/no-cycle
+import { Resolvers } from '../generated/generatedTypes';
+
 import { ApolloContext } from '../../types';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
+// eslint-disable-next-line import/no-cycle
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 
 const UserResolver: Resolvers<ApolloContext> = {

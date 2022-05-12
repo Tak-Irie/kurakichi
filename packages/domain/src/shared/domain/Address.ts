@@ -1,6 +1,6 @@
-import { Result } from '@kurakichi/domain/src/shared/core';
-import { ValueObject } from '@kurakichi/domain/src/shared/domain/ValueObject';
-import { JapaneseAddressRegExp } from '@kurakichi/domain/src/shared/util';
+import { Result } from '../core';
+import { JapaneseAddressRegExp } from '../util';
+import { ValueObject } from './ValueObject';
 
 type AddressProps = { address: string };
 

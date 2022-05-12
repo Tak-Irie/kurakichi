@@ -9,6 +9,7 @@ resource "aws_secretsmanager_secret_version" "dev" {
 }
 variable "dev" {
   default = {
+    SERVER_PORT = "DUMMY"
     YAHOO_OIDC_ISSUER_BASE_URL  = "DUMMY"
     YAHOO_OIDC_CLIENT_ID        = "DUMMY"
     YAHOO_OIDC_CLIENT_SECRET    = "DUMMY"

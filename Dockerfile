@@ -3,6 +3,9 @@ WORKDIR /app
 COPY . .
 RUN yarn install
 RUN yarn run gen:prisma:generate
+ENV PSQL_URL="postgres://127.0.0.1:5432"
+ENV REDIS_URL="redis://127.0.0.1:6380"
+EXPOSE 80
 CMD ["yarn", "dev"]
 
 

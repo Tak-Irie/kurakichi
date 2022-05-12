@@ -7,6 +7,10 @@ module "container" {
   private_subnet_1a_id = var.private_subnet_1a_id
   kms_arn              = var.kms_arn
   secrets_manager_name = var.secrets_manager_name
+  secret_manager_arn   = var.secret_manager_arn
+  express_image        = var.express_image
+  psql_image           = var.psql_image
+  redis_image          = var.redis_image
 }
 
 module "network" {

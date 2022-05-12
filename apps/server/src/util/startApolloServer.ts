@@ -61,7 +61,7 @@ const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
     },
   });
 
-  const port = APOLLO_SERVER_PORT;
+  const port = process.env.SERVER_PORT || APOLLO_SERVER_PORT;
 
   httpServer.listen(port, () => {
     console.log(`http ready:${port}`);

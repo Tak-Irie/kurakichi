@@ -23,19 +23,19 @@ variable "secrets_manager_name" {
   description = "used for iam of ecs_task"
 }
 
-   variavariable "express_image" {
-     description = "used as docker image for ecs"
+variable "express_image" {
+  description = "used as docker image for ecs"
 
-   }
-   variavariable "redis_image" {
+}
+variable "redis_image" {
 
-     description = "used as docker image for ecs"
-   }
-   variavariable "psql_image" {
-     description = "used as docker image for ecs"
+  description = "used as docker image for ecs"
+}
+variable "psql_image" {
+  description = "used as docker image for ecs"
 
-   }
-   variavariable "secret_manager_arn" {
-     description = "used to fetch secret env at ecs task"
+}
+variable "secret_manager_arn" {
+  description = "used to fetch secret env at ecs task"
 
-   }
+}

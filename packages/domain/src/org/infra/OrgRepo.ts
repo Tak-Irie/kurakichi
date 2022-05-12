@@ -1,4 +1,4 @@
-import { PrismaClient } from '@kurakichi/prisma/src';
+import { PrismaClient } from '@prisma/client';
 import { UniqueEntityId } from '../../shared/domain';
 import { IOrgRepo, Org } from '../domain';
 import { OrgName } from '../domain/OrgName';

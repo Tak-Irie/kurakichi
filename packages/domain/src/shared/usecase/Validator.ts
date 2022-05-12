@@ -1,6 +1,6 @@
 // TODO:used for usecase layer
 
-class Validator {
+export class Validator {
   public static checkLength() {
     return;
   }

@@ -2,7 +2,7 @@
   "name": "@kurakichi/prisma",
   "version": "0.0.1",
   "license": "Apache-2.0",
-  "main": "./src",
+  "main": "src/index",
   "scripts": {
     "migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
     "migrate-create": "prisma migrate dev --create-only --schema=./src/prisma/schema.prisma",

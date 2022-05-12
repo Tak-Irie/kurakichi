@@ -28,6 +28,7 @@ module.exports = {
     },
   },
   rules: {
+    'import/prefer-default-export': 'off',
     // react
     'react/function-component-definition': [
       2,
@@ -54,6 +55,7 @@ module.exports = {
           'off',
           { devDependencies: ['**/?(*.)+(spec|test).[jt]s?(x)'] },
         ],
+        'import/prefer-default-export': ['off'],
       },
     },
   ],
@@ -67,5 +69,6 @@ module.exports = {
     'coverage',
     'dist',
     '.turbo',
+    'generated',
   ],
 };

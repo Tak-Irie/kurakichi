@@ -31,6 +31,9 @@ module.exports = {
       },
     },
   },
+  rules: {
+    'import/prefer-default-export': 'off',
+  },
   overrides: [
     {
       env: {
@@ -46,5 +49,12 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['**/*.js', 'node_modules', '.turbo', 'dist', 'coverage'],
-}
+  ignorePatterns: [
+    '**/*.js',
+    'node_modules',
+    '.turbo',
+    'dist',
+    'coverage',
+    'generated',
+  ],
+};

@@ -1,4 +1,4 @@
-import { Organization as StoredOrg } from '@kurakichi/prisma';
+import { Organization as StoredOrg } from '@prisma/client';
 import { getIdFromObjectInArray } from '../../shared/util';
 import { Org } from '../domain';
 

@@ -3,7 +3,7 @@ import {
   Dialog,
   Karte,
   User as StoredUser,
-} from '@kurakichi/prisma/src';
+} from '@prisma/client';
 import { UniqueEntityId } from '../../shared/domain';
 import { Base } from '../domain';
 
