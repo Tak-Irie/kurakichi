@@ -11,7 +11,6 @@
     ]
   },
   "scripts": {
-    "postinstall": "husky install",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
@@ -19,9 +18,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
     "gen:gql": "graphql-codegen",
+    "gen:gql:prod": "graphql-codegen --config codegen.prod.yml",
     "gen:prisma:migrate": "yarn workspace @kurakichi/prisma migrate",
     "gen:prisma:migrate-create": "yarn workspace @kurakichi/prisma migrate-create",
-    "gen:prisma:generate": "yarn workspace @kurakichi/prisma generate",
+    "gen:prisma:generate": "yarn workspace @kurakichi/server generate",
     "gen:prisma:seed": "yarn workspace @kurakichi/prisma seed"
   },
   "devDependencies": {
@@ -45,6 +45,7 @@
     "lint-staged": "^12.1.3",
     "msw": "^0.36.3",
     "prettier": "^2.5.1",
+    "prisma": "^3.14.0",
     "turbo": "*"
   },
   "lint-staged": {

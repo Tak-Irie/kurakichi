@@ -1,11 +1,6 @@
-*
-
-!apps/server
-!packages/domain
-!packages/prisma
-!packages/third-api
-!packages/config
-!packages/tsconfig
-
-!package.json
-!turbo.json
+.env
+.env.*
+.turbo
+apps/web
+postgres
+redis

@@ -13,9 +13,10 @@ import {
 // eslint-disable-next-line import/no-cycle
 import { Resolvers } from '../generated/generatedTypes';
 
-import { ApolloContext } from '../../types';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
+// eslint-disable-next-line import/no-cycle
+import { ApolloContext } from '../../@types/global';
 // eslint-disable-next-line import/no-cycle
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 

@@ -1,12 +1,40 @@
-FROM node:14 AS Build
+FROM node:14.19 AS Install
+
 WORKDIR /app
-COPY . .
+
+ENV PSQL_URL="kurakichi-postgres_store-1"
+ENV REDIS_URL="kurakichi-redis-1"
+ENV NODE_ENV="production"
+
+COPY package.json .
+COPY yarn.lock .
+
+COPY apps/server/dist apps/server/dist
+COPY apps/server/package.json apps/server/package.json
+
+COPY packages/domain/dist packages/domain/dist
+COPY packages/domain/package.json packages/domain/package.json
+
+COPY packages/third-api/dist packages/third-api/dist
+COPY packages/third-api/package.json packages/third-api/package.json
+
+COPY packages/tsconfig packages/tsconfig
+COPY packages/prisma/src packages/prisma/src
+COPY packages/prisma/package.json packages/prisma/package.json
+
 RUN yarn install
+
 RUN yarn run gen:prisma:generate
-ENV PSQL_URL="postgres://127.0.0.1:5432"
-ENV REDIS_URL="redis://127.0.0.1:6380"
+
+# RUN rm -rf node_modules/.prisma/*
+# RUN cp packages/prisma/node_modules/.prisma node_modules/.prisma
+
+
+
+
 EXPOSE 80
-CMD ["yarn", "dev"]
+
+CMD ["sh"]
 
 
 # COPY modules/domain /modules/domain

@@ -1,7 +1,8 @@
-import Redis from "ioredis";
-import { RedisPubSub } from "graphql-redis-subscriptions";
+import { RedisPubSub } from 'graphql-redis-subscriptions';
+import Redis from 'ioredis';
 
-const redisUrl = process.env.REDIS_URL || "redis://127.0.0.1:6380";
+console.log('redis_url', process.env.REDIS_URL);
+const redisUrl = process.env.REDIS_URL || 'redis://127.0.0.1:6380';
 
 const redis = new Redis(redisUrl);
 
