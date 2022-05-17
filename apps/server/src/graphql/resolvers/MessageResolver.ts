@@ -4,7 +4,7 @@ import {
   useReplyMessageUsecase,
   useSendMessageUsecase,
 } from '@kurakichi/domain';
-import { ApolloContext } from '../../types';
+import { ApolloContext } from '../../@types/global';
 import {
   returnErrorToGQL,
   returnNotLoggedIn,
@@ -37,14 +37,14 @@ export const MessageResolver: Resolvers<ApolloContext> = {
       if (idInCookie === undefined)
         return returnErrorToGQL('ログインが確認できませんでした');
       const usecaseResult = await useGetMessagesByTreeIdUsecase.execute({
-        treeId: treeId,
+        treeId,
         requestUserId: idInCookie,
       });
       if (usecaseResult.isLeft()) {
         return returnErrorToGQL(usecaseResult.value.getErrorValue());
       }
       const messageTree = dtoMessagesToTree({
-        treeId: treeId,
+        treeId,
         messages: usecaseResult.value.getValue(),
       });
       return { __typename: 'MessageTree', ...messageTree };
@@ -59,7 +59,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
       if (idInCookie === undefined) return returnNotLoggedIn();
       const usecaseResult = await useSendMessageUsecase.execute({
         senderId: idInCookie,
-        receiverId: receiverId,
+        receiverId,
         contentInput: content,
       });
 

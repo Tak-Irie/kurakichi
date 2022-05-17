@@ -1,11 +1,15 @@
-import { pubsub } from '../../util/createRedis';
+import { createRedisPubSub } from '../../util/createRedis';
 
 const DIALOG_POSTED_TOPIC = 'dialog_posted';
 
 export const SubscriptionsResolver = {
   Subscription: {
     dialogPosted: {
-      subscribe: () => pubsub.asyncIterator([DIALOG_POSTED_TOPIC]),
+      subscribe: () => {
+        const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
+        const pubsub = createRedisPubSub(redisUrl, redisUrl);
+        return pubsub.asyncIterator([DIALOG_POSTED_TOPIC]);
+      },
     },
   },
 };

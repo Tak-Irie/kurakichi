@@ -9,8 +9,12 @@
     "lint": "eslint src --fix",
     "migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
     "migrate-create": "prisma migrate dev --create-only --schema=./src/prisma/schema.prisma",
-    "generate": "prisma generate --schema=./src/prisma/schema.prisma",
-    "seed": "ts-node-dev ./src/prisma/seed.ts"
+    "generate:dev": "prisma generate --schema=./src/prisma/schema-dev.prisma",
+    "generate:prod": "prisma generate --schema=./src/prisma/schema.prisma",
+    "seed:dev": "ts-node-dev ./src/prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "node dist/src/prisma/seed.js"
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.13",

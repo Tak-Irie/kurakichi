@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Request } from 'express';
 import { Redis } from 'ioredis';
 import { Client, generators, TokenSet } from 'openid-client';
@@ -49,6 +50,7 @@ type Address = {
 
 class OidcAuthService {
   private authService;
+
   private crypt;
 
   constructor(authService: AuthService, crypt: Cryptograph) {
@@ -104,13 +106,13 @@ class OidcAuthService {
 
     if (storedParams === false) return false;
 
-    const [storedState, storedNonce, storedCode_verifier] = storedParams;
+    const [storedState, storedNonce, storedCodeVerifier] = storedParams;
     const param = client.callbackParams(req);
 
     const tokenSet = await client.callback(callback_uri, param, {
       state: storedState,
       nonce: storedNonce,
-      code_verifier: storedCode_verifier,
+      code_verifier: storedCodeVerifier,
     });
 
     return tokenSet;
@@ -149,6 +151,7 @@ class OidcAuthService {
       return JSON.parse(plainToken);
     } catch (err) {
       console.log('err:', err);
+      return false;
     }
   }
 

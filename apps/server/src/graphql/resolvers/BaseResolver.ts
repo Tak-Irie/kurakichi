@@ -1,4 +1,4 @@
-import { ApolloContext } from '../../types';
+import { ApolloContext } from '../../@types/global';
 import { Resolvers } from '../generated/generatedTypes';
 
 export const BaseResolver: Resolvers<ApolloContext> = {

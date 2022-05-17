@@ -6,17 +6,17 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('setting seedData');
-  for (const user of users) {
-    await prisma.user.create({ data: user });
-  }
-  for (const org of orgs) {
-    await prisma.organization.create({
+  users.forEach((user) => {
+    prisma.user.create({ data: user });
+  });
+  orgs.forEach((org) => {
+    prisma.organization.create({
       data: org,
       include: {
         members: { where: { id: org.adminId } },
       },
     });
-  }
+  });
   console.log('done');
 }
 

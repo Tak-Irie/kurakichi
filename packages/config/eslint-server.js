@@ -32,7 +32,9 @@ module.exports = {
     },
   },
   rules: {
+    'class-methods-use-this': 'off',
     'import/prefer-default-export': 'off',
+    'import/no-cycle': 'warn',
   },
   overrides: [
     {

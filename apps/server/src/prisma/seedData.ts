@@ -2,7 +2,7 @@ import { Organization, User } from '@prisma/client';
 
 const shared = {
   heroImageUrl: 'UNKNOWN',
-  description: '都民向けの福祉サービスの相談・受付を行っております',
+  description: '県民向けの福祉サービスの相談・受付を行っております',
   avatarUrl: 'UNKNOWN',
   homePageUrl: 'UNKNOWN',
   adminId: '01F4BVK5ZA3NA42HXKAS0EDHC2',

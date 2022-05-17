@@ -6,7 +6,7 @@ import {
   useReplyInquiryUsecase,
   useUpdateInquiryStatusUsecase,
 } from '@kurakichi/domain';
-import { ApolloContext } from '../../types';
+import { ApolloContext } from '../../@types/global';
 import {
   returnErrorToGQL,
   returnNotLoggedIn,

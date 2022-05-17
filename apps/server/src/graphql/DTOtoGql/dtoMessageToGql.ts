@@ -9,7 +9,7 @@ type TreeArg = {
 };
 
 export const dtoMessageToGql = (message: DTOMessage): Message => {
-  const { content, id, receiverId, senderId, status, sentAt, treeId } = message;
+  const { content, id, receiverId, senderId, status, sentAt } = message;
   return {
     id,
     content,
@@ -20,9 +20,8 @@ export const dtoMessageToGql = (message: DTOMessage): Message => {
   };
 };
 
-export const dtoMessagesToGql = (messages: DTOMessage[]): Message[] => {
-  return messages.map((message) => dtoMessageToGql(message));
-};
+export const dtoMessagesToGql = (messages: DTOMessage[]): Message[] =>
+  messages.map((message) => dtoMessageToGql(message));
 
 export const dtoMessagesToTree = ({
   treeId,
@@ -32,7 +31,7 @@ export const dtoMessagesToTree = ({
     const { status, ...rest } = message;
     return {
       cursor: message.id,
-      isRoot: message.id === treeId ? true : false,
+      isRoot: message.id === treeId,
       node: {
         status,
         ...rest,

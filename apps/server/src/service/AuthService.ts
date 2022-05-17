@@ -17,17 +17,19 @@ type StoreTokenSetArg = {
 
 class AuthService {
   private client;
+
   constructor(client: Redis) {
     this.client = client;
   }
 
   public async storeAuthParam(arg: StoreAuthArg) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { sessionId, state, code_verifier, nonce } = arg;
 
     await this.client.hset(`auth:${sessionId}`, {
-      state: state,
-      nonce: nonce,
-      code_verifier: code_verifier,
+      state,
+      nonce,
+      code_verifier,
     });
   }
 
@@ -51,9 +53,8 @@ class AuthService {
   private async deleteStoredAuthParam(sessionId: string) {
     const result = await this.client.del(`auth:${sessionId}`);
     if (result === 1) return true;
-    else {
-      return false;
-    }
+
+    return false;
   }
 
   public async storeTokenSet(arg: StoreTokenSetArg) {
@@ -81,7 +82,7 @@ class AuthService {
       `forgetPassword:${userId}`,
       changePassToken,
       'EX',
-      60 * 60, //1hour
+      60 * 60, // 1hour
     );
     if (result === null) return false;
     return true;

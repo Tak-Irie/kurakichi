@@ -1,8 +1,8 @@
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import type Express from 'express';
+import { GraphQLSchema } from 'graphql';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import { GraphQLSchema } from 'graphql/type';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 import {
@@ -12,7 +12,7 @@ import {
   GRAPHQL_PATH,
   LOCAL_WEB,
 } from './Constants';
-import { pubsub } from './createRedis';
+import { createRedisPubSub } from './createRedis';
 
 import { getUserIdByCookie } from './getUserIdByCookie';
 
@@ -28,7 +28,8 @@ const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
     path: GRAPHQL_PATH,
   });
   const serverCleanup = useServer({ schema }, wsServer);
-  const redisPubSub = pubsub;
+  const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
+  const redisPubSub = createRedisPubSub(redisUrl, redisUrl);
 
   const apolloServer = new ApolloServer({
     schema,

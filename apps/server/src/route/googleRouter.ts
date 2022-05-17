@@ -8,13 +8,14 @@ import {
   SSO_REDIRECT_SUCCESS,
 } from '../util/Constants';
 import { createGoogleClient } from '../util/createOidcClient';
-import { redis } from '../util/createRedis';
+import { createRedis } from '../util/createRedis';
 
 const googleRouter = Router();
 
 googleRouter.get('/login', async (req, res) => {
+  const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
   const oidc = OidcAuthService.createService({
-    redisClient: redis,
+    redisClient: createRedis(redisUrl),
     password: CRYPT_PASS,
     salt: CRYPT_SALT,
   });
@@ -29,8 +30,10 @@ googleRouter.get('/login', async (req, res) => {
 
 googleRouter.get('/redirect', async (req, res) => {
   try {
+    const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
+
     const oidc = OidcAuthService.createService({
-      redisClient: redis,
+      redisClient: createRedis(redisUrl),
       password: CRYPT_PASS,
       salt: CRYPT_SALT,
     });
@@ -71,10 +74,10 @@ googleRouter.get('/redirect', async (req, res) => {
 
     req.session.userId = value.id;
 
-    res.redirect(SSO_REDIRECT_SUCCESS);
+    return res.redirect(SSO_REDIRECT_SUCCESS);
   } catch (err) {
     console.log('err:', err);
-    res.redirect(SSO_REDIRECT_FAIL);
+    return res.redirect(SSO_REDIRECT_FAIL);
   }
 });
 

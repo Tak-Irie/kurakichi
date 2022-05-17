@@ -1,0 +1,56 @@
+FROM node:14.19 AS Build
+WORKDIR /app
+COPY . .
+RUN yarn install --frozen-lockfile
+RUN yarn run gen:prisma:generate
+RUN yarn gen:gql:prod
+RUN yarn build
+
+FROM node:14.19 AS Run
+
+ENV NODE_ENV="prodcution"
+ENV PSQL_URL="127.0.0.1:5432"
+ENV REDIS_URL="127.0.0.1:6380"
+
+WORKDIR /app
+COPY package.json ./
+COPY yarn.lock ./
+COPY --from=Build app/apps/server/dist /apps/server/dist
+COPY --from=Build app/apps/server/package.json /apps/server/package.json
+
+COPY --from=Build app/packages/domain/dist packages/domain/dist
+COPY --from=Build app/packages/domain/package.json packages/domain/package.json
+
+COPY --from=Build app/packages/third-api/dist packages/third-api/dist
+COPY --from=Build app/packages/third-api/package.json packages/third-api/package.json
+
+RUN yarn install --production
+
+RUN rm -rf node_modules/.prisma
+COPY --from=Build node_modules/.prisma node_modules/.prisma
+
+EXPOSE 80
+
+CMD ["node", "./app/server/dist/index.js"]
+
+
+# COPY modules/domain /modules/domain
+# COPY modules/prisma /modules/prisma
+# COPY apps/server /apps/server
+
+# RUN yarn install -D typescript
+# RUN yarn
+
+
+# FROM node:14 AS Install
+# WORKDIR /app
+# # COPY . .
+# COPY package.json .
+# COPY yarn.lock .
+# COPY modules/domain /modules/domain
+# COPY modules/prisma /modules/prisma
+# COPY apps/server /apps/server
+
+# RUN yarn install
+
+# CMD ["yarn", "dev:server"]

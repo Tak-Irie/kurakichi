@@ -2,9 +2,11 @@ import { createExpress } from './util/createExpress';
 import { startApolloServer } from './util/startApolloServer';
 
 import { schema } from './graphql';
-import { redis } from './util/createRedis';
+import { createRedis } from './util/createRedis';
 
 const main = async () => {
+  const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
+  const redis = createRedis(redisUrl);
   const express = await createExpress({ redis });
   await startApolloServer({
     schema,

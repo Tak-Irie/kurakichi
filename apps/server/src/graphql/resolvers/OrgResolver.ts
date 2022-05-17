@@ -8,7 +8,7 @@ import {
   useUpdateOrgUsecase,
 } from '@kurakichi/domain';
 import { GoogleMapAPI, PostcodeAPI } from '@kurakichi/third-api';
-import { ApolloContext } from '../../types';
+import { ApolloContext } from '../../@types/global';
 import {
   returnErrorToGQL,
   returnNotLoggedIn,
@@ -58,10 +58,10 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       const result = await getOrgPrivateInfoByCookieAndId(orgId, idInCookie);
       if (result === false) return returnErrorToGQL('wip');
       const { inquiries, ...rest } = result;
-      const _org = readOrgToGql(rest);
-      const _inq = readInquiresToConn(inquiries);
+      const gqlOrg = readOrgToGql(rest);
+      const gqlInq = readInquiresToConn(inquiries);
 
-      return { __typename: 'Org', inquiries: _inq, ..._org };
+      return { __typename: 'Org', inquiries: gqlInq, ...gqlOrg };
     },
     getAddressByPostcode: async (_, { postcode }) => {
       console.log('postcode:', postcode);

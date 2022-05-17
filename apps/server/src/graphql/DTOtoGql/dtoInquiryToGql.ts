@@ -6,7 +6,7 @@ import {
 } from '../generated/generatedTypes';
 
 export const dtoInquiryToGql = (dtoInquiry: DTOInquiry): Inquiry => {
-  const { category, content, id, receiver, sender, status, sentAt, tree } =
+  const { category, content, id, receiver, sender, status, sentAt } =
     dtoInquiry;
 
   return {
