@@ -2,7 +2,9 @@
   "extends": "@kurakichi/tsconfig/server.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceMap": false,
+    "removeComments": true
   },
   "include": [
     "src"

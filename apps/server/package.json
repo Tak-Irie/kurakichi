@@ -8,9 +8,9 @@
     "test": "jest --coverage",
     "lint": "eslint src --fix",
     "migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
+    "migrate:prod": "npx prisma migrate deploy --schema=./dist/src//prisma/schema.prisma",
     "migrate-create": "prisma migrate dev --create-only --schema=./src/prisma/schema.prisma",
-    "generate:dev": "prisma generate --schema=./src/prisma/schema-dev.prisma",
-    "generate:prod": "prisma generate --schema=./src/prisma/schema.prisma",
+    "generate": "prisma generate --schema=./src/prisma/schema-dev.prisma",
     "seed:dev": "ts-node-dev ./src/prisma/seed.ts"
   },
   "prisma": {

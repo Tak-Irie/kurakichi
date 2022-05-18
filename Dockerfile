@@ -15,6 +15,7 @@ COPY apps/server/dist apps/server/dist
 COPY apps/server/package.json apps/server/package.json
 COPY apps/server/src/prisma/schema.prisma apps/server/dist/src/prisma/schema.prisma
 COPY apps/server/src/prisma/migrations apps/server/dist/src/prisma/migrations
+COPY apps/server/src/graphql/generated/generatedSchema.graphql apps/server/dist/src/graphql/generated/generatedSchema.graphql
 
 COPY packages/domain/dist packages/domain/dist
 COPY packages/domain/package.json packages/domain/package.json
@@ -31,7 +32,7 @@ RUN mv .prisma node_modules/.prisma
 # CMD ["node", "apps/server/dist/src/index.js"]
 
 FROM node:14.19-alpine3.15
-ENV PSQL_URL="postgresql://test:test@postgres"
+ENV PSQL_URL="postgresql://test:test@postgres/test"
 ENV REDIS_URL="redis://redis"
 ENV REDIS_AUTH_URL="redis://redis"
 ENV SERVER_PORT=80

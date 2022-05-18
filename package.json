@@ -20,11 +20,11 @@
     "gen:gql": "graphql-codegen",
     "gen:gql:prod": "graphql-codegen --config codegen.prod.yml",
     "gen:prisma:migrate": "yarn workspace @kurakichi/server migrate",
+    "gen:prisma:migrate:prod": "yarn workspace @kurakichi/server migrate:prod",
     "gen:prisma:migrate-create": "yarn workspace @kurakichi/server migrate-create",
-    "gen:prisma:generate:prod": "yarn workspace @kurakichi/server generate:prod",
-    "gen:prisma:generate:dev": "yarn workspace @kurakichi/server generate:dev",
+    "gen:prisma:generate": "yarn workspace @kurakichi/server generate",
     "gen:prisma:seed": "yarn workspace @kurakichi/server seed",
-    "gen:prisma:seed:prod": "yarn workspace @kurakichi/server npx prisma db seed"
+    "gen:prisma:seed:prod": "yarn workspace @kurakichi/server prisma db seed"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.2",
