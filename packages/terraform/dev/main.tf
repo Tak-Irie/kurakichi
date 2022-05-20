@@ -1,3 +1,15 @@
+module "network" {
+  source                           = "./network"
+  domain_address                   = var.domain_address
+  vpc_id                           = var.vpc_id
+  acm_arn                          = var.acm_arn
+  public_subnet_1a_id              = var.public_subnet_1a_id
+  public_subnet_1c_id              = var.public_subnet_1c_id
+  private_subnet_1a_id             = var.private_subnet_1a_id
+  route_table_id_private_subnet_1a = var.route_table_id_private_subnet_1a
+}
+
+
 module "container" {
   source               = "./container"
   lb_target_group      = module.network.lb_target_group
@@ -13,18 +25,3 @@ module "container" {
   redis_image          = var.redis_image
 }
 
-module "network" {
-  source              = "./network"
-  domain_address      = var.domain_address
-  vpc_id              = var.vpc_id
-  acm_arn             = var.acm_arn
-  public_subnet_1a_id = var.public_subnet_1a_id
-  public_subnet_1c_id = var.public_subnet_1c_id
-}
-
-module "iam" {
-  source     = "./iam"
-  name       = "ecs-task-execution"
-  identifier = "ecs-tasks.amazonaws.com"
-  policy     = module.container.ecs_policy
-}

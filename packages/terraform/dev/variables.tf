@@ -53,5 +53,9 @@ variable "psql_image" {
 }
 variable "secret_manager_arn" {
   description = "used to fetch secret env at ecs task"
+}
 
+variable "route_table_id_private_subnet_1a" {
+  description = "used for vpc endpoint at s3"
+  type        = string
 }

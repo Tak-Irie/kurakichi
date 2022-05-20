@@ -29,6 +29,8 @@ module "http_sg" {
   vpc_id            = var.vpc_id
   ingress_from_port = 80
   ingress_to_port   = 80
+  egress_from_port  = 0
+  egress_to_port    = 0
   cidr_blocks       = ["0.0.0.0/0"]
 }
 module "https_sg" {
@@ -37,12 +39,14 @@ module "https_sg" {
   vpc_id            = var.vpc_id
   ingress_from_port = 443
   ingress_to_port   = 443
+  egress_from_port  = 0
+  egress_to_port    = 0
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.this.arn
-  port              = "443"
+  port              = 443
   protocol          = "HTTPS"
   certificate_arn   = var.acm_arn
   ssl_policy        = "ELBSecurityPolicy-2016-08"
@@ -54,7 +58,7 @@ resource "aws_lb_listener" "https" {
 
 resource "aws_lb_listener" "redirect_http_to_https" {
   load_balancer_arn = aws_lb.this.arn
-  port              = "80"
+  port              = 80
   protocol          = "HTTP"
   default_action {
     type = "redirect"
@@ -69,7 +73,7 @@ resource "aws_lb_target_group" "this" {
   name                 = "kurakichi-dev"
   target_type          = "ip"
   vpc_id               = var.vpc_id
-  port                 = 80
+  port                 = 4000
   protocol             = "HTTP"
   deregistration_delay = 300
   health_check {

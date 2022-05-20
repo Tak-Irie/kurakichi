@@ -9,7 +9,7 @@ resource "aws_secretsmanager_secret_version" "dev" {
 }
 variable "dev" {
   default = {
-    SERVER_PORT = "DUMMY"
+    SERVER_PORT                 = "DUMMY"
     YAHOO_OIDC_ISSUER_BASE_URL  = "DUMMY"
     YAHOO_OIDC_CLIENT_ID        = "DUMMY"
     YAHOO_OIDC_CLIENT_SECRET    = "DUMMY"
@@ -25,6 +25,7 @@ variable "dev" {
     GOOGLE_GEO_API_KEY          = "DUMMY"
     PSQL_URL                    = "DUMMY"
     REDIS_URL                   = "DUMMY"
+    REDIS_AUTH_URL              = "DUMMY"
     CORS_NEXT                   = "DUMMY"
     SESSION_SECRET              = "DUMMY"
     CRYPT_PASS                  = "DUMMY"

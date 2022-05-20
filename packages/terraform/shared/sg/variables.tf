@@ -12,6 +12,12 @@ variable "ingress_from_port" {
 variable "ingress_to_port" {
   type = number
 }
+variable "egress_from_port" {
+  type = number
+}
+variable "egress_to_port" {
+  type = number
+}
 variable "cidr_blocks" {
   description = "these attach to ingress"
   type = list(string)

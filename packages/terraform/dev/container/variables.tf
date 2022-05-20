@@ -6,7 +6,7 @@ variable "vpc_id" {
 }
 
 variable "cidr_block" {
-  description = "used for sg on exoress"
+  description = "used for sg on ecs service"
 }
 
 variable "lb_target_group" {

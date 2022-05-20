@@ -46,7 +46,6 @@ resource "aws_subnet" "public_1c" {
   }
 }
 
-
 resource "aws_route_table_association" "public_1a" {
   subnet_id      = aws_subnet.public_1a.id
   route_table_id = aws_route_table.public.id
@@ -55,20 +54,6 @@ resource "aws_route_table_association" "public_1a" {
 resource "aws_route_table_association" "public_1c" {
   subnet_id      = aws_subnet.public_1c.id
   route_table_id = aws_route_table.public.id
-}
-
-
-resource "aws_route_table" "private_1a" {
-  vpc_id = aws_vpc.kurakichi.id
-  tags = {
-    Name = "kurakichi_private_route_table_1a"
-  }
-}
-resource "aws_route_table" "private_1c" {
-  vpc_id = aws_vpc.kurakichi.id
-  tags = {
-    Name = "kurakichi_private_route_table_1c"
-  }
 }
 
 resource "aws_subnet" "private_1a" {
@@ -89,3 +74,29 @@ resource "aws_subnet" "private_1c" {
     Name = "private_subnet_tokyo-1c"
   }
 }
+
+resource "aws_route_table" "private_1a" {
+  vpc_id = aws_vpc.kurakichi.id
+  tags = {
+    Name = "kurakichi_private_route_table_1a"
+  }
+}
+
+
+resource "aws_route_table" "private_1c" {
+  vpc_id = aws_vpc.kurakichi.id
+  tags = {
+    Name = "kurakichi_private_route_table_1c"
+  }
+}
+
+resource "aws_route_table_association" "private_1a" {
+  subnet_id      = aws_subnet.private_1a.id
+  route_table_id = aws_route_table.private_1a.id
+}
+
+resource "aws_route_table_association" "private_1c" {
+  subnet_id      = aws_subnet.private_1c.id
+  route_table_id = aws_route_table.private_1c.id
+}
+

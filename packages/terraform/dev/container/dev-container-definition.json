@@ -5,14 +5,17 @@
     "essential": true,
     "memory": 512,
     "cpu": 256,
-    "memoryReservation": 128,
+    "memoryReservation": 256,
     "portMappings": [
       {
-        "containerPort": 80,
-        "hostPort": 80,
+        "containerPort": 4000,
+        "hostPort": 4000,
         "protocol": "tcp"
       }
     ],
+    "linuxParameters": {
+      "initProcessEnabled": true
+    },
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
@@ -21,26 +24,27 @@
         "awslogs-stream-prefix": "express"
       }
     },
+    "environment": [{ "name": "NODE_ENV", "value": "production" }],
     "secrets": [
       {
         "name": "SERVER_PORT",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:SERVER_PORT::"
       },
       {
         "name": "CORS_NEXT",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:CORS_NEXT::"
       },
       {
         "name": "CRYPT_PASS",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:CRYPT_PASS::"
       },
       {
         "name": "CRYPT_SALT",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:CRYPT_SALT::"
       },
       {
         "name": "GOOGLE_GEO_API_KEY",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:GOOGLE_GEO_API_KEY::"
       },
       {
         "name": "GOOGLE_OIDC_CLIENT_ID",
@@ -48,63 +52,67 @@
       },
       {
         "name": "GOOGLE_OIDC_CLIENT_REDIRECT",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:GOOGLE_OIDC_CLIENT_REDIRECT::"
       },
       {
         "name": "GOOGLE_OIDC_CLIENT_SECRET",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:GOOGLE_OIDC_CLIENT_SECRET::"
       },
       {
         "name": "GOOGLE_OIDC_ISSUER_BASE_URL",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:GOOGLE_OIDC_ISSUER_BASE_URL::"
       },
       {
         "name": "PSQL_URL",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:PSQL_URL::"
       },
       {
         "name": "REDIS_URL",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:REDIS_URL::"
+      },
+      {
+        "name": "REDIS_AUTH_URL",
+        "valueFrom": "${secret_manager_arn}:REDIS_AUTH_URL::"
       },
       {
         "name": "S3_PUBLIC_BUCKET",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:S3_PUBLIC_BUCKET::"
       },
       {
         "name": "SENDGRID_API_KEY",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:SENDGRID_API_KEY::"
       },
       {
         "name": "SENTRY_DSN",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:SENTRY_DSN::"
       },
       {
         "name": "SESSION_SECRET",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:SESSION_SECRET::"
       },
       {
         "name": "SSO_REDIRECT_FAIL",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:SSO_REDIRECT_FAIL::"
       },
       {
         "name": "SSO_REDIRECT_SUCCESS",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:SSO_REDIRECT_SUCCESS::"
       },
       {
         "name": "YAHOO_OIDC_CLIENT_ID",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:YAHOO_OIDC_CLIENT_ID::"
       },
       {
         "name": "YAHOO_OIDC_CLIENT_REDIRECT",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:YAHOO_OIDC_CLIENT_REDIRECT::"
       },
       {
         "name": "YAHOO_OIDC_CLIENT_SECRET",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:YAHOO_OIDC_CLIENT_SECRET::"
       },
       {
         "name": "YAHOO_OIDC_ISSUER_BASE_URL",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:YAHOO_OIDC_ISSUER_BASE_URL::"
       }
     ]
   },
@@ -113,6 +121,7 @@
     "image": "${redis_image}",
     "cpu": 128,
     "memory": 256,
+    "memoryReservation": 256,
     "portMappings": [
       {
         "containerPort": 6379,
@@ -134,6 +143,7 @@
     "image": "${psql_image}",
     "cpu": 128,
     "memory": 256,
+    "memoryReservation": 256,
     "portMappings": [
       {
         "containerPort": 5432,
@@ -152,15 +162,15 @@
     "secrets": [
       {
         "name": "POSTGRES_USER",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:POSTGRES_USER::"
       },
       {
         "name": "POSTGRES_DB",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:POSTGRES_DB::"
       },
       {
         "name": "POSTGRES_PASSWORD",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:POSTGRES_PASSWORD::"
       }
     ]
   }
