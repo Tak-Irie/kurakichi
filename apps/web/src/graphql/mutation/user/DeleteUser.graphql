@@ -1,0 +1,10 @@
+mutation DeleteUser {
+  deleteUser {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Succeeded {
+      succeeded
+    }
+  }
+}

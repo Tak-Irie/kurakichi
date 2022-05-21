@@ -1,0 +1,13 @@
+query GetInquiriesByTreeId($treeId: String!) {
+  getInquiriesByTreeId(treeId: $treeId) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on InquiryTree {
+      id
+      leaves {
+        ...InquiryLeafConnection
+      }
+    }
+  }
+}

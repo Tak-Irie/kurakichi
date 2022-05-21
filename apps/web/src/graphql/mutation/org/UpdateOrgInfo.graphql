@@ -1,0 +1,10 @@
+mutation UpdateOrgInfo($input: UpdateOrgInput!) {
+  updateOrg(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Org {
+      ...OrgPrivateInfo
+    }
+  }
+}

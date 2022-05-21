@@ -1,9 +1,21 @@
+# general
+node_modules
+dist
+.DS_Store
+*.pem
+
+# docker
 redis
 eventstore
 rabbitmq
+postgres
 
-**/dist
-.DS_Store
+# turbo
+.turbo
+
+# next
+.next
+.vercel
 
 # terraform
 **/.terraform
@@ -23,7 +35,7 @@ override.tf.json
 terraform.rc
 show.json
 
-# created
+# generated
 logs
 *.log
 npm-debug.log*
@@ -39,7 +51,6 @@ lib-cov
 coverage
 *.lcov
 .nyc_output
-node_modules/
 *.tsbuildinfo
 .npm
 .eslintcache
@@ -49,5 +60,4 @@ node_modules/
 # dotenv environment variables file
 .env
 .env.test
-# Next.js build output
-.next
+.env.local

@@ -1,0 +1,10 @@
+mutation LoginUser($input: loginUserInput!) {
+  loginUser(input: $input) {
+    ... on User {
+      ...UserPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}

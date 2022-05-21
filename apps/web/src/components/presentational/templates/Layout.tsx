@@ -1,15 +1,16 @@
-import type { ReactNode, VFC } from "react";
+import type { FC, ReactChild } from 'react';
+import { Footer, NavAlpha, NavBar } from '../organisms';
 
-import { Footer, NavBar } from "../../presentational/organisms";
-import { NavAlpha } from "../../presentational/atoms";
-import { NextPage } from "next";
+type LayoutProps = {
+  children: ReactChild;
+};
 
-const Layout: NextPage = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <NavAlpha />
       <NavBar />
-      <main className='bg-green-50'>{children}</main>
+      <main className="bg-green-50">{children}</main>
       <Footer />
     </>
   );

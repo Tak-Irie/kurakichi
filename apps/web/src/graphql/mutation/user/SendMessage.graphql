@@ -1,0 +1,19 @@
+mutation SendMessage($input: sendMessageInput!) {
+  sendMessage(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Message {
+      content
+      id
+      receiver {
+        id
+      }
+      sender {
+        id
+      }
+      sentAt
+      status
+    }
+  }
+}

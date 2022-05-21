@@ -1,0 +1,21 @@
+schema: packages/domain/src/shared/infra/graphql/schemas/*.graphql
+generates:
+  ./apps/server/src/graphql/generated/generatedTypes.ts:
+    config:
+      useIndexSignature: true
+      scalars:
+        UserRole: UserRoleModel
+        MessageStatus: MessageStatusModel
+        InquiryCategory: InquiryCategoryModel
+        InquiryStatus: InquiryStatusModel
+      mappers:
+        UserRole: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#UserRoleModel
+        MessageStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#MessageStatusModel
+        InquiryCategory: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryCategoryModel
+        InquiryStatus: \@kurakichi/domain/src/shared/infra/graphql/MappingModels#InquiryStatusModel
+    plugins:
+      - typescript
+      - typescript-resolvers
+  ./apps/server/src/graphql/generated/generatedSchema.graphql:
+    plugins:
+      - schema-ast

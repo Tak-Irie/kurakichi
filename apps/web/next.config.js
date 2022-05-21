@@ -1,3 +1,11 @@
-// const withTM = require("next-transpile-modules")(["bar"]);
+// @ts-check
+/** @type {import('next').NextConfig} */
 
-// module.exports = withTM();
+const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    externalDir: true,
+  },
+};
+
+module.exports = nextConfig;

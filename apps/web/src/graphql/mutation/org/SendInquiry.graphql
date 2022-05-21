@@ -1,0 +1,23 @@
+mutation SendInquiry($input: SendInquiryInput!) {
+  sendInquiry(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Inquiry {
+      category
+      content
+      id
+      inquiryStatus
+      receivedOrg {
+        id
+      }
+      replier {
+        id
+      }
+      sender {
+        id
+      }
+      sentAt
+    }
+  }
+}

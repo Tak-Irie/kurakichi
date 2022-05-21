@@ -1,0 +1,21 @@
+{
+  "name": "@kurakichi/third-api",
+  "version": "0.0.1",
+  "main": "dist/src/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "jest --coverage",
+    "lint": "eslint src --fix"
+  },
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.13",
+    "@kurakichi/domain": "*",
+    "@sendgrid/mail": "^7.6.2",
+    "ioredis": "^5.0.4"
+  },
+  "devDependencies": {
+    "@kurakichi/tsconfig": "*",
+    "typescript": "^4.5.3"
+  }
+}

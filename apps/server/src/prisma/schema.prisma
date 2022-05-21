@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../../../../node_modules/.prisma/client"
+  binaryTargets = "linux-musl"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PSQL_URL")
+}
+
+model User {
+  id                String         @id
+  email             String         @unique
+  name              String
+  password          String
+  ssoSub            String
+  avatarUrl            String
+  heroImageUrl             String
+  selfIntro       String
+  role              USER_ROLE
+  receivedMessages  Message[]      @relation("receive")
+  sentMessages      Message[]      @relation("sent")
+  manageOrgs        Organization[] @relation("orgAdmin")
+  belongOrgs        Organization[] @relation("orgMember")
+  requestJoinOrgs   Organization[] @relation("requestedMember")
+  manageBases       Base[]         @relation("baseAdmin")
+  belongBases       Base[]         @relation("baseFellow")
+  sentInquiries     Inquiry[]      @relation("sentInquiry")
+  receivedInquiries Inquiry[]      @relation("receivedInquiry")
+}
+
+model Organization {
+  id               String    @id
+  name             String    @unique
+  email            String
+  description      String
+  phoneNumber      String
+  address          String
+  latitude         Float
+  longitude        Float
+  avatarUrl           String
+  heroImageUrl            String
+  homePageUrl         String
+  adminId          String
+  admin            User      @relation("orgAdmin", fields: [adminId], references: [id])
+  members          User[]    @relation("orgMember")
+  requestedMembers User[]    @relation("requestedMember")
+  inquiries        Inquiry[] @relation("gotInquiry")
+  articles         Article[] @relation("orgArticle")
+}
+
+model Message {
+  id            String         @id
+  content          String
+  senderId      String
+  receiverId    String
+  sentAt        String
+  status        MESSAGE_STATUS
+  receiver      User           @relation("receive", fields: [receiverId], references: [id])
+  sender        User           @relation("sent", fields: [senderId], references: [id])
+  tree          MessageTree    @relation("messageTree", fields: [messageTreeId], references: [id])
+  messageTreeId String
+}
+
+model MessageTree {
+  id       String    @id
+  messages Message[] @relation("messageTree")
+}
+
+model Inquiry {
+  id            String           @id
+  content          String
+  senderId      String
+  receiverId    String
+  receivedOrgId String
+  inquiryTreeId String
+  sentAt        String
+  category      INQUIRY_CATEGORY
+  status        INQUIRY_STATUS
+  sender        User             @relation("sentInquiry", fields: [senderId], references: [id])
+  receiver      User             @relation("receivedInquiry", fields: [receiverId], references: [id])
+  receivedOrg   Organization     @relation("gotInquiry", fields: [receivedOrgId], references: [id])
+  tree          InquiryTree      @relation("inquiryTree", fields: [inquiryTreeId], references: [id])
+}
+
+model InquiryTree {
+  id       String    @id
+  messages Inquiry[] @relation("inquiryTree")
+}
+
+model Base {
+  id      String  @id
+  adminId String
+  admin   User    @relation("baseAdmin", fields: [adminId], references: [id])
+  fellows User[]  @relation("baseFellow")
+  karte   Karte?
+  dialog  Dialog?
+}
+
+model Dialog {
+  id     String @id
+  content   String
+  baseId String @unique
+  base   Base   @relation(fields: [baseId], references: [id])
+}
+
+model Karte {
+  id     String @id
+  record String
+  baseId String @unique
+  base   Base   @relation(fields: [baseId], references: [id])
+}
+
+model Article {
+  id        String       @id
+  imageUrl     String
+  content      String
+  orgId     String
+  writerOrg Organization @relation("orgArticle", fields: [orgId], references: [id])
+}
+
+enum USER_ROLE {
+  VISITOR
+  EXPERT
+  CLIENT
+}
+
+enum INQUIRY_CATEGORY {
+  COUNSEL
+  INQUIRY
+  CONTACT
+  APPLICATION
+  OTHERS
+}
+
+enum INQUIRY_STATUS {
+  UNREAD
+  WORKING
+  DONE
+  DRAFT
+}
+
+enum MESSAGE_STATUS {
+  READ
+  UNREAD
+  DRAFT
+}

@@ -1,0 +1,23 @@
+mutation UpdateInquiryStatus($input: UpdateInquiryStatusInput!) {
+  updateInquiryStatus(input: $input) {
+    ... on Errors {
+      ...Errors
+    }
+    ... on Inquiry {
+      category
+      content
+      id
+      inquiryStatus
+      receivedOrg {
+        id
+      }
+      replier {
+        id
+      }
+      sender {
+        id
+      }
+      sentAt
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query GetOrgPublicInfoById($orgId: String!) {
+  getOrg(id: $orgId) {
+    ... on Org {
+      ...OrgPublicInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}

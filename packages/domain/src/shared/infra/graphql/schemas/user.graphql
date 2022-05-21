@@ -1,0 +1,132 @@
+type User implements Node {
+  id: ID!
+  name: String
+  email: String
+  selfIntro: String
+  avatarUrl: String
+  heroImageUrl: String
+  role: UserRole
+  messages: MessageConnection
+  orgs: OrgConnection
+}
+
+type OrgConnection {
+  edges: [OrgEdges!]
+  pageInfo: PageInfo
+}
+type OrgEdges {
+  cursor: String!
+  node: Org!
+}
+
+"""
+VISITOR | CLIENT | EXPERT
+"""
+scalar UserRole
+
+type MessageConnection {
+  edges: [MessageEdges!]
+  pageInfo: PageInfo
+}
+
+type MessageEdges {
+  cursor: String!
+  node: Message!
+}
+
+type Message implements Node {
+  id: ID!
+  content: String
+  status: MessageStatus
+  sentAt: String
+  sender: User
+  receiver: User
+}
+
+"""
+SENT | READ | UNREAD | DRAFT
+"""
+scalar MessageStatus
+
+type MessageTree implements Node {
+  id: ID!
+  leaves: MessageLeafConnection
+}
+
+type MessageLeafConnection {
+  edges: [MessageLeafEdges!]
+  pageInfo: PageInfo
+}
+
+type MessageLeafEdges {
+  cursor: String!
+  node: Message!
+  isRoot: Boolean
+}
+
+type Query {
+  getUserByCookie: UserResult
+  getUserById(userId: String!): UserResult
+  getUsers: UsersResult
+  getMessagesByCookie: MessagesResult
+  getMessagesByTreeId(treeId: String!): MessageTreeResult
+}
+
+type Mutation {
+  registerUser(input: registerUserInput!): UserResult
+  loginUser(input: loginUserInput!): UserResult
+  updateUser(input: updateUserInput!): UserResult
+  logoutUser: BoolResult
+  deleteUser: BoolResult
+  forgetPassword(email: String!): BoolResult
+  changePassword(input: changePasswordInput): BoolResult
+  sendMessage(input: sendMessageInput!): MessageResult
+  replyMessage(input: replyMessageInput!): MessageResult
+}
+
+union UserResult = User | Errors
+union UsersResult = Users | Errors
+union MessageResult = Message | Errors
+union MessagesResult = Messages | Errors
+union MessageTreeResult = MessageTree | Errors
+
+type Users {
+  users: [User!]
+}
+
+type Messages {
+  messages: [Message!]
+}
+
+input changePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
+
+input registerUserInput {
+  email: String!
+  password: String!
+}
+
+input updateUserInput {
+  name: String
+  email: String
+  selfIntro: String
+  avatarUrl: String
+  heroImageUrl: String
+}
+
+input loginUserInput {
+  email: String!
+  password: String!
+}
+
+input sendMessageInput {
+  receiverId: String!
+  content: String!
+}
+
+input replyMessageInput {
+  replyTargetId: String!
+  content: String!
+}

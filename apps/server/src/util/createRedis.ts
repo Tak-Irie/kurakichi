@@ -1,19 +1,16 @@
-import Redis from "ioredis";
-// import { RedisPubSub } from "graphql-redis-subscriptions";
+import { RedisPubSub } from 'graphql-redis-subscriptions';
+import Redis from 'ioredis';
 
-const uri = process.env.REDIS_URI || "redis_store:6379";
-const redisUri = `redis://${uri}`;
+const createRedis = (redisUrl: string): Redis => new Redis(redisUrl);
+const createRedisPubSub = (
+  publisherUrl: string,
+  subscriberUrl: string,
+): RedisPubSub => {
+  const pubsub = new RedisPubSub({
+    publisher: new Redis(publisherUrl),
+    subscriber: new Redis(subscriberUrl),
+  });
+  return pubsub;
+};
 
-const redis = new Redis(redisUri);
-
-// const pubRedis = new Redis(redisUrl);
-// const subRedis = new Redis(redisUrl);
-
-// const pubsub = new RedisPubSub({
-//   publisher: pubRedis,
-//   subscriber: subRedis,
-// });
-
-// export { redis, pubsub };
-
-export { redis };
+export { createRedis, createRedisPubSub };

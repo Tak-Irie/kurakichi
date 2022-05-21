@@ -1,0 +1,10 @@
+query GetUserMyInfo {
+  getUserByCookie {
+    ... on User {
+      ...UserPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}

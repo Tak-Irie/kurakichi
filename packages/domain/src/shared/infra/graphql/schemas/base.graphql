@@ -1,0 +1,65 @@
+type Base implements Node {
+  id: ID!
+  karte: Karte
+  dialogs: DialogConnection
+  fellows: FellowConnection
+}
+
+type Karte implements Node {
+  id: ID!
+}
+
+type Dialog implements Node {
+  id: ID!
+  content: String
+}
+
+type DialogConnection {
+  edges: [DialogEdges!]
+  pageInfo: PageInfo
+}
+
+type DialogEdges {
+  cursor: String!
+  node: Dialog!
+}
+
+type FellowConnection {
+  edges: [FellowEdge!]
+  pageInfo: PageInfo
+}
+
+type FellowEdge {
+  cursor: String!
+  node: User!
+  isBaseAdmin: Boolean
+}
+
+type Query {
+  getBase(id: String!): BaseResult
+  getKarte(id: String!): KarteResult
+  getDialogsByBaseId(id: String!): DialogsResult
+}
+
+type Mutation {
+  createBase: BaseResult
+  postDialog(input: postDialogInput!): PostDialogResult
+}
+
+type Subscription {
+  dialogPosted: Dialog
+}
+
+union BaseResult = Base | Errors
+union KarteResult = Karte | Errors
+union DialogResult = Dialog | Errors
+union DialogsResult = Dialogs | Errors
+union PostDialogResult = Dialog | Errors
+
+type Dialogs {
+  dialogs: [Dialog!]
+}
+
+input postDialogInput {
+  content: String!
+}
