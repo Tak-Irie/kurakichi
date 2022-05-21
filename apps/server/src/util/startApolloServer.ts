@@ -5,13 +5,7 @@ import { GraphQLSchema } from 'graphql';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import http from 'http';
 import { WebSocketServer } from 'ws';
-import {
-  APOLLO_SERVER_PORT,
-  APOLLO_STUDIO,
-  CORS_WEB,
-  GRAPHQL_PATH,
-  LOCAL_WEB,
-} from './Constants';
+import { APOLLO_STUDIO } from './Constants';
 import { createRedisPubSub } from './createRedis';
 
 import { getUserIdByCookie } from './getUserIdByCookie';
@@ -19,17 +13,27 @@ import { getUserIdByCookie } from './getUserIdByCookie';
 type ApolloSeverProps = {
   schema: GraphQLSchema;
   express: Express.Application;
+  serverPort: string;
+  corsWeb: string;
+  redisPubUrl: string;
+  redisSubUrl: string;
 };
 
-const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
+const startApolloServer = async ({
+  schema,
+  express,
+  corsWeb,
+  serverPort,
+  redisPubUrl,
+  redisSubUrl,
+}: ApolloSeverProps) => {
   const httpServer = http.createServer(express);
   const wsServer = new WebSocketServer({
     server: httpServer,
-    path: GRAPHQL_PATH,
+    path: '/graphql',
   });
   const serverCleanup = useServer({ schema }, wsServer);
-  const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
-  const redisPubSub = createRedisPubSub(redisUrl, redisUrl);
+  const redisPubSub = createRedisPubSub(redisPubUrl, redisSubUrl);
 
   const apolloServer = new ApolloServer({
     schema,
@@ -55,18 +59,16 @@ const startApolloServer = async ({ schema, express }: ApolloSeverProps) => {
 
   apolloServer.applyMiddleware({
     app: express,
-    path: GRAPHQL_PATH,
+    path: '/graphql',
     cors: {
-      origin: [CORS_WEB || LOCAL_WEB, APOLLO_STUDIO],
+      origin: [corsWeb, APOLLO_STUDIO],
       credentials: true,
     },
   });
 
-  const port = process.env.SERVER_PORT || APOLLO_SERVER_PORT;
-
-  httpServer.listen(port, () => {
-    console.log(`http ready:${port}`);
-    console.log(`gql ready:${port}${apolloServer.graphqlPath}`);
+  httpServer.listen(serverPort, () => {
+    console.log(`http ready:${serverPort}`);
+    console.log(`gql ready:${serverPort}${apolloServer.graphqlPath}`);
   });
 };
 

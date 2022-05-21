@@ -11,6 +11,10 @@ const main = async () => {
   await startApolloServer({
     schema,
     express,
+    serverPort: process.env.SERVER_PORT || '4000',
+    corsWeb: process.env.CORS_WEB || 'http://localhost:3000',
+    redisPubUrl: redisUrl,
+    redisSubUrl: redisUrl,
   });
   console.log('node_env', process.env.NODE_ENV);
   console.log('psql_url', process.env.PSQL_URL);

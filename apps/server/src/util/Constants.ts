@@ -1,8 +1,4 @@
 const APOLLO_SERVER_URI = 'https://kurakichi.org';
-const APOLLO_SERVER_PORT = 4000;
-const GRAPHQL_PATH = '/graphql';
-const CORS_WEB = undefined;
-const LOCAL_WEB = 'http://localhost:3000';
 const APOLLO_STUDIO = 'https://studio.apollographql.com';
 const COOKIE_NAME = process.env.COOKIE_NAME || 'sid';
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 365 * 10;
@@ -20,10 +16,6 @@ const SSO_REDIRECT_FAIL =
 
 export {
   APOLLO_SERVER_URI,
-  GRAPHQL_PATH,
-  APOLLO_SERVER_PORT,
-  CORS_WEB,
-  LOCAL_WEB,
   APOLLO_STUDIO,
   COOKIE_NAME,
   COOKIE_MAX_AGE,
