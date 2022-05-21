@@ -12,7 +12,7 @@ const wsLink = new GraphQLWsLink(
   //@ts-ignore
   typeof window !== 'undefined'
     ? createClient({
-        url: 'ws://localhost:4000/graphql',
+        url: process.env.GRAPHQL_WS_LINK || 'ws://localhost:4000/graphql',
       })
     : null,
 );
