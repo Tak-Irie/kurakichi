@@ -31,8 +31,8 @@
         "valueFrom": "${secret_manager_arn}:SERVER_PORT::"
       },
       {
-        "name": "CORS_NEXT",
-        "valueFrom": "${secret_manager_arn}:CORS_NEXT::"
+        "name": "CORS_WEB",
+        "valueFrom": "${secret_manager_arn}:CORS_WEB::"
       },
       {
         "name": "CRYPT_PASS",
