@@ -1,11 +1,18 @@
 {
+  "$schema": "https://turborepo.org/schema.json",
+  "baseBranch": "origin/main",
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**"]
+    },
+    "web#build": {
+      "dependsOn": ["^build", "$NEXT_PUBLIC_GRAPHQL_HTTP_LINK"],
+      "outputs": [".next/**"]
     },
     "test": {
       "dependsOn": ["^build"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "src/**/*.test.ts"],
       "outputs": ["coverage/**"]
     },
     "lint": {

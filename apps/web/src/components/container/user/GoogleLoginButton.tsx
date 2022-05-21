@@ -3,7 +3,7 @@ import { GoogleButton } from '../../presentational/atoms';
 
 const GoogleLoginButton: FC = () => {
   const GOOGLE_LOGIN =
-    process.env.GOOGLE_SSO || 'http://localhost:4000/google/login';
+    process.env.NEXT_PUBLIC_GOOGLE_SSO || 'http://localhost:4000/google/login';
   const handleClick = async () => {
     try {
       const res = await fetch(GOOGLE_LOGIN, {
