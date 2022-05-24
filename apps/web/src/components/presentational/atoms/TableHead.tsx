@@ -5,8 +5,7 @@ type TableHeadProps = {
   children?: ReactChild;
 };
 
-const TableHead: FC<TableHeadProps> = (props) => {
-  return (
+const TableHead: FC<TableHeadProps> = (props) => (
     <th
       className={`${
         props.left ? 'text-left pl-6' : 'text-center mx-auto'
@@ -15,6 +14,5 @@ const TableHead: FC<TableHeadProps> = (props) => {
       {props.children}
     </th>
   );
-};
 
 export { TableHead };

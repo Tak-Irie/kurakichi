@@ -123,7 +123,7 @@ export const OrgRegisterForm: FC = () => {
               register={register}
               minLength={7}
               maxLength={8}
-              helperText={'例: 100-0001 or 1000001'}
+              helperText="例: 100-0001 or 1000001"
               errMessage={errors.postcode && errors.postcode.message}
             />
           </span>

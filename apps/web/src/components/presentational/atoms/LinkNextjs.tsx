@@ -22,19 +22,17 @@ export const LinkNextjs: FC<LinkNextjsProps> = ({
   ariaLabel,
   ariaRole,
   onClick,
-}) => {
-  return (
-    <Link href={url} as={as} passHref>
-      <a
-        href="replace"
-        className={overwriteCSS}
-        aria-label={ariaLabel}
-        title={ariaLabel}
-        role={ariaRole}
-        onClick={onClick}
-      >
-        {labelOrElement}
-      </a>
-    </Link>
-  );
-};
+}) => (
+  <Link href={url} as={as} passHref>
+    <a
+      href="replace"
+      className={overwriteCSS}
+      aria-label={ariaLabel}
+      title={ariaLabel}
+      role={ariaRole}
+      onClick={onClick}
+    >
+      {labelOrElement}
+    </a>
+  </Link>
+);

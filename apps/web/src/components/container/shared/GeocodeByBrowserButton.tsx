@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 
-import { ButtonWithIcon, IconsWifi } from '../../presentational';
+import { ButtonWithIcon, IconsWifi } from '../../presentational/atoms';
 
 type GeocodeByBrowserButtonProps = {
   buttonLabel: string;

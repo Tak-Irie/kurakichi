@@ -9,10 +9,9 @@ import {
 import { FC } from 'react';
 import { SideBarItems } from '../atoms';
 
-export const SideBar: FC = () => {
-  return (
+export const SideBar: FC = () => (
     <div className="flex fixed inset-0 z-40" role="dialog" aria-modal="true">
-      <div className="fixed inset-0 bg-gray-600/75" aria-hidden="true"></div>
+      <div className="fixed inset-0 bg-gray-600/75" aria-hidden="true" />
       <div className="flex relative flex-col flex-1 w-full max-w-xs bg-white focus:outline-none">
         <div className="absolute top-0 right-0 pt-2 -mr-12">
           <button
@@ -66,7 +65,6 @@ export const SideBar: FC = () => {
           </a>
         </div>
       </div>
-      <div className="shrink-0 w-14" aria-hidden="true"></div>
+      <div className="shrink-0 w-14" aria-hidden="true" />
     </div>
   );
-};

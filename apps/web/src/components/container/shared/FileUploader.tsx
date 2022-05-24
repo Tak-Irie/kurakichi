@@ -7,6 +7,7 @@ type FileUploaderProps = {
 
 export const FileUploader: FC<FileUploaderProps> = () => {
   const [image, setImage] = useState<File>();
+  const [upload, { data }] = useUploadFileMutation();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -17,7 +18,6 @@ export const FileUploader: FC<FileUploaderProps> = () => {
   };
 
   const handleClick = async () => {
-    const [upload, { data, loading, error }] = useUploadFileMutation();
     if (image) {
       try {
         await upload({
@@ -35,7 +35,7 @@ export const FileUploader: FC<FileUploaderProps> = () => {
   return (
     <form className="flex flex-col py-10 space-y-5 max-w-sm">
       <input type="file" name="avatar" onChange={handleChange} />
-      <button onClick={handleClick} />
+      <button aria-label="uploadImage" type="submit" onClick={handleClick} />
     </form>
   );
 };

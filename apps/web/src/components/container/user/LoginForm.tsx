@@ -58,8 +58,7 @@ export const LoginForm: FC = () => {
   }
 
   return (
-    <>
-      <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
+    <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
         <Input<UserLoginInput>
           type="email"
           fieldLabel="メールアドレス"
@@ -89,6 +88,5 @@ export const LoginForm: FC = () => {
           />
         </div>
       </Form>
-    </>
   );
 };

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-props-no-spreading */
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -53,7 +55,7 @@ export const ImageHeroChangeable: FC<ImageHeroDroppableProps> = ({
         >
           <input {...getInputProps()} />
           <label className="flex flex-col justify-center items-center w-full h-full rounded-3xl border cursor-pointer">
-            <IconsDocumentAdd overwriteCSS={'w-16 h-16 text-gray-400'} />
+            <IconsDocumentAdd overwriteCSS="w-16 h-16 text-gray-400" />
           </label>
         </div>
       </div>

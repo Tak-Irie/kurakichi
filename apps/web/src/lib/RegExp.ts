@@ -15,7 +15,7 @@ const ULIDRegExp = /^[0-9A-Z]{26}/;
 
 const GeoCodeRegExp = /^-{0,1}[0-9]{1,3}\.[0-9]{0,8}$/;
 
-//** -_.@!* */
+//* * -_.@!* */
 const PasswordRegExp = /^[0-9A-Za-z\-_.@!*]{8,64}$/;
 
 const JapaneseTextRegExp =

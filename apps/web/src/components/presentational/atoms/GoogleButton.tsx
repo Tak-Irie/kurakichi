@@ -5,8 +5,7 @@ type GoogleButtonProps = {
 };
 
 // design guide https://developer.yahoo.co.jp/yconnect/loginbuttons.html
-const GoogleButton: FC<GoogleButtonProps> = ({ onClick }) => {
-  return (
+const GoogleButton: FC<GoogleButtonProps> = ({ onClick }) => (
     <button className="google-button" onClick={onClick}>
       <span className="google-icon-wrapper">
         <img
@@ -20,7 +19,6 @@ const GoogleButton: FC<GoogleButtonProps> = ({ onClick }) => {
       {/* </span> */}
     </button>
   );
-};
 
 export { GoogleButton };
 {

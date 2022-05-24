@@ -18,8 +18,7 @@ export const ButtonBig: FC<ButtonProps> = ({
   disabled,
   label,
   color = 'gray',
-}) => {
-  return (
+}) => (
     <div className={`${disabled ? 'opacity-50' : ''}`}>
       <button
         className={`px-4 py-2 border border-gray-200 text-sm rounded-md  text-${color}-700 bg-${color}-50 hover:bg-${color}-100 shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-100`}
@@ -31,7 +30,6 @@ export const ButtonBig: FC<ButtonProps> = ({
       </button>
     </div>
   );
-};
 
 export const ButtonWithIcon: FC<ButtonWithIconProps> = ({
   type,
@@ -39,8 +37,7 @@ export const ButtonWithIcon: FC<ButtonWithIconProps> = ({
   icon,
   disabled,
   onClick,
-}) => {
-  return (
+}) => (
     <div className={`${disabled ? 'opacity-50' : ''}`}>
       <button
         type={type}
@@ -57,4 +54,3 @@ export const ButtonWithIcon: FC<ButtonWithIconProps> = ({
       </button>
     </div>
   );
-};

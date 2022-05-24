@@ -32,7 +32,7 @@ export const ReplyInquiryForm: FC<ResponseInquiryProps> = ({
         variables: {
           input: {
             content: values.textInput,
-            replyTargetId: replyTargetId,
+            replyTargetId,
           },
         },
       });

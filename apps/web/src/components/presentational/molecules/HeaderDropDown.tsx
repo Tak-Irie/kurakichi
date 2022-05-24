@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
+import { HeaderList } from '../../container/shared/HeaderList';
 import { HamburgerMenuSVG, XMarkSVG } from '../atoms';
-import { HeaderList } from '../atoms/HeaderList';
 
 const HeaderDropDown: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -8,6 +8,7 @@ const HeaderDropDown: FC = () => {
   return (
     <>
       <button
+        type="button"
         aria-label="Open Menu"
         title="Open Menu"
         className="p-2 -mr-1 rounded focus:outline-none transition duration-200"
@@ -21,6 +22,7 @@ const HeaderDropDown: FC = () => {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <button
+                  type="button"
                   aria-label="Close Menu"
                   title="Close Menu"
                   className="top-0 right-0 p-2 hover:bg-gray-200 focus:bg-gray-200 rounded focus:outline-none transition duration-200"

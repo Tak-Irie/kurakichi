@@ -18,6 +18,7 @@ import {
 import { DEFAULT_MAP_PIN } from '../lib/Constants';
 
 const Index: NextPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);
   // const { data, loading, error } = useGetOrgsForMapQuery({
   //   ssr: false,
@@ -70,16 +71,15 @@ const Index: NextPage = () => {
       <div className="col-start-2 col-end-12 p-5 my-10 bg-white border border-gray-200 shadow-sm">
         <div className="flex justify-items-start">
           <TextH2 content="公共サービスは沢山あります！" />
-          <span className="flex items-center">
+          <div className="flex items-center">
             <HelperPop
               text={
                 '日本には活用されていない公共サービスが沢山あります\nどんなものがあるか見てみましょう！\n\n※下記の例は一部です\n※実際に利用する際は気軽に役所やプロに相談してみましょう'
               }
             />
-          </span>
+          </div>
         </div>
         <ArticlesWelfareGuide />
-        <div></div>
       </div>
     </div>
   );

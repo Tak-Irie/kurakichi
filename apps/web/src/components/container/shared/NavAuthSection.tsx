@@ -5,7 +5,6 @@ import { FC } from 'react';
 import { useGetUserMyInfoQuery } from '../../../graphql';
 import { isServer } from '../../../lib';
 import { FAIL_TO_FETCH } from '../../../lib/Constants';
-import { LogoutMenuItem } from '../../container';
 import {
   AvatarSmall,
   ButtonBig,
@@ -13,8 +12,12 @@ import {
   IconsUsers,
   IconsVerticalDots,
   LoadingSpinner,
-} from '../atoms';
-import { DropDownMenu2, DropDownMenuItem } from '../molecules';
+} from '../../presentational/atoms';
+import {
+  DropDownMenu2,
+  DropDownMenuItem,
+} from '../../presentational/molecules';
+import { LogoutMenuItem } from '../user/LogoutButton';
 
 const NavAuthSection: FC = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
@@ -49,16 +52,16 @@ const NavAuthSection: FC = () => {
     );
 
   if (data?.getUserByCookie?.__typename === 'User') {
-    const _user = data.getUserByCookie;
-    const _org = idx(_user, (d) => d.orgs.edges);
+    const authorizedUser = data.getUserByCookie;
+    const belongedOrg = idx(authorizedUser, (d) => d.orgs.edges);
     return (
       <div className="z-10">
         <DropDownMenu2
           menuElement={
             <AvatarSmall
-              src={_user.avatarUrl || FAIL_TO_FETCH}
+              src={authorizedUser.avatarUrl || FAIL_TO_FETCH}
               alt="ユーザーアバター"
-              notification={true}
+              notification
             />
           }
           menuIcon={<IconsVerticalDots />}
@@ -69,19 +72,17 @@ const NavAuthSection: FC = () => {
                 label="マイページ"
                 icon={<IconsUser />}
               />
-              {_org
-                ? _org.map((org) => {
-                    return (
-                      <div key={org.node.id}>
-                        <DropDownMenuItem
-                          linkUrl="/org/myorg/[id]"
-                          linkAs={`/org/myorg/${org.node.id}`}
-                          label={org.node.name}
-                          icon={<IconsUsers />}
-                        />
-                      </div>
-                    );
-                  })
+              {belongedOrg
+                ? belongedOrg.map((org) => (
+                    <div key={org.node.id}>
+                      <DropDownMenuItem
+                        linkUrl="/org/myorg/[id]"
+                        linkAs={`/org/myorg/${org.node.id}`}
+                        label={org.node.name}
+                        icon={<IconsUsers />}
+                      />
+                    </div>
+                  ))
                 : null}
               <LogoutMenuItem />
             </>

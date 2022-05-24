@@ -1,11 +1,9 @@
 import type { NextPage } from 'next';
 
-const AnswerToQuestionPage: NextPage = () => {
-  return (
+const AnswerToQuestionPage: NextPage = () => (
     <div>
       <p>placer</p>
     </div>
   );
-};
 
 export default AnswerToQuestionPage;

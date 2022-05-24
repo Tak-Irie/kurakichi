@@ -1,5 +1,5 @@
 import idx from 'idx';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import Link from 'next/link';
 import {
   ButtonWithIcon,
@@ -13,7 +13,7 @@ import {
 } from '../../components/presentational/templates';
 import { useGetUserMyInfoQuery } from '../../graphql';
 
-const userMyPage: NextPage = () => {
+const MyPage: NextPage = () => {
   // TODO:CQRS
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
@@ -28,14 +28,14 @@ const userMyPage: NextPage = () => {
   }
   if (data?.getUserByCookie?.__typename === 'User') {
     // console.log('MyPageData:', data.me.user);
-    const _user = data.getUserByCookie;
-    const messages = idx(_user, (idx) => idx.messages.edges);
+    const fetchedUser = data.getUserByCookie;
+    const messages = idx(fetchedUser, (accessor) => accessor.messages.edges);
 
     return (
       <UserTemplate
-        avatar={_user.avatarUrl || ''}
-        image={_user.heroImageUrl || ''}
-        userName={_user.name || ''}
+        avatar={fetchedUser.avatarUrl || ''}
+        image={fetchedUser.heroImageUrl || ''}
+        userName={fetchedUser.name || ''}
         headerButtons={
           <>
             <Link href="/user/setting" passHref>
@@ -60,10 +60,10 @@ const userMyPage: NextPage = () => {
         }
         pageContents={
           <UserMyPage
-            description={_user.selfIntro || ''}
+            description={fetchedUser.selfIntro || ''}
             orgs={[]}
             messages={messages?.map((_) => _.node) || []}
-            email={_user.email || ''}
+            email={fetchedUser.email || ''}
             bases={[]}
           />
         }
@@ -73,4 +73,4 @@ const userMyPage: NextPage = () => {
   return <p>something wrong</p>;
 };
 
-export default userMyPage;
+export default MyPage;

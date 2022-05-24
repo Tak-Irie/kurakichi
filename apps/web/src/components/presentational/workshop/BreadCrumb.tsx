@@ -4,8 +4,7 @@ type BreadCrumbProps = {
   some?: string;
 };
 
-const BreadCrumb: FC<BreadCrumbProps> = () => {
-  return (
+const BreadCrumb: FC<BreadCrumbProps> = () => (
     <nav
       className="flex items-start py-3 px-4 sm:px-6 lg:px-8 xl:hidden"
       aria-label="Breadcrumb"
@@ -31,6 +30,5 @@ const BreadCrumb: FC<BreadCrumbProps> = () => {
       </a>
     </nav>
   );
-};
 
 export { BreadCrumb };

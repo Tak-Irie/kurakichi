@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-props-no-spreading */
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 
 import { useDropzone } from 'react-dropzone';
@@ -50,7 +52,7 @@ export const AvatarChangeable: FC<AvatarChangeableProps> = ({
       >
         <input {...getInputProps()} />
         <label className="group flex absolute z-10 flex-col justify-center items-center py-6 px-4 w-16 h-16 rounded-full border cursor-pointer">
-          <IconsDocumentAdd overwriteCSS={'w-8 h-8 text-gray-400'} />
+          <IconsDocumentAdd overwriteCSS="w-8 h-8 text-gray-400" />
         </label>
       </div>
     </div>

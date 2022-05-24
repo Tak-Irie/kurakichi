@@ -28,6 +28,7 @@ module.exports = {
     },
   },
   rules: {
+    'no-underscore-dangle': 'warn',
     'import/prefer-default-export': 'off',
     // react
     'react/function-component-definition': [
@@ -37,7 +38,9 @@ module.exports = {
       },
     ],
     'react/jsx-uses-react': 'off',
+    'react/jsx-props-no-spreading': 'warn',
     'react/react-in-jsx-scope': 'off',
+    'react/require-default-props': 'off',
 
     // next
     '@next/next/no-html-link-for-pages': 'off',

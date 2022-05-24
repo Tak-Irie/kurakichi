@@ -75,8 +75,7 @@ export const NotificationSuccess: FC<NotificationProps> = ({
   content,
   onClick,
   showingMS,
-}) => {
-  return (
+}) => (
     <Notification
       onClick={onClick}
       content={content}
@@ -86,15 +85,13 @@ export const NotificationSuccess: FC<NotificationProps> = ({
       showingMS={showingMS}
     />
   );
-};
 
 export const NotificationCaution: FC<NotificationProps> = ({
   label = 'Caution!',
   content,
   onClick,
   showingMS,
-}) => {
-  return (
+}) => (
     <Notification
       onClick={onClick}
       content={content}
@@ -104,15 +101,13 @@ export const NotificationCaution: FC<NotificationProps> = ({
       showingMS={showingMS}
     />
   );
-};
 
 export const NotificationAlert: FC<NotificationProps> = ({
   label = 'Alert!',
   content,
   onClick,
   showingMS,
-}) => {
-  return (
+}) => (
     <Notification
       onClick={onClick}
       content={content}
@@ -122,4 +117,3 @@ export const NotificationAlert: FC<NotificationProps> = ({
       showingMS={showingMS}
     />
   );
-};

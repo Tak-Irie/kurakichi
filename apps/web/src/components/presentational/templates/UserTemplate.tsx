@@ -18,28 +18,26 @@ export const UserTemplate: FC<UserTemplateProps> = ({
   image,
   userName,
   settingHeader = false,
-}) => {
-  return (
-    <div className="grid grid-cols-12 pb-10">
-      <div className="col-span-full">
-        {settingHeader ? (
-          <ProfileHeaderSetting
-            avatarSrc={avatar}
-            imageSrc={image}
-            buttons={headerButtons}
-          />
-        ) : (
-          <ProfileHeader
-            avatarSrc={avatar}
-            imageSrc={image}
-            buttons={headerButtons}
-          />
-        )}
-      </div>
-      <div className="col-start-3">
-        <Text2xl content={userName} />
-      </div>
-      <div className="col-start-3 col-end-11 mt-2">{pageContents}</div>
+}) => (
+  <div className="grid grid-cols-12 pb-10">
+    <div className="col-span-full">
+      {settingHeader ? (
+        <ProfileHeaderSetting
+          avatarSrc={avatar}
+          imageSrc={image}
+          buttons={headerButtons}
+        />
+      ) : (
+        <ProfileHeader
+          avatarSrc={avatar}
+          imageSrc={image}
+          buttons={headerButtons}
+        />
+      )}
     </div>
-  );
-};
+    <div className="col-start-3">
+      <Text2xl content={userName} />
+    </div>
+    <div className="col-start-3 col-end-11 mt-2">{pageContents}</div>
+  </div>
+);

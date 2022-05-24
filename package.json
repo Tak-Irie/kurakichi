@@ -17,6 +17,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
+    "dev:server": "yarn workspace @kurakichi/server dev",
+    "dev:web": "yarn workspace @kurakichi/web dev",
     "gen:gql": "graphql-codegen",
     "gen:gql:prod": "graphql-codegen --config codegen.prod.yml",
     "gen:prisma:migrate": "yarn workspace @kurakichi/server migrate",

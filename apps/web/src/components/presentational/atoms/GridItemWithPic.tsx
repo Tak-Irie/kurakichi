@@ -20,7 +20,7 @@ export const GridItemWithPic: FC<GridItemWithPicProps> = (props) => {
       <div className="flex-1 min-w-0">
         <Link href={linkUrl} as={linkAs} passHref>
           <a href="replace" className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true"></span>
+            <span className="absolute inset-0" aria-hidden="true" />
             <p className="text-sm font-medium text-gray-900">{name}</p>
             <p className="text-sm text-gray-500 truncate">{description}</p>
           </a>

@@ -6,8 +6,7 @@ import {
   TextSmall,
 } from '../../components/presentational/atoms';
 
-const ForgotPasswordPage: NextPage = () => {
-  return (
+const ForgotPasswordPage: NextPage = () => (
     <div className="grid grid-cols-12">
       <div className="col-start-4 col-end-10 p-8 my-4 bg-white shadow">
         <div className="grid grid-cols-4">
@@ -33,6 +32,5 @@ const ForgotPasswordPage: NextPage = () => {
       </div>
     </div>
   );
-};
 
 export default ForgotPasswordPage;

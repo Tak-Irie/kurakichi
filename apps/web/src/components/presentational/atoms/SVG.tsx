@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-export const LoadingSpinnerSVG: FC = () => {
-  return (
+export const LoadingSpinnerSVG: FC = () => (
     <svg
       className="mr-3 w-5 h-5 animate-spin"
       stroke="currentColor"
@@ -11,10 +10,8 @@ export const LoadingSpinnerSVG: FC = () => {
       <path d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z" />
     </svg>
   );
-};
 
-export const XMarkSVG: FC = () => {
-  return (
+export const XMarkSVG: FC = () => (
     <svg className="w-5 text-gray-600 bg-black" viewBox="0 0 24 24">
       <path
         fill="currentColor"
@@ -22,10 +19,8 @@ export const XMarkSVG: FC = () => {
       />
     </svg>
   );
-};
 
-export const LightningSVG: FC = () => {
-  return (
+export const LightningSVG: FC = () => (
     <div className="mr-2">
       <svg
         className="w-6 h-6 sm:w-8 sm:h-8"
@@ -42,10 +37,8 @@ export const LightningSVG: FC = () => {
       </svg>
     </div>
   );
-};
 
-export const DownwardCurveSVG: FC = () => {
-  return (
+export const DownwardCurveSVG: FC = () => (
     <div className="absolute inset-x-0 bottom-0">
       <svg
         viewBox="0 0 224 12"
@@ -57,10 +50,8 @@ export const DownwardCurveSVG: FC = () => {
       </svg>
     </div>
   );
-};
 
-export const HamburgerMenuSVG: FC = () => {
-  return (
+export const HamburgerMenuSVG: FC = () => (
     <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
       <path
         fill="currentColor"
@@ -76,10 +67,8 @@ export const HamburgerMenuSVG: FC = () => {
       />
     </svg>
   );
-};
 
-export const DownArrowInCircleSVG: FC = () => {
-  return (
+export const DownArrowInCircleSVG: FC = () => (
     <Link href="/">
       <button
         aria-label="Scroll down"
@@ -97,4 +86,3 @@ export const DownArrowInCircleSVG: FC = () => {
       </button>
     </Link>
   );
-};

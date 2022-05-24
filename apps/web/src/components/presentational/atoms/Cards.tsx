@@ -43,8 +43,7 @@ export const SmallCard: FC<CardProps> = ({
   image = undefined,
   id,
   children,
-}) => {
-  return (
+}) => (
     <li key={id}>
       <div className="flex items-center p-3 m-2 max-w-lg bg-gray-200 border-2 border-red-900">
         <div className="flex justify-center items-center mr-5 w-16 h-16 bg-yellow-100 rounded-full">
@@ -70,7 +69,6 @@ export const SmallCard: FC<CardProps> = ({
       </div>
     </li>
   );
-};
 
 export const CardWithPick: FC<CardProps> = ({
   content,
@@ -79,8 +77,7 @@ export const CardWithPick: FC<CardProps> = ({
   linkUrl = '/',
   linkAs = '/',
   title,
-}) => {
-  return (
+}) => (
     <div className="flex relative items-center py-5 px-6 space-x-3 bg-white rounded-lg border border-gray-300 hover:border-gray-400 focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 shadow-sm">
       <div className="shrink-0">
         <img className="w-10 h-10 rounded-full" src={image} alt={imageAlt} />
@@ -88,7 +85,7 @@ export const CardWithPick: FC<CardProps> = ({
       <div className="flex-1 min-w-0">
         <Link href={linkUrl} as={linkAs} passHref>
           <a href="replace" className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true"></span>
+            <span className="absolute inset-0" aria-hidden="true" />
             <p className="text-sm font-medium text-gray-900">{title}</p>
             <p className="text-sm text-gray-500 truncate">{content}</p>
           </a>
@@ -96,4 +93,3 @@ export const CardWithPick: FC<CardProps> = ({
       </div>
     </div>
   );
-};

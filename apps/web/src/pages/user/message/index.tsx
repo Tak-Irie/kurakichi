@@ -6,13 +6,13 @@ import {
   IconsUser,
   LoadingSpinner,
 } from '../../../components/presentational/atoms';
-import { TableMessage } from '../../../components/presentational/molecules';
+import { TableMessage } from '../../../components/presentational/organisms';
 import { UserTemplate } from '../../../components/presentational/templates';
 import { useGetMessagesByCookieQuery } from '../../../graphql';
-import { isLoggedIn } from '../../../lib';
+import { useUserStatus } from '../../../lib';
 
 const MessageBoxPage: NextPage = () => {
-  const { cachedUser, loadingCache } = isLoggedIn();
+  const { cachedUser, loadingCache } = useUserStatus();
 
   const { data, loading, error } = useGetMessagesByCookieQuery({ ssr: false });
   // console.log('user:', userData.getUserByCookie.user);
@@ -26,7 +26,7 @@ const MessageBoxPage: NextPage = () => {
     cachedUser?.__typename === 'User' &&
     data?.getMessagesByCookie?.__typename === 'Messages'
   ) {
-    const messages = data.getMessagesByCookie.messages;
+    const { messages } = data.getMessagesByCookie;
 
     return (
       <UserTemplate

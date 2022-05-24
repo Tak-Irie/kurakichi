@@ -19,18 +19,14 @@ const AboutUsPage: NextPage = () => {
   if (data?.getOrgs?.__typename === 'Orgs') {
     const a = data.getOrgs.orgs;
     return (
-      <>
-        <li>
-          {a?.map((org) => {
-            return (
-              <ol>
-                <p>{org.id}</p>
-                <p>{org.name}</p>
-              </ol>
-            );
-          })}
-        </li>
-      </>
+      <li>
+        {a?.map((org) => (
+          <ol>
+            <p>{org.id}</p>
+            <p>{org.name}</p>
+          </ol>
+        ))}
+      </li>
     );
   }
 

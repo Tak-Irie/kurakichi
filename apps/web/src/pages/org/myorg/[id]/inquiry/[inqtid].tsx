@@ -3,11 +3,11 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
+import { InquiryTree } from '../../../../../components/container/org/InquiryTree';
 import {
   ButtonWithIcon,
   IconsMail,
   IconsUsers,
-  InquiryTree,
   LoadingSpinner,
   OrgTemplate,
 } from '../../../../../components/presentational';
@@ -44,13 +44,13 @@ const InquiryTreePrivatePage: NextPage = () => {
     orgData?.getOrgInfoByMemberCookieAndId?.__typename === 'Org'
   ) {
     const inqTree = data.getInquiriesByTreeId;
-    const _org = orgData.getOrgInfoByMemberCookieAndId;
-    const inquiries = idx(inqTree, (idx) => idx.leaves.edges);
+    const fetchedOrg = orgData.getOrgInfoByMemberCookieAndId;
+    const inquiries = idx(inqTree, (processor) => processor.leaves.edges);
     return (
       <OrgTemplate
-        avatar={_org.avatarUrl || FAIL_TO_FETCH}
-        image={_org.heroImageUrl || FAIL_TO_FETCH}
-        orgName={_org.name || FAIL_TO_FETCH}
+        avatar={fetchedOrg.avatarUrl || FAIL_TO_FETCH}
+        image={fetchedOrg.heroImageUrl || FAIL_TO_FETCH}
+        orgName={fetchedOrg.name || FAIL_TO_FETCH}
         headerButtons={
           <>
             <Link href="/org/myorg/[id]" as={`/org/myorg/${orgId}`} passHref>
@@ -78,12 +78,13 @@ const InquiryTreePrivatePage: NextPage = () => {
             </Link>
           </>
         }
-        pageContents={
+        pageTabs={[]}
+        pageContents={[
           <InquiryTree
-            orgId={_org.id}
+            orgId={fetchedOrg.id}
             inquiries={inquiries?.map((inq) => inq.node) || []}
-          />
-        }
+          />,
+        ]}
       />
     );
   }
