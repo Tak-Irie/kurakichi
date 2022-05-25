@@ -10,7 +10,7 @@ const Layout: FC<LayoutProps> = ({ children }) => (
   <>
     <NavAlpha />
     <NavBar />
-    <main className="bg-green-50">{children}</main>
+    <main className="h-max bg-green-50">{children}</main>
     <Footer />
   </>
 );

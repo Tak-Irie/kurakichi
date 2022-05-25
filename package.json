@@ -26,7 +26,7 @@
     "gen:prisma:migrate:create": "yarn workspace @kurakichi/server migrate:create",
     "gen:prisma:migrate:status": "yarn workspace @kurakichi/server migrate:status",
     "gen:prisma:generate": "yarn workspace @kurakichi/server generate",
-    "gen:prisma:seed": "yarn workspace @kurakichi/server seed",
+    "gen:prisma:seed": "yarn workspace @kurakichi/server seed:dev",
     "gen:prisma:seed:prod": "yarn workspace @kurakichi/server prisma db seed"
   },
   "devDependencies": {

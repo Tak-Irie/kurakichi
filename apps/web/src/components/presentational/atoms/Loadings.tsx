@@ -26,7 +26,9 @@ export const LoadingSpinner: FC<LoadingProps> = ({
   height = 'h-10',
   width = 'w-10',
 }) => (
-  <svg
-    className={`animate-spin flex-shrink rounded-full ${height} ${width} border-t-2 border-b-2 border-${color}-900`}
-  />
+  <div>
+    <svg
+      className={`animate-spin flex-shrink rounded-full ${height} ${width} border-t-2 border-b-2 border-${color}-900`}
+    />
+  </div>
 );

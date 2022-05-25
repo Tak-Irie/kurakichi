@@ -10,18 +10,18 @@ export const NavAlpha: FC = () => (
     />
     <div className="hidden ml-5 space-x-2 w-auto sm:flex">
       <LinkNextjs
-        labelOrElement="製作動機"
-        url="/alpha/motivation"
+        labelOrElement="ビジョンとミッション"
+        url="/alpha/vision-mission"
         overwriteCSS="hover:bg-red-300 transition duration-300  rounded px-1"
       />
       <LinkNextjs
-        labelOrElement="目的"
-        url="/alpha/goal"
+        labelOrElement="事業目標と計画"
+        url="/alpha/business-goal"
         overwriteCSS="hover:bg-red-300 transition duration-300  rounded px-1"
       />
       <LinkNextjs
-        labelOrElement="実装ロードマップ"
-        url="/alpha/load-map"
+        labelOrElement="開発ロードマップ"
+        url="/alpha/development-roadmap"
         overwriteCSS="hover:bg-red-300 transition duration-300  rounded px-1"
       />
     </div>

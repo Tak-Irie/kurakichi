@@ -1,5 +1,5 @@
-import { useGetOrgsForMapQuery } from '@src/graphql';
 import { NextPage } from 'next';
+import { useGetOrgsForMapQuery } from '../graphql';
 
 const AboutUsPage: NextPage = () => {
   const { error, loading, data } = useGetOrgsForMapQuery();
@@ -21,7 +21,7 @@ const AboutUsPage: NextPage = () => {
     return (
       <li>
         {a?.map((org) => (
-          <ol>
+          <ol key={org.id}>
             <p>{org.id}</p>
             <p>{org.name}</p>
           </ol>

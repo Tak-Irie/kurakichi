@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 import { HeaderList } from './HeaderList';
+import { NavAuthSection } from './NavAuthSection';
 
 export const NavBar: FC = () => (
   <div className="grid grid-cols-12 py-5 border border-gray-200">
@@ -24,24 +25,20 @@ export const NavBar: FC = () => (
       </div>
     </div>
     <ul className="flex col-start-5 col-end-11 justify-around items-center space-x-8">
-      <HeaderList
-        linkUrl="/howto"
-        ariaLabel="playground"
-        linkLabel="つかいかた"
-      />
+      <HeaderList linkUrl="/howto" ariaLabel="howto" linkLabel="つかいかた" />
       <HeaderList
         linkUrl="/about-us"
         ariaLabel="aboutUs"
         linkLabel="くらきちについて"
       />
       <HeaderList
-        linkUrl="/for-pro"
-        ariaLabel="forPros"
+        linkUrl="/for-expert"
+        ariaLabel="forExpert"
         linkLabel="福祉職の皆様へ"
       />
     </ul>
-    {/* <span className="flex  col-start-12 justify-end mr-2">
-        <NavAuthSection />
-      </span> */}
+    <span className="flex  col-start-12 justify-end mr-2">
+      <NavAuthSection />
+    </span>
   </div>
 );

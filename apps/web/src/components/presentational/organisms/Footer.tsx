@@ -48,9 +48,9 @@ export const Footer: FC = () => (
           <FooterItems
             label="くらきちについて"
             items={[
-              { label: '目指すもの', url: '/info/goal' },
+              { label: '目指すもの', url: '/info/purpose' },
               { label: '運営者', url: '/info/committee' },
-              { label: 'FAQ', url: '/info/faq' },
+              { label: 'Q&A', url: '/info/question-and-answer' },
             ]}
           />
           <FooterItems

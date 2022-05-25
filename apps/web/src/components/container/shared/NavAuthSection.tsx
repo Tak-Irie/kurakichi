@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { useGetUserMyInfoQuery } from '../../../graphql';
-import { isServer } from '../../../lib';
 import { FAIL_TO_FETCH } from '../../../lib/Constants';
 import {
   AvatarSmall,
@@ -23,7 +22,6 @@ const NavAuthSection: FC = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-only',
     ssr: false,
-    skip: isServer(),
   });
 
   if (loading)
