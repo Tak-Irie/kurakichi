@@ -37,7 +37,7 @@ const OrgSetting: NextPage = () => {
         avatar={avatarUrl || FAIL_TO_FETCH}
         image={heroImageUrl || FAIL_TO_FETCH}
         orgName={name || FAIL_TO_FETCH}
-        settingHeader={true}
+        settingHeader
         headerButtons={
           <Link href="/org/myorg/[id]" as={`/org/myorg/${id}`} passHref>
             <a href="replace">
@@ -49,7 +49,8 @@ const OrgSetting: NextPage = () => {
             </a>
           </Link>
         }
-        pageContents={
+        pageTabs={[]}
+        pageContents={[
           <UpdateOrgProfileForm
             exDescription={description || FAIL_TO_FETCH}
             exEmail={email || FAIL_TO_FETCH}
@@ -58,8 +59,8 @@ const OrgSetting: NextPage = () => {
             exPhoneNumber={phoneNumber || FAIL_TO_FETCH}
             exName={name || FAIL_TO_FETCH}
             orgId={id}
-          />
-        }
+          />,
+        ]}
       />
     );
   }

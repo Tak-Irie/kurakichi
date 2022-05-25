@@ -1,7 +1,7 @@
 import { Path, UseFormRegister } from 'react-hook-form';
+import { PopOnIcon } from '../atoms';
 
-import { PopOnIcon } from '..';
-import { IconsCheckCircle, IconsQuestion } from './Icons';
+import { IconsCheckCircle, IconsQuestion } from '../atoms/Icons';
 
 export type InputValue = {
   [key: string]: string;

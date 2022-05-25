@@ -12,7 +12,7 @@ import {
 import { UserTemplate } from '../../components/presentational/templates';
 import { useGetUserMyInfoQuery } from '../../graphql/generated';
 
-const userSettingPage: NextPage = () => {
+const UserSettingPage: NextPage = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
   });
@@ -23,13 +23,13 @@ const userSettingPage: NextPage = () => {
     return <p>{data.getUserByCookie.applicationError?.message}</p>;
 
   if (data?.getUserByCookie?.__typename === 'User') {
-    const _user = data.getUserByCookie;
+    const user = data.getUserByCookie;
     return (
       <UserTemplate
-        avatar={_user.avatarUrl || ''}
-        image={_user.heroImageUrl || ''}
-        userName={_user.name || ''}
-        settingHeader={true}
+        avatar={user.avatarUrl || ''}
+        image={user.heroImageUrl || ''}
+        userName={user.name || ''}
+        settingHeader
         headerButtons={
           <Link href="/user/mypage" passHref>
             <a href="replace">
@@ -45,9 +45,9 @@ const userSettingPage: NextPage = () => {
           <>
             <div className="col-start-3 col-end-11 mt-10">
               <UpdateUserProfile
-                exDescription={_user.selfIntro || ''}
-                exEmail={_user.email || ''}
-                exName={_user.name || ''}
+                exDescription={user.selfIntro || ''}
+                exEmail={user.email || ''}
+                exName={user.name || ''}
               />
             </div>
             <div className="col-start-3 col-end-11 mt-10">
@@ -60,4 +60,4 @@ const userSettingPage: NextPage = () => {
   }
   return <LoadingSpinner />;
 };
-export default userSettingPage;
+export default UserSettingPage;

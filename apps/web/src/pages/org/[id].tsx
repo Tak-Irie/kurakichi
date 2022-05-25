@@ -1,10 +1,8 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-
 import {
   ButtonWithIcon,
-  Disclosure,
   FeedbackCaution,
   IconsCaution,
   IconsMail,
@@ -14,9 +12,9 @@ import {
   OrgService,
   OrgTemplate,
   PopOnIcon,
-  Tabs,
   TextSmall,
 } from '../../components/presentational';
+import { Disclosure } from '../../components/presentational/molecules';
 import {
   useGetOrgPublicInfoByIdQuery,
   useGetUserMyInfoQuery,
@@ -26,7 +24,6 @@ const OrgInfoPage: NextPage = () => {
   const router = useRouter();
   const orgId = router.query.id as string;
   const [openedInqForm, setOpenedInqForm] = useState(false);
-  const [shownTab, setShownTab] = useState(0);
 
   const { data, loading, error } = useGetOrgPublicInfoByIdQuery({
     variables: { orgId },
@@ -41,12 +38,12 @@ const OrgInfoPage: NextPage = () => {
     return <p>{data.getOrg.applicationError?.message}</p>;
 
   if (data?.getOrg?.__typename === 'Org') {
-    const _org = data.getOrg;
+    const fetchedOrg = data.getOrg;
     return (
       <OrgTemplate
-        avatar={_org.avatarUrl || ''}
-        image={_org.heroImageUrl || ''}
-        orgName={_org.name || ''}
+        avatar={fetchedOrg.avatarUrl || ''}
+        image={fetchedOrg.heroImageUrl || ''}
+        orgName={fetchedOrg.name || ''}
         headerButtons={
           userData?.getUserByCookie?.__typename === 'User' ? (
             <Disclosure
@@ -78,34 +75,26 @@ const OrgInfoPage: NextPage = () => {
             </div>
           )
         }
-        pageTabs={
-          <Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />
-        }
-        pageContents={
-          shownTab === 0 ? (
-            <OrgProfile org={_org} />
-          ) : shownTab === 1 ? (
-            <OrgService
-              title="事業紹介"
-              content={
-                <TextSmall
-                  content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n・※ 編集機能を現在作成中です`}
-                />
-              }
-            />
-          ) : shownTab === 2 ? (
-            <OrgArticle
-              title="記事"
-              content={
-                <TextSmall
-                  content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
-                />
-              }
-            />
-          ) : (
-            <p>error</p>
-          )
-        }
+        pageTabs={['概要', '事業', '記事']}
+        pageContents={[
+          <OrgProfile org={fetchedOrg} />,
+          <OrgService
+            title="事業紹介"
+            content={
+              <TextSmall
+                content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n・※ 編集機能を現在作成中です`}
+              />
+            }
+          />,
+          <OrgArticle
+            title="記事"
+            content={
+              <TextSmall
+                content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+              />
+            }
+          />,
+        ]}
       />
     );
   }

@@ -5,8 +5,7 @@ type GridTemplateProps = {
   gridConf?: string;
 };
 
-export const GridTemplate: FC<GridTemplateProps> = (props) => {
-  return (
+export const GridTemplate: FC<GridTemplateProps> = (props) => (
     <dl
       className={
         props.gridConf || 'grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2'
@@ -15,4 +14,3 @@ export const GridTemplate: FC<GridTemplateProps> = (props) => {
       {props.children}
     </dl>
   );
-};

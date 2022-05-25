@@ -48,17 +48,21 @@ const InquiryBoxPrivatePage: NextPage = () => {
     data?.getOrgInfoByMemberCookieAndId?.__typename === 'Org' &&
     inqData?.getInquiriesByOrgId?.__typename === 'InquiryConnection'
   ) {
-    const _org = data.getOrgInfoByMemberCookieAndId;
-    const _inq = inqData?.getInquiriesByOrgId;
-    const edges = idx(_inq, (idx) => idx.edges);
+    const fetchedOrg = data.getOrgInfoByMemberCookieAndId;
+    const fetchedInquiry = inqData?.getInquiriesByOrgId;
+    const edges = idx(fetchedInquiry, (processor) => processor.edges);
 
     return (
       <OrgTemplate
-        avatar={_org.avatarUrl || FAIL_TO_FETCH}
-        image={_org.heroImageUrl || FAIL_TO_FETCH}
-        orgName={_org.name || FAIL_TO_FETCH}
+        avatar={fetchedOrg.avatarUrl || FAIL_TO_FETCH}
+        image={fetchedOrg.heroImageUrl || FAIL_TO_FETCH}
+        orgName={fetchedOrg.name || FAIL_TO_FETCH}
         headerButtons={
-          <Link href="/org/myorg/[id]" as={`/org/myorg/${_org.id}`} passHref>
+          <Link
+            href="/org/myorg/[id]"
+            as={`/org/myorg/${fetchedOrg.id}`}
+            passHref
+          >
             <a href="replace">
               <ButtonWithIcon
                 type="button"
@@ -68,22 +72,25 @@ const InquiryBoxPrivatePage: NextPage = () => {
             </a>
           </Link>
         }
+        pageTabs={[]}
         pageContents={
-          edges && edges[0] ? (
-            <>
-              <TextLabel content="お問い合わせ一覧" />
-              <InquiryInfiniteTable
-                orgId={_org.id}
-                initialInquiries={edges.map((e) => e.node)}
-                limit={20}
-              />
-            </>
-          ) : (
-            <>
-              <TextLabel content="お問い合わせ一覧" />
-              <TextSmall content="お問い合わせは有りません" />
-            </>
-          )
+          edges && edges[0]
+            ? [
+                <>
+                  <TextLabel content="お問い合わせ一覧" />
+                  <InquiryInfiniteTable
+                    orgId={fetchedOrg.id}
+                    initialInquiries={edges.map((e) => e.node)}
+                    limit={20}
+                  />
+                </>,
+              ]
+            : [
+                <>
+                  <TextLabel content="お問い合わせ一覧" />
+                  <TextSmall content="お問い合わせは有りません" />
+                </>,
+              ]
         }
       />
     );

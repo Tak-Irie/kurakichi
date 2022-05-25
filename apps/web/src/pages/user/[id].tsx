@@ -22,7 +22,6 @@ const UserProfilePage: NextPage = () => {
     return (
       <div>
         <UserProfile
-          userId={uid}
           avatar={res?.avatarUrl || ''}
           description={res?.selfIntro || ''}
           image={res?.heroImageUrl || ''}

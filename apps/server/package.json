@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "test": "jest --coverage",
     "lint": "eslint src --fix",
-    "migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
+    "migrate": "prisma migrate dev --schema=./src/prisma/schema-dev.prisma",
     "migrate:prod": "npx prisma migrate deploy --schema=./dist/src//prisma/schema.prisma",
     "migrate:create": "prisma migrate dev --create-only --schema=./src/prisma/schema.prisma",
     "migrate:status": "prisma migrate status --schema=./src/prisma/schema.prisma",

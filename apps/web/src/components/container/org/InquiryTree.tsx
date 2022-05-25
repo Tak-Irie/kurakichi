@@ -1,18 +1,14 @@
 import { FC, useState } from 'react';
 import { InquiryStatusModel } from '../../../lib';
 
-import {
-  AvatarSmall,
-  BadgeInquiryCategory,
-  BadgeInquiryStatusChangeable,
-  TextSmall,
-} from '..';
 import { Inquiry } from '../../../graphql';
-import {
-  AcceptJoinOrgButton,
-  ReplyInquiryForm,
-  UpdateInquiryStatusButton,
-} from '../../container';
+
+import { AvatarSmall, TextSmall } from '../../presentational/atoms';
+import { BadgeInquiryCategory } from '../../presentational/molecules';
+import { BadgeInquiryStatusChangeable } from '../../presentational/organisms';
+import { AcceptJoinOrgButton } from './AcceptJoinOrgButton';
+import { ReplyInquiryForm } from './ReplyInquiryForm';
+import { UpdateInquiryStatusButton } from './UpdateInquiryStatusButton';
 
 type InquiryTreeProps = {
   inquiries: Inquiry[];

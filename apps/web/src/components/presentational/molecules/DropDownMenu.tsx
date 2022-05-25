@@ -10,8 +10,7 @@ type DropDownMenuProps = {
   children?: ReactChild;
 };
 
-export const DropDownMenu: FC<DropDownMenuProps> = (props) => {
-  return (
+export const DropDownMenu: FC<DropDownMenuProps> = (props) => (
     <div className="z-10">
       <Menu>
         {({ open }) => (
@@ -41,13 +40,11 @@ export const DropDownMenu: FC<DropDownMenuProps> = (props) => {
       </Menu>
     </div>
   );
-};
 export const DropDownMenu2: FC<DropDownMenuProps> = ({
   menuElement,
   menuIcon,
   menuItems,
-}) => {
-  return (
+}) => (
     <div className="z-10">
       <Menu as="div">
         <Menu.Button className="flex items-center">
@@ -73,4 +70,3 @@ export const DropDownMenu2: FC<DropDownMenuProps> = ({
       </Menu>
     </div>
   );
-};

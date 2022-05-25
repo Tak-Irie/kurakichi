@@ -1,19 +1,18 @@
-import type { FC, ReactChild } from 'react';
-import { Footer, NavAlpha, NavBar } from '../organisms';
+import type { FC, ReactElement } from 'react';
+import { NavBar } from '../../container/shared';
+import { Footer, NavAlpha } from '../organisms';
 
 type LayoutProps = {
-  children: ReactChild;
+  children: ReactElement;
 };
 
-const Layout: FC<LayoutProps> = ({ children }) => {
-  return (
-    <>
-      <NavAlpha />
-      <NavBar />
-      <main className="bg-green-50">{children}</main>
-      <Footer />
-    </>
-  );
-};
+const Layout: FC<LayoutProps> = ({ children }) => (
+  <>
+    <NavAlpha />
+    <NavBar />
+    <main className="h-max bg-green-50">{children}</main>
+    <Footer />
+  </>
+);
 
 export { Layout };

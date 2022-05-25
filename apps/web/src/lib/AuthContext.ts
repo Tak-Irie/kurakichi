@@ -9,7 +9,7 @@ export interface AuthContextType {
 const initialAuthContext: AuthContextType = {
   authStatus: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setAuthStatus: (value) => {},
+  setAuthStatus: () => {},
 };
 
 // used for reRender hook

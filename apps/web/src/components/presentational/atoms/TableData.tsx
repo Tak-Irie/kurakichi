@@ -8,8 +8,7 @@ type TableBodyProps = {
   children?: ReactChild;
 };
 
-const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => {
-  return (
+const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => (
     <td className="py-4 px-6 w-full max-w-0 text-base text-gray-900 whitespace-nowrap">
       <div className="flex">
         <Link href={link} passHref>
@@ -26,10 +25,8 @@ const TableDataWithLink: FC<TableBodyProps> = ({ icon, link, title }) => {
       </div>
     </td>
   );
-};
 
-const TableData: FC<Omit<TableBodyProps, 'link'>> = ({ title, children }) => {
-  return (
+const TableData: FC<Omit<TableBodyProps, 'link'>> = ({ title, children }) => (
     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
       {title ? (
         <span className="font-medium text-gray-800">{title}</span>
@@ -38,6 +35,5 @@ const TableData: FC<Omit<TableBodyProps, 'link'>> = ({ title, children }) => {
       )}
     </td>
   );
-};
 
 export { TableDataWithLink, TableData };

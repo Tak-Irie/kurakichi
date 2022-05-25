@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ButtonBig, LoadingSpinner } from '..';
+import { ButtonBig, LoadingSpinner } from '../atoms';
 
 type ButtonOrLoadingProps = {
   loading: boolean;
@@ -8,7 +8,6 @@ type ButtonOrLoadingProps = {
   buttonType: 'submit' | 'button';
   onClick?: () => void;
   color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
-  disabled?: boolean;
 };
 
 export const ButtonOrLoading: FC<ButtonOrLoadingProps> = ({
@@ -17,8 +16,8 @@ export const ButtonOrLoading: FC<ButtonOrLoadingProps> = ({
   buttonType,
   onClick,
   color,
-}) => {
-  return loading ? (
+}) =>
+  loading ? (
     <ButtonBig
       disabled
       type="submit"
@@ -37,4 +36,3 @@ export const ButtonOrLoading: FC<ButtonOrLoadingProps> = ({
       label={buttonLabel}
     />
   );
-};

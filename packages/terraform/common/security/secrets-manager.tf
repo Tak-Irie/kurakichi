@@ -26,7 +26,7 @@ variable "dev" {
     PSQL_URL                    = "DUMMY"
     REDIS_URL                   = "DUMMY"
     REDIS_AUTH_URL              = "DUMMY"
-    CORS_NEXT                   = "DUMMY"
+    CORS_WEB                    = "DUMMY"
     SESSION_SECRET              = "DUMMY"
     CRYPT_PASS                  = "DUMMY"
     CRYPT_SALT                  = "DUMMY"

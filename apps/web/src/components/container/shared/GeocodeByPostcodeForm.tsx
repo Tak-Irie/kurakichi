@@ -3,13 +3,8 @@ import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import { PostcodeRegExp } from '../../../lib';
 
-import {
-  ButtonWithIcon,
-  Form,
-  IconsPost,
-  Input,
-  InputValue,
-} from '../../presentational';
+import { ButtonWithIcon, Form, IconsPost } from '../../presentational/atoms';
+import { Input, InputValue } from '../../presentational/molecules';
 
 type Geocode = {
   lat: number;

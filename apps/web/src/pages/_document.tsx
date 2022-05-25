@@ -16,7 +16,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="ja" dir="ltr">
-        <Head></Head>
+        <Head />
         <body className="font-kiwi">
           <Main />
           <NextScript />

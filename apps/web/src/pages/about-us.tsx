@@ -1,5 +1,5 @@
-import { useGetOrgsForMapQuery } from '@src/graphql';
 import { NextPage } from 'next';
+import { useGetOrgsForMapQuery } from '../graphql';
 
 const AboutUsPage: NextPage = () => {
   const { error, loading, data } = useGetOrgsForMapQuery();
@@ -19,18 +19,14 @@ const AboutUsPage: NextPage = () => {
   if (data?.getOrgs?.__typename === 'Orgs') {
     const a = data.getOrgs.orgs;
     return (
-      <>
-        <li>
-          {a?.map((org) => {
-            return (
-              <ol>
-                <p>{org.id}</p>
-                <p>{org.name}</p>
-              </ol>
-            );
-          })}
-        </li>
-      </>
+      <li>
+        {a?.map((org) => (
+          <ol key={org.id}>
+            <p>{org.id}</p>
+            <p>{org.name}</p>
+          </ol>
+        ))}
+      </li>
     );
   }
 

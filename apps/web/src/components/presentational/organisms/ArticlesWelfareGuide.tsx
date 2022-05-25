@@ -3,8 +3,7 @@ import { Article } from '../molecules';
 
 // type ArticlesWelfareGuideProps = {};
 
-export const ArticlesWelfareGuide: FC = () => {
-  return (
+export const ArticlesWelfareGuide: FC = () => (
     <div className="grid grid-cols-1 gap-8 mt-10 max-w-full md:grid-cols-2 xl:grid-cols-3">
       <Article
         imageSrc="/save_money_pig.jpg"
@@ -73,9 +72,8 @@ export const ArticlesWelfareGuide: FC = () => {
       <Article
         imageSrc="/lawyer.jpg"
         title="法律"
-        description={'・弁護士を雇いたい・相談したいがお金がない'}
+        description="・弁護士を雇いたい・相談したいがお金がない"
         linkUrl="/guide/law"
       />
     </div>
   );
-};

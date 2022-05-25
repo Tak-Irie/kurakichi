@@ -1,9 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { AvatarChangeable, ImageHeroChangeable } from '.';
-import { useUploadFileMutation } from '../../../graphql';
 
 import { UploadFiles } from '../../../lib';
 import { ButtonWithIcon, IconsCloudUpload } from '../atoms';
+import { AvatarChangeable, ImageHeroChangeable } from '../molecules';
 
 type ProfileHeaderProps = {
   imageSrc: string;
@@ -21,11 +20,11 @@ export const ProfileHeaderSetting: FC<ProfileHeaderProps> = ({
     avatar: avatarSrc,
   });
   const [isDisable, setIsDisable] = useState(true);
-  const [upload, { data, loading, error }] = useUploadFileMutation();
+  // const [upload, { data, loading, error }] = useUploadFileMutation();
 
   const handleClick = async () => {
     // console.log('clicked:', files);
-    const res = await upload(files as any);
+    // const res = await upload(files as any);
     // console.log('res:', res);
   };
 

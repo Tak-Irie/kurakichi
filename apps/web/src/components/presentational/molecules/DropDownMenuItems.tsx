@@ -17,8 +17,7 @@ export const DropDownMenuItem: FC<Omit<DropDownMenuItemProps, 'onClick'>> = ({
   linkAs,
   icon,
   label,
-}) => {
-  return (
+}) => (
     <Menu.Item>
       <Link href={linkUrl} as={linkAs} passHref>
         <a
@@ -34,12 +33,10 @@ export const DropDownMenuItem: FC<Omit<DropDownMenuItemProps, 'onClick'>> = ({
       </Link>
     </Menu.Item>
   );
-};
 
 export const DropDownMenuItemButton: FC<
   Omit<DropDownMenuItemProps, 'linkUrl'>
-> = ({ onClick, icon, label }) => {
-  return (
+> = ({ onClick, icon, label }) => (
     <Menu.Item>
       <button
         className="group flex items-center py-2 px-4 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100"
@@ -53,4 +50,3 @@ export const DropDownMenuItemButton: FC<
       </button>
     </Menu.Item>
   );
-};

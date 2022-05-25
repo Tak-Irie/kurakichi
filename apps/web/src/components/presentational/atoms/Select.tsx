@@ -29,13 +29,11 @@ export const Select = <
       className="grow px-4 mb-3 w-full h-12 text-gray-900 rounded border border-gray-400 appearance-none cursor-pointer"
       {...register(label, { required })}
     >
-      {options.map((option) => {
-        return (
+      {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
-        );
-      })}
+        ))}
     </select>
   </>
 );

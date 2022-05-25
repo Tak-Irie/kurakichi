@@ -69,7 +69,7 @@ export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId }) => {
           ]}
           required
           register={register}
-        ></Select>
+         />
         <InputTextarea<SendInquiryInput>
           rows={3}
           cols={30}

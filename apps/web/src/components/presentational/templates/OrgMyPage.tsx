@@ -26,9 +26,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
   let _members: User[] = [];
 
   if (inquiries?.edges) {
-    const _inq = inquiries.edges.map((edge) => {
-      return edge.node;
-    });
+    const _inq = inquiries.edges.map((edge) => edge.node);
     unreadInq = _inq.filter((inq) => inq.inquiryStatus === 'UNREAD');
   }
 

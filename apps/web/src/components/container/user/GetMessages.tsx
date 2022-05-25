@@ -18,15 +18,13 @@ export const GetMessages: FC = () => {
       <div>
         {_messages && _messages.length > 0 ? (
           <ul>
-            {_messages.map((message) => {
-              return (
+            {_messages.map((message) => (
                 <SmallCard
                   key={message.id}
                   title={message.id}
                   content={message.content || FAIL_TO_FETCH}
                 />
-              );
-            })}
+              ))}
           </ul>
         ) : (
           <p>no massage</p>

@@ -1,6 +1,5 @@
 export * from './FormPageTemplate';
 export * from './GeneralTemplate';
-export * from './InquiryTree';
 export * from './Layout';
 export * from './MessageTree';
 export * from './OrgArticle';

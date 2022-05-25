@@ -1,8 +1,8 @@
 import idx from 'idx';
 import { FC } from 'react';
 
-import { GridItemWithPic, GridTemplate, TextLabeled } from '..';
 import { Org } from '../../../graphql';
+import { GridItemWithPic, GridTemplate, TextLabeled } from '../atoms';
 // import { MapViewer } from '../../container';
 
 type OrgProfileProps = {
@@ -10,18 +10,9 @@ type OrgProfileProps = {
 };
 
 export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
-  const {
-    id,
-    name,
-    email,
-    phoneNumber,
-    address,
-    homePage,
-    description,
-    members,
-  } = org;
+  const { email, phoneNumber, address, homePage, description, members } = org;
   const geo = { lat: address?.latitude || 0, lng: address?.longitude || 0 };
-  const _members = idx(members, (d) => d.edges);
+  const idxMembers = idx(members, (d) => d.edges);
 
   return (
     <>
@@ -37,20 +28,20 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
           label="私達について"
           content={description || '団体の概要を記入して下さい'}
         />
-        {/* <span className="col-span-2 mt-1">
+        <span className="col-span-2 mt-1">
           <MapViewer
             center={geo}
             mapContainerCSS={{ width: 'auto', height: 300 }}
             zoomLevel={15}
           />
-        </span> */}
+        </span>
       </div>
 
       <div className="mt-8">
         <h2 className="text-sm font-medium text-gray-500">団体メンバー</h2>
         <GridTemplate>
-          {_members
-            ? _members.map((edge) => {
+          {idxMembers
+            ? idxMembers.map((edge) => {
                 const member = edge.node;
                 return (
                   <div key={member.id}>
@@ -58,7 +49,7 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
                       name={member.name}
                       description={member.selfIntro}
                       imgSrc={member.avatarUrl}
-                      imgAlt={'メンバーアバター'}
+                      imgAlt="メンバーアバター"
                       linkUrl="/user/[id]"
                       linkAs={`/user/${member.id}`}
                     />

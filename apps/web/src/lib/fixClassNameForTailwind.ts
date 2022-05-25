@@ -1,3 +1,1 @@
-export const fixClassNameForTailwind = (...classes: any[]) => {
-  return classes.filter(Boolean).join(' ');
-};
+export const fixClassNameForTailwind = (...classes: any[]) => classes.filter(Boolean).join(' ');

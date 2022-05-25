@@ -4,8 +4,7 @@ type TablePaginationProps = {
   some?: string;
 };
 
-const TablePagination: FC<TablePaginationProps> = () => {
-  return (
+const TablePagination: FC<TablePaginationProps> = () => (
     <nav
       className="flex justify-between items-center py-3 px-4 bg-white border-t border-gray-200 sm:px-6"
       aria-label="Pagination"
@@ -37,6 +36,5 @@ const TablePagination: FC<TablePaginationProps> = () => {
       </div>
     </nav>
   );
-};
 
 export { TablePagination };

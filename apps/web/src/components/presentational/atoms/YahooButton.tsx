@@ -5,8 +5,7 @@ type YahooButtonProps = {
 };
 
 // design guide https://developer.yahoo.co.jp/yconnect/loginbuttons.html
-const YahooButton: VFC<YahooButtonProps> = ({ onClick }) => {
-  return (
+const YahooButton: VFC<YahooButtonProps> = ({ onClick }) => (
     <button
       className="flex rounded hover:shadow-md"
       style={{ height: 50, width: 240, background: '#ff0033' }}
@@ -28,6 +27,5 @@ const YahooButton: VFC<YahooButtonProps> = ({ onClick }) => {
       </span>
     </button>
   );
-};
 
 export { YahooButton };

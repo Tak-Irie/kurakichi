@@ -17,6 +17,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install",
+    "dev:server": "yarn workspace @kurakichi/server dev",
+    "dev:web": "yarn workspace @kurakichi/web dev",
     "gen:gql": "graphql-codegen",
     "gen:gql:prod": "graphql-codegen --config codegen.prod.yml",
     "gen:prisma:migrate": "yarn workspace @kurakichi/server migrate",
@@ -24,7 +26,7 @@
     "gen:prisma:migrate:create": "yarn workspace @kurakichi/server migrate:create",
     "gen:prisma:migrate:status": "yarn workspace @kurakichi/server migrate:status",
     "gen:prisma:generate": "yarn workspace @kurakichi/server generate",
-    "gen:prisma:seed": "yarn workspace @kurakichi/server seed",
+    "gen:prisma:seed": "yarn workspace @kurakichi/server seed:dev",
     "gen:prisma:seed:prod": "yarn workspace @kurakichi/server prisma db seed"
   },
   "devDependencies": {

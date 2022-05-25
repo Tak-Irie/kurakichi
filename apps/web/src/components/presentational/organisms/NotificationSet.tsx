@@ -28,8 +28,7 @@ export const NotificationSet: FC<NotificationsProps> = ({
   errLabel = 'エラー！',
   sysErrLabel = 'エラー！',
   showingMS,
-}) => {
-  return (
+}) => (
     <>
       {sysErrContent ? (
         <NotificationAlert
@@ -54,4 +53,3 @@ export const NotificationSet: FC<NotificationsProps> = ({
       ) : null}
     </>
   );
-};

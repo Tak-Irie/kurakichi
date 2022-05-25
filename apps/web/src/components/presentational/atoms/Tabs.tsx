@@ -7,12 +7,10 @@ type TabsProps = {
 };
 
 export const Tabs: FC<TabsProps> = ({ clickHandler, labels }) => {
-  const tabs = labels.map((label, index) => {
-    return {
+  const tabs = labels.map((label, index) => ({
       name: label,
       id: index,
-    };
-  });
+    }));
   // const tabs = [
   //   { name: 'Applied', id: 0 },
   //   { name: 'Phone Screening', id: 1 },

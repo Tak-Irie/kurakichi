@@ -1,7 +1,6 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 import {
   ButtonWithIcon,
@@ -12,7 +11,6 @@ import {
   OrgMyPage,
   OrgService,
   OrgTemplate,
-  Tabs,
   TextSmall,
 } from '../../../../components/presentational';
 import { useGetOrgPrivateInfoByCookieAndIdQuery } from '../../../../graphql';
@@ -21,7 +19,6 @@ import { FAIL_TO_FETCH } from '../../../../lib/Constants';
 const OrgPrivatePage: NextPage = () => {
   const router = useRouter();
   const orgId = router.query.id as string;
-  const [shownTab, setShownTab] = useState(0);
 
   const { data, loading, error } = useGetOrgPrivateInfoByCookieAndIdQuery({
     variables: { orgId },
@@ -38,12 +35,12 @@ const OrgPrivatePage: NextPage = () => {
     );
 
   if (data?.getOrgInfoByMemberCookieAndId?.__typename === 'Org') {
-    const _org = data?.getOrgInfoByMemberCookieAndId;
+    const fetchedOrg = data?.getOrgInfoByMemberCookieAndId;
     return (
       <OrgTemplate
-        avatar={_org?.avatarUrl || FAIL_TO_FETCH}
-        image={_org?.heroImageUrl || FAIL_TO_FETCH}
-        orgName={_org?.name || FAIL_TO_FETCH}
+        avatar={fetchedOrg?.avatarUrl || FAIL_TO_FETCH}
+        image={fetchedOrg?.heroImageUrl || FAIL_TO_FETCH}
+        orgName={fetchedOrg?.name || FAIL_TO_FETCH}
         headerButtons={
           <>
             <Link
@@ -74,45 +71,37 @@ const OrgPrivatePage: NextPage = () => {
             </Link>
           </>
         }
-        pageTabs={
-          <Tabs labels={['概要', '事業', '記事']} clickHandler={setShownTab} />
-        }
-        pageContents={
-          shownTab === 0 && _org ? (
-            <OrgMyPage
-              org={{
-                members: {
-                  edges: _org.members?.edges,
-                },
-                ..._org,
-              }}
-            />
-          ) : shownTab === 1 ? (
-            <OrgService
-              title="事業紹介"
-              content={
-                <TextSmall
-                  content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
-                />
-              }
-            />
-          ) : shownTab === 2 ? (
-            <OrgArticle
-              title="記事"
-              content={
-                <TextSmall
-                  content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
-                />
-              }
-            />
-          ) : (
-            <p>error</p>
-          )
-        }
+        pageTabs={['概要', '事業', '記事']}
+        pageContents={[
+          <OrgMyPage
+            org={{
+              members: {
+                edges: fetchedOrg.members?.edges,
+              },
+              ...fetchedOrg,
+            }}
+          />,
+          <OrgService
+            title="事業紹介"
+            content={
+              <TextSmall
+                content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+              />
+            }
+          />,
+          <OrgArticle
+            title="記事"
+            content={
+              <TextSmall
+                content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+              />
+            }
+          />,
+        ]}
       />
     );
   }
-  return <p>something wrong</p>;
-};
 
+  return <p>wip, something wrong</p>;
+};
 export default OrgPrivatePage;

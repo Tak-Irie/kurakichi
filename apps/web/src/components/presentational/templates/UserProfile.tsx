@@ -5,14 +5,13 @@ import {
   IconsCaution,
   IconsMail,
   PopOnIcon,
-  ProfileHeader,
   Text2xl,
   TextLabel,
   TextLabeled,
-} from '..';
+} from '../atoms';
+import { ProfileHeader } from '../organisms';
 
 type UserProfileProps = {
-  userId: string;
   userName: string;
   image: string;
   avatar: string;
@@ -20,7 +19,7 @@ type UserProfileProps = {
 };
 
 export const UserProfile: FC<UserProfileProps> = (props) => {
-  const { avatar, description, image, userId, userName } = props;
+  const { avatar, description, image, userName } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -42,10 +41,10 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
                 label="メッセージを送る"
                 disabled
                 icon={<IconsMail />}
-              ></ButtonWithIcon>
+              />
             </>
           }
-        ></ProfileHeader>
+        />
       </div>
       <div className="col-start-3">
         <Text2xl content={userName} />

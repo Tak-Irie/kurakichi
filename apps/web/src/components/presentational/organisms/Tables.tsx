@@ -1,21 +1,16 @@
 import Link from 'next/link';
 import { FC } from 'react';
 
-import {
-  AvatarSmall,
-  BadgeInquiryCategory,
-  BadgeInquiryStatus,
-  CardWithPick,
-  TextLabel,
-  TextSmall,
-} from '..';
 import { Base, Inquiry, Message, Org, User } from '../../../graphql';
 import { FAIL_TO_FETCH } from '../../../lib/Constants';
+import { AvatarSmall, CardWithPick, TextLabel, TextSmall } from '../atoms';
+import { BadgeInquiryCategory, BadgeInquiryStatus } from '../molecules';
 
 type TableProps = {
+  // eslint-disable-next-line react/no-unused-prop-types
   tableLabel?: string;
   textOfNotExist?: string;
-  onClick?: () => void;
+  // onClick?: () => void;
 };
 
 type TableOrgProps = TableProps & {
@@ -42,142 +37,134 @@ export const TableOrg: FC<TableOrgProps> = ({
   orgs,
   tableLabel = '所属団体',
   textOfNotExist = '団体に所属していません',
-}) => {
-  return (
-    <>
-      <TextLabel content={tableLabel} />
-      {orgs[0] ? (
-        orgs.map((org) => (
-          <CardWithPick
-            key={org.id}
-            image={org.avatarUrl || '/logo_temp.png'}
-            title={org.name || FAIL_TO_FETCH}
-            content={org.description || FAIL_TO_FETCH}
-            imageAlt="団体アバター"
-            linkUrl="/org/[id]/"
-            linkAs={`/org/${org.id}`}
-          />
-        ))
-      ) : (
-        <TextSmall content={textOfNotExist} />
-      )}
-    </>
-  );
-};
+}) => (
+  <>
+    <TextLabel content={tableLabel} />
+    {orgs[0] ? (
+      orgs.map((org) => (
+        <CardWithPick
+          key={org.id}
+          image={org.avatarUrl || '/logo_temp.png'}
+          title={org.name || FAIL_TO_FETCH}
+          content={org.description || FAIL_TO_FETCH}
+          imageAlt="団体アバター"
+          linkUrl="/org/[id]/"
+          linkAs={`/org/${org.id}`}
+        />
+      ))
+    ) : (
+      <TextSmall content={textOfNotExist} />
+    )}
+  </>
+);
 
 export const TableOrgMember: FC<TableOrgMemberProps> = ({
   members,
   tableLabel = '団体メンバー',
   textOfNotExist = 'メンバーが読み込めません、お手数ですが管理者にお問い合わせ下さい',
-}) => {
-  return (
-    <>
-      <TextLabel content={tableLabel} />
-      {members[0] ? (
-        members.map((member) => (
-          <div key={member.id}>
-            <CardWithPick
-              image={member.avatarUrl || '/asian_man1.jpg'}
-              title={member.name || FAIL_TO_FETCH}
-              content={member.selfIntro || FAIL_TO_FETCH}
-              imageAlt="ユーザーアバター"
-              linkUrl="/user/[id]"
-              linkAs={`/user/${member.id}`}
-            />
-          </div>
-        ))
-      ) : (
-        <TextSmall content={textOfNotExist} />
-      )}
-    </>
-  );
-};
+}) => (
+  <>
+    <TextLabel content={tableLabel} />
+    {members[0] ? (
+      members.map((member) => (
+        <div key={member.id}>
+          <CardWithPick
+            image={member.avatarUrl || '/asian_man1.jpg'}
+            title={member.name || FAIL_TO_FETCH}
+            content={member.selfIntro || FAIL_TO_FETCH}
+            imageAlt="ユーザーアバター"
+            linkUrl="/user/[id]"
+            linkAs={`/user/${member.id}`}
+          />
+        </div>
+      ))
+    ) : (
+      <TextSmall content={textOfNotExist} />
+    )}
+  </>
+);
 export const TableBase: FC<TableSecureBaseProps> = ({
   bases,
   tableLabel = '所属ベース',
   textOfNotExist = 'ベースに所属していません',
-}) => {
-  return (
-    <>
-      <TextLabel content={tableLabel} />
-      {bases[0] ? (
-        bases.map((base) => (
-          <CardWithPick
-            key={base.id}
-            image={'/logo_temp.png'}
-            title={FAIL_TO_FETCH}
-            content={FAIL_TO_FETCH}
-            imageAlt="ユーザーアバター"
-            linkUrl={base.id}
-          />
-        ))
-      ) : (
-        <TextSmall content={textOfNotExist} />
-      )}
-    </>
-  );
-};
+}) => (
+  <>
+    <TextLabel content={tableLabel} />
+    {bases[0] ? (
+      bases.map((base) => (
+        <CardWithPick
+          key={base.id}
+          image="/logo_temp.png"
+          title={FAIL_TO_FETCH}
+          content={FAIL_TO_FETCH}
+          imageAlt="ユーザーアバター"
+          linkUrl={base.id}
+        />
+      ))
+    ) : (
+      <TextSmall content={textOfNotExist} />
+    )}
+  </>
+);
 
 export const TableMessage: FC<TableMessageProps> = ({
   messages,
   tableLabel = '新着メッセージ',
   textOfNotExist = '新着メッセージはありません',
-}) => {
-  return (
-    <>
-      <TextLabel content={tableLabel} />
-      {messages[0] ? (
-        <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
-          <div className="grid grid-cols-6 divide-y divide-gray-200">
-            <div className="col-start-1 py-1 pl-4 text-xs font-medium text-left text-gray-500">
-              送信者
-            </div>
-            <div className="col-auto py-1 text-xs font-medium text-left text-gray-500">
-              内容
-            </div>
-            <div className="col-end-7 p-1 text-xs font-medium text-left text-gray-500">
-              受信日
-            </div>
-            {messages.map((message) => (
-              <div
-                className="grid relative grid-cols-6 col-span-full"
-                key={message.id}
-              >
-                <Link
-                  href="/user/message/[id]"
-                  as={`/user/message/${message.id}`}
-                  passHref
-                >
-                  <a
-                    href="replace"
-                    className="absolute z-10 w-full h-full bg-black opacity-0 hover:opacity-30 transition "
-                  >
-                    link to message
-                  </a>
-                </Link>
-                <div className="flex col-start-1 items-center py-2 pl-2 space-x-1">
-                  <AvatarSmall
-                    src={message.sender?.avatarUrl || ''}
-                    alt="ユーザーアバター"
-                  />
-                  <TextSmall content={message.sender?.name || FAIL_TO_FETCH} />
-                </div>
-                <div className="overflow-scroll col-span-4 py-4 mx-1 whitespace-nowrap">
-                  <TextSmall content={message.content || FAIL_TO_FETCH} />
-                </div>
-                <div className="col-end-7 py-4 px-1 whitespace-nowrap">
-                  <TextSmall content={message.sentAt || FAIL_TO_FETCH} />
-                </div>
-              </div>
-            ))}
+}) => (
+  <>
+    <TextLabel content={tableLabel} />
+    {messages[0] ? (
+      <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
+        <div className="grid grid-cols-6 divide-y divide-gray-200">
+          <div className="col-start-1 py-1 pl-4 text-xs font-medium text-left text-gray-500">
+            送信者
           </div>
+          <div className="col-auto py-1 text-xs font-medium text-left text-gray-500">
+            内容
+          </div>
+          <div className="col-end-7 p-1 text-xs font-medium text-left text-gray-500">
+            受信日
+          </div>
+          {messages.map((message) => (
+            <div
+              className="grid relative grid-cols-6 col-span-full"
+              key={message.id}
+            >
+              <Link
+                href="/user/message/[id]"
+                as={`/user/message/${message.id}`}
+                passHref
+              >
+                <a
+                  href="replace"
+                  className="absolute z-10 w-full h-full bg-black opacity-0 hover:opacity-30 transition "
+                >
+                  link to message
+                </a>
+              </Link>
+              <div className="flex col-start-1 items-center py-2 pl-2 space-x-1">
+                <AvatarSmall
+                  src={message.sender?.avatarUrl || ''}
+                  alt="ユーザーアバター"
+                />
+                <TextSmall content={message.sender?.name || FAIL_TO_FETCH} />
+              </div>
+              <div className="overflow-scroll col-span-4 py-4 mx-1 whitespace-nowrap">
+                <TextSmall content={message.content || FAIL_TO_FETCH} />
+              </div>
+              <div className="col-end-7 py-4 px-1 whitespace-nowrap">
+                <TextSmall content={message.sentAt || FAIL_TO_FETCH} />
+              </div>
+            </div>
+          ))}
         </div>
-      ) : (
-        <TextSmall content={textOfNotExist} />
-      )}
-    </>
-  );
-};
+      </div>
+    ) : (
+      <TextSmall content={textOfNotExist} />
+    )}
+  </>
+);
 
 export const TableInquiry: FC<TableInquiryProps> = ({
   inquiries,

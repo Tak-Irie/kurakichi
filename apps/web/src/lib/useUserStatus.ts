@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useGetUserMyInfoQuery } from '../graphql';
 
-export const isLoggedIn = () => {
+export const useUserStatus = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
     ssr: false,
     fetchPolicy: 'cache-only',
@@ -14,7 +14,7 @@ export const isLoggedIn = () => {
       (!loading && data?.getUserByCookie === null) ||
       error
     ) {
-      router.replace('/login?next=' + router.pathname);
+      router.replace(`/login?next=${router.pathname}`);
     }
   }, [loading, data, router]);
 

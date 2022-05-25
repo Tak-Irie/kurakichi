@@ -1,16 +1,13 @@
 import { FC } from 'react';
 
 import { Placement } from '@popperjs/core';
-import { IconsQuestion } from '../atoms';
-import { PopOnIcon } from '../molecules';
+import { IconsQuestion, PopOnIcon } from '../atoms';
 
 type HelperPopProps = {
   text: string;
   popPlace?: Placement;
 };
 
-export const HelperPop: FC<HelperPopProps> = ({ text, popPlace }) => {
-  return (
-    <PopOnIcon placement={popPlace} icon={<IconsQuestion />} content={text} />
-  );
-};
+export const HelperPop: FC<HelperPopProps> = ({ text, popPlace }) => (
+  <PopOnIcon placement={popPlace} icon={<IconsQuestion />} content={text} />
+);

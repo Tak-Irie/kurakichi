@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-export const SideParts: FC = () => {
-  return (
+export const SideParts: FC = () => (
     <div className="flex justify-between items-center py-1.5 px-4 bg-gray-50 border-b border-gray-200">
       <div>
         <img
@@ -35,4 +34,3 @@ export const SideParts: FC = () => {
       </div>
     </div>
   );
-};

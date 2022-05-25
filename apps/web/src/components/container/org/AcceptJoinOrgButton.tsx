@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useAcceptToJoinOrgMutation } from '../../../graphql/generated';
-import { ButtonOrLoading, NotificationSet } from '../../presentational';
+import { ButtonOrLoading } from '../../presentational/molecules';
+import { NotificationSet } from '../../presentational/organisms';
 
 type AcceptJoinOrgButtonProps = {
   requestUserId: string;

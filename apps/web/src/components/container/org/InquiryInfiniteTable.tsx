@@ -49,12 +49,10 @@ export const InquiryInfiniteTable: FC<InquiryInfiniteTableProps> = ({
       data.getInquiriesByOrgId.edges
     ) {
       const _inq = data.getInquiriesByOrgId.edges.map((edge) => edge.node);
-      setInquiries((prev) => {
-        return {
+      setInquiries((prev) => ({
           loadedInquiries: prev.loadedInquiries.concat(_inq),
           pageInfo: { hasMore: false },
-        };
-      });
+        }));
     }
   }, [data]);
 

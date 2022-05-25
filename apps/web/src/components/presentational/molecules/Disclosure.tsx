@@ -16,8 +16,7 @@ export const Disclosure: FC<DisclosureProps> = ({
   contentCSS = 'text-gray-700',
   iconCSS,
   labelCSS,
-}) => {
-  return (
+}) => (
     <HeadlessDisclosure>
       {({ open }) => (
         <>
@@ -44,4 +43,3 @@ export const Disclosure: FC<DisclosureProps> = ({
       )}
     </HeadlessDisclosure>
   );
-};

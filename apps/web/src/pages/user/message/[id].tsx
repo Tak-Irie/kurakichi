@@ -1,5 +1,5 @@
 import idx from 'idx';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -14,13 +14,13 @@ import {
   UserTemplate,
 } from '../../../components/presentational/templates';
 import { useGetMessagesByTreeIdQuery } from '../../../graphql';
-import { isLoggedIn } from '../../../lib';
+import { useUserStatus } from '../../../lib';
 
 const MessageTreePage: NextPage = () => {
   const router = useRouter();
   const messageTreeId = router.query.id as string;
 
-  const { cachedUser, loadingCache } = isLoggedIn();
+  const { cachedUser, loadingCache } = useUserStatus();
 
   const { data, loading, error } = useGetMessagesByTreeIdQuery({
     variables: { treeId: messageTreeId },
@@ -37,8 +37,8 @@ const MessageTreePage: NextPage = () => {
     cachedUser?.__typename === 'User' &&
     data?.getMessagesByTreeId?.__typename === 'MessageTree'
   ) {
-    const _tree = data.getMessagesByTreeId;
-    const messages = idx(_tree, (idx) => idx.leaves.edges);
+    const fetchedTree = data.getMessagesByTreeId;
+    const messages = idx(fetchedTree, (accessor) => accessor.leaves.edges);
 
     return (
       <UserTemplate
@@ -68,10 +68,7 @@ const MessageTreePage: NextPage = () => {
           </>
         }
         pageContents={
-          <MessageTree
-            treeId={_tree.id}
-            messages={messages?.map((_) => _.node) || []}
-          />
+          <MessageTree messages={messages?.map((_) => _.node) || []} />
         }
       />
     );

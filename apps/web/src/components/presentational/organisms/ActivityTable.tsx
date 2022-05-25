@@ -23,8 +23,7 @@ export const ActivityTable: FC<ActivityProps> = ({
   messageTitle = 'こんにちは',
   status = 'ステータス',
   date = '日付',
-}) => {
-  return (
+}) => (
     <div>
       <div className="px-4 my-4 mx-auto max-w-6xl sm:px-6 lg:px-8">
         <div className="flex flex-col mt-2">
@@ -35,7 +34,7 @@ export const ActivityTable: FC<ActivityProps> = ({
                   {title}
                 </caption>
                 <tr>
-                  <TableHead left={true}>{subject}</TableHead>
+                  <TableHead left>{subject}</TableHead>
                   <TableHead>{category}</TableHead>
                   <TableHead>{status}</TableHead>
                   <TableHead>{date}</TableHead>
@@ -64,4 +63,3 @@ export const ActivityTable: FC<ActivityProps> = ({
       </div>
     </div>
   );
-};

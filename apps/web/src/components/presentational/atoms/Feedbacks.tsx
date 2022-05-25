@@ -13,8 +13,7 @@ export const Feedback: FC<FeedbackProps> = ({
   color = 'gray',
   icon,
   children = '本文',
-}) => {
-  return (
+}) => (
     <div className={`rounded-md mt-4  bg-${color}-50 p-4 `}>
       <div className="flex">
         <div className={`flex-shrink-0 h-5 w-5 text-${color}-400`}>{icon}</div>
@@ -27,12 +26,9 @@ export const Feedback: FC<FeedbackProps> = ({
       </div>
     </div>
   );
-};
 
-export const FeedbackCaution: FC<Pick<FeedbackProps, 'children'>> = (props) => {
-  return (
+export const FeedbackCaution: FC<Pick<FeedbackProps, 'children'>> = (props) => (
     <Feedback label="Caution" color="yellow" icon={<ExclamationIcon />}>
       {props.children}
     </Feedback>
   );
-};
