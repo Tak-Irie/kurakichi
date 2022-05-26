@@ -12,8 +12,8 @@ import {
   useGetAddressByPostcodeLazyQuery,
   useRegisterOrgMutation,
 } from '../../../graphql/generated';
-import { ButtonBig, Form, Input, TextSmall } from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+import { ButtonBig, Form, TextSmall } from '../../presentational/atoms';
+import { ButtonOrLoading, Input } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 type OrgRegisterInput = {
@@ -29,10 +29,8 @@ export const OrgRegisterForm: FC = () => {
   const [isPostcode, setIsPostcode] = useState('');
   const [isLocation, setIsLocation] = useState('');
   const [orgRegister, { data, loading, error }] = useRegisterOrgMutation();
-  const [
-    getAddress,
-    { data: addressData, loading: addressLoading, error: addressError },
-  ] = useGetAddressByPostcodeLazyQuery();
+  const [getAddress, { data: addressData }] =
+    useGetAddressByPostcodeLazyQuery();
 
   const {
     register,
@@ -172,7 +170,6 @@ export const OrgRegisterForm: FC = () => {
         />
         <span className="flex justify-end mt-5">
           <ButtonOrLoading
-            disabled={!isValid}
             buttonType="submit"
             color="yellow"
             buttonLabel={!isValid ? '未入力の項目があります' : '登録'}

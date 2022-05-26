@@ -10,7 +10,7 @@ import { LoadingSpinner, TableInquiry, TextSmall } from '../../presentational';
 type InquiryInfiniteTableProps = {
   initialInquiries: Inquiry[];
   orgId: string;
-  limit?: number;
+  // limit?: number;
 };
 
 type InquiriesInfo = {
@@ -24,8 +24,7 @@ export const InquiryInfiniteTable: FC<InquiryInfiniteTableProps> = ({
   initialInquiries,
   orgId,
 }) => {
-  const [getInquiry, { data, loading, error }] =
-    useGetInquiriesByOrgIdLazyQuery();
+  const [getInquiry, { data }] = useGetInquiriesByOrgIdLazyQuery();
 
   const [inquiries, setInquiries] = useState<InquiriesInfo>({
     loadedInquiries: initialInquiries,
@@ -48,11 +47,13 @@ export const InquiryInfiniteTable: FC<InquiryInfiniteTableProps> = ({
       data?.getInquiriesByOrgId?.__typename === 'InquiryConnection' &&
       data.getInquiriesByOrgId.edges
     ) {
-      const _inq = data.getInquiriesByOrgId.edges.map((edge) => edge.node);
+      const fetchedInquiry = data.getInquiriesByOrgId.edges.map(
+        (edge) => edge.node,
+      );
       setInquiries((prev) => ({
-          loadedInquiries: prev.loadedInquiries.concat(_inq),
-          pageInfo: { hasMore: false },
-        }));
+        loadedInquiries: prev.loadedInquiries.concat(fetchedInquiry),
+        pageInfo: { hasMore: false },
+      }));
     }
   }, [data]);
 

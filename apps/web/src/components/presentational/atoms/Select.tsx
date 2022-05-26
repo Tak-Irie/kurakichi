@@ -22,18 +22,22 @@ export const Select = <
   options,
 }: SelectProps<T, U>) => (
   <>
-    <label className="my-2 mr-auto text-xs font-bold text-gray-700">
+    <label
+      htmlFor={fieldLabel}
+      className="my-2 mr-auto text-xs font-bold text-gray-700"
+    >
       {fieldLabel}
     </label>
     <select
+      id={fieldLabel}
       className="grow px-4 mb-3 w-full h-12 text-gray-900 rounded border border-gray-400 appearance-none cursor-pointer"
       {...register(label, { required })}
     >
       {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
     </select>
   </>
 );

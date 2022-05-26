@@ -13,23 +13,25 @@ export const GetMessages: FC = () => {
   }
 
   if (data?.getMessagesByCookie?.__typename === 'Messages') {
-    const _messages = data.getMessagesByCookie.messages;
+    const fetchedMessages = data.getMessagesByCookie.messages;
     return (
       <div>
-        {_messages && _messages.length > 0 ? (
+        {fetchedMessages && fetchedMessages.length > 0 ? (
           <ul>
-            {_messages.map((message) => (
-                <SmallCard
-                  key={message.id}
-                  title={message.id}
-                  content={message.content || FAIL_TO_FETCH}
-                />
-              ))}
+            {fetchedMessages.map((message) => (
+              <SmallCard
+                key={message.id}
+                title={message.id}
+                content={message.content || FAIL_TO_FETCH}
+              />
+            ))}
           </ul>
         ) : (
           <p>no massage</p>
         )}
-        <button onClick={() => fetchMore}>fetchMoreMessages</button>
+        <button type="button" onClick={() => fetchMore}>
+          fetchMoreMessages
+        </button>
       </div>
     );
   }

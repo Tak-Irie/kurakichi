@@ -1,3 +1,3 @@
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 
-const markerCluster = new MarkerClusterer({});
+export const markerCluster = new MarkerClusterer({});

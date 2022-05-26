@@ -55,6 +55,7 @@ export const Notification: FC<NotificationProps> = ({
               </div>
               <div className="flex shrink-0 ml-4">
                 <button
+                  type="button"
                   onClick={() => setIsShowing(!isShowing)}
                   className="inline-flex w-5 h-5 text-gray-400 hover:text-gray-500 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
@@ -76,15 +77,15 @@ export const NotificationSuccess: FC<NotificationProps> = ({
   onClick,
   showingMS,
 }) => (
-    <Notification
-      onClick={onClick}
-      content={content}
-      label={label}
-      icon={<CheckCircleIcon />}
-      iconColor="text-green-400"
-      showingMS={showingMS}
-    />
-  );
+  <Notification
+    onClick={onClick}
+    content={content}
+    label={label}
+    icon={<CheckCircleIcon />}
+    iconColor="text-green-400"
+    showingMS={showingMS}
+  />
+);
 
 export const NotificationCaution: FC<NotificationProps> = ({
   label = 'Caution!',
@@ -92,15 +93,15 @@ export const NotificationCaution: FC<NotificationProps> = ({
   onClick,
   showingMS,
 }) => (
-    <Notification
-      onClick={onClick}
-      content={content}
-      label={label}
-      icon={<ExclamationIcon />}
-      iconColor="text-yellow-500"
-      showingMS={showingMS}
-    />
-  );
+  <Notification
+    onClick={onClick}
+    content={content}
+    label={label}
+    icon={<ExclamationIcon />}
+    iconColor="text-yellow-500"
+    showingMS={showingMS}
+  />
+);
 
 export const NotificationAlert: FC<NotificationProps> = ({
   label = 'Alert!',
@@ -108,12 +109,12 @@ export const NotificationAlert: FC<NotificationProps> = ({
   onClick,
   showingMS,
 }) => (
-    <Notification
-      onClick={onClick}
-      content={content}
-      label={label}
-      icon={<BanIcon />}
-      iconColor="text-red-500"
-      showingMS={showingMS}
-    />
-  );
+  <Notification
+    onClick={onClick}
+    content={content}
+    label={label}
+    icon={<BanIcon />}
+    iconColor="text-red-500"
+    showingMS={showingMS}
+  />
+);

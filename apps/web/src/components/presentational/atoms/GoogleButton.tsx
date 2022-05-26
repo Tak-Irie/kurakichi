@@ -6,23 +6,23 @@ type GoogleButtonProps = {
 
 // design guide https://developer.yahoo.co.jp/yconnect/loginbuttons.html
 const GoogleButton: FC<GoogleButtonProps> = ({ onClick }) => (
-    <button className="google-button" onClick={onClick}>
-      <span className="google-icon-wrapper">
-        <img
-          className="google-icon"
-          src="/Google__G__Logo.svg"
-          alt="Google_G_logo"
-        />
-      </span>
-      {/* <span className="flex flex-auto justify-center items-center h-12"> */}
-      <p className="google-button-text">Sign in with google</p>
-      {/* </span> */}
-    </button>
-  );
+  <button type="button" className="google-button" onClick={onClick}>
+    <span className="google-icon-wrapper">
+      <img
+        className="google-icon"
+        src="/Google__G__Logo.svg"
+        alt="Google_G_logo"
+      />
+    </span>
+    {/* <span className="flex flex-auto justify-center items-center h-12"> */}
+    <p className="google-button-text">Sign in with google</p>
+    {/* </span> */}
+  </button>
+);
 
 export { GoogleButton };
-{
-  /* <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+
+/* <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
 
 <div class="google-btn">
   <div class="google-icon-wrapper">
@@ -74,4 +74,3 @@ $button-active-blue: #1669F2;
 }
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:500); */
-}
