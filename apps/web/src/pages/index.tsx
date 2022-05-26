@@ -24,6 +24,11 @@ const Index: NextPage = () => {
   //   ssr: false,
   // });
 
+  const tokyoPublicOffice = {
+    lat: 35.6896342,
+    lng: 139.6921007,
+  };
+
   return (
     <div className="grid grid-cols-12">
       <div className="col-start-2 col-end-12 p-5 mt-10 bg-white border border-gray-200 shadow-sm">
@@ -39,7 +44,7 @@ const Index: NextPage = () => {
         </div>
         <div className="grid grid-cols-10 mt-5">
           <div className="col-span-8">
-            <GoogleMap>
+            <GoogleMap center={tokyoPublicOffice} zoomLevel={15}>
               <OrgMapMarker />
             </GoogleMap>
 
