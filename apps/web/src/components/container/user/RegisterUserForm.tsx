@@ -8,13 +8,12 @@ import {
 import { EmailRegExp, PasswordRegExp } from '../../../lib';
 import { NotificationSet } from '../../presentational/organisms';
 
+import { Form, LoadingSpinner } from '../../presentational/atoms';
 import {
-  Form,
+  ButtonOrLoading,
   Input,
   InputValue,
-  LoadingSpinner,
-} from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+} from '../../presentational/molecules';
 
 interface UserRegisterInput extends InputValue {
   email: string;

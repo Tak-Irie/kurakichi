@@ -6,8 +6,8 @@ import {
   InquiryCategoryModel,
   InquiryStatusModel,
 } from '../../../lib';
-import { Form, InputTextarea, Select } from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+import { Form, Select } from '../../presentational/atoms';
+import { ButtonOrLoading, InputTextarea } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 type SendInquiryProps = {
@@ -69,7 +69,7 @@ export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId }) => {
           ]}
           required
           register={register}
-         />
+        />
         <InputTextarea<SendInquiryInput>
           rows={3}
           cols={30}

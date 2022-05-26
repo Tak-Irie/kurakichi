@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendMessageMutation } from '../../../graphql/generated';
 import { Any100chrRegExp } from '../../../lib';
-import { Form, InputTextarea } from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+import { Form } from '../../presentational/atoms';
+import { ButtonOrLoading, InputTextarea } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 type SendMessageProps = {

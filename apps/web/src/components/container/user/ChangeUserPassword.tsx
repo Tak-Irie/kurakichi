@@ -3,13 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useChangeUserPasswordMutation } from '../../../graphql';
 import { PasswordRegExp } from '../../../lib';
 
+import { Form, LoadingSpinner } from '../../presentational/atoms';
 import {
-  Form,
+  ButtonOrLoading,
   Input,
   InputValue,
-  LoadingSpinner,
-} from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+} from '../../presentational/molecules';
 
 interface ChangeUserPasswordInput extends InputValue {
   currentPass: string;

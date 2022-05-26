@@ -17,14 +17,16 @@ import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 
-const UserResolver: Resolvers<ApolloContext> = {
+export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
     getUserByCookie: async (_, __, { idInCookie }) => {
       console.log('catch:');
       console.log('id:', idInCookie);
-      if (idInCookie === undefined)
+      if (idInCookie === undefined) {
         return returnErrorToGQL('ログインが確認できませんでした');
+      }
 
+      console.log('catch2:');
       // FIXME:CQRS
       // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
       // console.log('me/usecaseResult:', usecaseResult);
@@ -170,5 +172,3 @@ const UserResolver: Resolvers<ApolloContext> = {
     // changePassword: async () => {},
   },
 };
-
-export { UserResolver };

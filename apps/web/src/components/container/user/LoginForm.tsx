@@ -4,13 +4,12 @@ import { useForm } from 'react-hook-form';
 import { useGetUserMyInfoQuery, useLoginUserMutation } from '../../../graphql';
 import { EmailRegExp, PasswordRegExp } from '../../../lib';
 
+import { Form, LoadingSpinner } from '../../presentational/atoms';
 import {
-  Form,
+  ButtonOrLoading,
   Input,
   InputValue,
-  LoadingSpinner,
-} from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+} from '../../presentational/molecules';
 
 interface UserLoginInput extends InputValue {
   email: string;
@@ -24,7 +23,7 @@ export const LoginForm: FC = () => {
     ssr: false,
   });
 
-  const [loginUser, { data, loading, error }] = useLoginUserMutation();
+  const [loginUser, { data, loading }] = useLoginUserMutation();
 
   const {
     register,
@@ -49,7 +48,7 @@ export const LoginForm: FC = () => {
     return <LoadingSpinner />;
   }
 
-  if (userData?.getUserByCookie?.__typename == 'User') {
+  if (userData?.getUserByCookie?.__typename === 'User') {
     router.replace('/');
   }
 
@@ -59,34 +58,34 @@ export const LoginForm: FC = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
-        <Input<UserLoginInput>
-          type="email"
-          fieldLabel="メールアドレス"
-          label="email"
-          required
-          pattern={EmailRegExp}
-          autoComplete="email"
-          register={register}
-          errMessage={errors.email && errors.email.message}
+      <Input<UserLoginInput>
+        type="email"
+        fieldLabel="メールアドレス"
+        label="email"
+        required
+        pattern={EmailRegExp}
+        autoComplete="email"
+        register={register}
+        errMessage={errors.email && errors.email.message}
+      />
+      <Input<UserLoginInput>
+        type="password"
+        fieldLabel="パスワード"
+        label="password"
+        required
+        pattern={PasswordRegExp}
+        autoComplete="current-password"
+        register={register}
+        errMessage={errors.password && errors.password.message}
+      />
+      <div className="flex justify-end">
+        <ButtonOrLoading
+          color="yellow"
+          buttonType="submit"
+          buttonLabel="ログイン"
+          loading={loading}
         />
-        <Input<UserLoginInput>
-          type="password"
-          fieldLabel="パスワード"
-          label="password"
-          required
-          pattern={PasswordRegExp}
-          autoComplete="current-password"
-          register={register}
-          errMessage={errors.password && errors.password.message}
-        />
-        <div className="flex justify-end">
-          <ButtonOrLoading
-            color="yellow"
-            buttonType="submit"
-            buttonLabel="ログイン"
-            loading={loading}
-          />
-        </div>
-      </Form>
+      </div>
+    </Form>
   );
 };

@@ -18,22 +18,24 @@ import {
 } from '../../presentational/molecules';
 import { LogoutMenuItem } from '../user/LogoutButton';
 
-const NavAuthSection: FC = () => {
+export const NavAuthSection: FC = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
-    fetchPolicy: 'cache-only',
+    fetchPolicy: 'cache-first',
     ssr: false,
   });
 
-  if (loading)
+  if (loading) {
+    console.log(':', loading);
     return (
       <div>
         <LoadingSpinner />
       </div>
     );
+  }
 
   if (error) return <div>{error.message}</div>;
 
-  if (!data)
+  if (data?.getUserByCookie?.__typename === 'Errors')
     return (
       <div className="flex absolute space-x-1">
         <Link href="/auth/register" passHref>
@@ -91,5 +93,3 @@ const NavAuthSection: FC = () => {
   }
   return <p>wip, something wrong</p>;
 };
-
-export { NavAuthSection };
