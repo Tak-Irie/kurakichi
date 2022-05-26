@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   rules: {
-    'no-underscore-dangle': 'warn',
+    'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'import/prefer-default-export': 'off',
     // react
     'react/function-component-definition': [

@@ -81,7 +81,6 @@ const InquiryBoxPrivatePage: NextPage = () => {
                   <InquiryInfiniteTable
                     orgId={fetchedOrg.id}
                     initialInquiries={edges.map((e) => e.node)}
-                    limit={20}
                   />
                 </>,
               ]
