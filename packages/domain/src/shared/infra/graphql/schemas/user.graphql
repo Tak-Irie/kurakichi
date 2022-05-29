@@ -65,23 +65,23 @@ type MessageLeafEdges {
 }
 
 type Query {
-  getUserByCookie: UserResult
-  getUserById(userId: String!): UserResult
-  getUsers: UsersResult
-  getMessagesByCookie: MessagesResult
-  getMessagesByTreeId(treeId: String!): MessageTreeResult
+  getUserByCookie: UserResult!
+  getUserById(userId: String!): UserResult!
+  getUsers: UsersResult!
+  getMessagesByCookie: MessagesResult!
+  getMessagesByTreeId(treeId: String!): MessageTreeResult!
 }
 
 type Mutation {
-  registerUser(input: registerUserInput!): UserResult
-  loginUser(input: loginUserInput!): UserResult
-  updateUser(input: updateUserInput!): UserResult
-  logoutUser: BoolResult
-  deleteUser: BoolResult
-  forgetPassword(email: String!): BoolResult
-  changePassword(input: changePasswordInput): BoolResult
-  sendMessage(input: sendMessageInput!): MessageResult
-  replyMessage(input: replyMessageInput!): MessageResult
+  registerUser(input: registerUserInput!): UserResult!
+  loginUser(input: loginUserInput!): UserResult!
+  updateUser(input: updateUserInput!): UserResult!
+  logoutUser: BoolResult!
+  deleteUser: BoolResult!
+  forgetPassword(email: String!): BoolResult!
+  changePassword(input: changePasswordInput): BoolResult!
+  sendMessage(input: sendMessageInput!): MessageResult!
+  replyMessage(input: replyMessageInput!): MessageResult!
 }
 
 union UserResult = User | Errors

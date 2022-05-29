@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react';
 
 export const Marker: FC<google.maps.MarkerOptions> = (options) => {
   const [marker, setMarker] = useState<google.maps.Marker>();
-  const contentString = '<div><p>hoge</p></div>';
 
   useEffect(() => {
     if (!marker) {
@@ -18,19 +17,8 @@ export const Marker: FC<google.maps.MarkerOptions> = (options) => {
   }, [marker]);
 
   useEffect(() => {
-    const { map } = options;
     if (marker) {
       marker.setOptions(options);
-      const infoWindow = new google.maps.InfoWindow({
-        content: contentString,
-      });
-      marker.addListener('click', () => {
-        infoWindow.open({
-          anchor: marker,
-          map,
-          shouldFocus: false,
-        });
-      });
     }
   }, [marker, options]);
 

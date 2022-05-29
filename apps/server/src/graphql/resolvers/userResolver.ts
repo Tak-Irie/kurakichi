@@ -20,13 +20,14 @@ import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
     getUserByCookie: async (_, __, { idInCookie }) => {
-      console.log('catch:');
-      console.log('id:', idInCookie);
       if (idInCookie === undefined) {
-        return returnErrorToGQL('ログインが確認できませんでした');
+        return {
+          __typename: 'Errors',
+          applicationError: { message: 'miss' },
+        };
       }
 
-      console.log('catch2:');
+      console.log('pass if:');
       // FIXME:CQRS
       // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
       // console.log('me/usecaseResult:', usecaseResult);

@@ -6,6 +6,7 @@
 @tailwind utilities;
 
 .google-button {
+  position: relative;
   width: 184px;
   height: 42px;
   background-color: #4285f4;
@@ -21,7 +22,7 @@
 }
 
 .google-icon-wrapper {
-  position: absolute;
+  position: relative;
   margin-top: 1px;
   margin-left: 1px;
   width: 40px;

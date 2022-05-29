@@ -1,28 +1,26 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import {
-  OrgMapMarker,
   SearchOrgByPrefForm,
   SearchOrgByServiceForm,
 } from '../components/container/org';
 import {
   GeocodeByBrowserButton,
   GeocodeByPostcodeForm,
-  GoogleMap,
 } from '../components/container/shared';
-import { TextH2 } from '../components/presentational/atoms';
+import { MapViewer } from '../components/container/shared/GoogleMap/MapViewer';
+import { LoadingSpinner, TextH2 } from '../components/presentational/atoms';
 import {
   ArticlesWelfareGuide,
   HelperPop,
 } from '../components/presentational/organisms';
+import { useGetOrgsForMapQuery } from '../graphql/generated';
 import { DEFAULT_MAP_PIN } from '../lib/Constants';
 
 const Index: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);
-  // const { data, loading, error } = useGetOrgsForMapQuery({
-  //   ssr: false,
-  // });
+  const { data, loading } = useGetOrgsForMapQuery();
 
   const tokyoPublicOffice = {
     lat: 35.6896342,
@@ -42,22 +40,24 @@ const Index: NextPage = () => {
             />
           </span>
         </div>
-        <div className="grid grid-cols-10 mt-5">
-          <div className="col-span-8">
-            <GoogleMap center={tokyoPublicOffice} zoomLevel={15}>
-              <OrgMapMarker />
-            </GoogleMap>
-
-            {/* {loading && !data?.getOrgs.orgs ? (
+        <div className="grid grid-cols-10 mt-5 h-full">
+          <div className="col-span-8 h-full">
+            {loading ? (
               <LoadingSpinner />
             ) : (
               <MapViewer
-                center={isLocation}
-                mapContainerCSS={{ height: '50vh', width: 'auto' }}
-                orgs={data.getOrgs.orgs}
+                center={tokyoPublicOffice}
+                mapContainerCSS={{
+                  height: '50vh',
+                  width: 'auto',
+                }}
+                orgs={
+                  (data?.getOrgs.__typename === 'Orgs' && data.getOrgs.orgs) ||
+                  []
+                }
                 zoomLevel={13}
               />
-            )} */}
+            )}
           </div>
           <div className="flex flex-col col-span-2 ml-10 space-y-10">
             <GeocodeByBrowserButton

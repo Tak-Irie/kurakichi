@@ -4,7 +4,7 @@ import { Resolvers } from '../generated/generatedTypes';
 export const UploadResolver: Resolvers<ApolloContext> = {
   Mutation: {
     uploadFile: async (parent, { file }) => {
-      console.log('catch:');
+      console.log('catch upload query:');
       console.log('file:', file);
       // const { createReadStream, filename, mimetype, encoding } = await file;
 

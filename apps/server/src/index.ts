@@ -20,6 +20,7 @@ const main = async () => {
   console.log('psql_url', process.env.PSQL_URL);
   console.log('redis_url', process.env.REDIS_URL);
   console.log('redis', redisUrl);
+  console.log('corsWeb', process.env.CORS_WEB);
 };
 
 main().catch((err) => {

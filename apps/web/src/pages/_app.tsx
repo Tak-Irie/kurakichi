@@ -5,9 +5,12 @@ import { ApolloProvider } from '@apollo/client';
 import '../../styles/globals.css';
 
 import { Layout } from '../components/presentational/templates';
-import { apolloClient } from '../lib/createApolloClient';
+import { useApollo } from '../lib/createApolloClient';
 
-const CustomApp = ({ Component, pageProps }: AppProps) => (
+const CustomApp = ({ Component, pageProps }: AppProps) => {
+  const apolloClient = useApollo(pageProps);
+
+  return (
     <ApolloProvider client={apolloClient}>
       <Head>
         <title>くらきち~くらしのあんぜんきち~</title>
@@ -16,6 +19,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => (
         <Component {...pageProps} />
       </Layout>
     </ApolloProvider>
-  )
+  );
+};
 
 export default CustomApp;

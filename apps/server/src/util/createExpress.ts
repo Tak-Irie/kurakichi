@@ -32,7 +32,7 @@ const createExpress = async ({ redis }: ExpressArgs) => {
         httpOnly: true,
         sameSite: 'lax',
         secure: IS_PROD,
-        domain: IS_PROD ? 'www.kurakichi.org' : undefined,
+        domain: IS_PROD ? 'www.kurakichi.org' : 'localhost:3000',
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET || 'development',

@@ -19,12 +19,12 @@ const UserRegisterPage: NextPage = () => (
         <div className="mt-10 ">
           <TextWithDivider content="ソーシャルログインを利用する" />
           <div className="grid grid-cols-2 mt-10 max-h-12">
-            <span className="flex">
+            <div>
               <GoogleLoginButton />
-            </span>
-            <span className="flex justify-end">
+            </div>
+            <div>
               <YahooLoginButton />
-            </span>
+            </div>
           </div>
           <div className="mt-5 space-y-4">
             <Disclosure

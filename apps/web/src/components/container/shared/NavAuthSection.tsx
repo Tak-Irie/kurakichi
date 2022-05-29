@@ -21,11 +21,9 @@ import { LogoutMenuItem } from '../user/LogoutButton';
 export const NavAuthSection: FC = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
-    ssr: false,
   });
 
   if (loading) {
-    console.log(':', loading);
     return (
       <div>
         <LoadingSpinner />
@@ -35,10 +33,10 @@ export const NavAuthSection: FC = () => {
 
   if (error) return <div>{error.message}</div>;
 
-  if (data?.getUserByCookie?.__typename === 'Errors')
+  if (data?.getUserByCookie.__typename === 'Errors')
     return (
       <div className="flex absolute space-x-1">
-        <Link href="/auth/register" passHref>
+        <Link href="/auth/user-register" passHref>
           <a href="replace">
             <ButtonBig color="yellow" type="button" label="新規登録" />
           </a>
@@ -51,7 +49,7 @@ export const NavAuthSection: FC = () => {
       </div>
     );
 
-  if (data?.getUserByCookie?.__typename === 'User') {
+  if (data?.getUserByCookie.__typename === 'User') {
     const authorizedUser = data.getUserByCookie;
     const belongedOrg = idx(authorizedUser, (d) => d.orgs.edges);
     return (
