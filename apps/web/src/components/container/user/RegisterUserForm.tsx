@@ -2,13 +2,14 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  useGetUserMyInfoQuery,
+  GetUserMyInfoDocument,
+  GetUserMyInfoQuery,
   useRegisterUserMutation,
 } from '../../../graphql';
 import { EmailRegExp, PasswordRegExp } from '../../../lib';
 import { NotificationSet } from '../../presentational/organisms';
 
-import { Form, LoadingSpinner } from '../../presentational/atoms';
+import { Form } from '../../presentational/atoms';
 import {
   ButtonOrLoading,
   Input,
@@ -22,10 +23,9 @@ interface UserRegisterInput extends InputValue {
 
 export const RegisterUserForm: FC = () => {
   const router = useRouter();
-  const { data: userData, loading: userLoading } = useGetUserMyInfoQuery({
-    fetchPolicy: 'cache-only',
-    ssr: false,
-  });
+  // const { data: userData, loading: userLoading } = useGetUserMyInfoQuery({
+  //   fetchPolicy: 'cache-only',
+  // });
 
   const [registerUser, { data, loading, error }] = useRegisterUserMutation();
 
@@ -43,75 +43,85 @@ export const RegisterUserForm: FC = () => {
       // avoid to cache input data, set no-cache
       await registerUser({
         variables: { input: { ...value } },
-        fetchPolicy: 'no-cache',
+        update: (cache, result) => {
+          const userData = result.data;
+          if (userData?.registerUser.__typename === 'User') {
+            cache.writeQuery<GetUserMyInfoQuery>({
+              query: GetUserMyInfoDocument,
+              data: {
+                __typename: 'Query',
+                getUserByCookie: {
+                  __typename: 'User',
+                  ...userData.registerUser,
+                },
+              },
+            });
+          }
+        },
+        // fetchPolicy: 'no-cache',
       });
     } catch (err) {
       console.error('registerMutateErr:', err);
     }
   };
 
-  if (userLoading) {
+  if (loading) {
     return <p>loading</p>;
   }
 
-  if (userData?.getUserByCookie?.__typename === 'User') {
+  if (data?.registerUser?.__typename === 'User') {
+    // console.log('registered:', data.registerUser.name);
     router.replace('/');
   }
 
-  if (userData?.getUserByCookie?.__typename === 'Errors' || null) {
-    return (
-      <>
-        <NotificationSet
-          succeededContent=""
-          succeededLabel={
-            data?.registerUser?.__typename === 'User'
-              ? (data.registerUser.name as string)
-              : ''
-          }
-          errContent={
-            data?.registerUser?.__typename === 'Errors'
-              ? data.registerUser.applicationError?.message
-              : ''
-          }
-          sysErrContent={error}
-        />
-        <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
-          <Input<UserRegisterInput>
-            type="email"
-            fieldLabel="メールアドレス"
-            label="email"
-            register={register}
-            required
-            pattern={EmailRegExp}
-            autoComplete="email"
-            errMessage={errors.email && errors.email.message}
-          />
-          <Input<UserRegisterInput>
-            type="password"
-            fieldLabel="パスワード"
-            label="password"
-            register={register}
-            required
-            pattern={PasswordRegExp}
-            autoComplete="new-password"
-            errMessage={errors.password && errors.password.message}
-            helperText="8~30字の英数記号(.-_*!)を入力して下さい。英字の大小は区別されます"
-          />
-          <div className="flex justify-end">
-            <ButtonOrLoading
-              color="yellow"
-              buttonType="submit"
-              buttonLabel="新規登録"
-              loading={loading}
-            />
-          </div>
-        </Form>
-      </>
-    );
-  }
+  // if (data?.registerUser?.__typename === 'Errors' || null) {
   return (
-    <div className="absolute z-10 w-screen h-screen">
-      <LoadingSpinner />
-    </div>
+    <>
+      <NotificationSet
+        succeededContent=""
+        succeededLabel={
+          data?.registerUser?.__typename === 'User'
+            ? (data.registerUser.name as string)
+            : ''
+        }
+        errContent={
+          data?.registerUser?.__typename === 'Errors'
+            ? data.registerUser.applicationError?.message
+            : ''
+        }
+        sysErrContent={error}
+      />
+      <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
+        <Input<UserRegisterInput>
+          type="email"
+          fieldLabel="メールアドレス"
+          label="email"
+          register={register}
+          required
+          pattern={EmailRegExp}
+          autoComplete="email"
+          errMessage={errors.email && errors.email.message}
+        />
+        <Input<UserRegisterInput>
+          type="password"
+          fieldLabel="パスワード"
+          label="password"
+          register={register}
+          required
+          pattern={PasswordRegExp}
+          autoComplete="new-password"
+          errMessage={errors.password && errors.password.message}
+          helperText="8~30字の英数記号(.-_*!)を入力して下さい。英字の大小は区別されます"
+        />
+        <div className="flex justify-end">
+          <ButtonOrLoading
+            color="yellow"
+            buttonType="submit"
+            buttonLabel="新規登録"
+            loading={loading}
+          />
+        </div>
+      </Form>
+    </>
   );
 };

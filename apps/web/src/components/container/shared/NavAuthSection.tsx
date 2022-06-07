@@ -19,6 +19,7 @@ import {
 import { LogoutMenuItem } from '../user/LogoutButton';
 
 export const NavAuthSection: FC = () => {
+  // console.log('rendered:');
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
   });
@@ -33,21 +34,10 @@ export const NavAuthSection: FC = () => {
 
   if (error) return <div>{error.message}</div>;
 
-  if (data?.getUserByCookie.__typename === 'Errors')
-    return (
-      <div className="flex absolute space-x-1">
-        <Link href="/auth/user-register" passHref>
-          <a href="replace">
-            <ButtonBig color="yellow" type="button" label="新規登録" />
-          </a>
-        </Link>
-        <Link href="/auth/login" passHref>
-          <a href="replace">
-            <ButtonBig color="yellow" type="button" label="ログイン" />
-          </a>
-        </Link>
-      </div>
-    );
+  // if (data?.getUserByCookie.__typename === 'Errors')
+  //   return (
+
+  //   );
 
   if (data?.getUserByCookie.__typename === 'User') {
     const authorizedUser = data.getUserByCookie;
@@ -89,5 +79,18 @@ export const NavAuthSection: FC = () => {
       </div>
     );
   }
-  return <p>wip, something wrong</p>;
+  return (
+    <div className="flex absolute space-x-1">
+      <Link href="/auth/user-register" passHref>
+        <a href="replace">
+          <ButtonBig color="yellow" type="button" label="新規登録" />
+        </a>
+      </Link>
+      <Link href="/auth/login" passHref>
+        <a href="replace">
+          <ButtonBig color="yellow" type="button" label="ログイン" />
+        </a>
+      </Link>
+    </div>
+  );
 };

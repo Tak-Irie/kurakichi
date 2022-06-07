@@ -40,7 +40,7 @@ export const MapViewer: FC<MapViewerProps> = ({
   if (loadError) return <p>Mapの読み込みに失敗しました</p>;
 
   console.log('mapComponentMounted:');
-  console.log('orgs:', orgs);
+  // console.log('orgs:', orgs);
 
   if (orgs) {
     return isLoaded ? (
@@ -85,7 +85,6 @@ export const MapViewer: FC<MapViewerProps> = ({
       </div>
     );
   }
-  console.log('no org:');
 
   return isLoaded ? (
     <GoogleMap

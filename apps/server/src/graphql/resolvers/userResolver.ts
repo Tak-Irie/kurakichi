@@ -20,6 +20,7 @@ import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
     getUserByCookie: async (_, __, { idInCookie }) => {
+      console.log('cookie:', idInCookie);
       if (idInCookie === undefined) {
         return {
           __typename: 'Errors',
@@ -68,6 +69,8 @@ export const UserResolver: Resolvers<ApolloContext> = {
   },
   Mutation: {
     registerUser: async (_, { input }, context) => {
+      console.log('catch input:', input);
+      console.log('catch input:', context);
       const usecaseResult = await useRegisterUserUsecase.execute({
         ...input,
       });
@@ -76,10 +79,11 @@ export const UserResolver: Resolvers<ApolloContext> = {
       const dtoUser = usecaseResult.value.getValue();
       // console.log('stoUser:', dtoUser);
       context.req.session.userId = dtoUser.id;
-      // console.log('session:', context.req.session.userId);
-      const user = dtoUserToGql(usecaseResult.value.getValue());
+      // context.req.session.save;
+      console.log('session-userId:', context.req.session.userId);
+      const user = dtoUserToGql(dtoUser);
+      console.log('user:', user);
       return {
-        __typename: 'User',
         ...user,
       };
     },

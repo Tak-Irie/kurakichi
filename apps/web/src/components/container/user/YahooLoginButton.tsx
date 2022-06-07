@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { YahooButton } from '../../presentational/atoms';
 
 const YahooLoginButton: FC = () => {

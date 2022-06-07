@@ -39,7 +39,7 @@ const startApolloServer = async ({
     schema,
     context: ({ req, res }) => {
       const idOrUndefined = getUserIdByCookie({ req, res });
-      return { idInCookie: idOrUndefined, req, pubsub: redisPubSub };
+      return { idInCookie: idOrUndefined, req, res, pubsub: redisPubSub };
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),

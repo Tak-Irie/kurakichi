@@ -23,7 +23,7 @@ export const ReplyMessageForm: FC<ResponseMessageProps> = ({
   const [replyMessage, { data, error, loading }] = useReplyMessageMutation();
 
   const onSubmit = async (values: ResponseMessageInput) => {
-    console.log('resMessageValues:', values);
+    // console.log('resMessageValues:', values);
     try {
       await replyMessage({
         variables: {
