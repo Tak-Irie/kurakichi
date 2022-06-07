@@ -1,12 +1,15 @@
 {
   "extends": "@kurakichi/tsconfig/server.json",
   "compilerOptions": {
+    "module": "NodeNext",
+    "maxNodeModuleJsDepth": 10,
     "rootDir": ".",
     "outDir": "dist",
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
-    "removeComments": true
+    "removeComments": true,
+    "allowJs": true
   },
   "include": [
     "src"
@@ -20,4 +23,15 @@
     "src/**/*.spec.ts",
     "**/generated/*.ts"
   ],
+  "ts-node": {
+    // It is faster to skip typechecking.
+    // Remove if you want ts-node to do typechecking.
+    "transpileOnly": true,
+    "files": true,
+    "compilerOptions": {
+      // compilerOptions specified here will override those declared below,
+      // but *only* in ts-node.  Useful if you want ts-node and tsc to use
+      // different options with a single tsconfig.json.
+    }
+  },
 }

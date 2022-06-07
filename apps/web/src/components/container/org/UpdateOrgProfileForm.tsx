@@ -51,7 +51,7 @@ export const UpdateOrgProfileForm: FC<UpdateOrgProfileProps> = ({
   const { register, handleSubmit } = useForm<UpdateOrgProfileInput>();
 
   const onSubmit = async (values: UpdateOrgProfileInput) => {
-    console.log('orgUpdateValue:', values);
+    // console.log('orgUpdateValue:', values);
     try {
       await updateOrg({
         variables: { input: { orgId, ...values } },

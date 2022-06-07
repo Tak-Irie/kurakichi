@@ -1,5 +1,6 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-import { GraphQLUpload } from 'graphql-upload';
+// eslint-disable-next-line import/extensions
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 
 type ScalarMap = {
   [key: string]: GraphQLScalarType;

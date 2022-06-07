@@ -1,7 +1,8 @@
 import connectRedis from 'connect-redis';
 import express from 'express';
 import session from 'express-session';
-import { graphqlUploadExpress } from 'graphql-upload';
+// eslint-disable-next-line import/extensions
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 import type { Redis } from 'ioredis';
 import {
@@ -34,7 +35,7 @@ const createExpress = async ({ redis }: ExpressArgs) => {
         httpOnly: true,
         sameSite: 'lax',
         secure: IS_PROD,
-        domain: IS_PROD ? 'www.kurakichi.org' : 'localhost:3000',
+        domain: IS_PROD ? '.www.kurakichi.org' : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET || 'development',

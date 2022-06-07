@@ -20,7 +20,7 @@ import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
     getUserByCookie: async (_, __, { idInCookie }) => {
-      console.log('cookie:', idInCookie);
+      // console.log('cookie:', idInCookie);
       if (idInCookie === undefined) {
         return {
           __typename: 'Errors',
@@ -28,7 +28,7 @@ export const UserResolver: Resolvers<ApolloContext> = {
         };
       }
 
-      console.log('pass if:');
+      // console.log('confirm cookie!:');
       // FIXME:CQRS
       // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
       // console.log('me/usecaseResult:', usecaseResult);
@@ -69,8 +69,8 @@ export const UserResolver: Resolvers<ApolloContext> = {
   },
   Mutation: {
     registerUser: async (_, { input }, context) => {
-      console.log('catch input:', input);
-      console.log('catch input:', context);
+      // console.log('catch input:', input);
+      // console.log('catch input:', context);
       const usecaseResult = await useRegisterUserUsecase.execute({
         ...input,
       });
@@ -80,9 +80,9 @@ export const UserResolver: Resolvers<ApolloContext> = {
       // console.log('stoUser:', dtoUser);
       context.req.session.userId = dtoUser.id;
       // context.req.session.save;
-      console.log('session-userId:', context.req.session.userId);
+      // console.log('session-userId:', context.req.session.userId);
       const user = dtoUserToGql(dtoUser);
-      console.log('user:', user);
+      // console.log('user:', user);
       return {
         ...user,
       };

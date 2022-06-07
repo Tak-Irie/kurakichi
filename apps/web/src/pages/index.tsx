@@ -9,18 +9,16 @@ import {
   GeocodeByPostcodeForm,
 } from '../components/container/shared';
 import { MapViewer } from '../components/container/shared/GoogleMap/MapViewer';
-import { LoadingSpinner, TextH2 } from '../components/presentational/atoms';
+import { TextH2 } from '../components/presentational/atoms';
 import {
   ArticlesWelfareGuide,
   HelperPop,
 } from '../components/presentational/organisms';
-import { useGetOrgsForMapQuery } from '../graphql/generated';
 import { DEFAULT_MAP_PIN } from '../lib/Constants';
 
 const Index: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLocation, setIsLocation] = useState(DEFAULT_MAP_PIN);
-  const { data, loading } = useGetOrgsForMapQuery();
 
   const tokyoPublicOffice = {
     lat: 35.6896342,
@@ -42,22 +40,14 @@ const Index: NextPage = () => {
         </div>
         <div className="grid grid-cols-10 mt-5 h-full">
           <div className="col-span-8 h-full">
-            {loading ? (
-              <LoadingSpinner />
-            ) : (
-              <MapViewer
-                center={tokyoPublicOffice}
-                mapContainerCSS={{
-                  height: '50vh',
-                  width: 'auto',
-                }}
-                orgs={
-                  (data?.getOrgs.__typename === 'Orgs' && data.getOrgs.orgs) ||
-                  []
-                }
-                zoomLevel={13}
-              />
-            )}
+            <MapViewer
+              center={tokyoPublicOffice}
+              mapContainerCSS={{
+                height: '400px',
+                width: '900px',
+              }}
+              zoomLevel={11}
+            />
           </div>
           <div className="flex flex-col col-span-2 ml-10 space-y-10">
             <GeocodeByBrowserButton
