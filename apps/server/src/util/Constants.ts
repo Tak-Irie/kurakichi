@@ -1,7 +1,6 @@
 const APOLLO_SERVER_URI = 'https://kurakichi.org';
 const APOLLO_STUDIO = 'https://studio.apollographql.com';
 const COOKIE_NAME = process.env.COOKIE_NAME || 'sid';
-const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 365 * 10;
 const IS_PROD = process.env.NODE_ENV === 'production';
 const CRYPT_PASS =
   process.env.CRYPT_PASS ||
@@ -18,7 +17,6 @@ export {
   APOLLO_SERVER_URI,
   APOLLO_STUDIO,
   COOKIE_NAME,
-  COOKIE_MAX_AGE,
   IS_PROD,
   CRYPT_PASS,
   CRYPT_SALT,

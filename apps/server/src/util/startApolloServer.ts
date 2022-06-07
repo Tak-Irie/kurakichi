@@ -41,6 +41,7 @@ const startApolloServer = async ({
       const idOrUndefined = getUserIdByCookie({ req, res });
       return { idInCookie: idOrUndefined, req, res, pubsub: redisPubSub };
     },
+    csrfPrevention: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {

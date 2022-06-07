@@ -10,7 +10,7 @@ import {
   uploadRouter,
   yahooRouter,
 } from '../route';
-import { COOKIE_MAX_AGE, COOKIE_NAME, IS_PROD } from './Constants';
+import { IS_PROD } from './Constants';
 
 type ExpressArgs = {
   redis: Redis;
@@ -19,6 +19,8 @@ type ExpressArgs = {
 const createExpress = async ({ redis }: ExpressArgs) => {
   const app = express();
   const RedisSessionStore = connectRedis(session);
+  const COOKIE_NAME = process.env.COOKIE_NAME || 'sid';
+  const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 365 * 10;
 
   app.use(
     session({
@@ -40,7 +42,6 @@ const createExpress = async ({ redis }: ExpressArgs) => {
     }),
   );
 
-  // in bytes
   app.use(graphqlUploadExpress({ maxFileSize: 1000 * 1000 * 1, maxFiles: 2 }));
 
   app.use('/google', googleRouter);
