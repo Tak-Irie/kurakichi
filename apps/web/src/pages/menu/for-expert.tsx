@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { LinkNextjs } from '../components/presentational/atoms';
+import { LinkNextjs } from '../../components/presentational/atoms';
 
 const forExpertPage: NextPage = () => (
   <div className="inset-0">

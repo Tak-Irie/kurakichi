@@ -34,7 +34,7 @@ export const Article: FC<ArticleProps> = ({
           <p className="" aria-label="Category">
             {category}
           </p>
-          {date != null ? <span className="text-gray-600">{date}</span> : null}
+          {date != null ? <div className="text-gray-600">{date}</div> : null}
         </p>
       ) : null}
       <TextH3 content={title} />

@@ -69,21 +69,21 @@ export const Input = <T extends InputValue>({
       {fieldLabel ? (
         <p className="my-1 text-xs font-bold text-gray-700">{fieldLabel}</p>
       ) : null}
-      <span className="ml-1">
+      <div className="ml-1">
         {helperText ? (
           <PopOnIcon icon={<IconsQuestion />} content={helperText} />
         ) : null}
-      </span>
+      </div>
       {isValid ? (
         <IconsCheckCircle />
       ) : errMessage ? (
-        <span className="p-1 ml-1 text-xs text-red-800 bg-red-100 rounded">
+        <div className="p-1 ml-1 text-xs text-red-800 bg-red-100 rounded">
           {errMessage}
-        </span>
+        </div>
       ) : (
-        <span className="ml-1 text-xs text-red-500">
+        <div className="ml-1 text-xs text-red-500">
           {required === true ? '必須項目' : null}
-        </span>
+        </div>
       )}
     </div>
     <fieldset disabled={disable}>
@@ -119,7 +119,7 @@ export const InputTextarea = <T extends InputValue>({
     {helperText ? (
       <PopOnIcon icon={<IconsQuestion />} content={helperText} />
     ) : null}
-    {errMessage ? <span>a</span> : null}
+    {errMessage ? <div>a</div> : null}
     <textarea
       placeholder={placeholder}
       cols={cols}

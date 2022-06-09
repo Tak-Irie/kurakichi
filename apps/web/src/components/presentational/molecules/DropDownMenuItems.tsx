@@ -25,10 +25,10 @@ export const DropDownMenuItem: FC<Omit<DropDownMenuItemProps, 'onClick'>> = ({
         className="group flex items-center py-2 px-4 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100"
         role="menuitem"
       >
-        <span className="mr-3 mb-1 w-5 h-5 text-gray-500 group-hover:text-gray-700">
+        <div className="mr-3 mb-1 w-5 h-5 text-gray-500 group-hover:text-gray-700">
           {icon}
-        </span>
-        <span>{label}</span>
+        </div>
+        <div>{label}</div>
       </a>
     </Link>
   </Menu.Item>
@@ -44,10 +44,10 @@ export const DropDownMenuItemButton: FC<
       role="menuitem"
       onClick={onClick}
     >
-      <span className="mr-3 mb-1 w-5 h-5 text-gray-500 group-hover:text-gray-700">
+      <div className="mr-3 mb-1 w-5 h-5 text-gray-500 group-hover:text-gray-700">
         {icon}
-      </span>
-      <span>{label}</span>
+      </div>
+      <div>{label}</div>
     </button>
   </Menu.Item>
 );

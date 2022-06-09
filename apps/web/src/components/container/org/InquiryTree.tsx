@@ -28,12 +28,12 @@ export const InquiryTree: FC<InquiryTreeProps> = ({ inquiries, orgId }) => {
             category={inquiries[0].category || 'OTHERS'}
           />
           {inquiries[0].category === 'APPLICATION' ? (
-            <span className="flex justify-center">
+            <div className="flex justify-center">
               <AcceptJoinOrgButton
                 requestUserId={inquiries[0].sender?.id || ''}
                 requestedOrgId={orgId}
               />
-            </span>
+            </div>
           ) : null}
         </div>
         <div className="space-y-1 w-44">
@@ -42,12 +42,12 @@ export const InquiryTree: FC<InquiryTreeProps> = ({ inquiries, orgId }) => {
             size="large"
             status={isStatus || 'UNREAD'}
           />
-          <span className="flex justify-center">
+          <div className="flex justify-center">
             <UpdateInquiryStatusButton
               inquiryId={inquiries[0].id}
               inquiryStatus={isStatus || 'UNREAD'}
             />
-          </span>
+          </div>
         </div>
       </div>
       <div className="mt-10">

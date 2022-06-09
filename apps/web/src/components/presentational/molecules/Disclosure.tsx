@@ -17,29 +17,29 @@ export const Disclosure: FC<DisclosureProps> = ({
   iconCSS,
   labelCSS,
 }) => (
-    <HeadlessDisclosure>
-      {({ open }) => (
-        <>
-          <HeadlessDisclosure.Button>
-            {typeof label === 'string' ? (
-              <span className={`flex ${labelCSS}`}>
-                {label}
-                <span className="flex items-center">
-                  {open ? (
-                    <IconsUpChevron overwriteCSS={iconCSS} />
-                  ) : (
-                    <IconsDownChevron overwriteCSS={iconCSS} />
-                  )}
-                </span>
-              </span>
-            ) : (
-              label
-            )}
-          </HeadlessDisclosure.Button>
-          <HeadlessDisclosure.Panel className={contentCSS}>
-            {content}
-          </HeadlessDisclosure.Panel>
-        </>
-      )}
-    </HeadlessDisclosure>
-  );
+  <HeadlessDisclosure>
+    {({ open }) => (
+      <>
+        <HeadlessDisclosure.Button>
+          {typeof label === 'string' ? (
+            <div className={`flex ${labelCSS}`}>
+              {label}
+              <div className="flex items-center">
+                {open ? (
+                  <IconsUpChevron overwriteCSS={iconCSS} />
+                ) : (
+                  <IconsDownChevron overwriteCSS={iconCSS} />
+                )}
+              </div>
+            </div>
+          ) : (
+            label
+          )}
+        </HeadlessDisclosure.Button>
+        <HeadlessDisclosure.Panel className={contentCSS}>
+          {content}
+        </HeadlessDisclosure.Panel>
+      </>
+    )}
+  </HeadlessDisclosure>
+);

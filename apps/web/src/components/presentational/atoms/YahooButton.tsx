@@ -12,7 +12,7 @@ const YahooButton: FC<YahooButtonProps> = ({ onClick }) => (
     style={{ height: 50, width: 240, background: '#ff0033' }}
     onClick={onClick}
   >
-    <span
+    <div
       style={{ marginTop: 1, marginLeft: 2 }}
       className="w-14 h-12 bg-white bg-center rounded"
     >
@@ -22,10 +22,10 @@ const YahooButton: FC<YahooButtonProps> = ({ onClick }) => (
         src="/yahoo_icon_256.png"
         alt="YahooJapan company logo"
       />
-    </span>
-    <span className="flex flex-auto justify-center items-center h-12">
+    </div>
+    <div className="flex flex-auto justify-center items-center h-12">
       <p className="text-xl font-bold text-white">ログイン</p>
-    </span>
+    </div>
   </button>
 );
 

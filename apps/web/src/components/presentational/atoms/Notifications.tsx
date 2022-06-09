@@ -59,7 +59,7 @@ export const Notification: FC<NotificationProps> = ({
                   onClick={() => setIsShowing(!isShowing)}
                   className="inline-flex w-5 h-5 text-gray-400 hover:text-gray-500 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  <span className="sr-only">Close</span>
+                  <div className="sr-only">Close</div>
                   <XIcon />
                 </button>
               </div>

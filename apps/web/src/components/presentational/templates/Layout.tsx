@@ -1,5 +1,5 @@
 import type { FC, ReactElement } from 'react';
-import { NavBar } from '../../container/shared';
+import { MenuBar } from '../../container/shared';
 import { Footer, NavAlpha } from '../organisms';
 
 type LayoutProps = {
@@ -9,7 +9,7 @@ type LayoutProps = {
 const Layout: FC<LayoutProps> = ({ children }) => (
   <>
     <NavAlpha />
-    <NavBar />
+    <MenuBar />
     <main className="h-max bg-green-50">{children}</main>
     <Footer />
   </>

@@ -5,6 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.map-org {
+  background-color: #fff;
+  width: 100px;
+  height: 100px;
+}
+
 .google-button {
   position: relative;
   width: 184px;

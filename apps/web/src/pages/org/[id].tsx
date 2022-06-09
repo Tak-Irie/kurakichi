@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { SendInquiryForm } from '../../components/container';
 import {
   ButtonWithIcon,
-  FeedbackCaution,
   IconsCaution,
   IconsMail,
   LoadingSpinner,
@@ -56,14 +56,18 @@ const OrgInfoPage: NextPage = () => {
                 />
               }
               contentCSS="absolute z-10 mt-12"
-              content={<div>a</div>}
-              // <SendInquiryForm orgId={org.id} receiverId={org.members[0].id} />}
+              content={
+                <SendInquiryForm
+                  orgId={fetchedOrg.id}
+                  onClick={() => setOpenedInqForm(!openedInqForm)}
+                />
+              }
             />
           ) : (
             <div className="flex items-center space-x-3">
               <PopOnIcon
                 icon={<IconsCaution />}
-                content={<FeedbackCaution>ログインが必要です</FeedbackCaution>}
+                content="お問い合わせには、ログインが必要です"
               />
               <ButtonWithIcon
                 onClick={() => setOpenedInqForm(!openedInqForm)}
@@ -98,7 +102,7 @@ const OrgInfoPage: NextPage = () => {
       />
     );
   }
-  return <p>wip, something wrong</p>;
+  return <div>エラーが発生しました。管理者に報告して下さい。</div>;
 };
 
 export default OrgInfoPage;

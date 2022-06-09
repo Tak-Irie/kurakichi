@@ -76,3 +76,21 @@ export const DropDownMenu2: FC<DropDownMenuProps> = ({
     </Menu>
   </div>
 );
+
+export const DropdownMenu3: FC = () => (
+  <Menu>
+    <Menu.Button>More</Menu.Button>
+    <Menu.Items>
+      <Menu.Item>
+        {({ active }: { active: boolean }) => (
+          <a className={`${active && 'bg-blue-500'}`} href="/account-settings">
+            Account settings
+          </a>
+        )}
+      </Menu.Item>
+      <Menu.Item disabled>
+        <span className="opacity-75">Invite a friend (coming soon!)</span>
+      </Menu.Item>
+    </Menu.Items>
+  </Menu>
+);

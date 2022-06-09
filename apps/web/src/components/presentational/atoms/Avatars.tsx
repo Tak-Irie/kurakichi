@@ -11,12 +11,12 @@ export const Avatar: FC<AvatarsProps> = ({
   alt = 'sampleImage',
   notification = false,
 }) => (
-  <span className="inline-block relative">
+  <div className="inline-block relative">
     <img className="inline-block w-12 h-12 rounded-full" src={src} alt={alt} />
     {notification ? (
-      <span className="block absolute top-0 right-0 w-3 h-3 bg-red-400 rounded-full ring-2 ring-white" />
+      <div className="block absolute top-0 right-0 w-3 h-3 bg-red-400 rounded-full ring-2 ring-white" />
     ) : null}
-  </span>
+  </div>
 );
 
 export const AvatarSmall: FC<AvatarsProps> = ({
@@ -24,16 +24,16 @@ export const AvatarSmall: FC<AvatarsProps> = ({
   alt = 'sampleImage',
   notification = false,
 }) => (
-  <span className="inline-block relative">
+  <div className="inline-block relative">
     <img
       className="inline-block shrink-0 w-8 h-8 rounded-full"
       src={src === 'UNKNOWN' ? '/asian_man1.jpg' : src}
       alt={alt}
     />
     {notification ? (
-      <span className="block absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full ring-2 ring-white" />
+      <div className="block absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full ring-2 ring-white" />
     ) : null}
-  </span>
+  </div>
 );
 
 export const AvatarBig: FC<AvatarsProps> = ({

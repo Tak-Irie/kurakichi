@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unused-prop-types */
 /* eslint-disable react/button-has-type */
-import { FC, ReactElement, SyntheticEvent } from 'react';
+import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 
 type ButtonProps = {
   type: 'button' | 'submit';
-  onClick?: (e: SyntheticEvent) => void | Promise<void>;
+  onClick?: () => void | Dispatch<SetStateAction<any>>;
   color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
   disabled?: boolean;
   label?: string | ReactElement;
@@ -52,7 +52,7 @@ export const ButtonWithIcon: FC<ButtonWithIconProps> = ({
       <div className="inline-flex justify-center items-center mr-2 -ml-1 w-5 h-5 text-gray-400">
         {icon}
       </div>
-      {label ? <span>{label}</span> : null}
+      {label ? <div>{label}</div> : null}
     </button>
   </div>
 );

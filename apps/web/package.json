@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.6.3",
+    "@googlemaps/js-api-loader": "^1.14.3",
     "@googlemaps/markerclusterer": "^2.0.6",
+    "@googlemaps/markerwithlabel": "^2.0.13",
     "@googlemaps/react-wrapper": "^1.1.32",
     "@headlessui/react": "^1.6.1",
     "@heroicons/react": "^1.0.6",

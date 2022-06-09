@@ -15,11 +15,11 @@ const TablePagination: FC<TablePaginationProps> = () => (
   //   <div className="hidden sm:block">
   //     <p className="text-sm text-gray-700">
   //       Showing
-  //       <span className="mx-1 font-medium">1</span>
+  //       <div className="mx-1 font-medium">1</div>
   //       to
-  //       <span className="mx-1 font-medium">10</span>
+  //       <div className="mx-1 font-medium">10</div>
   //       of
-  //       <span className="mx-1 font-medium">20</span>
+  //       <div className="mx-1 font-medium">20</div>
   //       results
   //     </p>
   //   </div>

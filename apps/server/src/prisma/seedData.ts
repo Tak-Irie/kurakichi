@@ -1,34 +1,48 @@
 import { Organization, User } from '@prisma/client';
 
+export const adminUserId = '01F4BVK5ZA3NA42HXKAS0EDHC2';
+export const memberUserId = '01F57P2MEJAWTM75CT151BSCD0';
+
 const shared = {
   heroImageUrl: 'UNKNOWN',
   description: '県民向けの福祉サービスの相談・受付を行っております',
   avatarUrl: 'UNKNOWN',
   homePageUrl: 'UNKNOWN',
-  adminId: '01F4BVK5ZA3NA42HXKAS0EDHC2',
+  adminId: adminUserId,
 };
 
 export const users: User[] = [
   {
-    id: '01F4BVK5ZA3NA42HXKAS0EDHC2',
-    name: 'seedAdmin',
-    avatarUrl: 'UNKNOWN',
-    selfIntro: 'プロトタイプ用の仮ユーザーです',
+    id: adminUserId,
+    name: 'seedOrgAdmin',
+    avatarUrl: '/asian_woman1.jpg',
+    selfIntro: '仮組織管理者です',
     email: 'example-admin@example.com',
     heroImageUrl: 'UNKNOWN',
     password: 'TEST_USER',
-    role: 'VISITOR',
+    role: 'EXPERT',
     ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
   },
   {
-    id: '01F57P2MEJAWTM75CT151BSCD0',
-    name: 'testUser',
-    avatarUrl: 'UNKNOWN',
-    selfIntro: 'テスト用のユーザーです',
-    email: 'example-test@example.com',
+    id: memberUserId,
+    name: 'seedOrgMember',
+    avatarUrl: '/asian_man3.jpg',
+    selfIntro: '仮組織メンバーです',
+    email: 'example-member@example.com',
     heroImageUrl: 'UNKNOWN',
     password: 'THIS_IS_TEST_USER_PASSWORD',
     role: 'EXPERT',
+    ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
+  },
+  {
+    id: '01F57P2MEJAWTM75CT151HOGE',
+    name: 'seedVistor',
+    avatarUrl: '/asian_man1.jpg',
+    selfIntro: '仮一般ユーザーです',
+    email: 'example-visitor@example.com',
+    heroImageUrl: 'UNKNOWN',
+    password: 'THIS_IS_TEST_USER_PASSWORD',
+    role: 'VISITOR',
     ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
   },
 ];

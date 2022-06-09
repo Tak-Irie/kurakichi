@@ -64,9 +64,9 @@ export const InquiryInfiniteTable: FC<InquiryInfiniteTableProps> = ({
       hasMore={inquiries.pageInfo.hasMore}
       height={400}
       endMessage={
-        <span className="flex justify-center bg-yellow-100 rounded">
+        <div className="flex justify-center bg-yellow-100 rounded">
           <TextSmall color="yellow" content="お問い合わせは以上です" />
-        </span>
+        </div>
       }
       loader={<LoadingSpinner />}
     >
