@@ -7,21 +7,15 @@ import { DropDownMenuItemButton } from '../../presentational/molecules';
 
 export const LogoutButton: FC = () => {
   const router = useRouter();
-
   const [logout, { client }] = useLogoutUserMutation();
 
-  return (
-    <ButtonBig
-      label="ログアウト"
-      type="button"
-      onClick={async (e) => {
-        e.preventDefault();
-        await logout();
-        await client.resetStore();
-        router.replace('/');
-      }}
-    />
-  );
+  const clickHandler = async () => {
+    await logout();
+    await client.resetStore();
+    router.replace('/');
+  };
+
+  return <ButtonBig label="ログアウト" type="button" onClick={clickHandler} />;
 };
 
 export const LogoutMenuItem: FC = () => {

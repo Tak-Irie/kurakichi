@@ -7,6 +7,7 @@ import { FC, useCallback, useContext, useEffect } from 'react';
 import { MapContext } from './MapContext';
 
 type LabeledMarkerProps = MarkerWithLabelOptions & {
+  id?: string;
   linkURL: string;
 };
 
@@ -20,9 +21,11 @@ export const LabeledMarker: FC<LabeledMarkerProps> = ({
   const createMarker = useCallback(() => {
     const marker = new MarkerWithLabel({
       map: googleMap,
+      labelClass: linkURL,
       ...options,
     });
-    marker.addListener('click', () => {
+    google.maps.event.addListener(marker, 'click', () => {
+      // console.log('get:', marker.get());
       router.push(linkURL);
     });
     return marker;

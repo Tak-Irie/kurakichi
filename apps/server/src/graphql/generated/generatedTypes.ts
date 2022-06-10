@@ -246,6 +246,7 @@ export type Mutation = {
   requestJoinOrg: OrgResult;
   sendInquiry: InquiryResult;
   sendMessage: MessageResult;
+  ssoLogin: SsoResult;
   updateInquiryStatus: InquiryResult;
   updateOrg: OrgResult;
   updateUser: UserResult;
@@ -310,6 +311,11 @@ export type MutationSendInquiryArgs = {
 
 export type MutationSendMessageArgs = {
   input: SendMessageInput;
+};
+
+
+export type MutationSsoLoginArgs = {
+  provider: Scalars['String'];
 };
 
 
@@ -474,6 +480,13 @@ export type RegisterOrgInput = {
   name: Scalars['String'];
   phoneNumber: Scalars['String'];
 };
+
+export type Sso = {
+  __typename?: 'SSO';
+  url: Scalars['String'];
+};
+
+export type SsoResult = Errors | Sso;
 
 export type SendInquiryInput = {
   category: Scalars['InquiryCategory'];
@@ -708,6 +721,8 @@ export type ResolversTypes = ResolversObject<{
   PostDialogResult: ResolversTypes['Dialog'] | ResolversTypes['Errors'];
   Query: ResolverTypeWrapper<{}>;
   RegisterOrgInput: RegisterOrgInput;
+  SSO: ResolverTypeWrapper<Sso>;
+  SSOResult: ResolversTypes['Errors'] | ResolversTypes['SSO'];
   SendInquiryInput: SendInquiryInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
@@ -792,6 +807,8 @@ export type ResolversParentTypes = ResolversObject<{
   PostDialogResult: ResolversParentTypes['Dialog'] | ResolversParentTypes['Errors'];
   Query: {};
   RegisterOrgInput: RegisterOrgInput;
+  SSO: Sso;
+  SSOResult: ResolversParentTypes['Errors'] | ResolversParentTypes['SSO'];
   SendInquiryInput: SendInquiryInput;
   String: Scalars['String'];
   Subscription: {};
@@ -1073,6 +1090,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   requestJoinOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
   sendInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
   sendMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
+  ssoLogin?: Resolver<ResolversTypes['SSOResult'], ParentType, ContextType, RequireFields<MutationSsoLoginArgs, 'provider'>>;
   updateInquiryStatus?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
   updateOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
@@ -1154,6 +1172,15 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUsers?: Resolver<ResolversTypes['UsersResult'], ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Node']>>>, ParentType, ContextType, RequireFields<QueryNodesArgs, 'ids'>>;
+}>;
+
+export type SsoResolvers<ContextType = any, ParentType extends ResolversParentTypes['SSO'] = ResolversParentTypes['SSO']> = ResolversObject<{
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type SsoResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SSOResult'] = ResolversParentTypes['SSOResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'SSO', ParentType, ContextType>;
 }>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
@@ -1259,6 +1286,8 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   PageInfo?: PageInfoResolvers<ContextType>;
   PostDialogResult?: PostDialogResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SSO?: SsoResolvers<ContextType>;
+  SSOResult?: SsoResultResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Succeeded?: SucceededResolvers<ContextType>;
   Upload?: GraphQLScalarType;

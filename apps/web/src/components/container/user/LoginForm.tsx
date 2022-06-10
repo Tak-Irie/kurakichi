@@ -1,7 +1,12 @@
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useGetUserMyInfoQuery, useLoginUserMutation } from '../../../graphql';
+import {
+  GetUserMyInfoDocument,
+  GetUserMyInfoQuery,
+  useGetUserMyInfoQuery,
+  useLoginUserMutation,
+} from '../../../graphql';
 import { EmailRegExp, PasswordRegExp } from '../../../lib';
 
 import { Form, LoadingSpinner } from '../../presentational/atoms';
@@ -20,7 +25,6 @@ export const LoginForm: FC = () => {
   const router = useRouter();
   const { data: userData, loading: userLoading } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
-    ssr: false,
   });
 
   const [loginUser, { data, loading }] = useLoginUserMutation();
@@ -35,10 +39,28 @@ export const LoginForm: FC = () => {
 
   const onSubmit = async (value: UserLoginInput) => {
     try {
-      await loginUser({
+      const res = await loginUser({
         variables: { input: { ...value } },
-        fetchPolicy: 'no-cache',
+        update: (cache, result) => {
+          const loggedInUser = result.data;
+          if (loggedInUser?.loginUser.__typename === 'User') {
+            cache.writeQuery<GetUserMyInfoQuery>({
+              query: GetUserMyInfoDocument,
+              data: {
+                __typename: 'Query',
+                getUserByCookie: {
+                  __typename: 'User',
+                  ...loggedInUser.loginUser,
+                },
+              },
+            });
+          }
+        },
       });
+      // console.log('res:', res);
+      if (res.data?.loginUser.__typename === 'User') {
+        router.replace('/');
+      }
     } catch (err) {
       console.error('loginMutateErr:', err);
     }

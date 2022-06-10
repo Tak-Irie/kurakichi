@@ -1,0 +1,15 @@
+mutation SSOLogin($provider: String!) {
+  ssoLogin(provider: $provider) {
+    ... on Errors {
+      applicationError {
+        message
+      }
+      userError {
+        message
+      }
+    }
+    ... on SSO {
+      url
+    }
+  }
+}

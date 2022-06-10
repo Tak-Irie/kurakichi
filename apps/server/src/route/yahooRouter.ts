@@ -28,7 +28,7 @@ yahooRouter.get('/login', async (req, res) => {
   return res.send(authUrl);
 });
 
-yahooRouter.get('/redirect', async (req, res) => {
+yahooRouter.get('/callback', async (req, res) => {
   try {
     const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
 

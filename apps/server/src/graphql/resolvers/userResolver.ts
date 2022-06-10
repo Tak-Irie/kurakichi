@@ -13,6 +13,7 @@ import {
 import { Resolvers } from '../generated/generatedTypes';
 
 import { ApolloContext } from '../../@types/global';
+import { ssoLogin } from '../../service/SSOService';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
@@ -99,6 +100,17 @@ export const UserResolver: Resolvers<ApolloContext> = {
         __typename: 'User',
         ...gqlUser,
       };
+    },
+    ssoLogin: async (_, { provider }, { req }) => {
+      const authUrl = await ssoLogin({ provider, sessionID: req.sessionID });
+      if (authUrl === 'ERROR') {
+        return {
+          __typename: 'Errors',
+          applicationError: { message: 'something wrong' },
+        };
+      }
+      req.session.authSession = req.sessionID;
+      return { __typename: 'SSO', url: authUrl };
     },
     logoutUser: async (_, __, { idInCookie, req, res }) => {
       if (idInCookie === undefined)

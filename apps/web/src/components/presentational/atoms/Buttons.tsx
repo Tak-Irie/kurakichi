@@ -4,7 +4,7 @@ import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 
 type ButtonProps = {
   type: 'button' | 'submit';
-  onClick?: () => void | Dispatch<SetStateAction<any>>;
+  onClick?: (() => Promise<void> | void) | Dispatch<SetStateAction<any>>;
   color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
   disabled?: boolean;
   label?: string | ReactElement;

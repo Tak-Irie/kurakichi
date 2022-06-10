@@ -1,28 +1,45 @@
 import idx from 'idx';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-import { useGetUserMyInfoQuery } from '../../../graphql';
+import { useGetUserMyInfoQuery, useLogoutUserMutation } from '../../../graphql';
 import { FAIL_TO_FETCH } from '../../../lib/Constants';
 import {
   AvatarSmall,
   ButtonBig,
+  IconsLogout,
   IconsUser,
   IconsUsers,
   IconsVerticalDots,
   LoadingSpinner,
 } from '../../presentational/atoms';
-import {
-  DropDownMenu2,
-  DropDownMenuItem,
-} from '../../presentational/molecules';
-import { LogoutMenuItem } from '../user/LogoutButton';
+import { DropDownMenu } from '../../presentational/molecules';
 
 export const NavAuthSection: FC = () => {
   // console.log('rendered:');
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
   });
+  const router = useRouter();
+  const [logout, { client }] = useLogoutUserMutation();
+
+  const items = [
+    {
+      itemLabel: 'マイページ',
+      icon: <IconsUser />,
+      url: '/user/mypage',
+    },
+    {
+      itemLabel: 'ログアウト',
+      icon: <IconsLogout />,
+      onClick: async () => {
+        await logout();
+        await client.resetStore();
+        router.replace('/');
+      },
+    },
+  ];
 
   if (loading) {
     return (
@@ -34,47 +51,34 @@ export const NavAuthSection: FC = () => {
 
   if (error) return <div>{error.message}</div>;
 
-  // if (data?.getUserByCookie.__typename === 'Errors')
-  //   return (
-
-  //   );
-
   if (data?.getUserByCookie.__typename === 'User') {
     const authorizedUser = data.getUserByCookie;
     const belongedOrg = idx(authorizedUser, (d) => d.orgs.edges);
+
+    if (belongedOrg) {
+      belongedOrg.forEach((org) => {
+        items.push({
+          itemLabel: org.node.name,
+          icon: <IconsUsers />,
+          url: `/org/myorg/${org.node.id}`,
+        });
+      });
+    }
+
     return (
-      <div className="z-10">
-        <DropDownMenu2
+      <div className="z-10 w-full">
+        <DropDownMenu
           menuElement={
-            <AvatarSmall
-              src={authorizedUser.avatarUrl || FAIL_TO_FETCH}
-              alt="ユーザーアバター"
-              notification
-            />
-          }
-          menuIcon={<IconsVerticalDots />}
-          menuItems={
-            <>
-              <DropDownMenuItem
-                linkUrl="/user/mypage"
-                label="マイページ"
-                icon={<IconsUser />}
+            <div className="inline-flex justify-end items-center">
+              <AvatarSmall
+                src={authorizedUser.avatarUrl || FAIL_TO_FETCH}
+                alt="ユーザーアバター"
+                notification
               />
-              {belongedOrg
-                ? belongedOrg.map((org) => (
-                    <div key={org.node.id}>
-                      <DropDownMenuItem
-                        linkUrl="/org/myorg/[id]"
-                        linkAs={`/org/myorg/${org.node.id}`}
-                        label={org.node.name}
-                        icon={<IconsUsers />}
-                      />
-                    </div>
-                  ))
-                : null}
-              <LogoutMenuItem />
-            </>
+              <IconsVerticalDots />
+            </div>
           }
+          items={items}
         />
       </div>
     );

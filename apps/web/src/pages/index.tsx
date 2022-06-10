@@ -24,7 +24,7 @@ const Index: NextPage = () => {
   const { data, loading, error } = useGetOrgsForMapQuery({
     fetchPolicy: 'cache-first',
   });
-  console.log('org-data:', data?.getOrgs);
+  // console.log('org-data:', data?.getOrgs);
   let mapContent: ReactNode = null;
   if (error) mapContent = <div>組織情報の取得意失敗しました</div>;
   if (loading) mapContent = <div>地図を読み込んでいます</div>;
@@ -35,7 +35,7 @@ const Index: NextPage = () => {
           <LabeledMarker
             key={org.id}
             labelContent="<div>hoge</div>"
-            labelClass="map-org"
+            labelClass={`map-org map-${org.id}`}
             position={{
               lat: org.address?.latitude || 0,
               lng: org.address?.longitude || 0,

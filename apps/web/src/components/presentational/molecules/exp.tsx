@@ -4,16 +4,11 @@ import { ChevronDownIcon } from '@heroicons/react/solid';
 import { FC, Fragment, ReactNode } from 'react';
 
 type ItemProps = {
-  activeIcon: ReactNode;
-  inactiveIcon: ReactNode;
+  icon: ReactNode;
   buttonLabel: string;
 };
 
-export const Item: FC<ItemProps> = ({
-  activeIcon,
-  buttonLabel,
-  inactiveIcon,
-}) => (
+export const Item: FC<ItemProps> = ({ buttonLabel, icon }) => (
   <Menu.Item>
     {({ active }: { active: boolean }) => (
       <button
@@ -21,27 +16,11 @@ export const Item: FC<ItemProps> = ({
           active ? 'bg-violet-500 text-white' : 'text-gray-900'
         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
       >
-        {active ? activeIcon : inactiveIcon}
+        {icon}
         {buttonLabel}
       </button>
     )}
   </Menu.Item>
-);
-
-const EditInactiveIcon = (props: any) => (
-  <svg
-    {...props}
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M4 13V16H7L16 7L13 4L4 13Z"
-      fill="#EDE9FE"
-      stroke="#A78BFA"
-      strokeWidth="2"
-    />
-  </svg>
 );
 
 const EditActiveIcon = (props: any) => (
@@ -60,18 +39,6 @@ const EditActiveIcon = (props: any) => (
   </svg>
 );
 
-const DuplicateInactiveIcon = (props: any) => (
-  <svg
-    {...props}
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M4 4H12V12H4V4Z" fill="#EDE9FE" stroke="#A78BFA" strokeWidth="2" />
-    <path d="M8 8H16V16H8V8Z" fill="#EDE9FE" stroke="#A78BFA" strokeWidth="2" />
-  </svg>
-);
-
 const DuplicateActiveIcon = (props: any) => (
   <svg
     {...props}
@@ -81,35 +48,6 @@ const DuplicateActiveIcon = (props: any) => (
   >
     <path d="M4 4H12V12H4V4Z" fill="#8B5CF6" stroke="#C4B5FD" strokeWidth="2" />
     <path d="M8 8H16V16H8V8Z" fill="#8B5CF6" stroke="#C4B5FD" strokeWidth="2" />
-  </svg>
-);
-
-const ArchiveInactiveIcon = (props: any) => (
-  <svg
-    {...props}
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      x="5"
-      y="8"
-      width="10"
-      height="8"
-      fill="#EDE9FE"
-      stroke="#A78BFA"
-      strokeWidth="2"
-    />
-    <rect
-      x="4"
-      y="4"
-      width="12"
-      height="4"
-      fill="#EDE9FE"
-      stroke="#A78BFA"
-      strokeWidth="2"
-    />
-    <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
   </svg>
 );
 
@@ -163,26 +101,17 @@ export const Exp = () => (
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-56 bg-white rounded-md divide-y divide-gray-100 focus:outline-none ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right">
+        <Menu.Items className="absolute right-0 mt-2 w-56 bg-white rounded-md divide-y divide-gray-100 focus:outline-none ring-1 ring-black/5 shadow-lg origin-top-right">
           <div className="p-1 ">
             <Item
-              activeIcon={
+              icon={
                 <EditActiveIcon className="mr-2 w-5 h-5" aria-hidden="true" />
-              }
-              inactiveIcon={
-                <EditInactiveIcon className="mr-2 w-5 h-5" aria-hidden="true" />
               }
               buttonLabel="Edit"
             />
             <Item
-              activeIcon={
+              icon={
                 <DuplicateActiveIcon
-                  className="mr-2 w-5 h-5"
-                  aria-hidden="true"
-                />
-              }
-              inactiveIcon={
-                <DuplicateInactiveIcon
                   className="mr-2 w-5 h-5"
                   aria-hidden="true"
                 />
@@ -190,14 +119,8 @@ export const Exp = () => (
               buttonLabel="Duplicate"
             />
             <Item
-              activeIcon={
+              icon={
                 <ArchiveActiveIcon
-                  className="mr-2 w-5 h-5"
-                  aria-hidden="true"
-                />
-              }
-              inactiveIcon={
-                <ArchiveInactiveIcon
                   className="mr-2 w-5 h-5"
                   aria-hidden="true"
                 />

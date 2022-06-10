@@ -28,7 +28,7 @@ googleRouter.get('/login', async (req, res) => {
   return res.send(authUrl);
 });
 
-googleRouter.get('/redirect', async (req, res) => {
+googleRouter.get('/callback', async (req, res) => {
   try {
     const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
 
@@ -46,18 +46,18 @@ googleRouter.get('/redirect', async (req, res) => {
     });
     if (tokenSet === false) throw Error('token not exist');
 
-    console.log('tokenSet:', tokenSet);
+    // console.log('tokenSet:', tokenSet);
 
     const storeTokenResult = await oidc.storeAndCryptTokenSet(tokenSet);
     if (storeTokenResult !== 'OK') throw Error('fail to store token');
 
     req.session.authSession = undefined;
 
-    console.log('storeToken:', storeTokenResult);
+    // console.log('storeToken:', storeTokenResult);
 
     const userInfo = await oidc.getUserInfo(client, tokenSet);
 
-    console.log('userInfo:', userInfo);
+    // console.log('userInfo:', userInfo);
 
     const result = await useSsoUserUsecase.execute({
       ssoSub: userInfo.sub,

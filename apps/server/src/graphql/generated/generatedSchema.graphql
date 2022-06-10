@@ -200,6 +200,7 @@ type Mutation {
   requestJoinOrg(orgId: String!): OrgResult!
   sendInquiry(input: SendInquiryInput!): InquiryResult!
   sendMessage(input: sendMessageInput!): MessageResult!
+  ssoLogin(provider: String!): SSOResult!
   updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult!
   updateOrg(input: UpdateOrgInput!): OrgResult!
   updateUser(input: updateUserInput!): UserResult!
@@ -277,6 +278,12 @@ input RegisterOrgInput {
   name: String!
   phoneNumber: String!
 }
+
+type SSO {
+  url: String!
+}
+
+union SSOResult = Errors | SSO
 
 input SendInquiryInput {
   category: InquiryCategory!

@@ -78,6 +78,7 @@ type Mutation {
   updateUser(input: updateUserInput!): UserResult!
   logoutUser: BoolResult!
   deleteUser: BoolResult!
+  ssoLogin(provider: String!): SSOResult!
   forgetPassword(email: String!): BoolResult!
   changePassword(input: changePasswordInput): BoolResult!
   sendMessage(input: sendMessageInput!): MessageResult!
@@ -89,6 +90,11 @@ union UsersResult = Users | Errors
 union MessageResult = Message | Errors
 union MessagesResult = Messages | Errors
 union MessageTreeResult = MessageTree | Errors
+union SSOResult = SSO | Errors
+
+type SSO {
+  url: String!
+}
 
 type Users {
   users: [User!]

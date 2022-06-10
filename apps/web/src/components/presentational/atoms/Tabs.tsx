@@ -27,7 +27,7 @@ export const Tabs: FC<TabsProps> = ({ clickHandler, labels }) => {
     <div className="pb-5 border-b border-gray-200 sm:pb-0">
       <div className="mt-3 sm:mt-4">
         <div className="sm:hidden">
-          <text className="sr-only">Select a tab</text>
+          <div className="sr-only">Select a tab</div>
           <select
             id="current-tab"
             name="current-tab"
