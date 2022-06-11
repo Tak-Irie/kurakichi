@@ -21,24 +21,6 @@ const wsLink = new GraphQLWsLink(
     : null,
 );
 
-// const uploadLink = createUploadLink({
-//   uri:
-//     process.env.NEXT_PUBLIC_GRAPHQL_HTTP_LINK ||
-//     'http://localhost:4000/graphql',
-// });
-
-// TODO:add client error handling
-// const errorLink = onError(({ graphQLErrors, networkError }) => {
-//   if (graphQLErrors)
-//     graphQLErrors.forEach(({ message, locations, path }) =>
-//       console.log(
-//         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-//       ),
-//     );
-
-//   if (networkError) console.log(`[Network error]: ${networkError}`);
-// });
-
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);

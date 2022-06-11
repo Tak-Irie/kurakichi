@@ -30,11 +30,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           imageSrc={image}
           buttons={
             <>
-              <PopOnIcon
-                overWriteCSS=""
-                icon={<IconsCaution />}
-                content="ログインが必要です"
-              />
+              <PopOnIcon icon={<IconsCaution />} content="ログインが必要です" />
               <ButtonWithIcon
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"

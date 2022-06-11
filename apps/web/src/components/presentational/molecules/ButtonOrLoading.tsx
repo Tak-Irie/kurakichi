@@ -6,7 +6,7 @@ type ButtonOrLoadingProps = {
   loading: boolean;
   buttonLabel: string;
   buttonType: 'submit' | 'button';
-  onClick?: () => void | Dispatch<SetStateAction<any>>;
+  onClick?: (() => Promise<void> | void) | Dispatch<SetStateAction<any>>;
   color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
 };
 

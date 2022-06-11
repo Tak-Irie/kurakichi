@@ -12,22 +12,6 @@ import { createRedis } from '../util/createRedis';
 
 const googleRouter = Router();
 
-googleRouter.get('/login', async (req, res) => {
-  const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
-  const oidc = OidcAuthService.createService({
-    redisClient: createRedis(redisUrl),
-    password: CRYPT_PASS,
-    salt: CRYPT_SALT,
-  });
-
-  const client = await createGoogleClient();
-  const authUrl = await oidc.createAuthReq(client, req.sessionID);
-
-  req.session.authSession = req.sessionID;
-
-  return res.send(authUrl);
-});
-
 googleRouter.get('/callback', async (req, res) => {
   try {
     const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
@@ -42,7 +26,9 @@ googleRouter.get('/callback', async (req, res) => {
     const tokenSet = await oidc.verifyAuthCode({
       req,
       client,
-      callback_uri: 'http://localhost:4000/google/callback',
+      callback_uri:
+        process.env.GOOGLE_OIDC_CLIENT_REDIRECT ||
+        'http://localhost:4000/google/callback',
     });
     if (tokenSet === false) throw Error('token not exist');
 

@@ -64,12 +64,6 @@ type FellowEdge {
   node: User!
 }
 
-type File {
-  encoding: String!
-  filename: String!
-  mimetype: String!
-}
-
 union InquiriesResult = Errors | InquiryConnection
 
 type Inquiry implements Node {
@@ -204,7 +198,6 @@ type Mutation {
   updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult!
   updateOrg(input: UpdateOrgInput!): OrgResult!
   updateUser(input: updateUserInput!): UserResult!
-  uploadFile(file: Upload!): File!
 }
 
 interface Node {
@@ -313,8 +306,6 @@ input UpdateOrgInput {
   orgId: ID!
   phoneNumber: String
 }
-
-scalar Upload
 
 type User implements Node {
   avatarUrl: String
