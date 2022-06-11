@@ -21,7 +21,6 @@
     "@kurakichi/domain": "*",
     "@popperjs/core": "^2.11.5",
     "@react-google-maps/api": "^2.11.8",
-    "apollo-upload-client": "^17.0.0",
     "deepmerge": "^4.2.2",
     "fast-equals": "^4.0.1",
     "graphql": "^16.4.0",
@@ -41,7 +40,6 @@
   "devDependencies": {
     "@kurakichi/config": "*",
     "@kurakichi/tsconfig": "*",
-    "@types/apollo-upload-client": "^17.0.0",
     "@types/google.maps": "^3.49.2",
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.0",

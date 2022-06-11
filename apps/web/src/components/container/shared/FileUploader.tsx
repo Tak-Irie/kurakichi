@@ -1,5 +1,4 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { useUploadFileMutation } from '../../../graphql';
 
 type FileUploaderProps = {
   some?: string;
@@ -7,7 +6,6 @@ type FileUploaderProps = {
 
 export const FileUploader: FC<FileUploaderProps> = () => {
   const [image, setImage] = useState<File>();
-  const [upload, { data }] = useUploadFileMutation();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -20,12 +18,11 @@ export const FileUploader: FC<FileUploaderProps> = () => {
   const handleClick = async () => {
     if (image) {
       try {
-        await upload({
-          variables: { file: image },
-        });
-        if (data) {
-          console.log('image:', data.uploadFile.encoding);
-        }
+        // await upload({
+        //   variables: { file: image },
+        // });
+        // if (data) {
+        console.log('image:');
       } catch (err) {
         console.log('err:', err);
       }

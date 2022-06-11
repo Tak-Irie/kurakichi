@@ -1,6 +1,4 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-// eslint-disable-next-line import/extensions
-import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 
 type ScalarMap = {
   [key: string]: GraphQLScalarType;
@@ -56,14 +54,11 @@ const InquiryStatusScalar = new GraphQLScalarType({
   },
 });
 
-const UploadScalar = GraphQLUpload;
-
 const ScalarResolverMap: ScalarMap = {
   UserRole: UserRoleScalar,
   MessageStatus: MessageStatusScalar,
   InquiryCategory: InquiryCategoryScalar,
   InquiryStatus: InquiryStatusScalar,
-  Upload: UploadScalar,
 };
 
 export { ScalarResolverMap };

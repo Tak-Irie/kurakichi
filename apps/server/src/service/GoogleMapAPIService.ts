@@ -23,13 +23,14 @@ export class GoogleMapAPIService {
         region: 'jp',
       },
     });
-    if (response.status != 200) {
+    if (response.status !== 200) {
       return false;
     }
     const data = response.data.results[0].geometry.location;
     // console.log('data:', data);
     return { lat: data.lat, lng: data.lng };
   }
+
   public static async getGeoCodeByPostcode(
     postcode: string,
   ): Promise<GeoCode | false> {
@@ -43,7 +44,7 @@ export class GoogleMapAPIService {
         region: 'jp',
       },
     });
-    if (response.status != 200) {
+    if (response.status !== 200) {
       return false;
     }
     const data = response.data.results[0].geometry.location;

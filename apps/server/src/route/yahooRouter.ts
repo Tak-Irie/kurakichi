@@ -12,22 +12,6 @@ import { createRedis } from '../util/createRedis';
 
 const yahooRouter = Router();
 
-yahooRouter.get('/login', async (req, res) => {
-  const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
-  const oidc = OidcAuthService.createService({
-    redisClient: createRedis(redisUrl),
-    password: CRYPT_PASS,
-    salt: CRYPT_SALT,
-  });
-
-  const client = await createYahooClient();
-  const authUrl = await oidc.createAuthReq(client, req.sessionID);
-
-  req.session.authSession = req.sessionID;
-
-  return res.send(authUrl);
-});
-
 yahooRouter.get('/callback', async (req, res) => {
   try {
     const redisUrl = process.env.REDIS_URL || 'redis://0.0.0.0:6379';
@@ -44,7 +28,9 @@ yahooRouter.get('/callback', async (req, res) => {
     const tokenSet = await oidc.verifyAuthCode({
       req,
       client,
-      callback_uri: 'http://localhost:4000/yahoo/callback',
+      callback_uri:
+        process.env.YAHOO_OIDC_CLIENT_REDIRECT ||
+        'http://localhost:4000/yahoo/callback',
     });
     if (tokenSet === false) throw Error('token not exist');
 

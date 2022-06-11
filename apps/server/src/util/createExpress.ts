@@ -1,16 +1,9 @@
 import connectRedis from 'connect-redis';
 import express from 'express';
 import session from 'express-session';
-// eslint-disable-next-line import/extensions
-import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 import type { Redis } from 'ioredis';
-import {
-  geocodeRouter,
-  googleRouter,
-  uploadRouter,
-  yahooRouter,
-} from '../route';
+import { geocodeRouter, googleRouter, yahooRouter } from '../route';
 import { IS_PROD } from './Constants';
 
 type ExpressArgs = {
@@ -43,11 +36,8 @@ const createExpress = async ({ redis }: ExpressArgs) => {
     }),
   );
 
-  app.use(graphqlUploadExpress({ maxFileSize: 1000 * 1000 * 1, maxFiles: 2 }));
-
   app.use('/google', googleRouter);
   app.use('/yahoo', yahooRouter);
-  app.use('/upload', uploadRouter);
   app.use('/geocode', geocodeRouter);
 
   app.get('/', (req, res) => {
