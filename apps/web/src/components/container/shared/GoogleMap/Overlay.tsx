@@ -10,7 +10,7 @@ type Props = {
 export const Overlay: FC<Props> = ({ children, position }) => {
   const contextMap = useContext(MapContext);
   const [overlayView, setOverlayView] = useState<google.maps.OverlayView>();
-  let container = useMemo<HTMLDivElement>(
+  const container = useMemo<HTMLDivElement>(
     () => document.createElement('div'),
     [],
   );
@@ -58,6 +58,7 @@ export const Overlay: FC<Props> = ({ children, position }) => {
 
     const onRemove = () => {
       if (container) {
+        (container.parentNode as HTMLElement).removeChild(container);
         // FIXME: maybe use createRoot()
         // @ts-ignore
         container = null;
@@ -70,7 +71,7 @@ export const Overlay: FC<Props> = ({ children, position }) => {
       overlayView.onRemove = onRemove;
       overlayView.setMap(contextMap);
     }
-  }, [overlayView, container, contextMap]);
+  }, [overlayView, container, contextMap, position]);
 
   return createPortal(children, container);
 };
