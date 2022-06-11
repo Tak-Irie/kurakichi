@@ -73,30 +73,45 @@ const OrgPrivatePage: NextPage = () => {
         }
         pageTabs={['概要', '事業', '記事']}
         pageContents={[
-          <OrgMyPage
-            org={{
-              members: {
-                edges: fetchedOrg.members?.edges,
-              },
-              ...fetchedOrg,
-            }}
-          />,
-          <OrgService
-            title="事業紹介"
-            content={
-              <TextSmall
-                content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+          {
+            id: 'info',
+            content: (
+              <OrgMyPage
+                org={{
+                  members: {
+                    edges: fetchedOrg.members?.edges,
+                  },
+                  ...fetchedOrg,
+                }}
               />
-            }
-          />,
-          <OrgArticle
-            title="記事"
-            content={
-              <TextSmall
-                content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+            ),
+          },
+          {
+            id: 'service',
+            content: (
+              <OrgService
+                title="事業紹介"
+                content={
+                  <TextSmall
+                    content={`・取り組んでいる事業を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+                  />
+                }
               />
-            }
-          />,
+            ),
+          },
+          {
+            id: 'article',
+            content: (
+              <OrgArticle
+                title="記事"
+                content={
+                  <TextSmall
+                    content={`・日々の活動を紹介するページです\n・利用者の方が利用しやすい雰囲気を醸成するために活用してください\n\n※ 編集機能を現在作成中です`}
+                  />
+                }
+              />
+            ),
+          },
         ]}
       />
     );
