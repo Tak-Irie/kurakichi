@@ -1,28 +1,29 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { MapContext } from './MapContext';
 
-export const Marker: FC<google.maps.MarkerOptions> = (options) => {
+export const Marker: FC<google.maps.MarkerOptions> = ({ position }) => {
   const [marker, setMarker] = useState<google.maps.Marker>();
-  const { googleMap } = useContext(MapContext);
+  const contextMap = useContext(MapContext);
 
   useEffect(() => {
     if (!marker) {
-      setMarker(new google.maps.Marker({ map: googleMap }));
+      setMarker(new google.maps.Marker());
     }
-
     // remove marker from map on unmount
     return () => {
       if (marker) {
         marker.setMap(null);
       }
     };
-  }, [marker]);
+  }, [marker, contextMap, position]);
 
   useEffect(() => {
     if (marker) {
-      marker.setOptions(options);
+      marker.setOptions({ map: contextMap, position });
+      contextMap?.setCenter(position as google.maps.LatLngAltitudeLiteral);
+      contextMap?.setZoom(15);
     }
-  }, [marker, options]);
+  }, [marker, position, contextMap]);
 
   return null;
 };

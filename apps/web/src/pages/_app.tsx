@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/client';
 import '../../styles/globals.css';
 
-import MapLoader from '../components/container/shared/GoogleMap/MapLoader';
+import { MapLoader } from '../components/container/shared/GoogleMap/MapLoader';
 import { Layout } from '../components/presentational/templates';
 import { useApollo } from '../lib/createApolloClient';
 

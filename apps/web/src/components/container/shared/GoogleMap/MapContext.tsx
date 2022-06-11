@@ -1,9 +1,3 @@
 import { createContext } from 'react';
 
-type MapContextProps = {
-  googleMap: google.maps.Map | null;
-};
-
-export const MapContext = createContext<MapContextProps>({
-  googleMap: null,
-});
+export const MapContext = createContext<google.maps.Map | null>(null);

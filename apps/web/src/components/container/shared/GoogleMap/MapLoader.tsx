@@ -1,12 +1,11 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { LoadingSpinner } from '../../../presentational';
 
 type MapLoaderProps = {
   children: ReactNode;
 };
 
-const MapLoader: FC<MapLoaderProps> = ({ children }) => {
+export const MapLoader: FC<MapLoaderProps> = ({ children }) => {
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
   const loader = new Loader({
@@ -23,10 +22,8 @@ const MapLoader: FC<MapLoaderProps> = ({ children }) => {
   });
 
   if (!mapLoaded) {
-    return <LoadingSpinner />;
+    return <div>Loading...</div>;
   }
 
   return <div>{children}</div>;
 };
-
-export default MapLoader;
