@@ -9,7 +9,10 @@ type OrgTemplateProps = {
   image: string;
   orgName: string;
   pageTabs: string[];
-  pageContents: ReactNode[];
+  pageContents: {
+    id: string;
+    content: ReactNode;
+  }[];
   headerButtons?: ReactNode;
   settingHeader?: boolean;
 };
@@ -63,8 +66,8 @@ export const OrgTemplate: FC<OrgTemplateProps> = ({
           ))}
         </Tab.List>
         <Tab.Panels className="p-8 my-4 bg-white shadow">
-          {pageContents.map((content) => (
-            <Tab.Panel>{content}</Tab.Panel>
+          {pageContents.map(({ id, content }) => (
+            <Tab.Panel key={id}>{content}</Tab.Panel>
           ))}
         </Tab.Panels>
       </Tab.Group>

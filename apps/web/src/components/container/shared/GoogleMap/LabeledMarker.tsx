@@ -3,7 +3,7 @@ import {
   MarkerWithLabelOptions,
 } from '@googlemaps/markerwithlabel';
 import { useRouter } from 'next/router';
-import { FC, useCallback, useContext, useEffect } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { MapContext } from './MapContext';
 
 type LabeledMarkerProps = MarkerWithLabelOptions & {
@@ -16,34 +16,30 @@ export const LabeledMarker: FC<LabeledMarkerProps> = ({
   ...options
 }) => {
   const { googleMap } = useContext(MapContext);
+  const [marker, setMarker] = useState<google.maps.Marker>();
   const router = useRouter();
 
-  const createMarker = useCallback(() => {
-    const marker = new MarkerWithLabel({
-      map: googleMap,
-      labelClass: linkURL,
-      ...options,
-    });
-    google.maps.event.addListener(marker, 'click', () => {
-      // console.log('get:', marker.get());
-      router.push(linkURL);
-    });
-    return marker;
-  }, [options, googleMap]);
-
-  const removeMarker = useCallback((marker: google.maps.Marker) => {
-    marker.setMap(null);
-  }, []);
-
   useEffect(() => {
-    if (!googleMap) {
-      return;
+    if (!marker) {
+      setMarker(
+        new MarkerWithLabel({
+          map: googleMap,
+          labelClass: linkURL,
+          ...options,
+        }),
+      );
+      if (marker) {
+        google.maps.event.addListener(marker, 'click', () => {
+          router.push(linkURL);
+        });
+      }
     }
-
-    createMarker();
-    // eslint-disable-next-line consistent-return
-    // return () => removeMarker(marker);
-  }, [googleMap, createMarker, removeMarker]);
+    return () => {
+      if (marker) {
+        marker.setMap(null);
+      }
+    };
+  }, [marker, googleMap, linkURL, options, router]);
 
   return null;
 };
