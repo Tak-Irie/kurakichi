@@ -39,17 +39,18 @@ const Index: NextPage = () => {
               lat: org.address?.latitude || 0,
               lng: org.address?.longitude || 0,
             }}
-          >
-            <PopUp>
-              <button
-                type="button"
-                onClick={() => router.push(`/org/${org.id}`)}
-              >
-                <div className="flex justify-start">{org.name}</div>
-                <div>{org.description}</div>
-              </button>
-            </PopUp>
-          </Overlay>
+            content={
+              <PopUp>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/org/${org.id}`)}
+                >
+                  <div className="flex justify-start">{org.name}</div>
+                  <div>{org.description}</div>
+                </button>
+              </PopUp>
+            }
+          />
         ))}
       </div>
     );

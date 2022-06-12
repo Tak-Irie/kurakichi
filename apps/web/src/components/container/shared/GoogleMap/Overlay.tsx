@@ -4,10 +4,10 @@ import { MapContext } from './MapContext';
 
 type Props = {
   position: google.maps.LatLngLiteral;
-  children: ReactNode;
+  content: ReactNode;
 };
 
-export const Overlay: FC<Props> = ({ children, position }) => {
+export const Overlay: FC<Props> = ({ content, position }) => {
   const contextMap = useContext(MapContext);
   const [overlayView, setOverlayView] = useState<google.maps.OverlayView>();
   const container = useMemo<HTMLDivElement>(
@@ -73,5 +73,5 @@ export const Overlay: FC<Props> = ({ children, position }) => {
     }
   }, [overlayView, container, contextMap, position]);
 
-  return createPortal(children, container);
+  return createPortal(content, container);
 };
