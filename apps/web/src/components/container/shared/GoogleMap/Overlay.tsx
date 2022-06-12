@@ -57,10 +57,8 @@ export const Overlay: FC<Props> = ({ content, position }) => {
     };
 
     const onRemove = () => {
-      if (container) {
-        // FIXME: idk proper solution.
-        // @ts-ignore
-        container = null;
+      if (container.parentElement) {
+        container.parentElement.removeChild(container);
       }
     };
 
