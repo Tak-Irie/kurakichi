@@ -37,7 +37,7 @@ const MyPage: NextPage = () => {
         image={fetchedUser.heroImageUrl || ''}
         userName={fetchedUser.name || ''}
         headerButtons={
-          <>
+          <div>
             <Link href="/user/setting" passHref>
               <a href="replace">
                 <ButtonWithIcon
@@ -56,7 +56,7 @@ const MyPage: NextPage = () => {
                 />
               </a>
             </Link>
-          </>
+          </div>
         }
         pageContents={
           <UserMyPage

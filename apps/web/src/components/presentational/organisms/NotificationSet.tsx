@@ -29,27 +29,27 @@ export const NotificationSet: FC<NotificationsProps> = ({
   sysErrLabel = 'エラー！',
   showingMS,
 }) => (
-    <>
-      {sysErrContent ? (
-        <NotificationAlert
-          showingMS={showingMS}
-          label={sysErrLabel}
-          content={sysErrContent.message}
-        />
-      ) : null}
-      {errContent ? (
-        <NotificationCaution
-          showingMS={showingMS}
-          label={errLabel}
-          content={errContent}
-        />
-      ) : null}
-      {succeededContent ? (
-        <NotificationSuccess
-          showingMS={showingMS}
-          label={succeededLabel}
-          content={succeededContent}
-        />
-      ) : null}
-    </>
-  );
+  <div>
+    {sysErrContent ? (
+      <NotificationAlert
+        showingMS={showingMS}
+        label={sysErrLabel}
+        content={sysErrContent.message}
+      />
+    ) : null}
+    {errContent ? (
+      <NotificationCaution
+        showingMS={showingMS}
+        label={errLabel}
+        content={errContent}
+      />
+    ) : null}
+    {succeededContent ? (
+      <NotificationSuccess
+        showingMS={showingMS}
+        label={succeededLabel}
+        content={succeededContent}
+      />
+    ) : null}
+  </div>
+);

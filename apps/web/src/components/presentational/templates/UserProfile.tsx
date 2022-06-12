@@ -38,7 +38,7 @@ export const UserProfile: FC<UserProfileProps> = ({
           avatarSrc={avatar}
           imageSrc={image}
           buttons={
-            <>
+            <div>
               <PopOnIcon icon={<IconsCaution />} content="ログインが必要です" />
               <ButtonWithIcon
                 onClick={() => setIsOpen(!isOpen)}
@@ -47,7 +47,7 @@ export const UserProfile: FC<UserProfileProps> = ({
                 disabled
                 icon={<IconsMail />}
               />
-            </>
+            </div>
           }
         />
       </div>
@@ -88,7 +88,7 @@ export const UserProfile: FC<UserProfileProps> = ({
   );
 };
 // loggedIn ? (
-//   <>
+//   <div>
 //     <div>
 //       <ButtonWithIcon
 //         type="button"
@@ -112,5 +112,5 @@ export const UserProfile: FC<UserProfileProps> = ({
 //         </div>
 //       </Transition>
 //     </div>
-//   </>
+//   </div>
 // ) :

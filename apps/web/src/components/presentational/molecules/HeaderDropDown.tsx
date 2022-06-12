@@ -6,7 +6,7 @@ const HeaderDropDown: FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <>
+    <div>
       <button
         type="button"
         aria-label="Open Menu"
@@ -61,7 +61,7 @@ const HeaderDropDown: FC = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

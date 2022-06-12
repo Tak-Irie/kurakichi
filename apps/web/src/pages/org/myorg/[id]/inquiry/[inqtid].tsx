@@ -52,7 +52,7 @@ const InquiryTreePrivatePage: NextPage = () => {
         image={fetchedOrg.heroImageUrl || FAIL_TO_FETCH}
         orgName={fetchedOrg.name || FAIL_TO_FETCH}
         headerButtons={
-          <>
+          <div>
             <Link href="/org/myorg/[id]" as={`/org/myorg/${orgId}`} passHref>
               <a href="replace">
                 <ButtonWithIcon
@@ -76,7 +76,7 @@ const InquiryTreePrivatePage: NextPage = () => {
                 />
               </a>
             </Link>
-          </>
+          </div>
         }
         pageTabs={[]}
         pageContents={[

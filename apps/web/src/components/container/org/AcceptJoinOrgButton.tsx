@@ -21,7 +21,7 @@ export const AcceptJoinOrgButton: FC<AcceptJoinOrgButtonProps> = ({
   };
 
   return (
-    <>
+    <div>
       <NotificationSet
         succeededContent={
           data?.acceptJoinOrg?.__typename === 'Org'
@@ -48,6 +48,6 @@ export const AcceptJoinOrgButton: FC<AcceptJoinOrgButtonProps> = ({
         loading={loading}
         onClick={handleClick}
       />
-    </>
+    </div>
   );
 };

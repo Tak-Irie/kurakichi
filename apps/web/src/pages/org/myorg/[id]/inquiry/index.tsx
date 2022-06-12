@@ -79,13 +79,13 @@ const InquiryBoxPrivatePage: NextPage = () => {
                 {
                   id: 'inq',
                   content: (
-                    <>
+                    <div>
                       <TextLabel content="お問い合わせ一覧" />
                       <InquiryInfiniteTable
                         orgId={fetchedOrg.id}
                         initialInquiries={edges.map((e) => e.node)}
                       />
-                    </>
+                    </div>
                   ),
                 },
               ]
@@ -93,10 +93,10 @@ const InquiryBoxPrivatePage: NextPage = () => {
                 {
                   id: 'no-inq',
                   content: (
-                    <>
+                    <div>
                       <TextLabel content="お問い合わせ一覧" />
                       <TextSmall content="お問い合わせは有りません" />
-                    </>
+                    </div>
                   ),
                 },
               ]

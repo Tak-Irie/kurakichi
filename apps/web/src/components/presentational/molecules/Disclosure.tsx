@@ -19,7 +19,7 @@ export const Disclosure: FC<DisclosureProps> = ({
 }) => (
   <HeadlessDisclosure>
     {({ open }) => (
-      <>
+      <div>
         <HeadlessDisclosure.Button>
           {typeof label === 'string' ? (
             <div className={`flex ${labelCSS}`}>
@@ -39,7 +39,7 @@ export const Disclosure: FC<DisclosureProps> = ({
         <HeadlessDisclosure.Panel className={contentCSS}>
           {content}
         </HeadlessDisclosure.Panel>
-      </>
+      </div>
     )}
   </HeadlessDisclosure>
 );

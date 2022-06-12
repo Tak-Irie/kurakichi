@@ -51,7 +51,7 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
   };
 
   return (
-    <>
+    <div>
       <NotificationSet
         succeededContent={
           data?.updateUser?.__typename === 'User'
@@ -105,6 +105,6 @@ export const UpdateUserProfile: FC<UpdateUserProfileProps> = ({
           />
         </div>
       </Form>
-    </>
+    </div>
   );
 };

@@ -9,7 +9,7 @@ type MessageTreeProps = {
 };
 
 export const MessageTree: FC<MessageTreeProps> = ({ messages }) => (
-  <>
+  <div>
     <ul className="p-2 mt-4 bg-gray-50 rounded-lg border-2 border-gray-200 divide-y divide-gray-200 shadow">
       {messages.map((message) => (
         <li key={message.id}>
@@ -32,5 +32,5 @@ export const MessageTree: FC<MessageTreeProps> = ({ messages }) => (
     <div className="mt-5">
       <ReplyMessageForm replyTargetId={messages[0].id} />
     </div>
-  </>
+  </div>
 );

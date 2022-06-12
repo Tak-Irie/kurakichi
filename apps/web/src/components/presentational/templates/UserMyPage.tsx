@@ -19,7 +19,7 @@ export const UserMyPage: FC<UserProfileProps> = ({
   bases,
 }) => (
   // console.log('messages:', messages);
-  <>
+  <div>
     <div className="col-start-3 col-end-10 mt-5">
       <TextLabel content="プロフィール" />
       <div className="mt-2 space-y-1">
@@ -43,5 +43,5 @@ export const UserMyPage: FC<UserProfileProps> = ({
     <div className="col-start-3 col-end-10 mt-5">
       <TableOrg orgs={orgs} />
     </div>
-  </>
+  </div>
 );

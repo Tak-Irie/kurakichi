@@ -35,7 +35,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = ({ org }) => {
   // const descById = unreadInq.reverse();
   // const descById = [...inquiries].reverse();
   return (
-    <>
+    <div>
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="未読お問い合わせ" />
         {unreadInq[0] ? (
@@ -67,6 +67,6 @@ export const OrgMyPage: FC<OrgMyPageProps> = ({ org }) => {
       <div className="col-start-3 col-end-10 mt-5">
         <TableOrgMember members={givenMembers} />
       </div>
-    </>
+    </div>
   );
 };

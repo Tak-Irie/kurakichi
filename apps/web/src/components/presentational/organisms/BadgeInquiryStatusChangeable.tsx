@@ -47,7 +47,7 @@ export const BadgeInquiryStatusChangeable: FC<
               value={value.en}
             >
               {({ selected, active }) => (
-                <>
+                <div>
                   <div
                     className={`${
                       selected ? 'font-medium' : 'font-normal'
@@ -65,7 +65,7 @@ export const BadgeInquiryStatusChangeable: FC<
                       <IconsCheck />
                     </div>
                   ) : null}
-                </>
+                </div>
               )}
             </Listbox.Option>
           ))}

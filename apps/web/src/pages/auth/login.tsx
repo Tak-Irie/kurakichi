@@ -16,7 +16,7 @@ const LoginPage: NextPage = () => (
   <FormPageTemplate
     title="ログイン"
     content={
-      <>
+      <div>
         <div>
           <TextWithDivider content="ソーシャルログイン" />
           <div className="grid grid-cols-2 mt-10 max-h-12">
@@ -54,7 +54,7 @@ const LoginPage: NextPage = () => (
             overwriteCSS="p-1 bg-yellow-50 rounded-md border border-gray-200 hover:shadow-sm hover:bg-yellow-100"
           />
         </div>
-      </>
+      </div>
     }
   />
 );

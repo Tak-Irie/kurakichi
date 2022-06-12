@@ -46,7 +46,7 @@ const MessageTreePage: NextPage = () => {
         image={cachedUser.heroImageUrl || ''}
         userName={cachedUser.name || ''}
         headerButtons={
-          <>
+          <div>
             <Link href="/user/mypage" passHref>
               <a href="replace">
                 <ButtonWithIcon
@@ -65,7 +65,7 @@ const MessageTreePage: NextPage = () => {
                 />
               </a>
             </Link>
-          </>
+          </div>
         }
         pageContents={
           <MessageTree messages={messages?.map((_) => _.node) || []} />

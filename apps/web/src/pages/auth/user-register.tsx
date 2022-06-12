@@ -15,7 +15,7 @@ const UserRegisterPage: NextPage = () => (
   <FormPageTemplate
     title="新規登録"
     content={
-      <>
+      <div>
         <div className="mt-10 ">
           <TextWithDivider content="ソーシャルログインを利用する" />
           <div className="grid grid-cols-2 mt-10 max-h-12">
@@ -79,7 +79,7 @@ const UserRegisterPage: NextPage = () => (
           <TextWithDivider content="くらきちユーザーとして登録する" />
           <RegisterUserForm />
         </div>
-      </>
+      </div>
     }
   />
 );
