@@ -4,7 +4,7 @@ import { MapContext } from './MapContext';
 
 type Props = {
   position: google.maps.LatLngLiteral;
-  content: ReactNode;
+  content?: ReactNode;
 };
 
 export const Overlay: FC<Props> = ({ content, position }) => {

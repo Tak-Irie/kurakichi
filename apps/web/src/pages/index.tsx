@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { ReactNode, useState } from 'react';
 import {
   SearchOrgByPrefForm,
@@ -9,7 +8,7 @@ import {
   GeocodeByBrowserButton,
   GeocodeByPostcodeForm,
 } from '../components/container/shared';
-import { Map, Overlay, PopUp } from '../components/container/shared/GoogleMap';
+import { Map, Overlay } from '../components/container/shared/GoogleMap';
 import { TextH2 } from '../components/presentational/atoms';
 import {
   ArticlesWelfareGuide,
@@ -24,7 +23,7 @@ const Index: NextPage = () => {
   const { data, loading, error } = useGetOrgsForMapQuery({
     fetchPolicy: 'cache-first',
   });
-  const router = useRouter();
+  // const router = useRouter();
   // console.log('org-data:', data?.getOrgs);
   let mapContent: ReactNode = null;
   if (error) mapContent = <div>組織情報の取得意失敗しました</div>;
@@ -39,17 +38,17 @@ const Index: NextPage = () => {
               lat: org.address?.latitude || 0,
               lng: org.address?.longitude || 0,
             }}
-            content={
-              <PopUp>
-                <button
-                  type="button"
-                  onClick={() => router.push(`/org/${org.id}`)}
-                >
-                  <div className="flex justify-start">{org.name}</div>
-                  <div>{org.description}</div>
-                </button>
-              </PopUp>
-            }
+            // content={
+            //   <PopUp>
+            //     <button
+            //       type="button"
+            //       onClick={() => router.push(`/org/${org.id}`)}
+            //     >
+            //       <div className="flex justify-start">{org.name}</div>
+            //       <div>{org.description}</div>
+            //     </button>
+            //   </PopUp>
+            // }
           />
         ))}
       </div>
