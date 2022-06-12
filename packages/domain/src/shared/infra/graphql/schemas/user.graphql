@@ -79,6 +79,7 @@ type Mutation {
   logoutUser: BoolResult!
   deleteUser: BoolResult!
   ssoLogin(provider: String!): SSOResult!
+  tempLogin: UserResult!
   forgetPassword(email: String!): BoolResult!
   changePassword(input: changePasswordInput): BoolResult!
   sendMessage(input: sendMessageInput!): MessageResult!

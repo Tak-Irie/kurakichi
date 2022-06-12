@@ -239,6 +239,7 @@ export type Mutation = {
   sendInquiry: InquiryResult;
   sendMessage: MessageResult;
   ssoLogin: SsoResult;
+  tempLogin: UserResult;
   updateInquiryStatus: InquiryResult;
   updateOrg: OrgResult;
   updateUser: UserResult;
@@ -1066,6 +1067,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   sendInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
   sendMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
   ssoLogin?: Resolver<ResolversTypes['SSOResult'], ParentType, ContextType, RequireFields<MutationSsoLoginArgs, 'provider'>>;
+  tempLogin?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType>;
   updateInquiryStatus?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
   updateOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;

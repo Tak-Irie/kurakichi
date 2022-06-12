@@ -1,4 +1,5 @@
 import {
+  DTOUser,
   getUserMyInfo,
   useDeleteUserUsecase,
   useForgotPasswordUsecase,
@@ -180,6 +181,26 @@ export const UserResolver: Resolvers<ApolloContext> = {
       return {
         __typename: 'User',
         ...user,
+      };
+    },
+    tempLogin: (_, __, { req }) => {
+      const dtoUser: DTOUser = {
+        id: '02E67P2MEJAWTM75CT151FUGA',
+        userName: 'sampleAdmin',
+        avatarUrl: '/asian_man4.jpg',
+        selfIntro: 'サンプル管理者です',
+        email: 'example-visitor@example.com',
+        heroImageUrl: 'UNKNOWN',
+        role: 'EXPERT',
+        belongBases: [],
+        belongOrgs: [],
+        messages: [],
+      };
+      const gqlUser = dtoUserToGql(dtoUser);
+      req.session.userId = gqlUser.id;
+      return {
+        __typename: 'User',
+        ...gqlUser,
       };
     },
     // replyMessage:async () => {},

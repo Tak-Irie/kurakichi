@@ -242,6 +242,7 @@ export type Mutation = {
   sendInquiry: InquiryResult;
   sendMessage: MessageResult;
   ssoLogin: SsoResult;
+  tempLogin: UserResult;
   updateInquiryStatus: InquiryResult;
   updateOrg: OrgResult;
   updateUser: UserResult;
@@ -1068,6 +1069,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   sendInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
   sendMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
   ssoLogin?: Resolver<ResolversTypes['SSOResult'], ParentType, ContextType, RequireFields<MutationSsoLoginArgs, 'provider'>>;
+  tempLogin?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType>;
   updateInquiryStatus?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
   updateOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
@@ -1390,6 +1392,11 @@ export type SendMessageMutationVariables = Exact<{
 
 
 export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
+
+export type TempLoginMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TempLoginMutation = { __typename?: 'Mutation', tempLogin: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
@@ -2356,6 +2363,44 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const TempLoginDocument = gql`
+    mutation TempLogin {
+  tempLogin {
+    ... on User {
+      ...UserPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}
+    ${UserPrivateInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
+export type TempLoginMutationFn = Apollo.MutationFunction<TempLoginMutation, TempLoginMutationVariables>;
+
+/**
+ * __useTempLoginMutation__
+ *
+ * To run a mutation, you first call `useTempLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTempLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [tempLoginMutation, { data, loading, error }] = useTempLoginMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTempLoginMutation(baseOptions?: Apollo.MutationHookOptions<TempLoginMutation, TempLoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TempLoginMutation, TempLoginMutationVariables>(TempLoginDocument, options);
+      }
+export type TempLoginMutationHookResult = ReturnType<typeof useTempLoginMutation>;
+export type TempLoginMutationResult = Apollo.MutationResult<TempLoginMutation>;
+export type TempLoginMutationOptions = Apollo.BaseMutationOptions<TempLoginMutation, TempLoginMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($input: updateUserInput!) {
   updateUser(input: $input) {

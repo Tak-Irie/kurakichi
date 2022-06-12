@@ -1,6 +1,14 @@
 /* eslint-disable no-restricted-syntax */
 import { PrismaClient } from '@prisma/client';
-import { adminUserId, memberUserId, orgs, users } from './seedData';
+import {
+  adminUserId,
+  memberUserId,
+  orgs,
+  sampleAdminId,
+  sampleMemberId,
+  sampleOrg,
+  users,
+} from './seedData';
 
 const prisma = new PrismaClient();
 
@@ -25,6 +33,16 @@ async function main() {
       }),
     );
   }
+
+  orgsCreate.push(
+    prisma.organization.create({
+      data: {
+        members: { connect: [{ id: sampleAdminId }, { id: sampleMemberId }] },
+        ...sampleOrg,
+      },
+    }),
+  );
+
   await Promise.all(orgsCreate);
   console.log('seed org registered');
 }

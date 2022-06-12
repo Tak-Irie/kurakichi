@@ -195,6 +195,7 @@ type Mutation {
   sendInquiry(input: SendInquiryInput!): InquiryResult!
   sendMessage(input: sendMessageInput!): MessageResult!
   ssoLogin(provider: String!): SSOResult!
+  tempLogin: UserResult!
   updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult!
   updateOrg(input: UpdateOrgInput!): OrgResult!
   updateUser(input: updateUserInput!): UserResult!
