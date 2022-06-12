@@ -58,8 +58,7 @@ export const Overlay: FC<Props> = ({ content, position }) => {
 
     const onRemove = () => {
       if (container) {
-        (container.parentNode as HTMLElement).removeChild(container);
-        // FIXME: maybe use createRoot()
+        // FIXME: idk proper solution.
         // @ts-ignore
         container = null;
       }
