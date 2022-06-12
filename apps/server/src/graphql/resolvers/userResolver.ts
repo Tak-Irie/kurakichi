@@ -29,14 +29,6 @@ export const UserResolver: Resolvers<ApolloContext> = {
           applicationError: { message: 'miss' },
         };
       }
-
-      // console.log('confirm cookie!:');
-      // FIXME:CQRS
-      // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
-      // console.log('me/usecaseResult:', usecaseResult);
-      // if (usecaseResult.isLeft())
-      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
-
       const res = await getUserMyInfo(idInCookie);
       if (res === false) return returnErrorToGQL('wip');
 
@@ -185,7 +177,7 @@ export const UserResolver: Resolvers<ApolloContext> = {
     },
     tempLogin: (_, __, { req }) => {
       const dtoUser: DTOUser = {
-        id: '02E67P2MEJAWTM75CT151FUGA',
+        id: '01G5B8CDH1S1KGFM06KHQDTHRD',
         userName: 'sampleAdmin',
         avatarUrl: '/asian_man4.jpg',
         selfIntro: 'サンプル管理者です',
@@ -193,7 +185,7 @@ export const UserResolver: Resolvers<ApolloContext> = {
         heroImageUrl: 'UNKNOWN',
         role: 'EXPERT',
         belongBases: [],
-        belongOrgs: [],
+        belongOrgs: ['01G5B8CM45MBTGC9YRPF4G5MEZ'],
         messages: [],
       };
       const gqlUser = dtoUserToGql(dtoUser);

@@ -5,6 +5,8 @@ export const getOrgPrivateInfoByCookieAndId = async (
   orgId: string,
   memberId: string,
 ): Promise<OrgPrivateModel | false> => {
+  // console.log('orgId:', orgId);
+  // console.log('memberId:', memberId);
   const orgRepo = new OrgRepo();
   const res = await orgRepo.getOrgPrivateInfoTemp(orgId, memberId);
 

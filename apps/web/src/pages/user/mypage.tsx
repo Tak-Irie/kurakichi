@@ -17,7 +17,6 @@ const MyPage: NextPage = () => {
   // TODO:CQRS
   const { data, loading, error } = useGetUserMyInfoQuery({
     fetchPolicy: 'cache-first',
-    ssr: false,
   });
 
   if (loading) return <LoadingSpinner />;
@@ -30,6 +29,7 @@ const MyPage: NextPage = () => {
     // console.log('MyPageData:', data.me.user);
     const fetchedUser = data.getUserByCookie;
     const messages = idx(fetchedUser, (accessor) => accessor.messages.edges);
+    const orgs = idx(fetchedUser, (accessor) => accessor.orgs.edges);
 
     return (
       <UserTemplate
@@ -61,8 +61,8 @@ const MyPage: NextPage = () => {
         pageContents={
           <UserMyPage
             description={fetchedUser.selfIntro || ''}
-            orgs={[]}
-            messages={messages?.map((_) => _.node) || []}
+            orgs={orgs?.map((edge) => edge.node) || []}
+            messages={messages?.map((edge) => edge.node) || []}
             email={fetchedUser.email || ''}
             bases={[]}
           />

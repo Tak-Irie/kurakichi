@@ -1,16 +1,16 @@
-import { Either, left, Result, right } from "../../../shared/core";
+import { Either, left, Result, right } from '../../../shared/core';
 import {
   InvalidInputValueError,
   IUsecase,
   UnexpectedError,
-} from "../../../shared/usecase";
-import { IUserRepository, UserEmail, UserPassword } from "../../domain";
-import { DTOUser, createDTOUserFromDomain } from "../DTOUser";
+} from '../../../shared/usecase';
+import { IUserRepository, UserEmail, UserPassword } from '../../domain';
+import { createDTOUserFromDomain, DTOUser } from '../DTOUser';
 import {
   NotCorrectPasswordOrNotFoundUser,
   NotFoundEmailError,
   YouAreSsoUserError,
-} from "./LoginUserError";
+} from './LoginUserError';
 
 type LoginUserResponse = Either<
   | NotCorrectPasswordOrNotFoundUser
@@ -34,28 +34,29 @@ export class LoginUserUsecase
 
   public async execute(arg: LoginUserArg): Promise<LoginUserResponse> {
     try {
+      // console.log('login-arg:', arg);
       const email = UserEmail.create({ email: arg.email });
       if (email.isFailure)
-        return left(new InvalidInputValueError(email.getErrorValue(), ""));
+        return left(new InvalidInputValueError(email.getErrorValue(), ''));
 
       const dbUser = await this.userRepository.getUserByEmail(email.getValue());
-      if (dbUser === undefined) return left(new NotFoundEmailError(""));
+      if (dbUser === undefined) return left(new NotFoundEmailError(''));
 
       const storedPass = dbUser.getPassword();
-      if (storedPass === undefined) return left(new YouAreSsoUserError(""));
+      if (storedPass === undefined) return left(new YouAreSsoUserError(''));
 
       const passwordVerified = await UserPassword.verifyPassword(
         arg.password,
-        storedPass
+        storedPass,
       );
       if (!passwordVerified)
-        return left(new NotCorrectPasswordOrNotFoundUser(""));
+        return left(new NotCorrectPasswordOrNotFoundUser(''));
 
       const dtoUser = createDTOUserFromDomain(dbUser);
 
       return right(Result.success<DTOUser>(dtoUser));
     } catch (err) {
-      return left(new UnexpectedError(""));
+      return left(new UnexpectedError(''));
     }
   }
 }

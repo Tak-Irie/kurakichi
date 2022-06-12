@@ -11,7 +11,6 @@ export const NavAlpha: FC = () => {
   if (loading) {
     <div>loading...</div>;
   }
-  console.log('data:', data);
 
   return (
     <div className="flex text-gray-700 bg-red-200 border border-gray-100">

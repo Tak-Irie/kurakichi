@@ -71,7 +71,7 @@ export const TableOrgMember: FC<TableOrgMemberProps> = ({
           <CardWithPick
             image={member.avatarUrl || '/asian_man1.jpg'}
             title={member.name || FAIL_TO_FETCH}
-            content={member.selfIntro || FAIL_TO_FETCH}
+            // content={member.selfIntro || FAIL_TO_FETCH}
             imageAlt="ユーザーアバター"
             linkUrl="/user/[id]"
             linkAs={`/user/${member.id}`}

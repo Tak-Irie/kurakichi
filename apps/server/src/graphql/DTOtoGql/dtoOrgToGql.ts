@@ -20,17 +20,22 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
     members,
   } = dtoOrg;
 
-  const _address: Address = {
+  const modifiedAddress: Address = {
     address,
     longitude,
     latitude,
   };
 
-  const _inq = createGqlConn(inquiries);
-  const edges = members.map((id) => {
-    return { cursor: id, isAdmin: id === adminId ? true : false, node: { id } };
-  });
-  const _mem = { pageInfo: { hasNext: false, hasPrevious: false }, edges };
+  const modifiedInq = createGqlConn(inquiries);
+  const edges = members.map((member) => ({
+    cursor: member,
+    isAdmin: member === adminId,
+    node: { id: member },
+  }));
+  const memberConn = {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges,
+  };
 
   return {
     id,
@@ -38,70 +43,32 @@ export const dtoOrgToGql = (dtoOrg: DTOOrg): Org => {
     email,
     phoneNumber,
     description,
-    address: _address,
+    address: modifiedAddress,
     avatarUrl,
     heroImageUrl,
     homePage: homePageUrl,
-    inquiries: _inq,
-    members: _mem,
+    inquiries: modifiedInq,
+    members: memberConn,
   };
-
-  // return {
-  //   id,
-  //   orgName: name,
-  //   address,
-  //   latitude,
-  //   longitude,
-  //   email,
-  //   phoneNumber,
-  //   description,
-  //   homePage,
-  //   avatar,
-  //   image,
-  //   members: idsMapper(members),
-  //   inquiries: idsMapper(inquiries),
-  // };
 };
-export const dtoOrgsToGql = (dtoOrgs: DTOOrg[]): Org[] => {
-  return dtoOrgs.map((org) => dtoOrgToGql(org));
-};
+export const dtoOrgsToGql = (dtoOrgs: DTOOrg[]): Org[] =>
+  dtoOrgs.map((org) => dtoOrgToGql(org));
 
 export const readOrgToGql = (readOrg: OrgReadModel): Org => {
   const { latitude, longitude, address, members, ...rest } = readOrg;
-  const _address = { address, latitude, longitude };
-  const _memConn: MemberConnection = {
+  const modifiedAddress = { address, latitude, longitude };
+  const memConn: MemberConnection = {
     pageInfo: { hasNext: false, hasPrevious: false },
-    edges: members.map((mem) => {
-      return { cursor: mem.id, isAdmin: false, node: { ...mem } };
-    }),
+    edges: members.map((mem) => ({
+      cursor: mem.id,
+      isAdmin: false,
+      node: { ...mem },
+    })),
   };
-  members;
 
   return {
-    address: _address,
-    members: _memConn,
+    address: modifiedAddress,
+    members: memConn,
     ...rest,
   };
 };
-
-// // TODO:these function is used still impl CQRS
-// export const dtoOrgToGqlWithUser = (
-//   dtoOrg: DTOOrg,
-//   dtoUser: DTOUser[]
-// ): NexusGenFieldTypes["Org"] => {
-//   const org = dtoOrgToGql(dtoOrg);
-//   const members = org.members.map((member) => {
-//     const user = dtoUser.find((user) => user.id === member.id);
-//     const _user = { ...user, belongOrgs: [], messages: [], belongBases: [] };
-//     return _user;
-//   });
-//   return { ...org, members: members };
-// };
-
-// export const dtoOrgsToGqlWithUser = (
-//   dtoOrgs: DTOOrg[],
-//   dtoUser: DTOUser[]
-// ): NexusGenFieldTypes["Org"][] => {
-//   const orgs = dtoOrgs.map((org) => dtoOrgToGqlWithUser(org, dtoUser));
-//   return orgs;
-// };

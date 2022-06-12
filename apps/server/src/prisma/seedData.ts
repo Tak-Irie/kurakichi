@@ -1,9 +1,9 @@
 import { Organization, User } from '@prisma/client';
 
-export const adminUserId = '01F4BVK5ZA3NA42HXKAS0EDHC2';
-export const memberUserId = '01F57P2MEJAWTM75CT151BSCD0';
-export const sampleAdminId = '02E67P2MEJAWTM75CT151FUGA';
-export const sampleMemberId = '02E67P2MEJAWTM75CT151MEMB';
+export const adminUserId = '01G5B8CDGWX5K65XWGEZJV1F8T';
+export const memberUserId = '01G5B8CDH04DJ8D8XJQW81KDNB';
+export const sampleAdminId = '01G5B8CDH1S1KGFM06KHQDTHRD';
+export const sampleMemberId = '01G5B8CM4157QGQYGFVT63NB5B';
 
 const shared = {
   heroImageUrl: 'UNKNOWN',
@@ -37,7 +37,7 @@ export const users: User[] = [
     ssoSub: 'IT_IS_KURAKICHI_ORIGINAL_USER',
   },
   {
-    id: '01F57P2MEJAWTM75CT151HOGE',
+    id: '01G5B8CM45FM904PES3Y25AHKR',
     name: 'seedVistor',
     avatarUrl: '/asian_man1.jpg',
     selfIntro: '仮一般ユーザーです',
@@ -72,7 +72,7 @@ export const users: User[] = [
 ];
 
 export const sampleOrg: Organization = {
-  id: '01F5JQA6T3TKY3H12DHOGEFUGA',
+  id: '01G5B8CM45MBTGC9YRPF4G5MEZ',
   name: '架空団体',
   address: '171-0022東京都豊島区南池袋１丁目',
   latitude: 35.72947403,

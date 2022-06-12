@@ -16,8 +16,13 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="ja" dir="ltr">
-        <Head />
-        <body className="font-kiwi">
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter&display=optional"
+            rel="stylesheet"
+          />
+        </Head>
+        <body>
           <Main />
           <NextScript />
         </body>

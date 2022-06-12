@@ -50,7 +50,7 @@ export class OrgRepo implements IOrgRepo {
   }
 
   async getOrgs(): Promise<Org[]> {
-    console.log('catch getOrgs:');
+    // console.log('catch getOrgs:');
     const dbOrgs = await this.prisma.organization.findMany({
       include: {
         members: { select: { id: true } },

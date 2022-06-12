@@ -1290,7 +1290,7 @@ export type PageInfoFragment = { __typename?: 'PageInfo', endCursor?: string | n
 
 export type UserPrivateInfoFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null };
 
-export type UserPublicInfoFragment = { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null };
+export type UserPublicInfoFragment = { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null };
 
 export type AcceptToJoinOrgMutationVariables = Exact<{
   input: AcceptJoinOrgInput;
@@ -1467,7 +1467,7 @@ export type GetUserPublicInfoQueryVariables = Exact<{
 }>;
 
 
-export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } };
+export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type DialogPostedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -1726,6 +1726,15 @@ export const UserPublicInfoFragmentDoc = gql`
   selfIntro
   avatarUrl
   heroImageUrl
+  orgs {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+  }
 }
     `;
 export const AcceptToJoinOrgDocument = gql`

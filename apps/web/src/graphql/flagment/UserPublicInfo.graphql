@@ -4,4 +4,13 @@ fragment UserPublicInfo on User {
   selfIntro
   avatarUrl
   heroImageUrl
+  orgs {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+  }
 }

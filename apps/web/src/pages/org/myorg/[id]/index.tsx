@@ -22,8 +22,6 @@ const OrgPrivatePage: NextPage = () => {
 
   const { data, loading, error } = useGetOrgPrivateInfoByCookieAndIdQuery({
     variables: { orgId },
-    fetchPolicy: 'cache-first',
-    ssr: false,
   });
 
   if (loading) return <LoadingSpinner />;

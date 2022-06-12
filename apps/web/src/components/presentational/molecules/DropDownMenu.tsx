@@ -23,19 +23,19 @@ export const Item: FC<ItemProps> = ({ itemLabel, icon, url, onClick }) => {
         <div
           className={`${
             active ? 'bg-slate-100' : 'text-gray-900'
-          } flex rounded-md px-2 py-2 text-sm`}
+          } flex w-full rounded-md text-sm`}
         >
           {url ? (
             <button
               type="button"
-              className="flex"
+              className="flex p-2 w-full"
               onClick={() => router.push(url)}
             >
               {icon}
               {itemLabel}
             </button>
           ) : (
-            <button type="button" className="flex" onClick={onClick}>
+            <button type="button" className="flex p-2 w-full" onClick={onClick}>
               {icon}
               {itemLabel}
             </button>
