@@ -23,7 +23,6 @@ export type Scalars = {
   InquiryStatus: InquiryStatusModel;
   /** SENT | READ | UNREAD | DRAFT */
   MessageStatus: MessageStatusModel;
-  Upload: any;
   /** VISITOR | CLIENT | EXPERT */
   UserRole: UserRoleModel;
 };
@@ -102,13 +101,6 @@ export type FellowEdge = {
   cursor: Scalars['String'];
   isBaseAdmin?: Maybe<Scalars['Boolean']>;
   node: User;
-};
-
-export type File = {
-  __typename?: 'File';
-  encoding: Scalars['String'];
-  filename: Scalars['String'];
-  mimetype: Scalars['String'];
 };
 
 export type InquiriesResult = Errors | InquiryConnection;
@@ -234,25 +226,25 @@ export type MessagesResult = Errors | Messages;
 
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptJoinOrg?: Maybe<OrgResult>;
-  changePassword?: Maybe<BoolResult>;
-  createBase?: Maybe<BaseResult>;
-  deleteUser?: Maybe<BoolResult>;
-  forgetPassword?: Maybe<BoolResult>;
-  loginUser?: Maybe<UserResult>;
-  logoutUser?: Maybe<BoolResult>;
-  postDialog?: Maybe<PostDialogResult>;
-  registerOrg?: Maybe<OrgResult>;
-  registerUser?: Maybe<UserResult>;
-  replyInquiry?: Maybe<InquiryResult>;
-  replyMessage?: Maybe<MessageResult>;
-  requestJoinOrg?: Maybe<OrgResult>;
-  sendInquiry?: Maybe<InquiryResult>;
-  sendMessage?: Maybe<MessageResult>;
-  updateInquiryStatus?: Maybe<InquiryResult>;
-  updateOrg?: Maybe<OrgResult>;
-  updateUser?: Maybe<UserResult>;
-  uploadFile: File;
+  acceptJoinOrg: OrgResult;
+  changePassword: BoolResult;
+  createBase: BaseResult;
+  deleteUser: BoolResult;
+  forgetPassword: BoolResult;
+  loginUser: UserResult;
+  logoutUser: BoolResult;
+  postDialog: PostDialogResult;
+  registerOrg: OrgResult;
+  registerUser: UserResult;
+  replyInquiry: InquiryResult;
+  replyMessage: MessageResult;
+  requestJoinOrg: OrgResult;
+  sendInquiry: InquiryResult;
+  sendMessage: MessageResult;
+  ssoLogin: SsoResult;
+  updateInquiryStatus: InquiryResult;
+  updateOrg: OrgResult;
+  updateUser: UserResult;
 };
 
 
@@ -316,6 +308,11 @@ export type MutationSendMessageArgs = {
 };
 
 
+export type MutationSsoLoginArgs = {
+  provider: Scalars['String'];
+};
+
+
 export type MutationUpdateInquiryStatusArgs = {
   input: UpdateInquiryStatusInput;
 };
@@ -328,11 +325,6 @@ export type MutationUpdateOrgArgs = {
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
-};
-
-
-export type MutationUploadFileArgs = {
-  file: Scalars['Upload'];
 };
 
 export type Node = {
@@ -387,21 +379,21 @@ export type PostDialogResult = Dialog | Errors;
 
 export type Query = {
   __typename?: 'Query';
-  getAddressByPostcode?: Maybe<AddressResult>;
-  getBase?: Maybe<BaseResult>;
-  getDialogsByBaseId?: Maybe<DialogsResult>;
-  getInquiriesByOrgId?: Maybe<InquiriesResult>;
-  getInquiriesByTreeId?: Maybe<InquiryTreeResult>;
-  getInquiry?: Maybe<InquiryResult>;
-  getKarte?: Maybe<KarteResult>;
-  getMessagesByCookie?: Maybe<MessagesResult>;
-  getMessagesByTreeId?: Maybe<MessageTreeResult>;
-  getOrg?: Maybe<OrgResult>;
-  getOrgInfoByMemberCookieAndId?: Maybe<OrgResult>;
-  getOrgs?: Maybe<OrgsResult>;
-  getUserByCookie?: Maybe<UserResult>;
-  getUserById?: Maybe<UserResult>;
-  getUsers?: Maybe<UsersResult>;
+  getAddressByPostcode: AddressResult;
+  getBase: BaseResult;
+  getDialogsByBaseId: DialogsResult;
+  getInquiriesByOrgId: InquiriesResult;
+  getInquiriesByTreeId: InquiryTreeResult;
+  getInquiry: InquiryResult;
+  getKarte: KarteResult;
+  getMessagesByCookie: MessagesResult;
+  getMessagesByTreeId: MessageTreeResult;
+  getOrg: OrgResult;
+  getOrgInfoByMemberCookieAndId: OrgResult;
+  getOrgs: OrgsResult;
+  getUserByCookie: UserResult;
+  getUserById: UserResult;
+  getUsers: UsersResult;
   node?: Maybe<Node>;
   nodes?: Maybe<Array<Maybe<Node>>>;
 };
@@ -477,6 +469,13 @@ export type RegisterOrgInput = {
   name: Scalars['String'];
   phoneNumber: Scalars['String'];
 };
+
+export type Sso = {
+  __typename?: 'SSO';
+  url: Scalars['String'];
+};
+
+export type SsoResult = Errors | Sso;
 
 export type SendInquiryInput = {
   category: Scalars['InquiryCategory'];
@@ -669,7 +668,6 @@ export type ResolversTypes = {
   Errors: ResolverTypeWrapper<Errors>;
   FellowConnection: ResolverTypeWrapper<FellowConnection>;
   FellowEdge: ResolverTypeWrapper<FellowEdge>;
-  File: ResolverTypeWrapper<File>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   InquiriesResult: ResolversTypes['Errors'] | ResolversTypes['InquiryConnection'];
@@ -710,13 +708,14 @@ export type ResolversTypes = {
   PostDialogResult: ResolversTypes['Dialog'] | ResolversTypes['Errors'];
   Query: ResolverTypeWrapper<{}>;
   RegisterOrgInput: RegisterOrgInput;
+  SSO: ResolverTypeWrapper<Sso>;
+  SSOResult: ResolversTypes['Errors'] | ResolversTypes['SSO'];
   SendInquiryInput: SendInquiryInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   Succeeded: ResolverTypeWrapper<Succeeded>;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<Omit<User, 'role'> & { role?: Maybe<ResolversTypes['UserRole']> }>;
   UserError: ResolverTypeWrapper<UserError>;
   UserResult: ResolversTypes['Errors'] | ResolversTypes['User'];
@@ -753,7 +752,6 @@ export type ResolversParentTypes = {
   Errors: Errors;
   FellowConnection: FellowConnection;
   FellowEdge: FellowEdge;
-  File: File;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   InquiriesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryConnection'];
@@ -794,13 +792,14 @@ export type ResolversParentTypes = {
   PostDialogResult: ResolversParentTypes['Dialog'] | ResolversParentTypes['Errors'];
   Query: {};
   RegisterOrgInput: RegisterOrgInput;
+  SSO: Sso;
+  SSOResult: ResolversParentTypes['Errors'] | ResolversParentTypes['SSO'];
   SendInquiryInput: SendInquiryInput;
   String: Scalars['String'];
   Subscription: {};
   Succeeded: Succeeded;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: Scalars['Upload'];
   User: Omit<User, 'role'> & { role?: Maybe<ResolversParentTypes['UserRole']> };
   UserError: UserError;
   UserResult: ResolversParentTypes['Errors'] | ResolversParentTypes['User'];
@@ -902,13 +901,6 @@ export type FellowEdgeResolvers<ContextType = any, ParentType extends ResolversP
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isBaseAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
-  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1060,25 +1052,25 @@ export type MessagesResultResolvers<ContextType = any, ParentType extends Resolv
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
-  changePassword?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType, Partial<MutationChangePasswordArgs>>;
-  createBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType>;
-  deleteUser?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType>;
-  forgetPassword?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
-  loginUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
-  logoutUser?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType>;
-  postDialog?: Resolver<Maybe<ResolversTypes['PostDialogResult']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
-  registerOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
-  registerUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
-  replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
-  replyMessage?: Resolver<Maybe<ResolversTypes['MessageResult']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
-  requestJoinOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
-  sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
-  sendMessage?: Resolver<Maybe<ResolversTypes['MessageResult']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
-  updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
-  updateOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
-  updateUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
-  uploadFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationUploadFileArgs, 'file'>>;
+  acceptJoinOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
+  changePassword?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType, Partial<MutationChangePasswordArgs>>;
+  createBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType>;
+  deleteUser?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType>;
+  forgetPassword?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
+  loginUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
+  logoutUser?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType>;
+  postDialog?: Resolver<ResolversTypes['PostDialogResult'], ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
+  registerOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
+  registerUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
+  replyInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
+  replyMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
+  requestJoinOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
+  sendInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
+  sendMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
+  ssoLogin?: Resolver<ResolversTypes['SSOResult'], ParentType, ContextType, RequireFields<MutationSsoLoginArgs, 'provider'>>;
+  updateInquiryStatus?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
+  updateOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
+  updateUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
@@ -1139,23 +1131,32 @@ export type PostDialogResultResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getAddressByPostcode?: Resolver<Maybe<ResolversTypes['AddressResult']>, ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
-  getBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
-  getDialogsByBaseId?: Resolver<Maybe<ResolversTypes['DialogsResult']>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
-  getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
-  getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreeResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
-  getInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
-  getKarte?: Resolver<Maybe<ResolversTypes['KarteResult']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
-  getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesResult']>, ParentType, ContextType>;
-  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreeResult']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
-  getOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
-  getOrgInfoByMemberCookieAndId?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<QueryGetOrgInfoByMemberCookieAndIdArgs, 'orgId'>>;
-  getOrgs?: Resolver<Maybe<ResolversTypes['OrgsResult']>, ParentType, ContextType>;
-  getUserByCookie?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType>;
-  getUserById?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
-  getUsers?: Resolver<Maybe<ResolversTypes['UsersResult']>, ParentType, ContextType>;
+  getAddressByPostcode?: Resolver<ResolversTypes['AddressResult'], ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
+  getBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
+  getDialogsByBaseId?: Resolver<ResolversTypes['DialogsResult'], ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
+  getInquiriesByOrgId?: Resolver<ResolversTypes['InquiriesResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
+  getInquiriesByTreeId?: Resolver<ResolversTypes['InquiryTreeResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
+  getInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
+  getKarte?: Resolver<ResolversTypes['KarteResult'], ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
+  getMessagesByCookie?: Resolver<ResolversTypes['MessagesResult'], ParentType, ContextType>;
+  getMessagesByTreeId?: Resolver<ResolversTypes['MessageTreeResult'], ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
+  getOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
+  getOrgInfoByMemberCookieAndId?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<QueryGetOrgInfoByMemberCookieAndIdArgs, 'orgId'>>;
+  getOrgs?: Resolver<ResolversTypes['OrgsResult'], ParentType, ContextType>;
+  getUserByCookie?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType>;
+  getUserById?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
+  getUsers?: Resolver<ResolversTypes['UsersResult'], ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Node']>>>, ParentType, ContextType, RequireFields<QueryNodesArgs, 'ids'>>;
+};
+
+export type SsoResolvers<ContextType = any, ParentType extends ResolversParentTypes['SSO'] = ResolversParentTypes['SSO']> = {
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SsoResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SSOResult'] = ResolversParentTypes['SSOResult']> = {
+  __resolveType: TypeResolveFn<'Errors' | 'SSO', ParentType, ContextType>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -1166,10 +1167,6 @@ export type SucceededResolvers<ContextType = any, ParentType extends ResolversPa
   succeeded?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
-
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1223,7 +1220,6 @@ export type Resolvers<ContextType = any> = {
   Errors?: ErrorsResolvers<ContextType>;
   FellowConnection?: FellowConnectionResolvers<ContextType>;
   FellowEdge?: FellowEdgeResolvers<ContextType>;
-  File?: FileResolvers<ContextType>;
   InquiriesResult?: InquiriesResultResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
   InquiryCategory?: GraphQLScalarType;
@@ -1261,9 +1257,10 @@ export type Resolvers<ContextType = any> = {
   PageInfo?: PageInfoResolvers<ContextType>;
   PostDialogResult?: PostDialogResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SSO?: SsoResolvers<ContextType>;
+  SSOResult?: SsoResultResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Succeeded?: SucceededResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserError?: UserErrorResolvers<ContextType>;
   UserResult?: UserResultResolvers<ContextType>;
@@ -1298,172 +1295,172 @@ export type AcceptToJoinOrgMutationVariables = Exact<{
 }>;
 
 
-export type AcceptToJoinOrgMutation = { __typename?: 'Mutation', acceptJoinOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type AcceptToJoinOrgMutation = { __typename?: 'Mutation', acceptJoinOrg: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } };
 
 export type RegisterOrgMutationVariables = Exact<{
   input: RegisterOrgInput;
 }>;
 
 
-export type RegisterOrgMutation = { __typename?: 'Mutation', registerOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type RegisterOrgMutation = { __typename?: 'Mutation', registerOrg: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } };
 
 export type ReplyInquiryMutationVariables = Exact<{
   input: ReplyInquiryInput;
 }>;
 
 
-export type ReplyInquiryMutation = { __typename?: 'Mutation', replyInquiry?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null };
+export type ReplyInquiryMutation = { __typename?: 'Mutation', replyInquiry: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
 
 export type SendInquiryMutationVariables = Exact<{
   input: SendInquiryInput;
 }>;
 
 
-export type SendInquiryMutation = { __typename?: 'Mutation', sendInquiry?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null };
+export type SendInquiryMutation = { __typename?: 'Mutation', sendInquiry: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
 
 export type UpdateInquiryStatusMutationVariables = Exact<{
   input: UpdateInquiryStatusInput;
 }>;
 
 
-export type UpdateInquiryStatusMutation = { __typename?: 'Mutation', updateInquiryStatus?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null };
+export type UpdateInquiryStatusMutation = { __typename?: 'Mutation', updateInquiryStatus: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
 
 export type UpdateOrgInfoMutationVariables = Exact<{
   input: UpdateOrgInput;
 }>;
 
 
-export type UpdateOrgInfoMutation = { __typename?: 'Mutation', updateOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
-
-export type UploadFileMutationVariables = Exact<{
-  file: Scalars['Upload'];
-}>;
-
-
-export type UploadFileMutation = { __typename?: 'Mutation', uploadFile: { __typename?: 'File', encoding: string, filename: string, mimetype: string } };
+export type UpdateOrgInfoMutation = { __typename?: 'Mutation', updateOrg: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } };
 
 export type ChangeUserPasswordMutationVariables = Exact<{
   input?: InputMaybe<ChangePasswordInput>;
 }>;
 
 
-export type ChangeUserPasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } | null };
+export type ChangeUserPasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } };
 
 export type DeleteUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } | null };
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } };
 
 export type ForgetUserPasswordMutationVariables = Exact<{
   forgetPasswordEmail: Scalars['String'];
 }>;
 
 
-export type ForgetUserPasswordMutation = { __typename?: 'Mutation', forgetPassword?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } | null };
+export type ForgetUserPasswordMutation = { __typename?: 'Mutation', forgetPassword: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } };
 
 export type LoginUserMutationVariables = Exact<{
   input: LoginUserInput;
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } | null };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } | null };
+export type LogoutUserMutation = { __typename?: 'Mutation', logoutUser: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Succeeded', succeeded: string } };
 
 export type RegisterUserMutationVariables = Exact<{
   input: RegisterUserInput;
 }>;
 
 
-export type RegisterUserMutation = { __typename?: 'Mutation', registerUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } | null };
+export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type ReplyMessageMutationVariables = Exact<{
   input: ReplyMessageInput;
 }>;
 
 
-export type ReplyMessageMutation = { __typename?: 'Mutation', replyMessage?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null };
+export type ReplyMessageMutation = { __typename?: 'Mutation', replyMessage: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
+
+export type SsoLoginMutationVariables = Exact<{
+  provider: Scalars['String'];
+}>;
+
+
+export type SsoLoginMutation = { __typename?: 'Mutation', ssoLogin: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'SSO', url: string } };
 
 export type SendMessageMutationVariables = Exact<{
   input: SendMessageInput;
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', sendMessage?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } | null };
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } | null };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type GetAddressByPostcodeQueryVariables = Exact<{
   postcode: Scalars['String'];
 }>;
 
 
-export type GetAddressByPostcodeQuery = { __typename?: 'Query', getAddressByPostcode?: { __typename?: 'Address', address: string } | { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | null };
+export type GetAddressByPostcodeQuery = { __typename?: 'Query', getAddressByPostcode: { __typename?: 'Address', address: string } | { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } };
 
 export type GetInquiriesByOrgIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetInquiriesByOrgIdQuery = { __typename?: 'Query', getInquiriesByOrgId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null };
+export type GetInquiriesByOrgIdQuery = { __typename?: 'Query', getInquiriesByOrgId: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } };
 
 export type GetInquiriesByTreeIdQueryVariables = Exact<{
   treeId: Scalars['String'];
 }>;
 
 
-export type GetInquiriesByTreeIdQuery = { __typename?: 'Query', getInquiriesByTreeId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'InquiryTree', id: string, leaves?: { __typename?: 'InquiryLeafConnection', edges: Array<{ __typename?: 'InquiryLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null } } | null>, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
+export type GetInquiriesByTreeIdQuery = { __typename?: 'Query', getInquiriesByTreeId: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'InquiryTree', id: string, leaves?: { __typename?: 'InquiryLeafConnection', edges: Array<{ __typename?: 'InquiryLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Inquiry', id: string, content?: string | null, category?: InquiryCategoryModel | null, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, replier?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, avatarUrl?: string | null } | null } } | null>, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } };
 
 export type GetOrgPrivateInfoByCookieAndIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetOrgPrivateInfoByCookieAndIdQuery = { __typename?: 'Query', getOrgInfoByMemberCookieAndId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } | null };
+export type GetOrgPrivateInfoByCookieAndIdQuery = { __typename?: 'Query', getOrgInfoByMemberCookieAndId: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, email?: string | null, phoneNumber?: string | null, description?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, homePage?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, inquiries?: { __typename?: 'InquiryConnection', edges?: Array<{ __typename?: 'InquiryEdges', cursor: string, node: { __typename?: 'Inquiry', category?: InquiryCategoryModel | null, content?: string | null, id: string, inquiryStatus?: InquiryStatusModel | null, sentAt?: string | null, receivedOrg?: { __typename?: 'Org', id: string } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, replier?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, isAdmin?: boolean | null, node: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } }> | null } | null } };
 
 export type GetOrgPublicInfoByIdQueryVariables = Exact<{
   orgId: Scalars['String'];
 }>;
 
 
-export type GetOrgPublicInfoByIdQuery = { __typename?: 'Query', getOrg?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
+export type GetOrgPublicInfoByIdQuery = { __typename?: 'Query', getOrg: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Org', id: string, name?: string | null, description?: string | null, email?: string | null, phoneNumber?: string | null, homePage?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null, members?: { __typename?: 'MemberConnection', edges?: Array<{ __typename?: 'MemberEdges', cursor: string, node: { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } };
 
 export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null }> | null } | null };
+export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null }> | null } };
 
 export type GetMessagesByTreeIdQueryVariables = Exact<{
   treeId: Scalars['String'];
 }>;
 
 
-export type GetMessagesByTreeIdQuery = { __typename?: 'Query', getMessagesByTreeId?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'MessageTree', id: string, leaves?: { __typename?: 'MessageLeafConnection', edges?: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } | null };
+export type GetMessagesByTreeIdQuery = { __typename?: 'Query', getMessagesByTreeId: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'MessageTree', id: string, leaves?: { __typename?: 'MessageLeafConnection', edges?: Array<{ __typename?: 'MessageLeafEdges', cursor: string, isRoot?: boolean | null, node: { __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', endCursor?: string | null, hasNext: boolean, hasPrevious: boolean, startCursor?: string | null } | null } | null } };
 
 export type GetMessagesByCookieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMessagesByCookieQuery = { __typename?: 'Query', getMessagesByCookie?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Messages', messages?: Array<{ __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null }> | null } | null };
+export type GetMessagesByCookieQuery = { __typename?: 'Query', getMessagesByCookie: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Messages', messages?: Array<{ __typename?: 'Message', id: string, content?: string | null, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null, sender?: { __typename?: 'User', id: string, name?: string | null, avatarUrl?: string | null } | null }> | null } };
 
 export type GetUserMyInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserMyInfoQuery = { __typename?: 'Query', getUserByCookie?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } | null };
+export type GetUserMyInfoQuery = { __typename?: 'Query', getUserByCookie: { __typename: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type GetUserPublicInfoQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById?: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } | null };
+export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } };
 
 export type DialogPostedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -1994,41 +1991,6 @@ export function useUpdateOrgInfoMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateOrgInfoMutationHookResult = ReturnType<typeof useUpdateOrgInfoMutation>;
 export type UpdateOrgInfoMutationResult = Apollo.MutationResult<UpdateOrgInfoMutation>;
 export type UpdateOrgInfoMutationOptions = Apollo.BaseMutationOptions<UpdateOrgInfoMutation, UpdateOrgInfoMutationVariables>;
-export const UploadFileDocument = gql`
-    mutation UploadFile($file: Upload!) {
-  uploadFile(file: $file) {
-    encoding
-    filename
-    mimetype
-  }
-}
-    `;
-export type UploadFileMutationFn = Apollo.MutationFunction<UploadFileMutation, UploadFileMutationVariables>;
-
-/**
- * __useUploadFileMutation__
- *
- * To run a mutation, you first call `useUploadFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUploadFileMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [uploadFileMutation, { data, loading, error }] = useUploadFileMutation({
- *   variables: {
- *      file: // value for 'file'
- *   },
- * });
- */
-export function useUploadFileMutation(baseOptions?: Apollo.MutationHookOptions<UploadFileMutation, UploadFileMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UploadFileMutation, UploadFileMutationVariables>(UploadFileDocument, options);
-      }
-export type UploadFileMutationHookResult = ReturnType<typeof useUploadFileMutation>;
-export type UploadFileMutationResult = Apollo.MutationResult<UploadFileMutation>;
-export type UploadFileMutationOptions = Apollo.BaseMutationOptions<UploadFileMutation, UploadFileMutationVariables>;
 export const ChangeUserPasswordDocument = gql`
     mutation ChangeUserPassword($input: changePasswordInput) {
   changePassword(input: $input) {
@@ -2304,6 +2266,49 @@ export function useReplyMessageMutation(baseOptions?: Apollo.MutationHookOptions
 export type ReplyMessageMutationHookResult = ReturnType<typeof useReplyMessageMutation>;
 export type ReplyMessageMutationResult = Apollo.MutationResult<ReplyMessageMutation>;
 export type ReplyMessageMutationOptions = Apollo.BaseMutationOptions<ReplyMessageMutation, ReplyMessageMutationVariables>;
+export const SsoLoginDocument = gql`
+    mutation SSOLogin($provider: String!) {
+  ssoLogin(provider: $provider) {
+    ... on Errors {
+      applicationError {
+        message
+      }
+      userError {
+        message
+      }
+    }
+    ... on SSO {
+      url
+    }
+  }
+}
+    `;
+export type SsoLoginMutationFn = Apollo.MutationFunction<SsoLoginMutation, SsoLoginMutationVariables>;
+
+/**
+ * __useSsoLoginMutation__
+ *
+ * To run a mutation, you first call `useSsoLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSsoLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ssoLoginMutation, { data, loading, error }] = useSsoLoginMutation({
+ *   variables: {
+ *      provider: // value for 'provider'
+ *   },
+ * });
+ */
+export function useSsoLoginMutation(baseOptions?: Apollo.MutationHookOptions<SsoLoginMutation, SsoLoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SsoLoginMutation, SsoLoginMutationVariables>(SsoLoginDocument, options);
+      }
+export type SsoLoginMutationHookResult = ReturnType<typeof useSsoLoginMutation>;
+export type SsoLoginMutationResult = Apollo.MutationResult<SsoLoginMutation>;
+export type SsoLoginMutationOptions = Apollo.BaseMutationOptions<SsoLoginMutation, SsoLoginMutationVariables>;
 export const SendMessageDocument = gql`
     mutation SendMessage($input: sendMessageInput!) {
   sendMessage(input: $input) {
@@ -2740,6 +2745,7 @@ export type GetMessagesByCookieQueryResult = Apollo.QueryResult<GetMessagesByCoo
 export const GetUserMyInfoDocument = gql`
     query GetUserMyInfo {
   getUserByCookie {
+    __typename
     ... on User {
       ...UserPrivateInfo
     }

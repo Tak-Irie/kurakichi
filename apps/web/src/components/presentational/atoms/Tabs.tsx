@@ -8,9 +8,9 @@ type TabsProps = {
 
 export const Tabs: FC<TabsProps> = ({ clickHandler, labels }) => {
   const tabs = labels.map((label, index) => ({
-      name: label,
-      id: index,
-    }));
+    name: label,
+    id: index,
+  }));
   // const tabs = [
   //   { name: 'Applied', id: 0 },
   //   { name: 'Phone Screening', id: 1 },
@@ -27,9 +27,7 @@ export const Tabs: FC<TabsProps> = ({ clickHandler, labels }) => {
     <div className="pb-5 border-b border-gray-200 sm:pb-0">
       <div className="mt-3 sm:mt-4">
         <div className="sm:hidden">
-          <label htmlFor="current-tab" className="sr-only">
-            Select a tab
-          </label>
+          <div className="sr-only">Select a tab</div>
           <select
             id="current-tab"
             name="current-tab"
@@ -45,6 +43,7 @@ export const Tabs: FC<TabsProps> = ({ clickHandler, labels }) => {
           <nav className="flex -mb-px space-x-8">
             {tabs.map((tab) => (
               <button
+                type="button"
                 onClick={() => handleClick(tab.id)}
                 key={tab.name}
                 className={fixClassNameForTailwind(

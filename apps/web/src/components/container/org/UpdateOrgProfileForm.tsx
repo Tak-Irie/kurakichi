@@ -9,13 +9,13 @@ import {
   PhoneNumberRegExp,
   URLRegExp,
 } from '../../../lib';
+import { Form } from '../../presentational/atoms';
 import {
-  Form,
+  ButtonOrLoading,
   Input,
   InputTextarea,
   InputValue,
-} from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+} from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 type UpdateOrgProfileProps = {
@@ -51,7 +51,7 @@ export const UpdateOrgProfileForm: FC<UpdateOrgProfileProps> = ({
   const { register, handleSubmit } = useForm<UpdateOrgProfileInput>();
 
   const onSubmit = async (values: UpdateOrgProfileInput) => {
-    console.log('orgUpdateValue:', values);
+    // console.log('orgUpdateValue:', values);
     try {
       await updateOrg({
         variables: { input: { orgId, ...values } },

@@ -1,5 +1,4 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-import { GraphQLUpload } from 'graphql-upload';
 
 type ScalarMap = {
   [key: string]: GraphQLScalarType;
@@ -55,14 +54,11 @@ const InquiryStatusScalar = new GraphQLScalarType({
   },
 });
 
-const UploadScalar = GraphQLUpload;
-
 const ScalarResolverMap: ScalarMap = {
   UserRole: UserRoleScalar,
   MessageStatus: MessageStatusScalar,
   InquiryCategory: InquiryCategoryScalar,
   InquiryStatus: InquiryStatusScalar,
-  Upload: UploadScalar,
 };
 
 export { ScalarResolverMap };

@@ -8,7 +8,7 @@ import { reactNewLineToBr } from '../../../lib';
 type PopOnIconProps = {
   icon: ReactElement;
   content: string | ReactElement;
-  overWriteCSS?: string;
+  className?: string;
   placement?: Placement;
 };
 
@@ -16,7 +16,7 @@ export const PopOnIcon: FC<PopOnIconProps> = ({
   icon,
   content,
   placement = 'top',
-  overWriteCSS = 'absolute z-10 text:xs bg-yellow-50  text-yellow-700 p-2 border rounded border-gray-300',
+  className = 'absolute z-10 text:xs bg-yellow-50  text-yellow-700 p-2 border rounded border-gray-300',
 }) => {
   const [visible, setVisibility] = useState(false);
   const referenceRef = useRef(null);
@@ -54,7 +54,7 @@ export const PopOnIcon: FC<PopOnIconProps> = ({
         {...attributes.popper}
         style={styles.popper}
         ref={popperRef}
-        className={`${visible ? 'visible' : 'invisible'} ${overWriteCSS}`}
+        className={`${visible ? 'visible' : 'invisible'} ${className}`}
       >
         {typeof content === 'string' ? reactNewLineToBr(content) : content}
       </div>

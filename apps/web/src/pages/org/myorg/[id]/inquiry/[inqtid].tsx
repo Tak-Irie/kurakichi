@@ -80,10 +80,15 @@ const InquiryTreePrivatePage: NextPage = () => {
         }
         pageTabs={[]}
         pageContents={[
-          <InquiryTree
-            orgId={fetchedOrg.id}
-            inquiries={inquiries?.map((inq) => inq.node) || []}
-          />,
+          {
+            id: 'tree',
+            content: (
+              <InquiryTree
+                orgId={fetchedOrg.id}
+                inquiries={inquiries?.map((inq) => inq.node) || []}
+              />
+            ),
+          },
         ]}
       />
     );

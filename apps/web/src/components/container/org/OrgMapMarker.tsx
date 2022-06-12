@@ -4,7 +4,7 @@ import { LoadingSpinner } from '../../presentational/atoms';
 import { Marker } from '../shared/GoogleMap/Marker';
 
 export const OrgMapMarker: FC = () => {
-  const { data, loading, error } = useGetOrgsForMapQuery({ ssr: false });
+  const { data, loading, error } = useGetOrgsForMapQuery();
 
   if (loading) {
     return <LoadingSpinner />;

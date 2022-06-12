@@ -76,20 +76,29 @@ const InquiryBoxPrivatePage: NextPage = () => {
         pageContents={
           edges && edges[0]
             ? [
-                <>
-                  <TextLabel content="お問い合わせ一覧" />
-                  <InquiryInfiniteTable
-                    orgId={fetchedOrg.id}
-                    initialInquiries={edges.map((e) => e.node)}
-                    limit={20}
-                  />
-                </>,
+                {
+                  id: 'inq',
+                  content: (
+                    <>
+                      <TextLabel content="お問い合わせ一覧" />
+                      <InquiryInfiniteTable
+                        orgId={fetchedOrg.id}
+                        initialInquiries={edges.map((e) => e.node)}
+                      />
+                    </>
+                  ),
+                },
               ]
             : [
-                <>
-                  <TextLabel content="お問い合わせ一覧" />
-                  <TextSmall content="お問い合わせは有りません" />
-                </>,
+                {
+                  id: 'no-inq',
+                  content: (
+                    <>
+                      <TextLabel content="お問い合わせ一覧" />
+                      <TextSmall content="お問い合わせは有りません" />
+                    </>
+                  ),
+                },
               ]
         }
       />

@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   rules: {
-    'no-underscore-dangle': 'warn',
+    'no-underscore-dangle': ['error', { allow: ['__typename'] }],
     'import/prefer-default-export': 'off',
     // react
     'react/function-component-definition': [
@@ -41,7 +41,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'warn',
     'react/react-in-jsx-scope': 'off',
     'react/require-default-props': 'off',
-
+    'react/no-unused-prop-types': 'warn',
     // next
     '@next/next/no-html-link-for-pages': 'off',
   },

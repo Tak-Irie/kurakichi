@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { Path, UseFormRegister } from 'react-hook-form';
 import { PopOnIcon } from '../atoms';
 
@@ -66,25 +67,23 @@ export const Input = <T extends InputValue>({
   <>
     <div className="flex justify-start items-center">
       {fieldLabel ? (
-        <label className="my-1 text-xs font-bold text-gray-700">
-          {fieldLabel}
-        </label>
+        <p className="my-1 text-xs font-bold text-gray-700">{fieldLabel}</p>
       ) : null}
-      <span className="ml-1">
+      <div className="ml-1">
         {helperText ? (
           <PopOnIcon icon={<IconsQuestion />} content={helperText} />
         ) : null}
-      </span>
+      </div>
       {isValid ? (
         <IconsCheckCircle />
       ) : errMessage ? (
-        <span className="p-1 ml-1 text-xs text-red-800 bg-red-100 rounded">
+        <div className="p-1 ml-1 text-xs text-red-800 bg-red-100 rounded">
           {errMessage}
-        </span>
+        </div>
       ) : (
-        <span className="ml-1 text-xs text-red-500">
+        <div className="ml-1 text-xs text-red-500">
           {required === true ? '必須項目' : null}
-        </span>
+        </div>
       )}
     </div>
     <fieldset disabled={disable}>
@@ -116,13 +115,11 @@ export const InputTextarea = <T extends InputValue>({
   overWriteCSS = 'flex-grow w-full h-32 px-4 my-2 text-gray-800 border border-gray-400 rounded',
 }: TextareaProps<T>) => (
   <>
-    <label className="my-1 mr-auto text-xs font-bold text-gray-700">
-      {fieldLabel}
-    </label>
+    <p className="my-1 mr-auto text-xs font-bold text-gray-700">{fieldLabel}</p>
     {helperText ? (
       <PopOnIcon icon={<IconsQuestion />} content={helperText} />
     ) : null}
-    {errMessage ? <span>a</span> : null}
+    {errMessage ? <div>a</div> : null}
     <textarea
       placeholder={placeholder}
       cols={cols}

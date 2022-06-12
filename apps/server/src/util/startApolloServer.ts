@@ -39,8 +39,9 @@ const startApolloServer = async ({
     schema,
     context: ({ req, res }) => {
       const idOrUndefined = getUserIdByCookie({ req, res });
-      return { idInCookie: idOrUndefined, req, pubsub: redisPubSub };
+      return { idInCookie: idOrUndefined, req, res, pubsub: redisPubSub };
     },
+    csrfPrevention: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
@@ -66,10 +67,14 @@ const startApolloServer = async ({
     },
   });
 
-  httpServer.listen(serverPort, () => {
-    console.log(`http ready:${serverPort}`);
-    console.log(`gql ready:${serverPort}${apolloServer.graphqlPath}`);
-  });
+  // idk how to fix it
+  await new Promise<void>((resolve) =>
+    // eslint-disable-next-line no-promise-executor-return
+    httpServer.listen({ port: serverPort }, resolve),
+  );
+  console.log(
+    `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`,
+  );
 };
 
 export { startApolloServer };

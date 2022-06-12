@@ -20,7 +20,6 @@ export type Scalars = {
   InquiryStatus: InquiryStatusModel;
   /** SENT | READ | UNREAD | DRAFT */
   MessageStatus: MessageStatusModel;
-  Upload: any;
   /** VISITOR | CLIENT | EXPERT */
   UserRole: UserRoleModel;
 };
@@ -99,13 +98,6 @@ export type FellowEdge = {
   cursor: Scalars['String'];
   isBaseAdmin?: Maybe<Scalars['Boolean']>;
   node: User;
-};
-
-export type File = {
-  __typename?: 'File';
-  encoding: Scalars['String'];
-  filename: Scalars['String'];
-  mimetype: Scalars['String'];
 };
 
 export type InquiriesResult = Errors | InquiryConnection;
@@ -231,25 +223,25 @@ export type MessagesResult = Errors | Messages;
 
 export type Mutation = {
   __typename?: 'Mutation';
-  acceptJoinOrg?: Maybe<OrgResult>;
-  changePassword?: Maybe<BoolResult>;
-  createBase?: Maybe<BaseResult>;
-  deleteUser?: Maybe<BoolResult>;
-  forgetPassword?: Maybe<BoolResult>;
-  loginUser?: Maybe<UserResult>;
-  logoutUser?: Maybe<BoolResult>;
-  postDialog?: Maybe<PostDialogResult>;
-  registerOrg?: Maybe<OrgResult>;
-  registerUser?: Maybe<UserResult>;
-  replyInquiry?: Maybe<InquiryResult>;
-  replyMessage?: Maybe<MessageResult>;
-  requestJoinOrg?: Maybe<OrgResult>;
-  sendInquiry?: Maybe<InquiryResult>;
-  sendMessage?: Maybe<MessageResult>;
-  updateInquiryStatus?: Maybe<InquiryResult>;
-  updateOrg?: Maybe<OrgResult>;
-  updateUser?: Maybe<UserResult>;
-  uploadFile: File;
+  acceptJoinOrg: OrgResult;
+  changePassword: BoolResult;
+  createBase: BaseResult;
+  deleteUser: BoolResult;
+  forgetPassword: BoolResult;
+  loginUser: UserResult;
+  logoutUser: BoolResult;
+  postDialog: PostDialogResult;
+  registerOrg: OrgResult;
+  registerUser: UserResult;
+  replyInquiry: InquiryResult;
+  replyMessage: MessageResult;
+  requestJoinOrg: OrgResult;
+  sendInquiry: InquiryResult;
+  sendMessage: MessageResult;
+  ssoLogin: SsoResult;
+  updateInquiryStatus: InquiryResult;
+  updateOrg: OrgResult;
+  updateUser: UserResult;
 };
 
 
@@ -313,6 +305,11 @@ export type MutationSendMessageArgs = {
 };
 
 
+export type MutationSsoLoginArgs = {
+  provider: Scalars['String'];
+};
+
+
 export type MutationUpdateInquiryStatusArgs = {
   input: UpdateInquiryStatusInput;
 };
@@ -325,11 +322,6 @@ export type MutationUpdateOrgArgs = {
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
-};
-
-
-export type MutationUploadFileArgs = {
-  file: Scalars['Upload'];
 };
 
 export type Node = {
@@ -384,21 +376,21 @@ export type PostDialogResult = Dialog | Errors;
 
 export type Query = {
   __typename?: 'Query';
-  getAddressByPostcode?: Maybe<AddressResult>;
-  getBase?: Maybe<BaseResult>;
-  getDialogsByBaseId?: Maybe<DialogsResult>;
-  getInquiriesByOrgId?: Maybe<InquiriesResult>;
-  getInquiriesByTreeId?: Maybe<InquiryTreeResult>;
-  getInquiry?: Maybe<InquiryResult>;
-  getKarte?: Maybe<KarteResult>;
-  getMessagesByCookie?: Maybe<MessagesResult>;
-  getMessagesByTreeId?: Maybe<MessageTreeResult>;
-  getOrg?: Maybe<OrgResult>;
-  getOrgInfoByMemberCookieAndId?: Maybe<OrgResult>;
-  getOrgs?: Maybe<OrgsResult>;
-  getUserByCookie?: Maybe<UserResult>;
-  getUserById?: Maybe<UserResult>;
-  getUsers?: Maybe<UsersResult>;
+  getAddressByPostcode: AddressResult;
+  getBase: BaseResult;
+  getDialogsByBaseId: DialogsResult;
+  getInquiriesByOrgId: InquiriesResult;
+  getInquiriesByTreeId: InquiryTreeResult;
+  getInquiry: InquiryResult;
+  getKarte: KarteResult;
+  getMessagesByCookie: MessagesResult;
+  getMessagesByTreeId: MessageTreeResult;
+  getOrg: OrgResult;
+  getOrgInfoByMemberCookieAndId: OrgResult;
+  getOrgs: OrgsResult;
+  getUserByCookie: UserResult;
+  getUserById: UserResult;
+  getUsers: UsersResult;
   node?: Maybe<Node>;
   nodes?: Maybe<Array<Maybe<Node>>>;
 };
@@ -474,6 +466,13 @@ export type RegisterOrgInput = {
   name: Scalars['String'];
   phoneNumber: Scalars['String'];
 };
+
+export type Sso = {
+  __typename?: 'SSO';
+  url: Scalars['String'];
+};
+
+export type SsoResult = Errors | Sso;
 
 export type SendInquiryInput = {
   category: Scalars['InquiryCategory'];
@@ -667,7 +666,6 @@ export type ResolversTypes = ResolversObject<{
   Errors: ResolverTypeWrapper<Errors>;
   FellowConnection: ResolverTypeWrapper<FellowConnection>;
   FellowEdge: ResolverTypeWrapper<FellowEdge>;
-  File: ResolverTypeWrapper<File>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   InquiriesResult: ResolversTypes['Errors'] | ResolversTypes['InquiryConnection'];
@@ -708,13 +706,14 @@ export type ResolversTypes = ResolversObject<{
   PostDialogResult: ResolversTypes['Dialog'] | ResolversTypes['Errors'];
   Query: ResolverTypeWrapper<{}>;
   RegisterOrgInput: RegisterOrgInput;
+  SSO: ResolverTypeWrapper<Sso>;
+  SSOResult: ResolversTypes['Errors'] | ResolversTypes['SSO'];
   SendInquiryInput: SendInquiryInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   Succeeded: ResolverTypeWrapper<Succeeded>;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   User: ResolverTypeWrapper<Omit<User, 'role'> & { role?: Maybe<ResolversTypes['UserRole']> }>;
   UserError: ResolverTypeWrapper<UserError>;
   UserResult: ResolversTypes['Errors'] | ResolversTypes['User'];
@@ -751,7 +750,6 @@ export type ResolversParentTypes = ResolversObject<{
   Errors: Errors;
   FellowConnection: FellowConnection;
   FellowEdge: FellowEdge;
-  File: File;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   InquiriesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryConnection'];
@@ -792,13 +790,14 @@ export type ResolversParentTypes = ResolversObject<{
   PostDialogResult: ResolversParentTypes['Dialog'] | ResolversParentTypes['Errors'];
   Query: {};
   RegisterOrgInput: RegisterOrgInput;
+  SSO: Sso;
+  SSOResult: ResolversParentTypes['Errors'] | ResolversParentTypes['SSO'];
   SendInquiryInput: SendInquiryInput;
   String: Scalars['String'];
   Subscription: {};
   Succeeded: Succeeded;
   UpdateInquiryStatusInput: UpdateInquiryStatusInput;
   UpdateOrgInput: UpdateOrgInput;
-  Upload: Scalars['Upload'];
   User: Omit<User, 'role'> & { role?: Maybe<ResolversParentTypes['UserRole']> };
   UserError: UserError;
   UserResult: ResolversParentTypes['Errors'] | ResolversParentTypes['User'];
@@ -900,13 +899,6 @@ export type FellowEdgeResolvers<ContextType = any, ParentType extends ResolversP
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isBaseAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = ResolversObject<{
-  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1058,25 +1050,25 @@ export type MessagesResultResolvers<ContextType = any, ParentType extends Resolv
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  acceptJoinOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
-  changePassword?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType, Partial<MutationChangePasswordArgs>>;
-  createBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType>;
-  deleteUser?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType>;
-  forgetPassword?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
-  loginUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
-  logoutUser?: Resolver<Maybe<ResolversTypes['BoolResult']>, ParentType, ContextType>;
-  postDialog?: Resolver<Maybe<ResolversTypes['PostDialogResult']>, ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
-  registerOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
-  registerUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
-  replyInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
-  replyMessage?: Resolver<Maybe<ResolversTypes['MessageResult']>, ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
-  requestJoinOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
-  sendInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
-  sendMessage?: Resolver<Maybe<ResolversTypes['MessageResult']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
-  updateInquiryStatus?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
-  updateOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
-  updateUser?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
-  uploadFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationUploadFileArgs, 'file'>>;
+  acceptJoinOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationAcceptJoinOrgArgs, 'input'>>;
+  changePassword?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType, Partial<MutationChangePasswordArgs>>;
+  createBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType>;
+  deleteUser?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType>;
+  forgetPassword?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType, RequireFields<MutationForgetPasswordArgs, 'email'>>;
+  loginUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
+  logoutUser?: Resolver<ResolversTypes['BoolResult'], ParentType, ContextType>;
+  postDialog?: Resolver<ResolversTypes['PostDialogResult'], ParentType, ContextType, RequireFields<MutationPostDialogArgs, 'input'>>;
+  registerOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationRegisterOrgArgs, 'input'>>;
+  registerUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
+  replyInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationReplyInquiryArgs, 'input'>>;
+  replyMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationReplyMessageArgs, 'input'>>;
+  requestJoinOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationRequestJoinOrgArgs, 'orgId'>>;
+  sendInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
+  sendMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
+  ssoLogin?: Resolver<ResolversTypes['SSOResult'], ParentType, ContextType, RequireFields<MutationSsoLoginArgs, 'provider'>>;
+  updateInquiryStatus?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
+  updateOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
+  updateUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 }>;
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = ResolversObject<{
@@ -1137,23 +1129,32 @@ export type PostDialogResultResolvers<ContextType = any, ParentType extends Reso
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getAddressByPostcode?: Resolver<Maybe<ResolversTypes['AddressResult']>, ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
-  getBase?: Resolver<Maybe<ResolversTypes['BaseResult']>, ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
-  getDialogsByBaseId?: Resolver<Maybe<ResolversTypes['DialogsResult']>, ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
-  getInquiriesByOrgId?: Resolver<Maybe<ResolversTypes['InquiriesResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
-  getInquiriesByTreeId?: Resolver<Maybe<ResolversTypes['InquiryTreeResult']>, ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
-  getInquiry?: Resolver<Maybe<ResolversTypes['InquiryResult']>, ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
-  getKarte?: Resolver<Maybe<ResolversTypes['KarteResult']>, ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
-  getMessagesByCookie?: Resolver<Maybe<ResolversTypes['MessagesResult']>, ParentType, ContextType>;
-  getMessagesByTreeId?: Resolver<Maybe<ResolversTypes['MessageTreeResult']>, ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
-  getOrg?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
-  getOrgInfoByMemberCookieAndId?: Resolver<Maybe<ResolversTypes['OrgResult']>, ParentType, ContextType, RequireFields<QueryGetOrgInfoByMemberCookieAndIdArgs, 'orgId'>>;
-  getOrgs?: Resolver<Maybe<ResolversTypes['OrgsResult']>, ParentType, ContextType>;
-  getUserByCookie?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType>;
-  getUserById?: Resolver<Maybe<ResolversTypes['UserResult']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
-  getUsers?: Resolver<Maybe<ResolversTypes['UsersResult']>, ParentType, ContextType>;
+  getAddressByPostcode?: Resolver<ResolversTypes['AddressResult'], ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
+  getBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
+  getDialogsByBaseId?: Resolver<ResolversTypes['DialogsResult'], ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
+  getInquiriesByOrgId?: Resolver<ResolversTypes['InquiriesResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
+  getInquiriesByTreeId?: Resolver<ResolversTypes['InquiryTreeResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
+  getInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
+  getKarte?: Resolver<ResolversTypes['KarteResult'], ParentType, ContextType, RequireFields<QueryGetKarteArgs, 'id'>>;
+  getMessagesByCookie?: Resolver<ResolversTypes['MessagesResult'], ParentType, ContextType>;
+  getMessagesByTreeId?: Resolver<ResolversTypes['MessageTreeResult'], ParentType, ContextType, RequireFields<QueryGetMessagesByTreeIdArgs, 'treeId'>>;
+  getOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<QueryGetOrgArgs, 'id'>>;
+  getOrgInfoByMemberCookieAndId?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<QueryGetOrgInfoByMemberCookieAndIdArgs, 'orgId'>>;
+  getOrgs?: Resolver<ResolversTypes['OrgsResult'], ParentType, ContextType>;
+  getUserByCookie?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType>;
+  getUserById?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'userId'>>;
+  getUsers?: Resolver<ResolversTypes['UsersResult'], ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<QueryNodeArgs, 'id'>>;
   nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Node']>>>, ParentType, ContextType, RequireFields<QueryNodesArgs, 'ids'>>;
+}>;
+
+export type SsoResolvers<ContextType = any, ParentType extends ResolversParentTypes['SSO'] = ResolversParentTypes['SSO']> = ResolversObject<{
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type SsoResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SSOResult'] = ResolversParentTypes['SSOResult']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Errors' | 'SSO', ParentType, ContextType>;
 }>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
@@ -1164,10 +1165,6 @@ export type SucceededResolvers<ContextType = any, ParentType extends ResolversPa
   succeeded?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
-
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1221,7 +1218,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Errors?: ErrorsResolvers<ContextType>;
   FellowConnection?: FellowConnectionResolvers<ContextType>;
   FellowEdge?: FellowEdgeResolvers<ContextType>;
-  File?: FileResolvers<ContextType>;
   InquiriesResult?: InquiriesResultResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
   InquiryCategory?: GraphQLScalarType;
@@ -1259,9 +1255,10 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   PageInfo?: PageInfoResolvers<ContextType>;
   PostDialogResult?: PostDialogResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SSO?: SsoResolvers<ContextType>;
+  SSOResult?: SsoResultResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Succeeded?: SucceededResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserError?: UserErrorResolvers<ContextType>;
   UserResult?: UserResultResolvers<ContextType>;

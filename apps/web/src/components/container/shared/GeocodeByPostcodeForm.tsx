@@ -55,7 +55,7 @@ export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
   return (
     <div className="p-2 rounded border border-gray-200">
       <Form onSubmit={handleSubmit(onSubmit)} overWriteCSS="">
-        <span className="space-y-1">
+        <div className="space-y-1">
           <ButtonWithIcon
             type="submit"
             label={buttonLabel}
@@ -68,7 +68,7 @@ export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
             required={false}
             register={register}
           />
-        </span>
+        </div>
       </Form>
     </div>
   );

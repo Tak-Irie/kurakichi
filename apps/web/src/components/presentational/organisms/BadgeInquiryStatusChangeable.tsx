@@ -23,12 +23,12 @@ export const BadgeInquiryStatusChangeable: FC<
   <Listbox value={status} onChange={handleChange}>
     <div className="relative">
       <Listbox.Button className="relative w-full cursor-default">
-        <span className="block truncate">
+        <div className="block truncate">
           <BadgeInquiryStatus size={size} status={status} />
-        </span>
-        <span className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
+        </div>
+        <div className="flex absolute inset-y-0 right-0 items-center pr-2 pointer-events-none">
           <IconsSelector />
-        </span>
+        </div>
       </Listbox.Button>
       <Transition
         as={Fragment}
@@ -48,22 +48,22 @@ export const BadgeInquiryStatusChangeable: FC<
             >
               {({ selected, active }) => (
                 <>
-                  <span
+                  <div
                     className={`${
                       selected ? 'font-medium' : 'font-normal'
                     } block truncate`}
                   >
                     {value.jp}
-                  </span>
+                  </div>
                   {selected ? (
-                    <span
+                    <div
                       className={`${
                         active ? 'text-yellow-600' : 'text-yellow-600'
                       }
                                 absolute inset-y-0 left-0 flex items-center pl-3`}
                     >
                       <IconsCheck />
-                    </span>
+                    </div>
                   ) : null}
                 </>
               )}

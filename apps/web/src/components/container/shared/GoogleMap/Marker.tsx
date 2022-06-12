@@ -1,37 +1,29 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
+import { MapContext } from './MapContext';
 
-export const Marker: FC<google.maps.MarkerOptions> = (options) => {
+export const Marker: FC<google.maps.MarkerOptions> = ({ position }) => {
   const [marker, setMarker] = useState<google.maps.Marker>();
-  const contentString = '<div>' + '<p>hoge</p>' + '</div>';
+  const contextMap = useContext(MapContext);
 
   useEffect(() => {
     if (!marker) {
       setMarker(new google.maps.Marker());
     }
-
     // remove marker from map on unmount
     return () => {
       if (marker) {
         marker.setMap(null);
       }
     };
-  }, [marker]);
+  }, [marker, contextMap, position]);
 
   useEffect(() => {
     if (marker) {
-      marker.setOptions(options);
-      const infoWindow = new google.maps.InfoWindow({
-        content: contentString,
-      });
-      marker.addListener('click', () => {
-        infoWindow.open({
-          anchor: marker,
-          map: options.map,
-          shouldFocus: false,
-        });
-      });
+      marker.setOptions({ map: contextMap, position });
+      contextMap?.setCenter(position as google.maps.LatLngAltitudeLiteral);
+      contextMap?.setZoom(15);
     }
-  }, [marker, options]);
+  }, [marker, position, contextMap]);
 
   return null;
 };

@@ -1,27 +1,22 @@
 import { FC } from 'react';
+import { useSsoLoginMutation } from '../../../graphql';
 import { GoogleButton } from '../../presentational/atoms';
 
-const GoogleLoginButton: FC = () => {
-  const GOOGLE_LOGIN =
-    process.env.NEXT_PUBLIC_GOOGLE_SSO || 'http://localhost:4000/google/login';
+export const GoogleLoginButton: FC = () => {
+  const [ssoLogin] = useSsoLoginMutation();
   const handleClick = async () => {
     try {
-      const res = await fetch(GOOGLE_LOGIN, {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
+      const res = await ssoLogin({
+        variables: {
+          provider: 'GOOGLE',
+        },
       });
-      const data = await res.text();
-      const verified = data.match(
-        'https://accounts.google.com/o/oauth2/v2/auth.*',
-      );
-
-      if (verified === null) return;
-
-      // console.log('data:', data);
-      // console.log('verified:', verified);
-
-      window.location.assign(verified[0]);
+      if (res.data?.ssoLogin.__typename === 'SSO') {
+        const { url } = res.data.ssoLogin;
+        const verified = url.match('https://accounts.google.com/.*');
+        if (verified === null) return;
+        window.location.replace(verified[0]);
+      }
     } catch (err) {
       console.error('err:', err);
     }
@@ -29,5 +24,3 @@ const GoogleLoginButton: FC = () => {
 
   return <GoogleButton onClick={handleClick} />;
 };
-
-export { GoogleLoginButton };

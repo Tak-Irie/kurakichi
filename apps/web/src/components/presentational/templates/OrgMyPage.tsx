@@ -4,13 +4,13 @@ import { Inquiry, Org as GqlOrg, User } from '../../../graphql';
 import { FAIL_TO_FETCH } from '../../../lib/Constants';
 // import { InquiryInfiniteTableWithStatus } from '../../container';
 import { GridItem, GridTemplate, TextLabel, TextSmall } from '../atoms';
-import { TableInquiry, TableOrgMember } from '../molecules';
+import { TableInquiry, TableOrgMember } from '../organisms';
 
 type OrgMyPageProps = {
   org: GqlOrg;
 };
 
-export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
+export const OrgMyPage: FC<OrgMyPageProps> = ({ org }) => {
   const {
     id,
     email,
@@ -20,18 +20,17 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
     description,
     members,
     inquiries,
-  } = props.org;
+  } = org;
 
   let unreadInq: Inquiry[] = [];
-  let _members: User[] = [];
-
   if (inquiries?.edges) {
-    const _inq = inquiries.edges.map((edge) => edge.node);
-    unreadInq = _inq.filter((inq) => inq.inquiryStatus === 'UNREAD');
+    const givenInquiries = inquiries.edges.map((edge) => edge.node);
+    unreadInq = givenInquiries.filter((inq) => inq.inquiryStatus === 'UNREAD');
   }
 
+  let givenMembers: User[] = [];
   if (members?.edges) {
-    _members = members.edges.map((edge) => edge.node);
+    givenMembers = members.edges.map((edge) => edge.node);
   }
   // const descById = unreadInq.reverse();
   // const descById = [...inquiries].reverse();
@@ -63,7 +62,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = (props) => {
         </GridTemplate>
       </div>
       <div className="col-start-3 col-end-10 mt-5">
-        <TableOrgMember members={_members} />
+        <TableOrgMember members={givenMembers} />
       </div>
     </>
   );

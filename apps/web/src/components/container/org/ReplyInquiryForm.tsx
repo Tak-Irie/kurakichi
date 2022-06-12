@@ -65,7 +65,7 @@ export const ReplyInquiryForm: FC<ResponseInquiryProps> = ({
           required
           register={register}
         />
-        <span className="flex justify-end py-2 w-full">
+        <div className="flex justify-end py-2 w-full">
           <ButtonOrLoading
             onClick={onClick}
             loading={loading}
@@ -73,7 +73,7 @@ export const ReplyInquiryForm: FC<ResponseInquiryProps> = ({
             buttonLabel="返信する"
             color="yellow"
           />
-        </span>
+        </div>
       </Form>
     </div>
   );

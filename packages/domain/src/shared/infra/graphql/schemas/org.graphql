@@ -77,23 +77,23 @@ type InquiryLeafEdges {
 }
 
 type Query {
-  getOrg(id: String!): OrgResult
-  getOrgs: OrgsResult
-  getOrgInfoByMemberCookieAndId(orgId: String!): OrgResult
-  getInquiry(inquiryId: String!): InquiryResult
-  getInquiriesByOrgId(orgId: String!): InquiriesResult
-  getInquiriesByTreeId(treeId: String!): InquiryTreeResult
-  getAddressByPostcode(postcode: String!): AddressResult
+  getOrg(id: String!): OrgResult!
+  getOrgs: OrgsResult!
+  getOrgInfoByMemberCookieAndId(orgId: String!): OrgResult!
+  getInquiry(inquiryId: String!): InquiryResult!
+  getInquiriesByOrgId(orgId: String!): InquiriesResult!
+  getInquiriesByTreeId(treeId: String!): InquiryTreeResult!
+  getAddressByPostcode(postcode: String!): AddressResult!
 }
 
 type Mutation {
-  acceptJoinOrg(input: acceptJoinOrgInput!): OrgResult
-  registerOrg(input: RegisterOrgInput!): OrgResult
-  updateOrg(input: UpdateOrgInput!): OrgResult
-  requestJoinOrg(orgId: String!): OrgResult
-  replyInquiry(input: replyInquiryInput!): InquiryResult
-  sendInquiry(input: SendInquiryInput!): InquiryResult
-  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult
+  acceptJoinOrg(input: acceptJoinOrgInput!): OrgResult!
+  registerOrg(input: RegisterOrgInput!): OrgResult!
+  updateOrg(input: UpdateOrgInput!): OrgResult!
+  requestJoinOrg(orgId: String!): OrgResult!
+  replyInquiry(input: replyInquiryInput!): InquiryResult!
+  sendInquiry(input: SendInquiryInput!): InquiryResult!
+  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult!
 }
 
 union OrgResult = Org | Errors

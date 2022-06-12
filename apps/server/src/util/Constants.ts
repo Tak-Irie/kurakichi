@@ -1,7 +1,6 @@
 const APOLLO_SERVER_URI = 'https://kurakichi.org';
 const APOLLO_STUDIO = 'https://studio.apollographql.com';
 const COOKIE_NAME = process.env.COOKIE_NAME || 'sid';
-const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 365 * 10;
 const IS_PROD = process.env.NODE_ENV === 'production';
 const CRYPT_PASS =
   process.env.CRYPT_PASS ||
@@ -10,15 +9,14 @@ const CRYPT_SALT =
   process.env.CRYPT_SALT ||
   'e68e6611ddbdac8dcad4bbe4d9a3456a627b8acd05839eb45fa240e9c8dcb9a8';
 const SSO_REDIRECT_SUCCESS =
-  process.env.SSO_REDIRECT_SUCCESS || 'http://localhost:4200/auth/success';
+  process.env.SSO_REDIRECT_SUCCESS || 'http://localhost:3000';
 const SSO_REDIRECT_FAIL =
-  process.env.SSO_REDIRECT_FAIL || 'http://localhost:4200/auth/fail';
+  process.env.SSO_REDIRECT_FAIL || 'http://localhost:3000/auth/fail';
 
 export {
   APOLLO_SERVER_URI,
   APOLLO_STUDIO,
   COOKIE_NAME,
-  COOKIE_MAX_AGE,
   IS_PROD,
   CRYPT_PASS,
   CRYPT_SALT,

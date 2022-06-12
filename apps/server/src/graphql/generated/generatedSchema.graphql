@@ -64,12 +64,6 @@ type FellowEdge {
   node: User!
 }
 
-type File {
-  encoding: String!
-  filename: String!
-  mimetype: String!
-}
-
 union InquiriesResult = Errors | InquiryConnection
 
 type Inquiry implements Node {
@@ -185,25 +179,25 @@ type Messages {
 union MessagesResult = Errors | Messages
 
 type Mutation {
-  acceptJoinOrg(input: acceptJoinOrgInput!): OrgResult
-  changePassword(input: changePasswordInput): BoolResult
-  createBase: BaseResult
-  deleteUser: BoolResult
-  forgetPassword(email: String!): BoolResult
-  loginUser(input: loginUserInput!): UserResult
-  logoutUser: BoolResult
-  postDialog(input: postDialogInput!): PostDialogResult
-  registerOrg(input: RegisterOrgInput!): OrgResult
-  registerUser(input: registerUserInput!): UserResult
-  replyInquiry(input: replyInquiryInput!): InquiryResult
-  replyMessage(input: replyMessageInput!): MessageResult
-  requestJoinOrg(orgId: String!): OrgResult
-  sendInquiry(input: SendInquiryInput!): InquiryResult
-  sendMessage(input: sendMessageInput!): MessageResult
-  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult
-  updateOrg(input: UpdateOrgInput!): OrgResult
-  updateUser(input: updateUserInput!): UserResult
-  uploadFile(file: Upload!): File!
+  acceptJoinOrg(input: acceptJoinOrgInput!): OrgResult!
+  changePassword(input: changePasswordInput): BoolResult!
+  createBase: BaseResult!
+  deleteUser: BoolResult!
+  forgetPassword(email: String!): BoolResult!
+  loginUser(input: loginUserInput!): UserResult!
+  logoutUser: BoolResult!
+  postDialog(input: postDialogInput!): PostDialogResult!
+  registerOrg(input: RegisterOrgInput!): OrgResult!
+  registerUser(input: registerUserInput!): UserResult!
+  replyInquiry(input: replyInquiryInput!): InquiryResult!
+  replyMessage(input: replyMessageInput!): MessageResult!
+  requestJoinOrg(orgId: String!): OrgResult!
+  sendInquiry(input: SendInquiryInput!): InquiryResult!
+  sendMessage(input: sendMessageInput!): MessageResult!
+  ssoLogin(provider: String!): SSOResult!
+  updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult!
+  updateOrg(input: UpdateOrgInput!): OrgResult!
+  updateUser(input: updateUserInput!): UserResult!
 }
 
 interface Node {
@@ -252,21 +246,21 @@ type PageInfo {
 union PostDialogResult = Dialog | Errors
 
 type Query {
-  getAddressByPostcode(postcode: String!): AddressResult
-  getBase(id: String!): BaseResult
-  getDialogsByBaseId(id: String!): DialogsResult
-  getInquiriesByOrgId(orgId: String!): InquiriesResult
-  getInquiriesByTreeId(treeId: String!): InquiryTreeResult
-  getInquiry(inquiryId: String!): InquiryResult
-  getKarte(id: String!): KarteResult
-  getMessagesByCookie: MessagesResult
-  getMessagesByTreeId(treeId: String!): MessageTreeResult
-  getOrg(id: String!): OrgResult
-  getOrgInfoByMemberCookieAndId(orgId: String!): OrgResult
-  getOrgs: OrgsResult
-  getUserByCookie: UserResult
-  getUserById(userId: String!): UserResult
-  getUsers: UsersResult
+  getAddressByPostcode(postcode: String!): AddressResult!
+  getBase(id: String!): BaseResult!
+  getDialogsByBaseId(id: String!): DialogsResult!
+  getInquiriesByOrgId(orgId: String!): InquiriesResult!
+  getInquiriesByTreeId(treeId: String!): InquiryTreeResult!
+  getInquiry(inquiryId: String!): InquiryResult!
+  getKarte(id: String!): KarteResult!
+  getMessagesByCookie: MessagesResult!
+  getMessagesByTreeId(treeId: String!): MessageTreeResult!
+  getOrg(id: String!): OrgResult!
+  getOrgInfoByMemberCookieAndId(orgId: String!): OrgResult!
+  getOrgs: OrgsResult!
+  getUserByCookie: UserResult!
+  getUserById(userId: String!): UserResult!
+  getUsers: UsersResult!
   node(id: ID!): Node
   nodes(ids: [ID!]!): [Node]
 }
@@ -277,6 +271,12 @@ input RegisterOrgInput {
   name: String!
   phoneNumber: String!
 }
+
+type SSO {
+  url: String!
+}
+
+union SSOResult = Errors | SSO
 
 input SendInquiryInput {
   category: InquiryCategory!
@@ -306,8 +306,6 @@ input UpdateOrgInput {
   orgId: ID!
   phoneNumber: String
 }
-
-scalar Upload
 
 type User implements Node {
   avatarUrl: String

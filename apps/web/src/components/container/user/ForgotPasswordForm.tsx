@@ -2,8 +2,12 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useForgetUserPasswordMutation } from '../../../graphql/generated';
 import { EmailRegExp } from '../../../lib';
-import { Form, Input, InputValue } from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+import { Form } from '../../presentational/atoms';
+import {
+  ButtonOrLoading,
+  Input,
+  InputValue,
+} from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 interface ForgetPasswordInput extends InputValue {
@@ -60,14 +64,14 @@ export const ForgotPasswordForm: FC = () => {
           autoComplete="email"
           errMessage={errors.email && errors.email.message}
         />
-        <span className="flex justify-end">
+        <div className="flex justify-end">
           <ButtonOrLoading
             color="yellow"
             loading={loading}
             buttonType="submit"
             buttonLabel="パスワード再登録"
           />
-        </span>
+        </div>
       </Form>
     </>
   );

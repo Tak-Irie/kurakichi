@@ -12,8 +12,8 @@ import {
   useGetAddressByPostcodeLazyQuery,
   useRegisterOrgMutation,
 } from '../../../graphql/generated';
-import { ButtonBig, Form, Input, TextSmall } from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+import { ButtonBig, Form, TextSmall } from '../../presentational/atoms';
+import { ButtonOrLoading, Input } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 type OrgRegisterInput = {
@@ -29,10 +29,8 @@ export const OrgRegisterForm: FC = () => {
   const [isPostcode, setIsPostcode] = useState('');
   const [isLocation, setIsLocation] = useState('');
   const [orgRegister, { data, loading, error }] = useRegisterOrgMutation();
-  const [
-    getAddress,
-    { data: addressData, loading: addressLoading, error: addressError },
-  ] = useGetAddressByPostcodeLazyQuery();
+  const [getAddress, { data: addressData }] =
+    useGetAddressByPostcodeLazyQuery();
 
   const {
     register,
@@ -112,8 +110,8 @@ export const OrgRegisterForm: FC = () => {
           register={register}
           errMessage={errors.email && errors.email.message}
         />
-        <span className="grid grid-cols-3">
-          <span className="col-span-2">
+        <div className="grid grid-cols-3">
+          <div className="col-span-2">
             <Input<OrgRegisterInput>
               type="text"
               fieldLabel="郵便番号"
@@ -126,16 +124,16 @@ export const OrgRegisterForm: FC = () => {
               helperText="例: 100-0001 or 1000001"
               errMessage={errors.postcode && errors.postcode.message}
             />
-          </span>
-          <span className="flex col-span-1 justify-end items-center ml-4">
+          </div>
+          <div className="flex col-span-1 justify-end items-center ml-4">
             <ButtonBig
               label={<TextSmall content={'郵便番号から\n所在地を取得する'} />}
               type="button"
               color="yellow"
               onClick={() => setIsPostcode(getValues('postcode'))}
             />
-          </span>
-        </span>
+          </div>
+        </div>
         <Input<OrgRegisterInput>
           type="text"
           fieldLabel="所在地"
@@ -170,15 +168,14 @@ export const OrgRegisterForm: FC = () => {
           register={register}
           errMessage={errors.phoneNumber && errors.phoneNumber.message}
         />
-        <span className="flex justify-end mt-5">
+        <div className="flex justify-end mt-5">
           <ButtonOrLoading
-            disabled={!isValid}
             buttonType="submit"
             color="yellow"
             buttonLabel={!isValid ? '未入力の項目があります' : '登録'}
             loading={loading}
           />
-        </span>
+        </div>
       </Form>
     </div>
   );

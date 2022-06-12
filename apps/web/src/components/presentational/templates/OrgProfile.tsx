@@ -2,8 +2,9 @@ import idx from 'idx';
 import { FC } from 'react';
 
 import { Org } from '../../../graphql';
-import { GridItemWithPic, GridTemplate, TextLabeled } from '../atoms';
-// import { MapViewer } from '../../container';
+import { Map } from '../../container/shared/GoogleMap/index';
+import { Marker } from '../../container/shared/GoogleMap/Marker';
+import { GridItemWithPic, TextLabeled } from '../atoms';
 
 type OrgProfileProps = {
   org: Org;
@@ -15,50 +16,43 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
   const idxMembers = idx(members, (d) => d.edges);
 
   return (
-    <>
-      <div className="grid grid-cols-2 gap-y-4 mt-6 max-w-5xl">
-        <TextLabeled label="メールアドレス" content={email || ''} />
-        <TextLabeled label="電話番号" content={phoneNumber || ''} />
-        <TextLabeled label="所在地" content={address?.address || ''} />
-        <TextLabeled
-          label="ホームページ"
-          content={homePage || 'ホームページはありません'}
-        />
-        <TextLabeled
-          label="私達について"
-          content={description || '団体の概要を記入して下さい'}
-        />
-        <span className="col-span-2 mt-1">
-          <MapViewer
-            center={geo}
-            mapContainerCSS={{ width: 'auto', height: 300 }}
-            zoomLevel={15}
-          />
-        </span>
+    <div className="grid grid-cols-2 gap-y-4 mt-6">
+      <TextLabeled label="メールアドレス" content={email || ''} />
+      <TextLabeled label="電話番号" content={phoneNumber || ''} />
+      <TextLabeled label="所在地" content={address?.address || ''} />
+      <TextLabeled
+        label="ホームページ"
+        content={homePage || 'ホームページはありません'}
+      />
+      <TextLabeled
+        label="私達について"
+        content={description || '団体の概要を記入して下さい'}
+      />
+      <div className="col-span-2 mt-1 w-auto h-[400px]">
+        <Map>
+          <Marker position={geo} />
+        </Map>
       </div>
-
-      <div className="mt-8">
-        <h2 className="text-sm font-medium text-gray-500">団体メンバー</h2>
-        <GridTemplate>
-          {idxMembers
-            ? idxMembers.map((edge) => {
-                const member = edge.node;
-                return (
-                  <div key={member.id}>
-                    <GridItemWithPic
-                      name={member.name}
-                      description={member.selfIntro}
-                      imgSrc={member.avatarUrl}
-                      imgAlt="メンバーアバター"
-                      linkUrl="/user/[id]"
-                      linkAs={`/user/${member.id}`}
-                    />
-                  </div>
-                );
-              })
-            : null}
-        </GridTemplate>
-      </div>
-    </>
+      <h2 className="col-span-2 text-sm font-medium text-gray-500">
+        団体メンバー
+      </h2>
+      {idxMembers
+        ? idxMembers.map((edge) => {
+            const member = edge.node;
+            return (
+              <div key={member.id} className="m-2">
+                <GridItemWithPic
+                  name={member.name}
+                  description={member.selfIntro}
+                  imgSrc={member.avatarUrl}
+                  imgAlt="user-avatar"
+                  linkUrl="/user/[id]"
+                  linkAs={`/user/${member.id}`}
+                />
+              </div>
+            );
+          })
+        : null}
+    </div>
   );
 };

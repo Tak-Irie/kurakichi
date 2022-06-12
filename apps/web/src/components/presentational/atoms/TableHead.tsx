@@ -1,18 +1,18 @@
-import { FC, ReactChild } from 'react';
+import { FC, ReactNode } from 'react';
 
 type TableHeadProps = {
   left?: boolean;
-  children?: ReactChild;
+  children?: ReactNode;
 };
 
-const TableHead: FC<TableHeadProps> = (props) => (
-    <th
-      className={`${
-        props.left ? 'text-left pl-6' : 'text-center mx-auto'
-      } py-3 bg-gray-50 text-base font-medium text-gray-500 tracking-wider`}
-    >
-      {props.children}
-    </th>
-  );
+const TableHead: FC<TableHeadProps> = ({ children, left }) => (
+  <th
+    className={`${
+      left ? 'text-left pl-6' : 'text-center mx-auto'
+    } py-3 bg-gray-50 text-base font-medium text-gray-500 tracking-wider`}
+  >
+    {children}
+  </th>
+);
 
 export { TableHead };

@@ -51,15 +51,20 @@ const OrgSetting: NextPage = () => {
         }
         pageTabs={[]}
         pageContents={[
-          <UpdateOrgProfileForm
-            exDescription={description || FAIL_TO_FETCH}
-            exEmail={email || FAIL_TO_FETCH}
-            exHomePage={homePage || FAIL_TO_FETCH}
-            exLocation={address?.address || FAIL_TO_FETCH}
-            exPhoneNumber={phoneNumber || FAIL_TO_FETCH}
-            exName={name || FAIL_TO_FETCH}
-            orgId={id}
-          />,
+          {
+            id: 'updateForm',
+            content: (
+              <UpdateOrgProfileForm
+                exDescription={description || FAIL_TO_FETCH}
+                exEmail={email || FAIL_TO_FETCH}
+                exHomePage={homePage || FAIL_TO_FETCH}
+                exLocation={address?.address || FAIL_TO_FETCH}
+                exPhoneNumber={phoneNumber || FAIL_TO_FETCH}
+                exName={name || FAIL_TO_FETCH}
+                orgId={id}
+              />
+            ),
+          },
         ]}
       />
     );

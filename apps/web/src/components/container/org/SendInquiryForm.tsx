@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSendInquiryMutation } from '../../../graphql/generated';
 import {
@@ -6,12 +6,13 @@ import {
   InquiryCategoryModel,
   InquiryStatusModel,
 } from '../../../lib';
-import { Form, InputTextarea, Select } from '../../presentational/atoms';
-import { ButtonOrLoading } from '../../presentational/molecules';
+import { Form, Select } from '../../presentational/atoms';
+import { ButtonOrLoading, InputTextarea } from '../../presentational/molecules';
 import { NotificationSet } from '../../presentational/organisms';
 
 type SendInquiryProps = {
   orgId: string;
+  onClick?: () => void | Dispatch<SetStateAction<any>>;
 };
 
 type SendInquiryInput = {
@@ -20,7 +21,7 @@ type SendInquiryInput = {
   status: InquiryStatusModel;
 };
 
-export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId }) => {
+export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId, onClick }) => {
   const { register, handleSubmit } = useForm<SendInquiryInput>();
   const [sendInquiry, { data, error, loading }] = useSendInquiryMutation();
 
@@ -69,7 +70,7 @@ export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId }) => {
           ]}
           required
           register={register}
-         />
+        />
         <InputTextarea<SendInquiryInput>
           rows={3}
           cols={30}
@@ -79,13 +80,14 @@ export const SendInquiryForm: FC<SendInquiryProps> = ({ orgId }) => {
           required
           register={register}
         />
-        <span className="flex justify-end py-2 w-full border-gray-400">
+        <div className="flex justify-end py-2 w-full border-gray-400">
           <ButtonOrLoading
             loading={loading}
             buttonLabel="送信"
             buttonType="submit"
+            onClick={onClick}
           />
-        </span>
+        </div>
       </Form>
     </div>
   );

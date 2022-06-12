@@ -34,6 +34,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       if (readResult === false) {
         return returnErrorToGQL('wip');
       }
+      // console.log('orgReadResult:', readResult);
       const org = readOrgToGql(readResult);
       return { __typename: 'Org', ...org };
     },

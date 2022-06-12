@@ -11,18 +11,6 @@ type Query {
   nodes(ids: [ID!]!): [Node]
 }
 
-type Mutation {
-  uploadFile(file: Upload!): File!
-}
-
-scalar Upload
-
-type File {
-  filename: String!
-  mimetype: String!
-  encoding: String!
-}
-
 type PageInfo {
   hasNext: Boolean!
   hasPrevious: Boolean!

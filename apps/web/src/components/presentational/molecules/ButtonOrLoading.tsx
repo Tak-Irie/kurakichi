@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 
 import { ButtonBig, LoadingSpinner } from '../atoms';
 
@@ -6,7 +6,7 @@ type ButtonOrLoadingProps = {
   loading: boolean;
   buttonLabel: string;
   buttonType: 'submit' | 'button';
-  onClick?: () => void;
+  onClick?: (() => Promise<void> | void) | Dispatch<SetStateAction<any>>;
   color?: 'gray' | 'yellow' | 'blue' | 'green' | 'red';
 };
 
@@ -23,9 +23,9 @@ export const ButtonOrLoading: FC<ButtonOrLoadingProps> = ({
       type="submit"
       color={color}
       label={
-        <span className="flex">
+        <div className="flex">
           <LoadingSpinner color="green" height="h-5" width="w-5" />
-        </span>
+        </div>
       }
     />
   ) : (

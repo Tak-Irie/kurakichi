@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC, ReactChild } from 'react';
+import { FC, ReactNode } from 'react';
 
 type CardProps = {
   id?: string;
@@ -9,7 +9,7 @@ type CardProps = {
   linkAs?: string;
   image?: string;
   imageAlt?: string;
-  children?: ReactChild;
+  children?: ReactNode;
 };
 
 export const Card: FC<CardProps> = (props) => {
@@ -40,35 +40,35 @@ export const Card: FC<CardProps> = (props) => {
 export const SmallCard: FC<CardProps> = ({
   title = 'title',
   content = 'content',
-  image = undefined,
+  // image = undefined,
   id,
   children,
 }) => (
-    <li key={id}>
-      <div className="flex items-center p-3 m-2 max-w-lg bg-gray-200 border-2 border-red-900">
-        <div className="flex justify-center items-center mr-5 w-16 h-16 bg-yellow-100 rounded-full">
-          <svg
-            className="w-16 h-12 text-red-300"
-            stroke="currentColor"
-            viewBox="0 0 52 52"
-          >
-            <polygon
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              points="29 13 14 29 25 29 23 39 38 23 27 23"
-            />
-          </svg>
-        </div>
-        <div>
-          <h6 className="mb-2 font-semibold leading-5">{title}</h6>
-          <p className="mb-3 text-sm text-gray-900">{content}</p>
-          {children}
-        </div>
+  <li key={id}>
+    <div className="flex items-center p-3 m-2 max-w-lg bg-gray-200 border-2 border-red-900">
+      <div className="flex justify-center items-center mr-5 w-16 h-16 bg-yellow-100 rounded-full">
+        <svg
+          className="w-16 h-12 text-red-300"
+          stroke="currentColor"
+          viewBox="0 0 52 52"
+        >
+          <polygon
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+            points="29 13 14 29 25 29 23 39 38 23 27 23"
+          />
+        </svg>
       </div>
-    </li>
-  );
+      <div>
+        <h6 className="mb-2 font-semibold leading-5">{title}</h6>
+        <p className="mb-3 text-sm text-gray-900">{content}</p>
+        {children}
+      </div>
+    </div>
+  </li>
+);
 
 export const CardWithPick: FC<CardProps> = ({
   content,
@@ -78,18 +78,18 @@ export const CardWithPick: FC<CardProps> = ({
   linkAs = '/',
   title,
 }) => (
-    <div className="flex relative items-center py-5 px-6 space-x-3 bg-white rounded-lg border border-gray-300 hover:border-gray-400 focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 shadow-sm">
-      <div className="shrink-0">
-        <img className="w-10 h-10 rounded-full" src={image} alt={imageAlt} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <Link href={linkUrl} as={linkAs} passHref>
-          <a href="replace" className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true" />
-            <p className="text-sm font-medium text-gray-900">{title}</p>
-            <p className="text-sm text-gray-500 truncate">{content}</p>
-          </a>
-        </Link>
-      </div>
+  <div className="flex relative items-center py-5 px-6 space-x-3 bg-white rounded-lg border border-gray-300 hover:border-gray-400 focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 shadow-sm">
+    <div className="shrink-0">
+      <img className="w-10 h-10 rounded-full" src={image} alt={imageAlt} />
     </div>
-  );
+    <div className="flex-1 min-w-0">
+      <Link href={linkUrl} as={linkAs} passHref>
+        <a href="replace" className="focus:outline-none">
+          <div className="absolute inset-0" aria-hidden="true" />
+          <p className="text-sm font-medium text-gray-900">{title}</p>
+          <p className="text-sm text-gray-500 truncate">{content}</p>
+        </a>
+      </Link>
+    </div>
+  </div>
+);

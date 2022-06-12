@@ -13,18 +13,23 @@ import {
 import { Resolvers } from '../generated/generatedTypes';
 
 import { ApolloContext } from '../../@types/global';
+import { ssoLogin } from '../../service/SSOService';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
 
-const UserResolver: Resolvers<ApolloContext> = {
+export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
     getUserByCookie: async (_, __, { idInCookie }) => {
-      console.log('catch:');
-      console.log('id:', idInCookie);
-      if (idInCookie === undefined)
-        return returnErrorToGQL('ログインが確認できませんでした');
+      // console.log('cookie:', idInCookie);
+      if (idInCookie === undefined) {
+        return {
+          __typename: 'Errors',
+          applicationError: { message: 'miss' },
+        };
+      }
 
+      // console.log('confirm cookie!:');
       // FIXME:CQRS
       // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
       // console.log('me/usecaseResult:', usecaseResult);
@@ -65,6 +70,8 @@ const UserResolver: Resolvers<ApolloContext> = {
   },
   Mutation: {
     registerUser: async (_, { input }, context) => {
+      // console.log('catch input:', input);
+      // console.log('catch input:', context);
       const usecaseResult = await useRegisterUserUsecase.execute({
         ...input,
       });
@@ -73,10 +80,11 @@ const UserResolver: Resolvers<ApolloContext> = {
       const dtoUser = usecaseResult.value.getValue();
       // console.log('stoUser:', dtoUser);
       context.req.session.userId = dtoUser.id;
-      // console.log('session:', context.req.session.userId);
-      const user = dtoUserToGql(usecaseResult.value.getValue());
+      // context.req.session.save;
+      // console.log('session-userId:', context.req.session.userId);
+      const user = dtoUserToGql(dtoUser);
+      // console.log('user:', user);
       return {
-        __typename: 'User',
         ...user,
       };
     },
@@ -92,6 +100,17 @@ const UserResolver: Resolvers<ApolloContext> = {
         __typename: 'User',
         ...gqlUser,
       };
+    },
+    ssoLogin: async (_, { provider }, { req }) => {
+      const authUrl = await ssoLogin({ provider, sessionID: req.sessionID });
+      if (authUrl === 'ERROR') {
+        return {
+          __typename: 'Errors',
+          applicationError: { message: 'something wrong' },
+        };
+      }
+      req.session.authSession = req.sessionID;
+      return { __typename: 'SSO', url: authUrl };
     },
     logoutUser: async (_, __, { idInCookie, req, res }) => {
       if (idInCookie === undefined)
@@ -170,5 +189,3 @@ const UserResolver: Resolvers<ApolloContext> = {
     // changePassword: async () => {},
   },
 };
-
-export { UserResolver };

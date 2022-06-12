@@ -50,15 +50,15 @@ export const TextLabel: FC<Omit<TextProps, 'label'>> = ({
   color = 'gray',
 }) => (
   <div className="mb-2">
-    <text className={`underline font-bold text-base  text-${color}-700`}>
+    <div className={`underline font-bold text-base  text-${color}-700`}>
       {content}
-    </text>
+    </div>
   </div>
 );
 
 export const TextLabeled: FC<TextProps> = ({ content, label }) => (
   <div className="flex flex-col">
-    <text className="text-sm font-medium text-gray-500">{label}</text>
+    <div className="text-sm font-medium text-gray-500">{label}</div>
     <TextBase content={content} overwriteCSS="text-sm " />
   </div>
 );

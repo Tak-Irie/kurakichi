@@ -20,12 +20,12 @@ const LoginPage: NextPage = () => (
         <div>
           <TextWithDivider content="ソーシャルログイン" />
           <div className="grid grid-cols-2 mt-10 max-h-12">
-            <span className="flex">
+            <div className="flex">
               <GoogleLoginButton />
-            </span>
-            <span className="flex justify-end">
+            </div>
+            <div className="flex justify-end">
               <YahooLoginButton />
-            </span>
+            </div>
           </div>
           <div className="mt-5 space-y-4" />
         </div>
