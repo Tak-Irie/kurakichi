@@ -5,26 +5,27 @@ type TempProps = {
   title: string;
   children?: ReactNode;
 };
-type TempListProps = {
-  title: string;
-  list: string[];
-};
 const Temp: FC<TempProps> = ({ children, title }) => (
   <div>
     <p className="mt-2 text-lg font-bold underline">{title}</p>
     <div className="text-base">{children}</div>
   </div>
 );
-const TempList: FC<TempListProps> = ({ list, title }) => (
-  <div>
-    <p className="mt-2 text-lg font-bold underline">{title}</p>
-    <ul className="ml-4 text-base list-disc">
-      {list!.map((li) => (
-        <li key={li}>{li}</li>
-      ))}
-    </ul>
-  </div>
-);
+
+// type TempListProps = {
+//   title: string;
+//   list: string[];
+// };
+// const TempList: FC<TempListProps> = ({ list, title }) => (
+//   <div>
+//     <p className="mt-2 text-lg font-bold underline">{title}</p>
+//     <ul className="ml-4 text-base list-disc">
+//       {list!.map((li) => (
+//         <li key={li}>{li}</li>
+//       ))}
+//     </ul>
+//   </div>
+// );
 
 const HowToPage: NextPage = () => (
   <div className="grid grid-cols-12">
