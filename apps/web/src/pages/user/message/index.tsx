@@ -14,8 +14,8 @@ import { useUserStatus } from '../../../lib';
 const MessageBoxPage: NextPage = () => {
   const { cachedUser, loadingCache } = useUserStatus();
 
-  const { data, loading, error } = useGetMessagesByCookieQuery({ ssr: false });
-  // console.log('user:', userData.getUserByCookie.user);
+  const { data, loading, error } = useGetMessagesByCookieQuery();
+
   if (loading && loadingCache) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 

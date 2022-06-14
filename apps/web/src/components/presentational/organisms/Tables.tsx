@@ -148,7 +148,7 @@ export const TableMessage: FC<TableMessageProps> = ({
                   src={message.sender?.avatarUrl || ''}
                   alt="ユーザーアバター"
                 />
-                <TextSmall content={message.sender?.name || FAIL_TO_FETCH} />
+                <TextSmall content={message.sender?.name || ''} />
               </div>
               <div className="overflow-scroll col-span-4 py-4 mx-1 whitespace-nowrap">
                 <TextSmall content={message.content || FAIL_TO_FETCH} />

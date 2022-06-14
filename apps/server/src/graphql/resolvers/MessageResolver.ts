@@ -34,6 +34,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
       return { __typename: 'Messages', messages };
     },
     getMessagesByTreeId: async (_, { treeId }, { idInCookie }) => {
+      console.log('getMessagesByTreeId:', treeId);
       if (idInCookie === undefined)
         return returnErrorToGQL('ログインが確認できませんでした');
       const usecaseResult = await useGetMessagesByTreeIdUsecase.execute({
