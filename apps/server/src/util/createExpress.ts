@@ -4,7 +4,6 @@ import session from 'express-session';
 
 import type { Redis } from 'ioredis';
 import { geocodeRouter, googleRouter, yahooRouter } from '../route';
-import { IS_PROD } from './Constants';
 
 type ExpressArgs = {
   redis: Redis;
@@ -27,8 +26,10 @@ const createExpress = async ({ redis }: ExpressArgs) => {
         maxAge: COOKIE_MAX_AGE,
         httpOnly: true,
         sameSite: 'lax',
-        secure: IS_PROD,
-        domain: IS_PROD ? '.www.kurakichi.org' : undefined,
+        // secure: IS_PROD,
+        secure: false,
+        // TODO: researching BP
+        domain: undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET || 'development',

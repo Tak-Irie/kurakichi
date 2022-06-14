@@ -5,7 +5,7 @@ dist
 *.pem
 
 # docker
-redis
+redis/data
 eventstore
 rabbitmq
 postgres

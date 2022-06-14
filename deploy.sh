@@ -4,7 +4,6 @@
 # 引数は、1.AWSプロファイル名、2.イメージのタグ名、3.AWSアカウントID
 # CDを整備するまでのつなぎ
 
-export AWS_DEFAULT_PROFILE=$1 &
 yarn gen:gql
 wait
 yarn build
@@ -12,6 +11,8 @@ wait
 yarn install
 wait
 docker build -t "$2" .
+wait
+export AWS_DEFAULT_PROFILE=$1
 wait
 aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin "$3".dkr.ecr.ap-northeast-1.amazonaws.com
 wait

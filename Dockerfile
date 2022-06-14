@@ -29,4 +29,5 @@ FROM node:14.19-alpine3.15
 ENV NODE_ENV="production"
 COPY --from=Install /app /app
 WORKDIR /app
-CMD ["apps/server/dist/src/index.js"]
+RUN npx prisma -v
+CMD ["node","apps/server/dist/src/index.js"]
