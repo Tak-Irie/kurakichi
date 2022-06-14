@@ -11,11 +11,11 @@ const Form: FC<FormProps> = ({
   overWriteCSS = 'flex flex-col space-y-1 items-center px-5 border-2 rounded-md border-gray-400 bg-white',
   children,
 }) => (
-    <div>
-      <form onSubmit={onSubmit} className={overWriteCSS}>
-        {children}
-      </form>
-    </div>
-  );
+  <div>
+    <form onSubmit={onSubmit} className={overWriteCSS}>
+      {children}
+    </form>
+  </div>
+);
 
 export { Form };

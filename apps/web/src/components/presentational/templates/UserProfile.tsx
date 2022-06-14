@@ -1,5 +1,8 @@
+import { Transition } from '@headlessui/react';
+import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
-import { Org } from '../../../graphql';
+import { Org, useGetUserMyInfoQuery } from '../../../graphql';
+import { SendMessage } from '../../container/user/SendMessage';
 
 import {
   ButtonWithIcon,
@@ -30,6 +33,11 @@ export const UserProfile: FC<UserProfileProps> = ({
   userName,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data } = useGetUserMyInfoQuery({
+    fetchPolicy: 'cache-first',
+  });
+  const router = useRouter();
+  const userId = router.query.id as string;
 
   return (
     <div className="grid grid-cols-12 pb-10">
@@ -38,16 +46,47 @@ export const UserProfile: FC<UserProfileProps> = ({
           avatarSrc={avatar}
           imageSrc={image}
           buttons={
-            <div>
-              <PopOnIcon icon={<IconsCaution />} content="ログインが必要です" />
-              <ButtonWithIcon
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-                label="メッセージを送る"
-                disabled
-                icon={<IconsMail />}
-              />
-            </div>
+            data?.getUserByCookie.__typename === 'User' ? (
+              <div>
+                <div>
+                  <ButtonWithIcon
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    label="メッセージを送る"
+                    icon={<IconsMail />}
+                  />
+                </div>
+                <div className="absolute mt-12 w-full">
+                  <Transition
+                    show={isOpen}
+                    enter="transition-opacity duration-150"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity duration-150"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute -ml-36">
+                      <SendMessage receiverId={userId} />
+                    </div>
+                  </Transition>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <PopOnIcon
+                  icon={<IconsCaution />}
+                  content="ログインが必要です"
+                />
+                <ButtonWithIcon
+                  onClick={() => setIsOpen(!isOpen)}
+                  type="button"
+                  label="メッセージを送る"
+                  disabled
+                  icon={<IconsMail />}
+                />
+              </div>
+            )
           }
         />
       </div>
@@ -87,30 +126,3 @@ export const UserProfile: FC<UserProfileProps> = ({
     </div>
   );
 };
-// loggedIn ? (
-//   <div>
-//     <div>
-//       <ButtonWithIcon
-//         type="button"
-//         onClick={() => setIsOpen(!isOpen)}
-//         label="メッセージを送る"
-//         icon={<IconsMail />}
-//       />
-//     </div>
-//     <div className="absolute mt-12 w-full">
-//       <Transition
-//         show={isOpen}
-//         enter="transition-opacity duration-150"
-//         enterFrom="opacity-0"
-//         enterTo="opacity-100"
-//         leave="transition-opacity duration-150"
-//         leaveFrom="opacity-100"
-//         leaveTo="opacity-0"
-//       >
-//         <div className="absolute -ml-36">
-//           <SendMessage receiverId={userId} />
-//         </div>
-//       </Transition>
-//     </div>
-//   </div>
-// ) :
