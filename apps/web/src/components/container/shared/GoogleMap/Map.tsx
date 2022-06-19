@@ -3,6 +3,7 @@ import { MapContext } from './MapContext';
 
 type MapProps = {
   children?: ReactNode;
+  // location?:
 };
 
 const tokyoMetropolitanGovernment = {

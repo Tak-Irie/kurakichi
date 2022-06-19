@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../shared';
+
 import { UniqueEntityId } from '../../shared/domain';
 import { IMessageRepo, Message } from '../domain';
 import { MessageMapper } from './MessageMapper';
@@ -6,7 +8,7 @@ import { MessageMapper } from './MessageMapper';
 export class MessageRepo implements IMessageRepo {
   private prisma: PrismaClient;
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = prisma;
   }
 
   async getMessage(messageId: UniqueEntityId): Promise<Message | false> {
