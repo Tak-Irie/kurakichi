@@ -12,16 +12,17 @@ const Temp: FC<TempProps> = ({ children, title }) => (
   </div>
 );
 
-const TermsOfServicePage: NextPage = () => (
+const OpinionFormPage: NextPage = () => (
   <div className="grid grid-cols-12">
     <div className="col-start-2 col-end-12 p-8 my-4 space-y-2 text-gray-800 bg-white rounded-md shadow-md">
-      <Temp title="くらきち利用規約">
-        <p className="p-1 mt-4 w-fit bg-red-100 rounded-md">
-          製作中・・・サービスリリースの際に、くらきちが備える機能に基づいたものを記述する
+      <Temp title="ご意見・ご要望フォーム">
+        <p>
+          くらきちについてご意見やご要望がございましたら、こちらよりお送り願います。
         </p>
       </Temp>
+      <p>製作中・・・</p>
     </div>
   </div>
 );
 
-export default TermsOfServicePage;
+export default OpinionFormPage;

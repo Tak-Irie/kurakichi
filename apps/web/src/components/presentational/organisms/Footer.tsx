@@ -48,7 +48,6 @@ export const Footer: FC = () => (
           <FooterItems
             label="くらきちについて"
             items={[
-              { label: '目指すもの', url: '/info/purpose' },
               { label: '運営者', url: '/info/committee' },
               { label: 'Q&A', url: '/info/question-and-answer' },
             ]}
@@ -67,7 +66,7 @@ export const Footer: FC = () => (
           <FooterItems
             label="ご意見"
             items={[
-              { label: 'ご意見・ご要望フォーム', url: '/info/opinion' },
+              { label: 'ご意見・ご要望フォーム', url: '/info/opinion-form' },
               {
                 label: 'これまでのご意見と回答',
                 url: '/info/answer-to-opinion',

@@ -9,6 +9,11 @@
     "declarationMap": false,
     "sourceMap": false,
     "removeComments": true,
+    "paths": {
+      "@kurakichi/domain": [
+        "../../packages/domain"
+      ]
+    }
   },
   "include": [
     "src"

@@ -70,9 +70,9 @@ resource "aws_vpc_endpoint" "logs" {
 }
 
 resource "aws_vpc_endpoint" "ssm_messages" {
-  vpc_id       = var.vpc_id
-  service_name = "com.amazonaws.${data.aws_region.current.name}.ssmmessages"
-  vpc_endpoint_type = "Interface"
+  vpc_id              = var.vpc_id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ssmmessages"
+  vpc_endpoint_type   = "Interface"
   subnet_ids          = [var.private_subnet_1a_id]
   security_group_ids  = [aws_security_group.endpoint_security_group.id]
   private_dns_enabled = true

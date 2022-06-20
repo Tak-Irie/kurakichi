@@ -31,7 +31,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     assign_public_ip = false
-    security_groups  = [ module.ecs_service_alb_sg.security_group_id]
+    security_groups  = [module.ecs_service_alb_sg.security_group_id]
     subnets = [
       var.private_subnet_1a_id,
     ]

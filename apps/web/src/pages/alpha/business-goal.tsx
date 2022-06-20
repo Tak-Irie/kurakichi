@@ -58,6 +58,7 @@ const AlphaBusinessGoalPage: NextPage = () => (
           '現状に足りていない部分を十分にヒアリングし、自分たちにできることを見つける。',
         ]}
       />
+      <TempList title="計画" list={['作成中・・・']} />
     </div>
   </div>
 );
