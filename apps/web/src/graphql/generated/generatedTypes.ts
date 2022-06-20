@@ -103,6 +103,12 @@ export type FellowEdge = {
   node: User;
 };
 
+export type Geocode = {
+  __typename?: 'Geocode';
+  lat: Scalars['String'];
+  lng: Scalars['String'];
+};
+
 export type InquiriesResult = Errors | InquiryConnection;
 
 export type Inquiry = Node & {
@@ -383,6 +389,7 @@ export type Query = {
   getAddressByPostcode: AddressResult;
   getBase: BaseResult;
   getDialogsByBaseId: DialogsResult;
+  getGeocodeByPostcode: Geocode;
   getInquiriesByOrgId: InquiriesResult;
   getInquiriesByTreeId: InquiryTreeResult;
   getInquiry: InquiryResult;
@@ -412,6 +419,11 @@ export type QueryGetBaseArgs = {
 
 export type QueryGetDialogsByBaseIdArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetGeocodeByPostcodeArgs = {
+  postcode: Scalars['String'];
 };
 
 
@@ -670,6 +682,7 @@ export type ResolversTypes = {
   FellowConnection: ResolverTypeWrapper<FellowConnection>;
   FellowEdge: ResolverTypeWrapper<FellowEdge>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  Geocode: ResolverTypeWrapper<Geocode>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   InquiriesResult: ResolversTypes['Errors'] | ResolversTypes['InquiryConnection'];
   Inquiry: ResolverTypeWrapper<Omit<Inquiry, 'category' | 'inquiryStatus'> & { category?: Maybe<ResolversTypes['InquiryCategory']>, inquiryStatus?: Maybe<ResolversTypes['InquiryStatus']> }>;
@@ -754,6 +767,7 @@ export type ResolversParentTypes = {
   FellowConnection: FellowConnection;
   FellowEdge: FellowEdge;
   Float: Scalars['Float'];
+  Geocode: Geocode;
   ID: Scalars['ID'];
   InquiriesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryConnection'];
   Inquiry: Omit<Inquiry, 'category' | 'inquiryStatus'> & { category?: Maybe<ResolversParentTypes['InquiryCategory']>, inquiryStatus?: Maybe<ResolversParentTypes['InquiryStatus']> };
@@ -902,6 +916,12 @@ export type FellowEdgeResolvers<ContextType = any, ParentType extends ResolversP
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isBaseAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GeocodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Geocode'] = ResolversParentTypes['Geocode']> = {
+  lat?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lng?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1136,6 +1156,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAddressByPostcode?: Resolver<ResolversTypes['AddressResult'], ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
   getBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
   getDialogsByBaseId?: Resolver<ResolversTypes['DialogsResult'], ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
+  getGeocodeByPostcode?: Resolver<ResolversTypes['Geocode'], ParentType, ContextType, RequireFields<QueryGetGeocodeByPostcodeArgs, 'postcode'>>;
   getInquiriesByOrgId?: Resolver<ResolversTypes['InquiriesResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
   getInquiriesByTreeId?: Resolver<ResolversTypes['InquiryTreeResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
   getInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
@@ -1222,6 +1243,7 @@ export type Resolvers<ContextType = any> = {
   Errors?: ErrorsResolvers<ContextType>;
   FellowConnection?: FellowConnectionResolvers<ContextType>;
   FellowEdge?: FellowEdgeResolvers<ContextType>;
+  Geocode?: GeocodeResolvers<ContextType>;
   InquiriesResult?: InquiriesResultResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
   InquiryCategory?: GraphQLScalarType;
@@ -1444,6 +1466,13 @@ export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null }> | null } };
+
+export type GetGeocodeByPostcodeQueryVariables = Exact<{
+  postcode: Scalars['String'];
+}>;
+
+
+export type GetGeocodeByPostcodeQuery = { __typename?: 'Query', getGeocodeByPostcode: { __typename?: 'Geocode', lat: string, lng: string } };
 
 export type GetMessagesByTreeIdQueryVariables = Exact<{
   treeId: Scalars['String'];
@@ -2698,6 +2727,42 @@ export function useGetOrgsForMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetOrgsForMapQueryHookResult = ReturnType<typeof useGetOrgsForMapQuery>;
 export type GetOrgsForMapLazyQueryHookResult = ReturnType<typeof useGetOrgsForMapLazyQuery>;
 export type GetOrgsForMapQueryResult = Apollo.QueryResult<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>;
+export const GetGeocodeByPostcodeDocument = gql`
+    query GetGeocodeByPostcode($postcode: String!) {
+  getGeocodeByPostcode(postcode: $postcode) {
+    lat
+    lng
+  }
+}
+    `;
+
+/**
+ * __useGetGeocodeByPostcodeQuery__
+ *
+ * To run a query within a React component, call `useGetGeocodeByPostcodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGeocodeByPostcodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGeocodeByPostcodeQuery({
+ *   variables: {
+ *      postcode: // value for 'postcode'
+ *   },
+ * });
+ */
+export function useGetGeocodeByPostcodeQuery(baseOptions: Apollo.QueryHookOptions<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>(GetGeocodeByPostcodeDocument, options);
+      }
+export function useGetGeocodeByPostcodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>(GetGeocodeByPostcodeDocument, options);
+        }
+export type GetGeocodeByPostcodeQueryHookResult = ReturnType<typeof useGetGeocodeByPostcodeQuery>;
+export type GetGeocodeByPostcodeLazyQueryHookResult = ReturnType<typeof useGetGeocodeByPostcodeLazyQuery>;
+export type GetGeocodeByPostcodeQueryResult = Apollo.QueryResult<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>;
 export const GetMessagesByTreeIdDocument = gql`
     query GetMessagesByTreeId($treeId: String!) {
   getMessagesByTreeId(treeId: $treeId) {

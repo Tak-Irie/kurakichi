@@ -100,6 +100,12 @@ export type FellowEdge = {
   node: User;
 };
 
+export type Geocode = {
+  __typename?: 'Geocode';
+  lat: Scalars['String'];
+  lng: Scalars['String'];
+};
+
 export type InquiriesResult = Errors | InquiryConnection;
 
 export type Inquiry = Node & {
@@ -380,6 +386,7 @@ export type Query = {
   getAddressByPostcode: AddressResult;
   getBase: BaseResult;
   getDialogsByBaseId: DialogsResult;
+  getGeocodeByPostcode: Geocode;
   getInquiriesByOrgId: InquiriesResult;
   getInquiriesByTreeId: InquiryTreeResult;
   getInquiry: InquiryResult;
@@ -409,6 +416,11 @@ export type QueryGetBaseArgs = {
 
 export type QueryGetDialogsByBaseIdArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetGeocodeByPostcodeArgs = {
+  postcode: Scalars['String'];
 };
 
 
@@ -668,6 +680,7 @@ export type ResolversTypes = ResolversObject<{
   FellowConnection: ResolverTypeWrapper<FellowConnection>;
   FellowEdge: ResolverTypeWrapper<FellowEdge>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  Geocode: ResolverTypeWrapper<Geocode>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   InquiriesResult: ResolversTypes['Errors'] | ResolversTypes['InquiryConnection'];
   Inquiry: ResolverTypeWrapper<Omit<Inquiry, 'category' | 'inquiryStatus'> & { category?: Maybe<ResolversTypes['InquiryCategory']>, inquiryStatus?: Maybe<ResolversTypes['InquiryStatus']> }>;
@@ -752,6 +765,7 @@ export type ResolversParentTypes = ResolversObject<{
   FellowConnection: FellowConnection;
   FellowEdge: FellowEdge;
   Float: Scalars['Float'];
+  Geocode: Geocode;
   ID: Scalars['ID'];
   InquiriesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryConnection'];
   Inquiry: Omit<Inquiry, 'category' | 'inquiryStatus'> & { category?: Maybe<ResolversParentTypes['InquiryCategory']>, inquiryStatus?: Maybe<ResolversParentTypes['InquiryStatus']> };
@@ -900,6 +914,12 @@ export type FellowEdgeResolvers<ContextType = any, ParentType extends ResolversP
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isBaseAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type GeocodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Geocode'] = ResolversParentTypes['Geocode']> = ResolversObject<{
+  lat?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lng?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1134,6 +1154,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAddressByPostcode?: Resolver<ResolversTypes['AddressResult'], ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
   getBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
   getDialogsByBaseId?: Resolver<ResolversTypes['DialogsResult'], ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
+  getGeocodeByPostcode?: Resolver<ResolversTypes['Geocode'], ParentType, ContextType, RequireFields<QueryGetGeocodeByPostcodeArgs, 'postcode'>>;
   getInquiriesByOrgId?: Resolver<ResolversTypes['InquiriesResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
   getInquiriesByTreeId?: Resolver<ResolversTypes['InquiryTreeResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
   getInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
@@ -1220,6 +1241,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Errors?: ErrorsResolvers<ContextType>;
   FellowConnection?: FellowConnectionResolvers<ContextType>;
   FellowEdge?: FellowEdgeResolvers<ContextType>;
+  Geocode?: GeocodeResolvers<ContextType>;
   InquiriesResult?: InquiriesResultResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
   InquiryCategory?: GraphQLScalarType;

@@ -1,9 +1,15 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import useSWR from 'swr';
+
+import { useGetGeocodeByPostcodeLazyQuery } from '../../../graphql';
 import { PostcodeRegExp } from '../../../lib';
 
-import { ButtonWithIcon, Form, IconsPost } from '../../presentational/atoms';
+import {
+  ButtonWithIcon,
+  Form,
+  IconsPost,
+  LoadingSpinner,
+} from '../../presentational/atoms';
 import { Input, InputValue } from '../../presentational/molecules';
 
 type Geocode = {
@@ -20,37 +26,32 @@ interface PostcodeInput extends InputValue {
   postcode: string;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
   buttonLabel,
   dispatcher,
 }) => {
-  const [isLocation, setIsLocation] = useState<Geocode>();
-  const [isPostcode, setIsPostcode] = useState<string>();
   const { register, handleSubmit } = useForm<PostcodeInput>();
-  const POST_CODE_API =
-    process.env.POST_CODE_API ||
-    `http://localhost:4000/geocode/postcode?code=${isPostcode}`;
+  const [getGeocode, { data, loading }] = useGetGeocodeByPostcodeLazyQuery();
 
-  useSWR(POST_CODE_API, fetcher, {
-    revalidateOnMount: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    onSuccess: (data) => {
-      setIsLocation(data);
-    },
-  });
-
-  const onSubmit = (input: PostcodeInput) => {
-    setIsPostcode(input.postcode);
+  const onSubmit = async (input: PostcodeInput) => {
+    await getGeocode({ variables: { postcode: input.postcode } });
   };
 
   useEffect(() => {
-    if (isLocation) {
-      dispatcher({ lat: isLocation.lat, lng: isLocation.lng });
+    if (
+      data?.getGeocodeByPostcode.__typename === 'Geocode' &&
+      data.getGeocodeByPostcode.lat !== '0'
+    ) {
+      dispatcher({
+        lat: Number(data.getGeocodeByPostcode.lat),
+        lng: Number(data.getGeocodeByPostcode.lng),
+      });
     }
-  }, [isLocation, dispatcher]);
+  }, [data, dispatcher]);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="p-2 rounded border border-gray-200">
@@ -67,6 +68,8 @@ export const GeocodeByPostcodeForm: FC<GeocodeByPostcodeButtonProps> = ({
             pattern={PostcodeRegExp}
             required={false}
             register={register}
+            placeholder="例:100-0001"
+            maxLength={8}
           />
         </div>
       </Form>

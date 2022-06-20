@@ -1,0 +1,6 @@
+query GetGeocodeByPostcode($postcode: String!) {
+  getGeocodeByPostcode(postcode: $postcode) {
+    lat
+    lng
+  }
+}

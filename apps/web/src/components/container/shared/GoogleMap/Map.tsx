@@ -2,8 +2,8 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { MapContext } from './MapContext';
 
 type MapProps = {
+  center?: google.maps.LatLngLiteral;
   children?: ReactNode;
-  // location?:
 };
 
 const tokyoMetropolitanGovernment = {
@@ -11,7 +11,10 @@ const tokyoMetropolitanGovernment = {
   lng: 139.6921007,
 };
 
-export const Map: FC<MapProps> = ({ children }) => {
+export const Map: FC<MapProps> = ({
+  children,
+  center = tokyoMetropolitanGovernment,
+}) => {
   const [googleMap, setGoogleMap] = useState<google.maps.Map>();
 
   useEffect(() => {
@@ -21,6 +24,10 @@ export const Map: FC<MapProps> = ({ children }) => {
     );
     setGoogleMap(map);
   }, []);
+
+  useEffect(() => {
+    googleMap?.setCenter(center);
+  }, [googleMap, center]);
 
   return (
     <div id="map" className="w-full h-full">

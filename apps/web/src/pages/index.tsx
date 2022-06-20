@@ -29,6 +29,12 @@ const Index: NextPage = () => {
   // if (error) mapContent = <div>組織情報の取得意失敗しました</div>;
   // if (loading) mapContent = <div>地図を読み込んでいます</div>;
 
+  // useEffect(() => {
+  //   console.log('isLoc:', isLocation);
+  //   contextMap?.setCenter(isLocation);
+  //   contextMap?.setZoom(14);
+  // }, [isLocation, contextMap]);
+
   if (loading) {
     <div>Loading...</div>;
   }
@@ -50,7 +56,7 @@ const Index: NextPage = () => {
           <div className="grid grid-cols-10 mt-5 h-full">
             <div className="col-span-8">
               <div className="w-auto h-[500px]">
-                <Map>
+                <Map center={isLocation}>
                   {data.getOrgs.orgs?.map((org) => (
                     <Overlay
                       key={org.id}

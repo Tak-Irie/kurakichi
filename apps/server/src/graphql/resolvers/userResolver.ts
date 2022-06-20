@@ -18,6 +18,7 @@ import { ssoLogin } from '../../service/SSOService';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
+import { GoogleMapAPIService } from '../../service';
 
 export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
@@ -38,7 +39,6 @@ export const UserResolver: Resolvers<ApolloContext> = {
         ...user,
       };
     },
-
     getUserById: async (_, { userId }) => {
       const usecaseResult = await useGetUserById.execute({ id: userId });
       if (usecaseResult.isLeft())
@@ -58,6 +58,22 @@ export const UserResolver: Resolvers<ApolloContext> = {
       return {
         __typename: 'Users',
         users,
+      };
+    },
+    // FIXME: temp impl
+    getGeocodeByPostcode: async (_, { postcode }) => {
+      const result = await GoogleMapAPIService.getGeoCodeByPostcode(postcode);
+      if (result === false) {
+        return {
+          __typename: 'Geocode',
+          lat: '0',
+          lng: '0',
+        };
+      }
+      return {
+        __typename: 'Geocode',
+        lat: `${result.lat}`,
+        lng: `${result.lng}`,
       };
     },
   },
