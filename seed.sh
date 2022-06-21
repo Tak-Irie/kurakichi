@@ -8,6 +8,8 @@ export AWS_DEFAULT_PROFILE=$1
 wait
 aws ecs execute-command --cluster "$2" --task "$3" --container express --interactive --command "/bin/sh"
 wait
-yarn gen:prisma:migrate:prod
-wait
-yarn gen:prisma:seed:prod
+# yarn gen:prisma:migrate:prod
+# wait
+# yarn gen:prisma:seed:prod
+# wait
+echo "seeding done!"

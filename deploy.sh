@@ -21,3 +21,5 @@ wait
 docker tag "$imageId" "$3".dkr.ecr.ap-northeast-1.amazonaws.com/kurakichi:"$2"
 wait
 docker push "$3".dkr.ecr.ap-northeast-1.amazonaws.com/kurakichi:"$2"
+wait
+echo "deployment done!"

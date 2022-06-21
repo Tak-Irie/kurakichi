@@ -34,7 +34,11 @@ export const dtoUserToGql = (user: DTOUser): User => {
 
   const orgEdges: OrgEdges[] = belongOrgs.map((org) => ({
     cursor: org,
-    node: { id: org, name: org },
+    // FIXME: temporary!!!!
+    node: {
+      id: org,
+      name: org === '01G5B8CM45MBTGC9YRPF4G5MEZ' ? '架空団体' : null,
+    },
   }));
 
   const modifiedOrgs: OrgConnection = {
