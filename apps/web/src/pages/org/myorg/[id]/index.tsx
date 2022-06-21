@@ -22,8 +22,6 @@ const OrgPrivatePage: NextPage = () => {
 
   const { data, loading, error } = useGetOrgPrivateInfoByCookieAndIdQuery({
     variables: { orgId },
-    fetchPolicy: 'cache-first',
-    ssr: false,
   });
 
   if (loading) return <LoadingSpinner />;
@@ -42,7 +40,7 @@ const OrgPrivatePage: NextPage = () => {
         image={fetchedOrg?.heroImageUrl || FAIL_TO_FETCH}
         orgName={fetchedOrg?.name || FAIL_TO_FETCH}
         headerButtons={
-          <>
+          <div>
             <Link
               href="/org/myorg/[id]/setting"
               as={`/org/myorg/${orgId}/setting`}
@@ -69,7 +67,7 @@ const OrgPrivatePage: NextPage = () => {
                 />
               </a>
             </Link>
-          </>
+          </div>
         }
         pageTabs={['概要', '事業', '記事']}
         pageContents={[

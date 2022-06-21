@@ -13,40 +13,46 @@ import {
   MessageTree,
   UserTemplate,
 } from '../../../components/presentational/templates';
-import { useGetMessagesByTreeIdQuery } from '../../../graphql';
-import { useUserStatus } from '../../../lib';
+import {
+  useGetMessagesByTreeIdQuery,
+  useGetUserMyInfoQuery,
+} from '../../../graphql';
 
 const MessageTreePage: NextPage = () => {
   const router = useRouter();
   const messageTreeId = router.query.id as string;
+  // const { cachedUser, loadingCache } = useUserStatus();
+  const { data: cachedUser, loading: loadingCache } = useGetUserMyInfoQuery({
+    fetchPolicy: 'cache-only',
+  });
 
-  const { cachedUser, loadingCache } = useUserStatus();
-
-  const { data, loading, error } = useGetMessagesByTreeIdQuery({
+  const { data, loading } = useGetMessagesByTreeIdQuery({
     variables: { treeId: messageTreeId },
-    ssr: false,
   });
 
   // console.log('user:', userData.getUserByCookie.user);
   if (loadingCache || loading) return <LoadingSpinner />;
-  if (error) return <p>{error.message}</p>;
-  if (data?.getMessagesByTreeId?.__typename === 'Errors')
-    return <p>{data.getMessagesByTreeId.applicationError?.message}</p>;
+  // if (error) return <p>{error.message}</p>;
+  console.log('messageData:', data);
+  // if (data?.getMessagesByTreeId?.__typename === 'Errors')
+  //   return <p>{data.getMessagesByTreeId.applicationError?.message}</p>;
 
   if (
-    cachedUser?.__typename === 'User' &&
+    cachedUser?.getUserByCookie.__typename === 'User' &&
     data?.getMessagesByTreeId?.__typename === 'MessageTree'
   ) {
+    const userData = cachedUser.getUserByCookie;
     const fetchedTree = data.getMessagesByTreeId;
+    console.log('message/[id]:', fetchedTree);
     const messages = idx(fetchedTree, (accessor) => accessor.leaves.edges);
 
     return (
       <UserTemplate
-        avatar={cachedUser.avatarUrl || ''}
-        image={cachedUser.heroImageUrl || ''}
-        userName={cachedUser.name || ''}
+        avatar={userData.avatarUrl || ''}
+        image={userData.heroImageUrl || ''}
+        userName={userData.name || ''}
         headerButtons={
-          <>
+          <div>
             <Link href="/user/mypage" passHref>
               <a href="replace">
                 <ButtonWithIcon
@@ -65,7 +71,7 @@ const MessageTreePage: NextPage = () => {
                 />
               </a>
             </Link>
-          </>
+          </div>
         }
         pageContents={
           <MessageTree messages={messages?.map((_) => _.node) || []} />
@@ -73,7 +79,46 @@ const MessageTreePage: NextPage = () => {
       />
     );
   }
-  return <p>wip</p>;
-};
 
+  if (
+    cachedUser?.getUserByCookie.__typename === 'User' &&
+    data?.getMessagesByTreeId?.__typename === 'Errors'
+  ) {
+    const userData = cachedUser.getUserByCookie;
+
+    return (
+      <UserTemplate
+        avatar={userData.avatarUrl || ''}
+        image={userData.heroImageUrl || ''}
+        userName={userData.name || ''}
+        headerButtons={
+          <div>
+            <Link href="/user/mypage" passHref>
+              <a href="replace">
+                <ButtonWithIcon
+                  type="button"
+                  label="マイページに戻る"
+                  icon={<IconsUser />}
+                />
+              </a>
+            </Link>
+            <Link href="/user/message" passHref scroll={false}>
+              <a href="replace">
+                <ButtonWithIcon
+                  type="button"
+                  label="メッセージボックス"
+                  icon={<IconsMail />}
+                />
+              </a>
+            </Link>
+          </div>
+        }
+        pageContents={
+          <p>{data.getMessagesByTreeId.applicationError?.message}</p>
+        }
+      />
+    );
+  }
+  return <div>something wrong</div>;
+};
 export default MessageTreePage;

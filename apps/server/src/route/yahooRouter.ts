@@ -53,8 +53,9 @@ yahooRouter.get('/callback', async (req, res) => {
       avatar: userInfo.picture,
     });
 
+    console.log('result:', result);
     if (result.isLeft()) {
-      console.error('err:', result.value.getErrorValue());
+      console.error('err-result:', result.value.getErrorValue());
       return res.redirect(SSO_REDIRECT_FAIL);
     }
 
@@ -64,7 +65,7 @@ yahooRouter.get('/callback', async (req, res) => {
 
     return res.redirect(SSO_REDIRECT_SUCCESS);
   } catch (err) {
-    console.log('err:', err);
+    console.log('err-unexpected:', err);
     return res.redirect(SSO_REDIRECT_FAIL);
   }
 });

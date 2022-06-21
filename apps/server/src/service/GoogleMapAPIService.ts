@@ -34,22 +34,30 @@ export class GoogleMapAPIService {
   public static async getGeoCodeByPostcode(
     postcode: string,
   ): Promise<GeoCode | false> {
-    // const postRegExp = //
+    try {
+      // const postRegExp = //
+      // console.log('postcode:', postcode);
+      const mapClient = new Client();
+      const response = await mapClient.geocode({
+        params: {
+          address: postcode,
+          key: process.env.GOOGLE_GEO_API_KEY as string,
+          language: 'jp',
+          region: 'jp',
+        },
+      });
 
-    const mapClient = new Client();
-    const response = await mapClient.geocode({
-      params: {
-        address: postcode,
-        key: process.env.GOOGLE_GEO_API_KEY as string,
-        region: 'jp',
-      },
-    });
-    if (response.status !== 200) {
+      // console.log('response:', response);
+      if (response.status !== 200) {
+        return false;
+      }
+      const data = response.data.results[0].geometry.location;
+      // console.log('data:', data);
+      return { lat: data.lat, lng: data.lng };
+    } catch (err) {
+      // console.log('err:', err);
       return false;
     }
-    const data = response.data.results[0].geometry.location;
-    // console.log('data:', data);
-    return { lat: data.lat, lng: data.lng };
   }
 
   private static modifyAddress(address: string): string {

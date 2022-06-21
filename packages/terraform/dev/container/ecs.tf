@@ -4,8 +4,8 @@ resource "aws_ecs_cluster" "this" {
 
 resource "aws_ecs_task_definition" "this" {
   family                   = var.domain_name
-  cpu                      = "512"
-  memory                   = "1024"
+  cpu                      = "1024"
+  memory                   = "2048"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   container_definitions = templatefile("${path.module}/dev-container-definition.json", {
@@ -31,7 +31,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     assign_public_ip = false
-    security_groups  = [ module.ecs_service_alb_sg.security_group_id]
+    security_groups  = [module.ecs_service_alb_sg.security_group_id]
     subnets = [
       var.private_subnet_1a_id,
     ]

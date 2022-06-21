@@ -8,10 +8,10 @@ type GeneralTemplateProps = {
 };
 
 export const OrgService: FC<GeneralTemplateProps> = ({ content, title }) => (
-  <>
+  <div>
     <div className="flex col-span-5 items-center">
       <TextH2 content={title} />
     </div>
     <div className="mt-10">{content}</div>
-  </>
+  </div>
 );

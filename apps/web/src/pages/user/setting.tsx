@@ -42,7 +42,7 @@ const UserSettingPage: NextPage = () => {
           </Link>
         }
         pageContents={
-          <>
+          <div>
             <div className="col-start-3 col-end-11 mt-10">
               <UpdateUserProfile
                 exDescription={user.selfIntro || ''}
@@ -53,7 +53,7 @@ const UserSettingPage: NextPage = () => {
             <div className="col-start-3 col-end-11 mt-10">
               <ChangeUserPassword />
             </div>
-          </>
+          </div>
         }
       />
     );

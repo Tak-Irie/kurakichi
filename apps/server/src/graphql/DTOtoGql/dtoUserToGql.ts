@@ -4,6 +4,8 @@ import { UserReadModel } from '@kurakichi/domain/src/user/tempRead/UserReadModel
 import {
   MessageConnection,
   MessageEdges,
+  OrgConnection,
+  OrgEdges,
   User,
 } from '../generated/generatedTypes';
 
@@ -17,16 +19,31 @@ export const dtoUserToGql = (user: DTOUser): User => {
     messages,
     role,
     userName,
+    belongOrgs,
   } = user;
 
-  const edges = messages.map((messageId) => ({
+  const messageEdges: MessageEdges[] = messages.map((messageId) => ({
     cursor: messageId,
     node: { id: messageId },
   }));
 
-  const modifiedMessages = {
+  const modifiedMessages: MessageConnection = {
     pageInfo: { hasNext: false, hasPrevious: false },
-    edges,
+    edges: messageEdges,
+  };
+
+  const orgEdges: OrgEdges[] = belongOrgs.map((org) => ({
+    cursor: org,
+    // FIXME: temporary!!!!
+    node: {
+      id: org,
+      name: org === '01G5B8CM45MBTGC9YRPF4G5MEZ' ? '架空団体' : null,
+    },
+  }));
+
+  const modifiedOrgs: OrgConnection = {
+    pageInfo: { hasNext: false, hasPrevious: false },
+    edges: orgEdges,
   };
 
   return {
@@ -39,6 +56,7 @@ export const dtoUserToGql = (user: DTOUser): User => {
     avatarUrl,
     heroImageUrl,
     messages: modifiedMessages,
+    orgs: modifiedOrgs,
   };
 };
 

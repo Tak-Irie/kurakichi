@@ -62,7 +62,7 @@ export const UpdateOrgProfileForm: FC<UpdateOrgProfileProps> = ({
   };
 
   return (
-    <>
+    <div>
       <NotificationSet
         succeededContent={
           data?.updateOrg?.__typename === 'Org' ? '組織情報を更新しました' : ''
@@ -151,6 +151,6 @@ export const UpdateOrgProfileForm: FC<UpdateOrgProfileProps> = ({
           />
         </div>
       </Form>
-    </>
+    </div>
   );
 };

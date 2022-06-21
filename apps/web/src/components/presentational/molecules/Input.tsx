@@ -64,7 +64,7 @@ export const Input = <T extends InputValue>({
   placeholder = '',
   overWriteCSS = 'flex-grow w-full h-12 px-4 mb-3 text-black border-gray-300 border shadow-sm rounded appearance-none focus:outline-none focus:border-gray-700',
 }: InputProps<T>) => (
-  <>
+  <div>
     <div className="flex justify-start items-center">
       {fieldLabel ? (
         <p className="my-1 text-xs font-bold text-gray-700">{fieldLabel}</p>
@@ -98,7 +98,7 @@ export const Input = <T extends InputValue>({
         {...register(label, { required, pattern })}
       />
     </fieldset>
-  </>
+  </div>
 );
 
 export const InputTextarea = <T extends InputValue>({
@@ -114,7 +114,7 @@ export const InputTextarea = <T extends InputValue>({
   placeholder = '',
   overWriteCSS = 'flex-grow w-full h-32 px-4 my-2 text-gray-800 border border-gray-400 rounded',
 }: TextareaProps<T>) => (
-  <>
+  <div>
     <p className="my-1 mr-auto text-xs font-bold text-gray-700">{fieldLabel}</p>
     {helperText ? (
       <PopOnIcon icon={<IconsQuestion />} content={helperText} />
@@ -127,5 +127,5 @@ export const InputTextarea = <T extends InputValue>({
       className={overWriteCSS}
       {...register(label, { required, pattern })}
     />
-  </>
+  </div>
 );

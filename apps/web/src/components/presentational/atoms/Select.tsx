@@ -21,7 +21,7 @@ export const Select = <
   required,
   options,
 }: SelectProps<T, U>) => (
-  <>
+  <div>
     <label
       htmlFor={fieldLabel}
       className="my-2 mr-auto text-xs font-bold text-gray-700"
@@ -39,5 +39,5 @@ export const Select = <
         </option>
       ))}
     </select>
-  </>
+  </div>
 );

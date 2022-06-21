@@ -14,25 +14,27 @@ const UserProfilePage: NextPage = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error.message}</p>;
 
-  const res = data?.getUserById;
-  if (res?.__typename === 'Errors') {
-    <p>{res.applicationError?.message}</p>;
+  if (data?.getUserById.__typename === 'Errors') {
+    <p>{data.getUserById.applicationError?.message}</p>;
   }
-  if (res?.__typename === 'User') {
-    return (
-      <div>
-        <UserProfile
-          avatar={res?.avatarUrl || ''}
-          description={res?.selfIntro || ''}
-          image={res?.heroImageUrl || ''}
-          userName={res?.name || ''}
-          // orgs={belongOrgs}
-          // loggedIn={!!clientData?.getUserByCookie.user}
-        />
-      </div>
-    );
-  }
-  return <p>wip, something wrong</p>;
+
+  return (
+    <div>
+      {data?.getUserById.__typename === 'User' ? (
+        <div>
+          <UserProfile
+            avatar={data.getUserById.avatarUrl || ''}
+            description={data.getUserById.selfIntro || ''}
+            image={data.getUserById.heroImageUrl || ''}
+            userName={data.getUserById.name || ''}
+            orgs={data.getUserById.orgs?.edges?.map((org) => org.node) || []}
+          />
+        </div>
+      ) : (
+        <div>sorry, something wrong</div>
+      )}
+    </div>
+  );
 };
 
 export default UserProfilePage;

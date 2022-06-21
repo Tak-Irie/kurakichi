@@ -1,15 +1,19 @@
 {
   "extends": "@kurakichi/tsconfig/server.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "maxNodeModuleJsDepth": 10,
     "rootDir": ".",
     "outDir": "dist",
+    "target": "es6",
+    "module": "commonjs",
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
     "removeComments": true,
-    "allowJs": true
+    "paths": {
+      "@kurakichi/domain": [
+        "../../packages/domain"
+      ]
+    }
   },
   "include": [
     "src"

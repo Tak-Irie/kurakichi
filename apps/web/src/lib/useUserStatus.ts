@@ -4,7 +4,6 @@ import { useGetUserMyInfoQuery } from '../graphql';
 
 export const useUserStatus = () => {
   const { data, loading, error } = useGetUserMyInfoQuery({
-    ssr: false,
     fetchPolicy: 'cache-only',
   });
   const router = useRouter();

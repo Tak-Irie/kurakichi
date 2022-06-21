@@ -103,6 +103,12 @@ export type FellowEdge = {
   node: User;
 };
 
+export type Geocode = {
+  __typename?: 'Geocode';
+  lat: Scalars['String'];
+  lng: Scalars['String'];
+};
+
 export type InquiriesResult = Errors | InquiryConnection;
 
 export type Inquiry = Node & {
@@ -242,6 +248,7 @@ export type Mutation = {
   sendInquiry: InquiryResult;
   sendMessage: MessageResult;
   ssoLogin: SsoResult;
+  tempLogin: UserResult;
   updateInquiryStatus: InquiryResult;
   updateOrg: OrgResult;
   updateUser: UserResult;
@@ -382,6 +389,7 @@ export type Query = {
   getAddressByPostcode: AddressResult;
   getBase: BaseResult;
   getDialogsByBaseId: DialogsResult;
+  getGeocodeByPostcode: Geocode;
   getInquiriesByOrgId: InquiriesResult;
   getInquiriesByTreeId: InquiryTreeResult;
   getInquiry: InquiryResult;
@@ -411,6 +419,11 @@ export type QueryGetBaseArgs = {
 
 export type QueryGetDialogsByBaseIdArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetGeocodeByPostcodeArgs = {
+  postcode: Scalars['String'];
 };
 
 
@@ -669,6 +682,7 @@ export type ResolversTypes = {
   FellowConnection: ResolverTypeWrapper<FellowConnection>;
   FellowEdge: ResolverTypeWrapper<FellowEdge>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  Geocode: ResolverTypeWrapper<Geocode>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   InquiriesResult: ResolversTypes['Errors'] | ResolversTypes['InquiryConnection'];
   Inquiry: ResolverTypeWrapper<Omit<Inquiry, 'category' | 'inquiryStatus'> & { category?: Maybe<ResolversTypes['InquiryCategory']>, inquiryStatus?: Maybe<ResolversTypes['InquiryStatus']> }>;
@@ -753,6 +767,7 @@ export type ResolversParentTypes = {
   FellowConnection: FellowConnection;
   FellowEdge: FellowEdge;
   Float: Scalars['Float'];
+  Geocode: Geocode;
   ID: Scalars['ID'];
   InquiriesResult: ResolversParentTypes['Errors'] | ResolversParentTypes['InquiryConnection'];
   Inquiry: Omit<Inquiry, 'category' | 'inquiryStatus'> & { category?: Maybe<ResolversParentTypes['InquiryCategory']>, inquiryStatus?: Maybe<ResolversParentTypes['InquiryStatus']> };
@@ -901,6 +916,12 @@ export type FellowEdgeResolvers<ContextType = any, ParentType extends ResolversP
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isBaseAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   node?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GeocodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Geocode'] = ResolversParentTypes['Geocode']> = {
+  lat?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lng?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1068,6 +1089,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   sendInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationSendInquiryArgs, 'input'>>;
   sendMessage?: Resolver<ResolversTypes['MessageResult'], ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'input'>>;
   ssoLogin?: Resolver<ResolversTypes['SSOResult'], ParentType, ContextType, RequireFields<MutationSsoLoginArgs, 'provider'>>;
+  tempLogin?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType>;
   updateInquiryStatus?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<MutationUpdateInquiryStatusArgs, 'input'>>;
   updateOrg?: Resolver<ResolversTypes['OrgResult'], ParentType, ContextType, RequireFields<MutationUpdateOrgArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
@@ -1134,6 +1156,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAddressByPostcode?: Resolver<ResolversTypes['AddressResult'], ParentType, ContextType, RequireFields<QueryGetAddressByPostcodeArgs, 'postcode'>>;
   getBase?: Resolver<ResolversTypes['BaseResult'], ParentType, ContextType, RequireFields<QueryGetBaseArgs, 'id'>>;
   getDialogsByBaseId?: Resolver<ResolversTypes['DialogsResult'], ParentType, ContextType, RequireFields<QueryGetDialogsByBaseIdArgs, 'id'>>;
+  getGeocodeByPostcode?: Resolver<ResolversTypes['Geocode'], ParentType, ContextType, RequireFields<QueryGetGeocodeByPostcodeArgs, 'postcode'>>;
   getInquiriesByOrgId?: Resolver<ResolversTypes['InquiriesResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByOrgIdArgs, 'orgId'>>;
   getInquiriesByTreeId?: Resolver<ResolversTypes['InquiryTreeResult'], ParentType, ContextType, RequireFields<QueryGetInquiriesByTreeIdArgs, 'treeId'>>;
   getInquiry?: Resolver<ResolversTypes['InquiryResult'], ParentType, ContextType, RequireFields<QueryGetInquiryArgs, 'inquiryId'>>;
@@ -1220,6 +1243,7 @@ export type Resolvers<ContextType = any> = {
   Errors?: ErrorsResolvers<ContextType>;
   FellowConnection?: FellowConnectionResolvers<ContextType>;
   FellowEdge?: FellowEdgeResolvers<ContextType>;
+  Geocode?: GeocodeResolvers<ContextType>;
   InquiriesResult?: InquiriesResultResolvers<ContextType>;
   Inquiry?: InquiryResolvers<ContextType>;
   InquiryCategory?: GraphQLScalarType;
@@ -1288,7 +1312,7 @@ export type PageInfoFragment = { __typename?: 'PageInfo', endCursor?: string | n
 
 export type UserPrivateInfoFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null };
 
-export type UserPublicInfoFragment = { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null };
+export type UserPublicInfoFragment = { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null };
 
 export type AcceptToJoinOrgMutationVariables = Exact<{
   input: AcceptJoinOrgInput;
@@ -1391,6 +1415,11 @@ export type SendMessageMutationVariables = Exact<{
 
 export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } };
 
+export type TempLoginMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TempLoginMutation = { __typename?: 'Mutation', tempLogin: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, email?: string | null, selfIntro?: string | null, role?: UserRoleModel | null, avatarUrl?: string | null, heroImageUrl?: string | null, messages?: { __typename?: 'MessageConnection', edges?: Array<{ __typename?: 'MessageEdges', cursor: string, node: { __typename?: 'Message', content?: string | null, id: string, sentAt?: string | null, status?: MessageStatusModel | null, receiver?: { __typename?: 'User', id: string } | null, sender?: { __typename?: 'User', id: string } | null } }> | null, pageInfo?: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean } | null } | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
+
 export type UpdateUserMutationVariables = Exact<{
   input: UpdateUserInput;
 }>;
@@ -1438,6 +1467,13 @@ export type GetOrgsForMapQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetOrgsForMapQuery = { __typename?: 'Query', getOrgs: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'Orgs', orgs?: Array<{ __typename?: 'Org', avatarUrl?: string | null, description?: string | null, email?: string | null, heroImageUrl?: string | null, homePage?: string | null, id: string, name?: string | null, phoneNumber?: string | null, address?: { __typename?: 'Address', address: string, latitude?: number | null, longitude?: number | null } | null }> | null } };
 
+export type GetGeocodeByPostcodeQueryVariables = Exact<{
+  postcode: Scalars['String'];
+}>;
+
+
+export type GetGeocodeByPostcodeQuery = { __typename?: 'Query', getGeocodeByPostcode: { __typename?: 'Geocode', lat: string, lng: string } };
+
 export type GetMessagesByTreeIdQueryVariables = Exact<{
   treeId: Scalars['String'];
 }>;
@@ -1460,7 +1496,7 @@ export type GetUserPublicInfoQueryVariables = Exact<{
 }>;
 
 
-export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null } };
+export type GetUserPublicInfoQuery = { __typename?: 'Query', getUserById: { __typename?: 'Errors', applicationError?: { __typename?: 'ApplicationError', message: string } | null, userError?: { __typename?: 'UserError', message: string } | null } | { __typename?: 'User', id: string, name?: string | null, selfIntro?: string | null, avatarUrl?: string | null, heroImageUrl?: string | null, orgs?: { __typename?: 'OrgConnection', edges?: Array<{ __typename?: 'OrgEdges', cursor: string, node: { __typename?: 'Org', id: string, name?: string | null } }> | null } | null } };
 
 export type DialogPostedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -1719,6 +1755,15 @@ export const UserPublicInfoFragmentDoc = gql`
   selfIntro
   avatarUrl
   heroImageUrl
+  orgs {
+    edges {
+      cursor
+      node {
+        id
+        name
+      }
+    }
+  }
 }
     `;
 export const AcceptToJoinOrgDocument = gql`
@@ -2356,6 +2401,44 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const TempLoginDocument = gql`
+    mutation TempLogin {
+  tempLogin {
+    ... on User {
+      ...UserPrivateInfo
+    }
+    ... on Errors {
+      ...Errors
+    }
+  }
+}
+    ${UserPrivateInfoFragmentDoc}
+${ErrorsFragmentDoc}`;
+export type TempLoginMutationFn = Apollo.MutationFunction<TempLoginMutation, TempLoginMutationVariables>;
+
+/**
+ * __useTempLoginMutation__
+ *
+ * To run a mutation, you first call `useTempLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTempLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [tempLoginMutation, { data, loading, error }] = useTempLoginMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTempLoginMutation(baseOptions?: Apollo.MutationHookOptions<TempLoginMutation, TempLoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TempLoginMutation, TempLoginMutationVariables>(TempLoginDocument, options);
+      }
+export type TempLoginMutationHookResult = ReturnType<typeof useTempLoginMutation>;
+export type TempLoginMutationResult = Apollo.MutationResult<TempLoginMutation>;
+export type TempLoginMutationOptions = Apollo.BaseMutationOptions<TempLoginMutation, TempLoginMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($input: updateUserInput!) {
   updateUser(input: $input) {
@@ -2644,6 +2727,42 @@ export function useGetOrgsForMapLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetOrgsForMapQueryHookResult = ReturnType<typeof useGetOrgsForMapQuery>;
 export type GetOrgsForMapLazyQueryHookResult = ReturnType<typeof useGetOrgsForMapLazyQuery>;
 export type GetOrgsForMapQueryResult = Apollo.QueryResult<GetOrgsForMapQuery, GetOrgsForMapQueryVariables>;
+export const GetGeocodeByPostcodeDocument = gql`
+    query GetGeocodeByPostcode($postcode: String!) {
+  getGeocodeByPostcode(postcode: $postcode) {
+    lat
+    lng
+  }
+}
+    `;
+
+/**
+ * __useGetGeocodeByPostcodeQuery__
+ *
+ * To run a query within a React component, call `useGetGeocodeByPostcodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGeocodeByPostcodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGeocodeByPostcodeQuery({
+ *   variables: {
+ *      postcode: // value for 'postcode'
+ *   },
+ * });
+ */
+export function useGetGeocodeByPostcodeQuery(baseOptions: Apollo.QueryHookOptions<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>(GetGeocodeByPostcodeDocument, options);
+      }
+export function useGetGeocodeByPostcodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>(GetGeocodeByPostcodeDocument, options);
+        }
+export type GetGeocodeByPostcodeQueryHookResult = ReturnType<typeof useGetGeocodeByPostcodeQuery>;
+export type GetGeocodeByPostcodeLazyQueryHookResult = ReturnType<typeof useGetGeocodeByPostcodeLazyQuery>;
+export type GetGeocodeByPostcodeQueryResult = Apollo.QueryResult<GetGeocodeByPostcodeQuery, GetGeocodeByPostcodeQueryVariables>;
 export const GetMessagesByTreeIdDocument = gql`
     query GetMessagesByTreeId($treeId: String!) {
   getMessagesByTreeId(treeId: $treeId) {

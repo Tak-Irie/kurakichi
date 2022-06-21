@@ -7,3 +7,4 @@ export * from './postcodeApi';
 export * from './RegularExpressions';
 export * from './sanitize';
 export * from './tailwindJoin';
+export * from './PrismaClient';

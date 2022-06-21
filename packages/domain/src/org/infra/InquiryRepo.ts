@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../shared';
+
 import { Nothing } from '../../shared/core';
 import { UniqueEntityId } from '../../shared/domain';
 import { IInquiryRepo, Inquiry } from '../domain';
@@ -8,7 +10,7 @@ import { InquiryMapper } from './InquiryMapper';
 export class InquiryRepo implements IInquiryRepo {
   private prisma: PrismaClient;
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = prisma;
   }
 
   async registerInquiry(inquiry: Inquiry): Promise<Inquiry> {

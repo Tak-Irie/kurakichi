@@ -28,7 +28,7 @@ export const UpdateInquiryStatusButton: FC<UpdateInquiryStatusButtonProps> = ({
   };
 
   return (
-    <>
+    <div>
       <NotificationSet
         succeededContent={
           data?.updateInquiryStatus?.__typename === 'Inquiry'
@@ -49,6 +49,6 @@ export const UpdateInquiryStatusButton: FC<UpdateInquiryStatusButtonProps> = ({
         buttonLabel="対応状況を更新する"
         onClick={handleClick}
       />
-    </>
+    </div>
   );
 };

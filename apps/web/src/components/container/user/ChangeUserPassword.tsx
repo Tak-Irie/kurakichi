@@ -45,7 +45,7 @@ export const ChangeUserPassword: FC = () => {
   }
   if (!loading && data?.changePassword) {
     return (
-      <>
+      <div>
         {/* <NotificationSet
       succeededContent={}
       succeededLabel={}
@@ -91,7 +91,7 @@ export const ChangeUserPassword: FC = () => {
             />
           </div>
         </Form>
-      </>
+      </div>
     );
   }
   return <p>something wrong</p>;

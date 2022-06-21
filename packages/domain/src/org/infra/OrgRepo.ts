@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../shared';
+
 import { UniqueEntityId } from '../../shared/domain';
 import { IOrgRepo, Org } from '../domain';
 import { OrgName } from '../domain/OrgName';
@@ -8,7 +10,7 @@ import { OrgMapper } from './OrgMapper';
 export class OrgRepo implements IOrgRepo {
   private prisma: PrismaClient;
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = prisma;
   }
 
   async confirmOrgByName(orgName: OrgName): Promise<boolean> {
@@ -50,7 +52,7 @@ export class OrgRepo implements IOrgRepo {
   }
 
   async getOrgs(): Promise<Org[]> {
-    console.log('catch getOrgs:');
+    // console.log('catch getOrgs:');
     const dbOrgs = await this.prisma.organization.findMany({
       include: {
         members: { select: { id: true } },

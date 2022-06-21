@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../shared';
 import { UniqueEntityId } from '../../shared/domain';
 import { IUserRepository, User, UserEmail, UserPassword } from '../domain';
 import { UserReadModel } from '../tempRead/UserReadModel';
@@ -7,7 +8,7 @@ import { StoredUserRelation, UserMapper } from './UserMapper';
 export class UserRepository implements IUserRepository {
   private prisma: PrismaClient;
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = prisma;
   }
 
   async confirmExistence(userEmail: UserEmail): Promise<boolean> {

@@ -7,12 +7,12 @@ type LayoutProps = {
 };
 
 const Layout: FC<LayoutProps> = ({ children }) => (
-  <>
+  <div>
     <NavAlpha />
     <MenuBar />
     <main className="h-max bg-green-50">{children}</main>
     <Footer />
-  </>
+  </div>
 );
 
 export { Layout };

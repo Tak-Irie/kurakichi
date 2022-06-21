@@ -39,7 +39,7 @@ export const ForgotPasswordForm: FC = () => {
     }
   };
   return (
-    <>
+    <div>
       <NotificationSet
         succeededContent={
           data?.forgetPassword?.__typename === 'Succeeded'
@@ -73,6 +73,6 @@ export const ForgotPasswordForm: FC = () => {
           />
         </div>
       </Form>
-    </>
+    </div>
   );
 };

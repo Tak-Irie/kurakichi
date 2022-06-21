@@ -1,4 +1,5 @@
 import {
+  DTOUser,
   getUserMyInfo,
   useDeleteUserUsecase,
   useForgotPasswordUsecase,
@@ -17,6 +18,7 @@ import { ssoLogin } from '../../service/SSOService';
 import { COOKIE_NAME } from '../../util/Constants';
 import { returnErrorToGQL } from '../../util/FunctionsForGqlResolver';
 import { dtoUsersToGql, dtoUserToGql, readUserToGql } from '../DTOtoGql';
+import { GoogleMapAPIService } from '../../service';
 
 export const UserResolver: Resolvers<ApolloContext> = {
   Query: {
@@ -28,14 +30,6 @@ export const UserResolver: Resolvers<ApolloContext> = {
           applicationError: { message: 'miss' },
         };
       }
-
-      // console.log('confirm cookie!:');
-      // FIXME:CQRS
-      // const usecaseResult = await useGetUserById.execute({ id: idInCookie });
-      // console.log('me/usecaseResult:', usecaseResult);
-      // if (usecaseResult.isLeft())
-      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
-
       const res = await getUserMyInfo(idInCookie);
       if (res === false) return returnErrorToGQL('wip');
 
@@ -45,7 +39,6 @@ export const UserResolver: Resolvers<ApolloContext> = {
         ...user,
       };
     },
-
     getUserById: async (_, { userId }) => {
       const usecaseResult = await useGetUserById.execute({ id: userId });
       if (usecaseResult.isLeft())
@@ -65,6 +58,22 @@ export const UserResolver: Resolvers<ApolloContext> = {
       return {
         __typename: 'Users',
         users,
+      };
+    },
+    // FIXME: temp impl
+    getGeocodeByPostcode: async (_, { postcode }) => {
+      const result = await GoogleMapAPIService.getGeoCodeByPostcode(postcode);
+      if (result === false) {
+        return {
+          __typename: 'Geocode',
+          lat: '0',
+          lng: '0',
+        };
+      }
+      return {
+        __typename: 'Geocode',
+        lat: `${result.lat}`,
+        lng: `${result.lng}`,
       };
     },
   },
@@ -180,6 +189,26 @@ export const UserResolver: Resolvers<ApolloContext> = {
       return {
         __typename: 'User',
         ...user,
+      };
+    },
+    tempLogin: (_, __, { req }) => {
+      const dtoUser: DTOUser = {
+        id: '01G5B8CDH1S1KGFM06KHQDTHRD',
+        userName: 'sampleAdmin',
+        avatarUrl: '/asian_man4.jpg',
+        selfIntro: 'サンプル管理者です',
+        email: 'example-visitor@example.com',
+        heroImageUrl: 'UNKNOWN',
+        role: 'EXPERT',
+        belongBases: [],
+        belongOrgs: ['01G5B8CM45MBTGC9YRPF4G5MEZ'],
+        messages: [],
+      };
+      const gqlUser = dtoUserToGql(dtoUser);
+      req.session.userId = gqlUser.id;
+      return {
+        __typename: 'User',
+        ...gqlUser,
       };
     },
     // replyMessage:async () => {},

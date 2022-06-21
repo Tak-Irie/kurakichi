@@ -35,7 +35,7 @@ export const OrgMyPage: FC<OrgMyPageProps> = ({ org }) => {
   // const descById = unreadInq.reverse();
   // const descById = [...inquiries].reverse();
   return (
-    <>
+    <div>
       <div className="col-start-3 col-end-10 mt-5">
         <TextLabel content="未読お問い合わせ" />
         {unreadInq[0] ? (
@@ -53,7 +53,10 @@ export const OrgMyPage: FC<OrgMyPageProps> = ({ org }) => {
             label="所在地"
             content={address?.address || FAIL_TO_FETCH}
           />
-          <GridItem label="ホームページ" content={homePage || FAIL_TO_FETCH} />
+          <GridItem
+            label="ホームページ"
+            content={homePage || 'ホームページが登録されていません'}
+          />
           <GridItem
             label="私達について"
             content={description || '団体の概要を記入して下さい'}
@@ -64,6 +67,6 @@ export const OrgMyPage: FC<OrgMyPageProps> = ({ org }) => {
       <div className="col-start-3 col-end-10 mt-5">
         <TableOrgMember members={givenMembers} />
       </div>
-    </>
+    </div>
   );
 };

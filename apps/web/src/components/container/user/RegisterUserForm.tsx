@@ -76,7 +76,7 @@ export const RegisterUserForm: FC = () => {
 
   // if (data?.registerUser?.__typename === 'Errors' || null) {
   return (
-    <>
+    <div>
       <NotificationSet
         succeededContent=""
         succeededLabel={
@@ -122,6 +122,6 @@ export const RegisterUserForm: FC = () => {
           />
         </div>
       </Form>
-    </>
+    </div>
   );
 };

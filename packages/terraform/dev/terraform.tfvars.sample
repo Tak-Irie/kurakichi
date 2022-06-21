@@ -1,0 +1,22 @@
+domain_name                      =
+domain_address                   =
+vpc_id                           =
+cidr_block                       =
+private_subnet_1a_id             =
+public_subnet_1a_id              =
+public_subnet_1c_id              =
+route_table_id_private_subnet_1a =
+acm_arn                          =
+kms_arn                          =
+secrets_manager_name             =
+secret_manager_arn               =
+express_image                    =
+redis_image                      =
+psql_image                       =
+
+
+
+
+
+
+

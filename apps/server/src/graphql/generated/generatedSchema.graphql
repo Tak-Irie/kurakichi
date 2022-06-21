@@ -64,6 +64,11 @@ type FellowEdge {
   node: User!
 }
 
+type Geocode {
+  lat: String!
+  lng: String!
+}
+
 union InquiriesResult = Errors | InquiryConnection
 
 type Inquiry implements Node {
@@ -195,6 +200,7 @@ type Mutation {
   sendInquiry(input: SendInquiryInput!): InquiryResult!
   sendMessage(input: sendMessageInput!): MessageResult!
   ssoLogin(provider: String!): SSOResult!
+  tempLogin: UserResult!
   updateInquiryStatus(input: UpdateInquiryStatusInput!): InquiryResult!
   updateOrg(input: UpdateOrgInput!): OrgResult!
   updateUser(input: updateUserInput!): UserResult!
@@ -249,6 +255,7 @@ type Query {
   getAddressByPostcode(postcode: String!): AddressResult!
   getBase(id: String!): BaseResult!
   getDialogsByBaseId(id: String!): DialogsResult!
+  getGeocodeByPostcode(postcode: String!): Geocode!
   getInquiriesByOrgId(orgId: String!): InquiriesResult!
   getInquiriesByTreeId(treeId: String!): InquiryTreeResult!
   getInquiry(inquiryId: String!): InquiryResult!

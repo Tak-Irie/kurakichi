@@ -19,6 +19,7 @@ export const GeocodeByBrowserButton: FC<GeocodeByBrowserButtonProps> = ({
   const [isLocation, setIsLocation] = useState<GeolocationCoordinates>();
 
   const handleClick = () => {
+    // console.log('click:');
     navigator.geolocation.getCurrentPosition(
       (position) => setIsLocation(position.coords),
       (err) => console.log('err:', err.message),
@@ -31,6 +32,7 @@ export const GeocodeByBrowserButton: FC<GeocodeByBrowserButtonProps> = ({
   };
 
   useEffect(() => {
+    // console.log('isLoc1:', isLocation);
     if (isLocation) {
       dispatcher({ lat: isLocation.latitude, lng: isLocation.longitude });
     }

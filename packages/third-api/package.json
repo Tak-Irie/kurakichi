@@ -1,7 +1,7 @@
 {
   "name": "@kurakichi/third-api",
   "version": "0.0.1",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --build",

@@ -29,7 +29,7 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
       // const org = dtoOrgToGql(usecaseResult.value.getValue());
 
-      // temp
+      // FIXME:temp for PF
       const readResult = await getOrgPublicInfoById(id);
       if (readResult === false) {
         return returnErrorToGQL('wip');
@@ -48,16 +48,11 @@ export const OrgResolver: Resolvers<ApolloContext> = {
       return { __typename: 'Orgs', orgs };
     },
     getOrgInfoByMemberCookieAndId: async (_, { orgId }, { idInCookie }) => {
+      console.log('getOrgInfo:', idInCookie);
       if (idInCookie === undefined) return returnNotLoggedIn();
-      // const usecaseResult = await useGetOrgsByMemberIdUsecase.execute({
-      //   memberId: idInCookie,
-      // });
-      // if (usecaseResult.isLeft())
-      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
-      // const orgs = dtoOrgsToGql(usecaseResult.value.getValue());
-
       const result = await getOrgPrivateInfoByCookieAndId(orgId, idInCookie);
-      if (result === false) return returnErrorToGQL('wip');
+      if (result === false)
+        return returnErrorToGQL('Error - 管理者に報告して下さい');
       const { inquiries, ...rest } = result;
       const gqlOrg = readOrgToGql(rest);
       const gqlInq = readInquiresToConn(inquiries);
@@ -73,14 +68,6 @@ export const OrgResolver: Resolvers<ApolloContext> = {
           __typename: 'Errors',
           applicationError: { message: '郵便番号が存在しません' },
         };
-      // const usecaseResult = await useGetAddressByPostcode.execute({ postcode });
-      // // console.log('ucresult:', usecaseResult);
-      // if (usecaseResult.isLeft())
-      //   return {
-      //     __typename: 'Errors',
-      //     applicationError: { message: usecaseResult.value.getErrorValue() },
-      //   };
-      // console.log('ucresult:', usecaseResult.value);
       return {
         __typename: 'Address',
         address,

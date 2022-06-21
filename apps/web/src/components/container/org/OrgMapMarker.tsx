@@ -21,7 +21,7 @@ export const OrgMapMarker: FC = () => {
   if (data?.getOrgs?.__typename === 'Orgs' && data.getOrgs.orgs) {
     const { orgs } = data.getOrgs;
     return (
-      <>
+      <div>
         {orgs.map((org) => (
           <Marker
             key={org.id}
@@ -32,7 +32,7 @@ export const OrgMapMarker: FC = () => {
             }}
           />
         ))}
-      </>
+      </div>
     );
   }
 

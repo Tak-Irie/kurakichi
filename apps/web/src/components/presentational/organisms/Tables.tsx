@@ -38,7 +38,7 @@ export const TableOrg: FC<TableOrgProps> = ({
   tableLabel = '所属団体',
   textOfNotExist = '団体に所属していません',
 }) => (
-  <>
+  <div>
     <TextLabel content={tableLabel} />
     {orgs[0] ? (
       orgs.map((org) => (
@@ -55,7 +55,7 @@ export const TableOrg: FC<TableOrgProps> = ({
     ) : (
       <TextSmall content={textOfNotExist} />
     )}
-  </>
+  </div>
 );
 
 export const TableOrgMember: FC<TableOrgMemberProps> = ({
@@ -63,7 +63,7 @@ export const TableOrgMember: FC<TableOrgMemberProps> = ({
   tableLabel = '団体メンバー',
   textOfNotExist = 'メンバーが読み込めません、お手数ですが管理者にお問い合わせ下さい',
 }) => (
-  <>
+  <div>
     <TextLabel content={tableLabel} />
     {members[0] ? (
       members.map((member) => (
@@ -71,7 +71,7 @@ export const TableOrgMember: FC<TableOrgMemberProps> = ({
           <CardWithPick
             image={member.avatarUrl || '/asian_man1.jpg'}
             title={member.name || FAIL_TO_FETCH}
-            content={member.selfIntro || FAIL_TO_FETCH}
+            // content={member.selfIntro || FAIL_TO_FETCH}
             imageAlt="ユーザーアバター"
             linkUrl="/user/[id]"
             linkAs={`/user/${member.id}`}
@@ -81,14 +81,14 @@ export const TableOrgMember: FC<TableOrgMemberProps> = ({
     ) : (
       <TextSmall content={textOfNotExist} />
     )}
-  </>
+  </div>
 );
 export const TableBase: FC<TableSecureBaseProps> = ({
   bases,
   tableLabel = '所属ベース',
   textOfNotExist = 'ベースに所属していません',
 }) => (
-  <>
+  <div>
     <TextLabel content={tableLabel} />
     {bases[0] ? (
       bases.map((base) => (
@@ -104,7 +104,7 @@ export const TableBase: FC<TableSecureBaseProps> = ({
     ) : (
       <TextSmall content={textOfNotExist} />
     )}
-  </>
+  </div>
 );
 
 export const TableMessage: FC<TableMessageProps> = ({
@@ -112,7 +112,7 @@ export const TableMessage: FC<TableMessageProps> = ({
   tableLabel = '新着メッセージ',
   textOfNotExist = '新着メッセージはありません',
 }) => (
-  <>
+  <div>
     <TextLabel content={tableLabel} />
     {messages[0] ? (
       <div className="bg-gray-50 rounded-lg border-2 border-gray-200 shadow">
@@ -148,7 +148,7 @@ export const TableMessage: FC<TableMessageProps> = ({
                   src={message.sender?.avatarUrl || ''}
                   alt="ユーザーアバター"
                 />
-                <TextSmall content={message.sender?.name || FAIL_TO_FETCH} />
+                <TextSmall content={message.sender?.name || ''} />
               </div>
               <div className="overflow-scroll col-span-4 py-4 mx-1 whitespace-nowrap">
                 <TextSmall content={message.content || FAIL_TO_FETCH} />
@@ -163,7 +163,7 @@ export const TableMessage: FC<TableMessageProps> = ({
     ) : (
       <TextSmall content={textOfNotExist} />
     )}
-  </>
+  </div>
 );
 
 export const TableInquiry: FC<TableInquiryProps> = ({

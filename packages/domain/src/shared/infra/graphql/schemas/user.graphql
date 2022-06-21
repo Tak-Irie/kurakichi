@@ -70,6 +70,7 @@ type Query {
   getUsers: UsersResult!
   getMessagesByCookie: MessagesResult!
   getMessagesByTreeId(treeId: String!): MessageTreeResult!
+  getGeocodeByPostcode(postcode: String!): Geocode!
 }
 
 type Mutation {
@@ -79,6 +80,7 @@ type Mutation {
   logoutUser: BoolResult!
   deleteUser: BoolResult!
   ssoLogin(provider: String!): SSOResult!
+  tempLogin: UserResult!
   forgetPassword(email: String!): BoolResult!
   changePassword(input: changePasswordInput): BoolResult!
   sendMessage(input: sendMessageInput!): MessageResult!
@@ -91,6 +93,11 @@ union MessageResult = Message | Errors
 union MessagesResult = Messages | Errors
 union MessageTreeResult = MessageTree | Errors
 union SSOResult = SSO | Errors
+
+type Geocode {
+  lat: String!
+  lng: String!
+}
 
 type SSO {
   url: String!
