@@ -4,6 +4,8 @@
 
 このアプリケーションは、Proof Of Concept であり、Portfolio です。
 
+※ 製作途上であり、アーキテクチャーや技術が変更になることがあります。
+
 ## 使用技術
 
 ![kurakichi-technologies](https://github.com/Tak-Irie/kurakichi/blob/imagesForGithub/images/kurakichi-technologies.webp)
