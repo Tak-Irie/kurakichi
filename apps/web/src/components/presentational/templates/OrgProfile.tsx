@@ -29,7 +29,7 @@ export const OrgProfile: FC<OrgProfileProps> = ({ org }) => {
         content={description || '団体の概要を記入して下さい'}
       />
       <div className="col-span-2 mt-1 w-auto h-[400px]">
-        <Map>
+        <Map center={geo}>
           <Marker position={geo} />
         </Map>
       </div>
