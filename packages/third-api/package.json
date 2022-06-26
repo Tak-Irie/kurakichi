@@ -9,13 +9,13 @@
     "lint": "eslint src --fix"
   },
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.3.13",
+    "@googlemaps/google-maps-services-js": "^3.3.16",
     "@kurakichi/domain": "*",
     "@sendgrid/mail": "^7.6.2",
-    "ioredis": "^5.0.4"
+    "ioredis": "^5.1.0"
   },
   "devDependencies": {
     "@kurakichi/tsconfig": "*",
-    "typescript": "^4.5.3"
+    "typescript": "^4.7.4"
   }
 }
