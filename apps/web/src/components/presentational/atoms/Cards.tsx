@@ -75,7 +75,6 @@ export const CardWithPick: FC<CardProps> = ({
   image,
   imageAlt,
   linkUrl = '/',
-  linkAs = '/',
   title,
 }) => (
   <div className="flex relative items-center py-5 px-6 space-x-3 bg-white rounded-lg border border-gray-300 hover:border-gray-400 focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 shadow-sm">
@@ -83,7 +82,7 @@ export const CardWithPick: FC<CardProps> = ({
       <img className="w-10 h-10 rounded-full" src={image} alt={imageAlt} />
     </div>
     <div className="flex-1 min-w-0">
-      <Link href={linkUrl} as={linkAs} passHref>
+      <Link href={linkUrl} passHref>
         <a href="replace" className="focus:outline-none">
           <div className="absolute inset-0" aria-hidden="true" />
           <p className="text-sm font-medium text-gray-900">{title}</p>

@@ -86,27 +86,48 @@ export const readUserToGql = (user: UserReadModel): User => {
     selfIntro,
     heroImageUrl,
     receivedMessages,
+    belongOrgs,
   } = user;
 
-  const edges: MessageEdges[] = receivedMessages.map((mes) => {
-    const { receiverId, senderId, content, messageTreeId, status, ...rest } =
-      mes;
-    return {
-      cursor: mes.id,
-      node: {
-        receiver: { id: receiverId },
-        sender: { id: senderId },
-        content,
-        status,
-        ...rest,
-      },
-    };
-  });
+  let messages: MessageConnection | undefined;
+  let orgs: OrgConnection | undefined;
 
-  const messages: MessageConnection = {
-    pageInfo: { hasNext: false, hasPrevious: false },
-    edges,
-  };
+  if (receivedMessages) {
+    const edges: MessageEdges[] = receivedMessages.map((mes) => {
+      const { receiverId, senderId, content, messageTreeId, status, ...rest } =
+        mes;
+      return {
+        cursor: mes.id,
+        node: {
+          receiver: { id: receiverId },
+          sender: { id: senderId },
+          content,
+          status,
+          ...rest,
+        },
+      };
+    });
+
+    messages = {
+      pageInfo: { hasNext: false, hasPrevious: false },
+      edges,
+    };
+  }
+
+  if (belongOrgs) {
+    const orgEdges: OrgEdges[] = belongOrgs.map((org) => ({
+      cursor: org.id,
+      node: {
+        id: org.id,
+        name: org.name,
+      },
+    }));
+
+    orgs = {
+      pageInfo: { hasNext: false, hasPrevious: false },
+      edges: orgEdges,
+    };
+  }
 
   return {
     __typename: 'User',
@@ -118,5 +139,6 @@ export const readUserToGql = (user: UserReadModel): User => {
     avatarUrl,
     heroImageUrl,
     messages,
+    orgs,
   };
 };

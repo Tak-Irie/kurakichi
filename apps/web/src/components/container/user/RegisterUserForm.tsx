@@ -57,6 +57,7 @@ export const RegisterUserForm: FC = () => {
               },
             });
           }
+          // console.log('registered:', res);
         },
         // fetchPolicy: 'no-cache',
       });

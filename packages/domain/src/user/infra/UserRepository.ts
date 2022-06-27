@@ -152,6 +152,26 @@ export class UserRepository implements IUserRepository {
       include: { receivedMessages: true },
     });
     if (!data) return false;
-    return { sentMessages: [], ...data };
+    return { sentMessages: [], belongOrgs: [], ...data };
+  }
+  async getUserByIdTemp(userId: string): Promise<false | UserReadModel> {
+    const data = await this.prisma.user.findFirst({
+      where: { id: userId },
+      include: { belongOrgs: { select: { id: true, name: true } } },
+    });
+    if (!data) return false;
+    return { sentMessages: [], receivedMessages: [], ...data };
+  }
+
+  async getSentInquiryByUserIdTemp(
+    userId: string,
+  ): Promise<false | UserReadModel> {
+    const data = await this.prisma.user.findFirst({
+      where: { id: userId },
+      include: { sentInquiries: true },
+    });
+    if (!data) return false;
+
+    return { ...data };
   }
 }

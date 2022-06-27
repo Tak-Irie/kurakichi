@@ -34,7 +34,7 @@ const HowToPage: NextPage = () => (
         <p className="max-w-2xl indent-4">
           あなたがお住まいの地域の事業者を探すことができます。
         </p>
-        <div className="flex mt-3 h-96">
+        <div className="flex justify-between mt-3 h-96">
           <div className="basis-1/3">
             <TempList
               list={[
@@ -99,7 +99,7 @@ const HowToPage: NextPage = () => (
               くらきち内で、事業利用の全てを完結できるようにすることが目標である。
             </p>
           </div>
-          <div className="relative basis-2/3 h-full">
+          <div className="relative basis-2/3 ml-4 h-full">
             <Image
               src="/howto-inquiry.webp"
               layout="fill"

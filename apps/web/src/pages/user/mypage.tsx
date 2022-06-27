@@ -37,7 +37,7 @@ const MyPage: NextPage = () => {
         image={fetchedUser.heroImageUrl || ''}
         userName={fetchedUser.name || ''}
         headerButtons={
-          <div>
+          <div className="flex justify-around">
             <Link href="/user/setting" passHref>
               <a href="replace">
                 <ButtonWithIcon

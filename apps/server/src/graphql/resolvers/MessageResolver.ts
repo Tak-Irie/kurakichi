@@ -27,6 +27,7 @@ export const MessageResolver: Resolvers<ApolloContext> = {
       //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
 
       const result = await getMessagesByCookie(idInCookie);
+      console.log('getMessagesByCookie res:', result);
       if (result === false) return returnErrorToGQL('wip');
 
       const messages = readMessagesToGql(result);

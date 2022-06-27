@@ -3,12 +3,13 @@ import {
   getUserMyInfo,
   useDeleteUserUsecase,
   useForgotPasswordUsecase,
-  useGetUserById,
+  // useGetUserById,
   useGetUsersUsecase,
   useLoginUserUsecase,
   useLogoutUserUsecase,
   useRegisterUserUsecase,
   useUpdateUserUsecase,
+  getUserByIdTemp,
 } from '@kurakichi/domain';
 
 import { Resolvers } from '../generated/generatedTypes';
@@ -40,11 +41,20 @@ export const UserResolver: Resolvers<ApolloContext> = {
       };
     },
     getUserById: async (_, { userId }) => {
-      const usecaseResult = await useGetUserById.execute({ id: userId });
-      if (usecaseResult.isLeft())
-        return returnErrorToGQL(usecaseResult.value.getErrorValue());
+      // FIXME:
+      // const usecaseResult = await useGetUserById.execute({ id: userId });
+      // if (usecaseResult.isLeft())
+      //   return returnErrorToGQL(usecaseResult.value.getErrorValue());
+      // const user = dtoUserToGql(usecaseResult.value.getValue());
 
-      const user = dtoUserToGql(usecaseResult.value.getValue());
+      // temporary impl fnc using readModel
+
+      const result = await getUserByIdTemp(userId);
+      // console.log('getUserTemp:', result);
+      if (result === false) return returnErrorToGQL('ユーザーが存在しません');
+
+      const user = readUserToGql(result);
+
       return {
         __typename: 'User',
         ...user,
@@ -211,6 +221,7 @@ export const UserResolver: Resolvers<ApolloContext> = {
         ...gqlUser,
       };
     },
+
     // replyMessage:async () => {},
     // sendMessage: async() => {},
 

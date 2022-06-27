@@ -73,7 +73,6 @@ export const NavAuthSection: FC = () => {
               <AvatarSmall
                 src={authorizedUser.avatarUrl || FAIL_TO_FETCH}
                 alt="ユーザーアバター"
-                notification
               />
               <IconsVerticalDots />
             </div>

@@ -8,8 +8,10 @@ export type UserReadModel = {
   heroImageUrl: string;
   selfIntro: string;
   role: string;
-  receivedMessages: Message[];
-  sentMessages: Message[];
+  receivedMessages?: Message[];
+  sentMessages?: Message[];
+  belongOrgs?: Org[];
+  sentInquiries?: Inquiry[];
 };
 
 type Message = {
@@ -20,4 +22,21 @@ type Message = {
   sentAt: string;
   status: 'SENT' | 'READ' | 'UNREAD' | 'DRAFT';
   messageTreeId: string;
+};
+
+type Org = {
+  id: string;
+  name: string;
+};
+
+type Inquiry = {
+  id: string;
+  content: string;
+  senderId: string;
+  receiverId: string;
+  receivedOrgId: string;
+  inquiryTreeId: string;
+  sentAt: string;
+  category: string;
+  status: string;
 };

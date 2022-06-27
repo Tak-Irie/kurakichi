@@ -48,7 +48,10 @@ export const dtoMessagesToTree = ({
 export const readMessagesToGql = (user: UserReadModel): Message[] => {
   const { receivedMessages, sentMessages } = user;
 
-  return receivedMessages.concat(sentMessages);
+  if (receivedMessages && sentMessages) {
+    return receivedMessages.concat(sentMessages);
+  }
+  return [];
 };
 
 // export const dtoMessageWithSenderToGql = (

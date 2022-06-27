@@ -18,7 +18,7 @@ export const Disclosure: FC<DisclosureProps> = ({
   labelCSS,
 }) => (
   <HeadlessDisclosure>
-    {({ open }) => (
+    {({ open }: { open: boolean }) => (
       <div>
         <HeadlessDisclosure.Button>
           {typeof label === 'string' ? (

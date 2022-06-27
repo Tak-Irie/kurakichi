@@ -43,10 +43,10 @@ export const ChangeUserPassword: FC = () => {
   if (data?.changePassword?.__typename === 'Errors') {
     return <p>{data.changePassword.applicationError?.message}</p>;
   }
-  if (!loading && data?.changePassword) {
-    return (
-      <div>
-        {/* <NotificationSet
+
+  return (
+    <div>
+      {/* <NotificationSet
       succeededContent={}
       succeededLabel={}
       errContent={}
@@ -59,40 +59,38 @@ export const ChangeUserPassword: FC = () => {
         errDataContent={data?.changePassword.message}
         dataContent={data?.changePassword.message}
       /> */}
-        <Form
-          overWriteCSS="flex flex-col space-y-2"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Input<ChangeUserPasswordInput>
-            type="password"
-            fieldLabel="現在のパスワード"
-            label="currentPass"
-            helperText="現在のパスワードを入力して下さい"
-            errMessage={errors.currentPass && errors.currentPass.message}
-            pattern={PasswordRegExp}
-            required
-            register={register}
+      <Form
+        overWriteCSS="flex flex-col space-y-2"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Input<ChangeUserPasswordInput>
+          type="password"
+          fieldLabel="現在のパスワード"
+          label="currentPass"
+          helperText="現在のパスワードを入力して下さい"
+          errMessage={errors.currentPass && errors.currentPass.message}
+          pattern={PasswordRegExp}
+          required
+          register={register}
+        />
+        <Input<ChangeUserPasswordInput>
+          type="password"
+          fieldLabel="新しいパスワード"
+          label="newPass"
+          helperText="パスワードは英数字を8文字以上を入力して下さい"
+          errMessage={errors.newPass && errors.newPass.message}
+          pattern={PasswordRegExp}
+          required
+          register={register}
+        />
+        <div className="flex justify-end">
+          <ButtonOrLoading
+            loading={loading}
+            buttonType="submit"
+            buttonLabel="パスワードを変更する"
           />
-          <Input<ChangeUserPasswordInput>
-            type="password"
-            fieldLabel="新しいパスワード"
-            label="newPass"
-            helperText="パスワードは英数字を8文字以上を入力して下さい"
-            errMessage={errors.newPass && errors.newPass.message}
-            pattern={PasswordRegExp}
-            required
-            register={register}
-          />
-          <div className="flex justify-end">
-            <ButtonOrLoading
-              loading={loading}
-              buttonType="submit"
-              buttonLabel="パスワードを変更する"
-            />
-          </div>
-        </Form>
-      </div>
-    );
-  }
-  return <p>something wrong</p>;
+        </div>
+      </Form>
+    </div>
+  );
 };
