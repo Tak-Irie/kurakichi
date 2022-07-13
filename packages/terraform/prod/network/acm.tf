@@ -1,6 +1,6 @@
 resource "aws_acm_certificate" "kurakichi" {
-  domain_name               = aws_route53_record.kurakichi_top_level_domain.name
-  validation_method         = "DNS"
+  domain_name       = aws_route53_record.kurakichi_top_level_domain.name
+  validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true

@@ -20,12 +20,13 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: '14'
 
       - name: build express
         run: |
           yarn install
-          yarn run server:build
+          yarn build
+          yarn install
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -38,7 +39,7 @@ jobs:
           ECR_REPOSITORY: kurakichi
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./apps/server
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
@@ -46,7 +47,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ./terraform/dev/task-definition.json
+          task-definition: ./packages/terraform/dev/container/dev-container-definition.json
           container-name: kurakichi
           image: ${{ steps.build-image.outputs.image }}
 
@@ -54,6 +55,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: kurakichi
-          cluster: kurakichi
+          service: kurakichi-dev
+          cluster: kurakichi-dev
           wait-for-service-stability: true

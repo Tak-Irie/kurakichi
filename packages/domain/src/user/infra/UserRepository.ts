@@ -163,12 +163,16 @@ export class UserRepository implements IUserRepository {
     return { sentMessages: [], receivedMessages: [], ...data };
   }
 
-  async getSentInquiryByUserIdTemp(
+  async getInquiriesAndMessagesByUserIdTemp(
     userId: string,
   ): Promise<false | UserReadModel> {
     const data = await this.prisma.user.findFirst({
       where: { id: userId },
-      include: { sentInquiries: true },
+      include: {
+        sentInquiries: true,
+        sentMessages: true,
+        receivedMessages: true,
+      },
     });
     if (!data) return false;
 

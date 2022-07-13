@@ -12,7 +12,7 @@ module "storage" {
 }
 
 module "security" {
-  source = "./security"
+  source        = "./security"
   docdb_cluster = module.storage.docdb_cluster
 
 }

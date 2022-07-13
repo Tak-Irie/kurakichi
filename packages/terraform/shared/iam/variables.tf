@@ -1,10 +1,10 @@
 variable "name" {
   description = "name of iam role"
-  type = string
+  type        = string
 }
 variable "policy" {
   description = "iam policy"
-  type = string
+  type        = string
 }
 variable "identifier" {
   description = "identifier of principals in policy_document/statement "

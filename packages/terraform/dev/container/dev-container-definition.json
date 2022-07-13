@@ -48,7 +48,7 @@
       },
       {
         "name": "GOOGLE_OIDC_CLIENT_ID",
-        "valueFrom": "${secret_manager_arn}"
+        "valueFrom": "${secret_manager_arn}:GOOGLE_OIDC_CLIENT_ID::"
       },
       {
         "name": "GOOGLE_OIDC_CLIENT_REDIRECT",
